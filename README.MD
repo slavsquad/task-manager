@@ -7,8 +7,8 @@ Task Manager - console application allows you to manage projects and tasks.
 TECHNOLOGY STACK
 ----------------
 
-Java 1.8 SE
-Maven 3.6.0
+        Java 1.8 SE
+        Maven 3.6.0
 
 
 REQUIREMENTS
@@ -33,5 +33,5 @@ For run application using follow commands:
 Developers
 -----------
 
-Stepanenko Stas
-e-mail: stepanenkostas87@yandex.ru
+        Stepanenko Stas
+        e-mail: stepanenkostas87@yandex.ru
