@@ -7,6 +7,7 @@ public class Project extends BaseEntity {
     public Project(String name, String description) {
         this.name = name;
         this.description = description;
+
     }
 
     @Override

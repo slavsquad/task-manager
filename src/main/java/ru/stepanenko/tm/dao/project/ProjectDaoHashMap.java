@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ProjectDaoHashMap implements ProjectDao {
+public class  ProjectDaoHashMap implements ProjectDao {
     private Map<Integer, Project> projects = new HashMap<>();
     private static int idCount;
 
