@@ -223,6 +223,6 @@ public class App {
                 "task-list: Show all tasks or selected task.\n" +
                 "task-remove: Remove selected task.\n" +
                 "help: Show all commands.\n" +
-                "quit: quit from application.");
+                "exit: quit from application.");
     }
 }
