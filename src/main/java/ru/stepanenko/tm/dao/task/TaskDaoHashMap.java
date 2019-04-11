@@ -5,6 +5,7 @@ import ru.stepanenko.tm.domain.Task;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class TaskDaoHashMap implements TaskDao {
     private Map<Integer, Task> tasks = new HashMap<>();
@@ -40,7 +41,7 @@ public class TaskDaoHashMap implements TaskDao {
     public boolean create(Task task) {
         if (task != null ){
             task.setId(idCount);
-            task.setDateTime(LocalDateTime.now());
+            task.setStartDate(LocalDateTime.now());
             tasks.put(idCount++,task);
             return true;
         }else {
@@ -49,10 +50,10 @@ public class TaskDaoHashMap implements TaskDao {
     }
 
     @Override
-    public Map<Integer, Task> getByProjectID(int projectID) {
+    public Map<Integer, Task> getByProjectUUID(UUID projectUUID) {
         Map<Integer,Task> projectTasks = new HashMap<>();
         for (Integer id:tasks.keySet()){
-            if (projectID==tasks.get(id).getProjectID()){
+            if (projectUUID==tasks.get(id).getProjectUUID()){
                 projectTasks.put(id,tasks.get(id));
             }
         }

@@ -1,33 +1,35 @@
 package ru.stepanenko.tm.domain;
 
 import java.time.format.DateTimeFormatter;
+import java.util.UUID;
 
 public class Task extends BaseEntity {
-    private int projectID;
+    private UUID projectUUID;
 
-    public Task(String name, String description, int projectID) {
+    public Task(String name, String description, UUID projectUUID) {
         this.name = name;
         this.description = description;
-        this.projectID = projectID;
+        this.projectUUID = projectUUID;
 
     }
 
-    public int getProjectID() {
-        return projectID;
+    public UUID getProjectUUID() {
+        return projectUUID;
     }
 
-    public void setProjectID(int projectID) {
-        this.projectID = projectID;
+    public void setProjectUUID(UUID projectUUID) {
+        this.projectUUID = projectUUID;
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
         return "Task{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", dateTime=" + dateTime.format(formatter) +
+                ", startDate=" + startDate.format(formatter) +
+                ", endDate=" + endDate +
                 '}';
     }
 }

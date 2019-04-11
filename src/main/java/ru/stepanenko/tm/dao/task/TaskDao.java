@@ -4,6 +4,7 @@ import ru.stepanenko.tm.domain.Project;
 import ru.stepanenko.tm.domain.Task;
 
 import java.util.Map;
+import java.util.UUID;
 
 public interface TaskDao {
     Task getById(int id);
@@ -11,6 +12,5 @@ public interface TaskDao {
     boolean clear();
     Task remove(int id);
     boolean create(Task task);
-    Map<Integer,Task> getByProjectID(int projectID);
-
+    Map<Integer,Task> getByProjectUUID(UUID projectUUID);
 }

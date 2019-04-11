@@ -12,6 +12,7 @@ import ru.stepanenko.tm.services.task.TaskCommands;
 import ru.stepanenko.tm.services.task.TaskCommandsImpl;
 
 import java.util.Scanner;
+import java.util.UUID;
 
 /**
  * Hello world!
@@ -37,12 +38,13 @@ public class App {
     static TaskCommands taskCommands = new TaskCommandsImpl(taskDao);
 
     public static void main(String[] args) {
+
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
         Scanner scanner = new Scanner(System.in);
 
-
         while (true) {
+            System.out.println("Please input your command:");
             String command = scanner.nextLine();
             switch (command) {
                 case PROJECT_CLEAR:
@@ -93,8 +95,6 @@ public class App {
                     exit();
                     break;
             }
-
-            System.out.println("Please input your command:");
         }
     }
 
@@ -152,8 +152,7 @@ public class App {
             String name = scanner.nextLine();
             System.out.println("Please input task description:");
             String description = scanner.nextLine();
-            taskCommands.create(new Task(name, description, projectID));
-
+            taskCommands.create(new Task(name, description, projectDao.getById(projectID).getUuid()));
         } else {
             System.out.println("Project id " + projectID + " does not found!");
         }
@@ -167,11 +166,11 @@ public class App {
             System.out.println("Please input ID task for print task or input all for print all task");
             String string = scanner.nextLine();
             if ("all".equals(string)) {
-                taskCommands.list(projectID);
+                taskCommands.list(projectDao.getById(projectID).getUuid());
             } else {
                 try {
                     int id = Integer.parseInt(string);
-                    taskCommands.list(projectID, id);
+                    taskCommands.list(projectDao.getById(projectID).getUuid(), id);
                 } catch (IllegalArgumentException e) {
                     System.out.println("Incorrect input error:" + e);
                 }
@@ -209,10 +208,6 @@ public class App {
         }
     }
 
-    private static void exit() {
-        System.exit(0);
-    }
-
     private static void help() {
         System.out.println("project-clear: Remove all projects.\n" +
                 "project-create: Create new project.\n" +
@@ -224,5 +219,9 @@ public class App {
                 "task-remove: Remove selected task.\n" +
                 "help: Show all commands.\n" +
                 "exit: quit from application.");
+    }
+
+    private static void exit(){
+        System.exit(0);
     }
 }

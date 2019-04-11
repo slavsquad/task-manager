@@ -6,7 +6,8 @@ public abstract class BaseEntity {
     protected int id;
     protected String name;
     protected String description;
-    protected LocalDateTime dateTime;
+    protected LocalDateTime startDate;
+    protected LocalDateTime endDate;
 
     public int getId() {
         return id;
@@ -32,11 +33,19 @@ public abstract class BaseEntity {
         this.description = description;
     }
 
-    public LocalDateTime getDateTime() {
-        return dateTime;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDateTime getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 }

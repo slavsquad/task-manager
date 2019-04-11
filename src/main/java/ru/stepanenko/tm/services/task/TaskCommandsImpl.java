@@ -5,6 +5,7 @@ import ru.stepanenko.tm.domain.Task;
 
 import java.util.Map;
 import java.util.Scanner;
+import java.util.UUID;
 
 public class TaskCommandsImpl implements TaskCommands {
     private TaskDao taskDao;
@@ -32,16 +33,16 @@ public class TaskCommandsImpl implements TaskCommands {
     }
 
     @Override
-    public void list(int projectID) {
-        Map<Integer,Task> projectTasks = taskDao.getByProjectID(projectID);
+    public void list(UUID projectUUID) {
+        Map<Integer,Task> projectTasks = taskDao.getByProjectUUID(projectUUID);
         for (Integer id:projectTasks.keySet()){
             System.out.println(projectTasks.get(id));
         }
     }
 
     @Override
-    public void list(int projectID, int id) {
-        Task task = taskDao.getByProjectID(projectID).get(id);
+    public void list(UUID projectUUID, int id) {
+        Task task = taskDao.getByProjectUUID(projectUUID).get(id);
         if (task!=null){
             System.out.println(task);
         }else{

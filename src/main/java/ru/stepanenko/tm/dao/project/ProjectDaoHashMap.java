@@ -40,7 +40,7 @@ public class  ProjectDaoHashMap implements ProjectDao {
     public boolean create(Project project) {
         if (project != null ){
             project.setId(idCount);
-            project.setDateTime(LocalDateTime.now());
+            project.setStartDate(LocalDateTime.now());
             projects.put(idCount++,project);
             return true;
         }else {
