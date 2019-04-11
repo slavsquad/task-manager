@@ -1,10 +1,10 @@
-package ru.stepanenko.tm.dao.project;
+package ru.stepanenko.tm.repository.project;
 
-import ru.stepanenko.tm.domain.Project;
+import ru.stepanenko.tm.entity.Project;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class  ProjectDaoHashMap implements ProjectDao {
@@ -12,17 +12,17 @@ public class  ProjectDaoHashMap implements ProjectDao {
     private static int idCount;
 
     @Override
-    public Project getById(int id) {
+    public Project findOne(int id) {
         return projects.get(id);
     }
 
     @Override
-    public Map<Integer,Project> getAll() {
-        return projects;
+    public Collection<Project> findAll() {
+        return projects.values();
     }
 
     @Override
-    public boolean clear() {
+    public boolean removeAll() {
         projects.clear();
         if (projects.size()==0){
             return true;
@@ -37,7 +37,7 @@ public class  ProjectDaoHashMap implements ProjectDao {
     }
 
     @Override
-    public boolean create(Project project) {
+    public boolean persist(Project project) {
         if (project != null ){
             project.setId(idCount);
             project.setStartDate(LocalDateTime.now());
@@ -46,5 +46,11 @@ public class  ProjectDaoHashMap implements ProjectDao {
         }else {
             return false;
         }
+    }
+
+    @Override
+    public boolean merge(Project project) {
+        projects.put(project.getId(),project);
+        return false;
     }
 }

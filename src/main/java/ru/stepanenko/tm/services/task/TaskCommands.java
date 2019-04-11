@@ -1,6 +1,6 @@
 package ru.stepanenko.tm.services.task;
 
-import ru.stepanenko.tm.domain.Task;
+import ru.stepanenko.tm.entity.Task;
 
 import java.util.UUID;
 

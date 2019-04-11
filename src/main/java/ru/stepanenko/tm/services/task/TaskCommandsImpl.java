@@ -1,7 +1,7 @@
 package ru.stepanenko.tm.services.task;
 
-import ru.stepanenko.tm.dao.task.TaskDao;
-import ru.stepanenko.tm.domain.Task;
+import ru.stepanenko.tm.repository.task.TaskDao;
+import ru.stepanenko.tm.entity.Task;
 
 import java.util.Map;
 import java.util.Scanner;
@@ -16,19 +16,19 @@ public class TaskCommandsImpl implements TaskCommands {
 
     @Override
     public void clear() {
-        if (taskDao.clear()){
-            System.out.println("Task list is clear!");
+        if (taskDao.removeAll()){
+            System.out.println("Task list is removeAll!");
         } else {
-            System.out.println("Task list does not clear!");
+            System.out.println("Task list does not removeAll!");
         }
     }
     @Override
     public void create(Task task) {
 
-        if (taskDao.create(task)){
-            System.out.println("Task "+task.getName()+" is create!");
+        if (taskDao.persist(task)){
+            System.out.println("Task "+task.getName()+" is persist!");
         }else {
-            System.out.println("Task "+task.getName()+" does not create!");
+            System.out.println("Task "+task.getName()+" does not persist!");
         }
     }
 
@@ -63,7 +63,7 @@ public class TaskCommandsImpl implements TaskCommands {
 
     @Override
     public void edit(int id) {
-        Task task = taskDao.getById(id);
+        Task task = taskDao.findOne(id);
         if (task!=null){
             System.out.println(task);
             Scanner scanner = new Scanner(System.in);

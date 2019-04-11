@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.domain;
+package ru.stepanenko.tm.entity;
 
 import java.time.LocalDateTime;
 

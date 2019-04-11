@@ -1,8 +1,11 @@
 package ru.stepanenko.tm.services.project;
 
-import ru.stepanenko.tm.dao.project.ProjectDao;
-import ru.stepanenko.tm.domain.Project;
+import ru.stepanenko.tm.repository.project.ProjectDao;
+import ru.stepanenko.tm.entity.Project;
+import ru.stepanenko.tm.services.util.StringValidator;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Scanner;
 
 public class ProjectCommandsImpl implements ProjectCommands {
@@ -14,68 +17,60 @@ public class ProjectCommandsImpl implements ProjectCommands {
     }
 
     @Override
-    public void clear() {
+    public boolean clear() {
+        return projectDao.removeAll();
+    }
 
-        if (projectDao.clear()){
-            System.out.println("Project list is clear!");
+    @Override
+    public boolean create(String name, String description) {
+        if (StringValidator.validate(name) && StringValidator.validate(description)) {
+            return projectDao.persist(new Project(name, description));
         } else {
-            System.out.println("Project list does not clear!");
+            return false;
         }
     }
 
     @Override
-    public void create(Project project) {
+    public Collection<Project> findAll() {
+        return projectDao.findAll();
+    }
 
-        if (projectDao.create(project)){
-            System.out.println("Project "+project.getName()+" is create!");
-        }else {
-            System.out.println("Project "+project.getName()+" does not create!");
+    @Override
+    public Project findOne(String id) {
+        if (StringValidator.isNumeric(id) && StringValidator.validate(id)) {
+            return projectDao.findOne(Integer.parseInt(id));
+        } else {
+            return null;
         }
     }
 
     @Override
-    public void list() {
-        if (projectDao.getAll().size()!=0) {
-            for (Integer id : projectDao.getAll().keySet()) {
-                System.out.println(projectDao.getAll().get(id));
+    public Project remove(String id) {
+        if (StringValidator.isNumeric(id) && StringValidator.validate(id)) {
+            return projectDao.remove(Integer.parseInt(id));
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Project edit(String projectID, String name, String description) {
+        if (StringValidator.validate(projectID) && StringValidator.isNumeric(projectID) &&
+                StringValidator.validate(name) && StringValidator.validate(description)){
+            Project oldProject = projectDao.findOne(Integer.parseInt(projectID));
+            if (oldProject!=null){
+                Project newProject = new Project(name,description);
+                newProject.setUuid(oldProject.getUuid());
+                newProject.setId(oldProject.getId());
+                newProject.setStartDate(oldProject.getStartDate());
+                newProject.setEndDate(oldProject.getEndDate());
+                projectDao.merge(newProject);
+                return newProject;
+            }else {
+                return null;
             }
-        }else{
-            System.out.println("Projects lists is empty!");
-        }
-    }
-
-    @Override
-    public void list(int id) {
-        Project project = projectDao.getById(id);
-        if (project==null){
-            System.out.println("Project with id = "+id+" does not exist!");
-        }else{
-            System.out.println(project);
-        }
-    }
-
-    @Override
-    public void remove(int id) {
-        Project project = projectDao.remove(id);
-        if (project!=null){
-            System.out.println("Project "+project.getName()+" is remove!");
         }else {
-            System.out.println("Project id: "+id+" does not found!");
-        }
-    }
-
-    @Override
-    public void edit(int id) {
-        Project project = projectDao.getById(id);
-        if (project!=null){
-            System.out.println(project);
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Input project name:");
-            String name = scanner.nextLine();
-            System.out.println("Input project description:");
-            String description = scanner.nextLine();
-            project.setName(name);
-            project.setDescription(description);
+            return null;
         }
     }
 }

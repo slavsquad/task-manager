@@ -1,6 +1,6 @@
-package ru.stepanenko.tm.dao.task;
+package ru.stepanenko.tm.repository.task;
 
-import ru.stepanenko.tm.domain.Task;
+import ru.stepanenko.tm.entity.Task;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -12,18 +12,18 @@ public class TaskDaoHashMap implements TaskDao {
     private static int idCount;
 
     @Override
-    public Task getById(int id) {
+    public Task findOne(int id) {
         return tasks.get(id);
     }
 
 
     @Override
-    public Map<Integer,Task> getAll() {
+    public Map<Integer,Task> findAll() {
         return tasks;
     }
 
     @Override
-    public boolean clear() {
+    public boolean removeAll() {
         tasks.clear();
         if (tasks.size()==0){
             return true;
@@ -38,7 +38,7 @@ public class TaskDaoHashMap implements TaskDao {
     }
 
     @Override
-    public boolean create(Task task) {
+    public boolean persist(Task task) {
         if (task != null ){
             task.setId(idCount);
             task.setStartDate(LocalDateTime.now());
@@ -58,5 +58,10 @@ public class TaskDaoHashMap implements TaskDao {
             }
         }
         return projectTasks;
+    }
+
+    @Override
+    public boolean merge() {
+        return false;
     }
 }
