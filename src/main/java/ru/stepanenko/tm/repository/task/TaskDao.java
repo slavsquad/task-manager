@@ -10,7 +10,6 @@ public interface TaskDao {
     Map<Integer,Task> findAll();
     boolean removeAll();
     Task remove(int id);
-    boolean persist(Task task);
-    Map<Integer,Task> getByProjectUUID(UUID projectUUID);
-    boolean merge();
+    Task persist(Task task);
+    Task merge(Task task);
 }

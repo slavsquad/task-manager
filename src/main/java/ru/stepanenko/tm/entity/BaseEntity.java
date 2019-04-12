@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 public abstract class BaseEntity {
     protected int id;
@@ -47,5 +48,22 @@ public abstract class BaseEntity {
 
     public void setEndDate(LocalDateTime endDate) {
         this.endDate = endDate;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BaseEntity that = (BaseEntity) o;
+        return id == that.id &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(startDate, that.startDate) &&
+                Objects.equals(endDate, that.endDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, startDate, endDate);
     }
 }

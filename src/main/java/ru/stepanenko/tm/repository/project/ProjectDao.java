@@ -11,8 +11,8 @@ public interface ProjectDao {
     Collection<Project> findAll();
     boolean removeAll();
     Project remove(int id);
-    boolean persist(Project project);
-    boolean merge(Project project);
+    Project persist(Project project);
+    Project merge(Project project);
 
 
 }

@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.entity;
 
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import java.util.UUID;
 
 public class Task extends BaseEntity {
@@ -31,5 +32,19 @@ public class Task extends BaseEntity {
                 ", startDate=" + startDate.format(formatter) +
                 ", endDate=" + endDate +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        Task task = (Task) o;
+        return Objects.equals(projectUUID, task.projectUUID);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), projectUUID);
     }
 }

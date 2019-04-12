@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class  ProjectDaoHashMap implements ProjectDao {
     private Map<Integer, Project> projects = new HashMap<>();
-    private static int idCount;
+    private static int idCount = 0;
 
     @Override
     public Project findOne(int id) {
@@ -37,20 +37,21 @@ public class  ProjectDaoHashMap implements ProjectDao {
     }
 
     @Override
-    public boolean persist(Project project) {
-        if (project != null ){
-            project.setId(idCount);
-            project.setStartDate(LocalDateTime.now());
-            projects.put(idCount++,project);
-            return true;
+    public Project persist(Project project) {
+
+        project.setId(idCount);
+        project.setStartDate(LocalDateTime.now());
+        Project result = projects.put(idCount,project);
+        idCount++;
+        if (result==null){
+            return project;
         }else {
-            return false;
+            return null;
         }
     }
 
     @Override
-    public boolean merge(Project project) {
-        projects.put(project.getId(),project);
-        return false;
+    public Project merge(Project project) {
+        return projects.put(project.getId(),project);
     }
 }

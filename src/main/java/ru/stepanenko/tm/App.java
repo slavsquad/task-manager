@@ -23,8 +23,8 @@ public class App {
     private static final String PROJECT_LIST = "project-list";
     private static final String PROJECT_REMOVE = "project-remove";
     private static final String PROJECT_EDIT = "project-edit";
-    private static final String TASK_CLEAR = "task-removeAll";
-    private static final String TASK_CREATE = "task-persist";
+    private static final String TASK_CLEAR = "task-clear";
+    private static final String TASK_CREATE = "task-create";
     private static final String TASK_LIST = "task-list";
     private static final String TASK_REMOVE = "task-remove";
     private static final String TASK_EDIT = "task-edit";
@@ -36,29 +36,29 @@ public class App {
     static TaskDao taskDao = new TaskDaoHashMap();
 
     static {
-        Project project1 = new Project("My_project_1","Description for my project 1");
-        Project project2 = new Project("My_project_2","Description for my project 2");
-        Project project3 = new Project("My_project_3","Description for my project 3");
-        Project project4 = new Project("My_project_4","Description for my project 4");
+        Project project1 = new Project("My_project_1", "Description for my project 1");
+        Project project2 = new Project("My_project_2", "Description for my project 2");
+        Project project3 = new Project("My_project_3", "Description for my project 3");
+        Project project4 = new Project("My_project_4", "Description for my project 4");
 
         projectDao.persist(project1);
         projectDao.persist(project2);
         projectDao.persist(project3);
         projectDao.persist(project4);
 
-        taskDao.persist(new Task("task_1","Description for task 1",project1.getUuid()));
-        taskDao.persist(new Task("task_2","Description for task 2",project1.getUuid()));
-        taskDao.persist(new Task("task_3","Description for task 3",project1.getUuid()));
-        taskDao.persist(new Task("task_4","Description for task 4",project1.getUuid()));
+        taskDao.persist(new Task("task_1", "Description for task 1", project1.getUuid()));
+        taskDao.persist(new Task("task_2", "Description for task 2", project1.getUuid()));
+        taskDao.persist(new Task("task_3", "Description for task 3", project1.getUuid()));
+        taskDao.persist(new Task("task_4", "Description for task 4", project1.getUuid()));
 
-        taskDao.persist(new Task("task_1","Description for task 1",project2.getUuid()));
-        taskDao.persist(new Task("task_2","Description for task 2",project2.getUuid()));
-        taskDao.persist(new Task("task_3","Description for task 3",project2.getUuid()));
+        taskDao.persist(new Task("task_1", "Description for task 1", project2.getUuid()));
+        taskDao.persist(new Task("task_2", "Description for task 2", project2.getUuid()));
+        taskDao.persist(new Task("task_3", "Description for task 3", project2.getUuid()));
 
-        taskDao.persist(new Task("task_1","Description for task 1",project3.getUuid()));
-        taskDao.persist(new Task("task_2","Description for task 2",project3.getUuid()));
+        taskDao.persist(new Task("task_1", "Description for task 1", project3.getUuid()));
+        taskDao.persist(new Task("task_2", "Description for task 2", project3.getUuid()));
 
-        taskDao.persist(new Task("task_1","Description for task 1",project4.getUuid()));
+        taskDao.persist(new Task("task_1", "Description for task 1", project4.getUuid()));
 
     }
 
@@ -74,7 +74,7 @@ public class App {
 
 
         while (true) {
-            System.out.println("Please input your command:");
+            System.out.println("\nPlease input your command:");
             String command = scanner.nextLine();
             switch (command) {
                 case PROJECT_CLEAR:
@@ -98,7 +98,7 @@ public class App {
                     break;
 
                 case TASK_CLEAR:
-                    taskClear();
+                    taskClear(scanner);
                     break;
 
                 case TASK_CREATE:
@@ -134,7 +134,7 @@ public class App {
         String name = scanner.nextLine();
         System.out.println("Please input project description:");
         String description = scanner.nextLine();
-        if (projectCommands.create(name, description)) {
+        if (projectCommands.create(name, description) != null) {
             System.out.println("Project " + name + " is create!");
         } else {
             System.out.println("Project " + name + " does not create!");
@@ -145,14 +145,14 @@ public class App {
     private static void projectClear() {
 
         if (projectCommands.clear()) {
-            System.out.println("Project list is clear!");
+            System.out.println("Project is clear!");
         } else {
-            System.out.println("Project list does not clear!");
+            System.out.println("Project does not clear!");
         }
     }
 
     private static void projectList(Scanner scanner) {
-        System.out.print("Press Enter for print all project or input id project: ");
+        System.out.print("Press ENTER for print all project or input id project: ");
         String projectID = scanner.nextLine();
         //list for all projects
         if ("".equals(projectID)) {
@@ -183,73 +183,81 @@ public class App {
         System.out.print("Please input project ID for edit: ");
         String projectID = scanner.nextLine();
 
-        System.out.println("Input new project's name: ");
-        String name = scanner.nextLine();
+        Project oldProject = (projectCommands.findOne(projectID));
+        if (oldProject != null) {
+            System.out.println("Input new project's name: ");
+            String newName = scanner.nextLine();
 
-        System.out.println("Input new project's description: ");
-        String description = scanner.nextLine();
+            System.out.println("Input new project's description: ");
+            String newDescription = scanner.nextLine();
 
-        Project project = projectCommands.edit(projectID,name,description);
-        if (project!=null){
-            System.out.println("Project " + project.getName() + " is update!");
+            Project project = projectCommands.edit(oldProject, newName, newDescription);
+
+            if (project != null) {
+                System.out.println("Project " + project.getName() + " is update!");
+            } else {
+                System.out.println("Project name or description can't be empty!");
+            }
         } else {
-            System.out.println("Project id: " + projectID + " does not found or name and description can't be empty!");
+            System.out.println("Project id: " + projectID + " does not found!");
         }
-
-
-
-
-
-        if (project == null) {
-
-        } else {
-            System.out.println(project);
-
-
-
-            project.setName(name);
-            project.setDescription(description);
-        }
-
-
-       // projectCommands.edit(id);
     }
 
-    private static void taskClear() {
-        taskCommands.clear();
+    private static void taskClear(Scanner scanner) {
+        System.out.println("Please input project id:");
+        String projectID = scanner.nextLine();
+
+        Project project = (projectCommands.findOne(projectID));
+        if (project != null) {
+            if (taskCommands.clear(project.getUuid())) {
+                System.out.println("All tasks for project id:" + projectID + " clear.");
+            } else {
+                System.out.println("Tasks for project id:" + projectID + " does not found!");
+            }
+        } else {
+            System.out.println("Project id: " + projectID + " does not found!");
+        }
     }
 
     private static void taskCreate(Scanner scanner) {
         System.out.println("Please input project id:");
-        int projectID = scanner.nextInt();
-        if (projectDao.findOne(projectID) != null) {
-            scanner.nextLine();
+        String projectID = scanner.nextLine();
 
+        Project project = (projectCommands.findOne(projectID));
+        if (project != null) {
             System.out.println("Please input task name:");
             String name = scanner.nextLine();
             System.out.println("Please input task description:");
             String description = scanner.nextLine();
-            taskCommands.create(new Task(name, description, projectDao.findOne(projectID).getUuid()));
+            Task task = taskCommands.create(name, description, project.getUuid());
+            if (task != null) {
+                System.out.println("Task " + name + " is create!");
+            } else {
+                System.out.println("Task " + name + " does not create!");
+                System.out.println("Task name or description can't be empty!");
+            }
         } else {
-            System.out.println("Project id " + projectID + " does not found!");
+            System.out.println("Project id: " + projectID + " does not found!");
         }
     }
 
     private static void taskList(Scanner scanner) {
         System.out.println("Please input project id:");
-        int projectID = scanner.nextInt();
-        if (projectDao.findOne(projectID) != null) {
-            scanner.nextLine();
-            System.out.println("Please input ID task for print task or input all for print all task");
-            String string = scanner.nextLine();
-            if ("all".equals(string)) {
-                taskCommands.list(projectDao.findOne(projectID).getUuid());
+        String projectID = scanner.nextLine();
+        Project project = projectCommands.findOne(projectID);
+        if (project != null) {
+
+            System.out.print("Please input ID task or press ENTER for print all task: ");
+            String taskID = scanner.nextLine();
+
+            if ("".equals(taskID)) {
+                printCollection(taskCommands.findAllByProjectUUID(project.getUuid()));
             } else {
-                try {
-                    int id = Integer.parseInt(string);
-                    taskCommands.list(projectDao.findOne(projectID).getUuid(), id);
-                } catch (IllegalArgumentException e) {
-                    System.out.println("Incorrect input error:" + e);
+                Task task = taskCommands.findOne(taskID);
+                if (task != null) {
+                    System.out.println(task);
+                } else {
+                    System.out.println("Task id: " + taskID + " does not found!");
                 }
             }
         } else {
@@ -259,13 +267,18 @@ public class App {
 
     private static void taskRemove(Scanner scanner) {
         System.out.println("Please input project id:");
-        int projectID = scanner.nextInt();
-        if (projectDao.findOne(projectID) != null) {
-            scanner.nextLine();
-
+        String projectID = scanner.nextLine();
+        Project project = projectCommands.findOne(projectID);
+        if (project != null) {
             System.out.println("Please input ID task for remove:");
-            int id = scanner.nextInt();
-            taskCommands.remove(id);
+            String taskID = scanner.nextLine();
+            Task task = taskCommands.remove(taskID);
+            if (task != null) {
+                System.out.println("Task id: " + task.getId() + " is remove!");
+            } else {
+                System.out.println("Task id: " + taskID + " is not found!");
+            }
+
         } else {
             System.out.println("Project id " + projectID + " does not found!");
         }
@@ -273,13 +286,30 @@ public class App {
 
     private static void taskEdit(Scanner scanner) {
         System.out.println("Please input project id:");
-        int projectID = scanner.nextInt();
-        if (projectDao.findOne(projectID) != null) {
-            scanner.nextLine();
-
+        String projectID = scanner.nextLine();
+        Project project = projectCommands.findOne(projectID);
+        if (project != null) {
             System.out.println("Please input ID task for edit:");
-            int id = scanner.nextInt();
-            taskCommands.edit(id);
+            String taskID = scanner.nextLine();
+            Task oldTask = taskCommands.findOne(taskID);
+            if (oldTask != null) {
+                System.out.println("Input new task's name: ");
+                String newName = scanner.nextLine();
+
+                System.out.println("Input new task's description: ");
+                String newDescription = scanner.nextLine();
+
+                Task task = taskCommands.edit(oldTask, newName, newDescription);
+                if (task != null) {
+                    System.out.println("Task id: " + task.getId() + "edit is complete!");
+                } else {
+                    System.out.println("Task name or description can't be empty!");
+                }
+
+            } else {
+                System.out.println("Task id: " + taskID + " is not found!");
+            }
+
         } else {
             System.out.println("Project id " + projectID + " does not found!");
         }
@@ -290,8 +320,8 @@ public class App {
                 "project-create: Create new project.\n" +
                 "project-list: Show all project or selected project.\n" +
                 "project-remove: Remove selected project.\n" +
-                "task-removeAll: Remove all tasks.\n" +
-                "task-persist: Create new task.\n" +
+                "task-clear: Remove all tasks.\n" +
+                "task-create: Create new task.\n" +
                 "task-list: Show all tasks or selected task.\n" +
                 "task-remove: Remove selected task.\n" +
                 "help: Show all commands.\n" +

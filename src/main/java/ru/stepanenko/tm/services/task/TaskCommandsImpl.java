@@ -2,10 +2,9 @@ package ru.stepanenko.tm.services.task;
 
 import ru.stepanenko.tm.repository.task.TaskDao;
 import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.services.util.StringValidator;
 
-import java.util.Map;
-import java.util.Scanner;
-import java.util.UUID;
+import java.util.*;
 
 public class TaskCommandsImpl implements TaskCommands {
     private TaskDao taskDao;
@@ -15,66 +14,73 @@ public class TaskCommandsImpl implements TaskCommands {
     }
 
     @Override
-    public void clear() {
-        if (taskDao.removeAll()){
-            System.out.println("Task list is removeAll!");
+    public boolean clear(UUID projectUUID) {
+
+        Collection<Task> removalTasks = findAllByProjectUUID(projectUUID);
+        if (removalTasks.size() != 0) {
+            for (Task task : removalTasks) {
+                taskDao.remove(task.getId());
+            }
+            return true;
         } else {
-            System.out.println("Task list does not removeAll!");
-        }
-    }
-    @Override
-    public void create(Task task) {
-
-        if (taskDao.persist(task)){
-            System.out.println("Task "+task.getName()+" is persist!");
-        }else {
-            System.out.println("Task "+task.getName()+" does not persist!");
+            return false;
         }
     }
 
     @Override
-    public void list(UUID projectUUID) {
-        Map<Integer,Task> projectTasks = taskDao.getByProjectUUID(projectUUID);
-        for (Integer id:projectTasks.keySet()){
-            System.out.println(projectTasks.get(id));
+    public Task create(String name, String description, UUID projectUUID) {
+
+        if (StringValidator.validate(name) && StringValidator.validate(description)) {
+            return taskDao.persist(new Task(name, description, projectUUID));
+        } else {
+            return null;
         }
     }
 
     @Override
-    public void list(UUID projectUUID, int id) {
-        Task task = taskDao.getByProjectUUID(projectUUID).get(id);
-        if (task!=null){
-            System.out.println(task);
-        }else{
-            System.out.println("Task id "+ id +"does not fond!");
-        }
-    }
+    public Collection<Task> findAllByProjectUUID(UUID projectUUID) {
+        Map<Integer, Task> tasks = taskDao.findAll();
+        List<Task> taskList = new ArrayList<>();
 
-
-    @Override
-    public void remove(int id) {
-        Task task = taskDao.remove(id);
-        if (task!=null){
-            System.out.println("Task "+task.getName()+" is remove!");
-        }else {
-            System.out.println("Task id: "+id+" does not found!");
+        for (Integer id : tasks.keySet()) {
+            Task currentTask = tasks.get(id);
+            if (projectUUID == currentTask.getProjectUUID()) {
+                taskList.add(currentTask);
+            }
         }
+
+        return taskList;
     }
 
     @Override
-    public void edit(int id) {
-        Task task = taskDao.findOne(id);
-        if (task!=null){
-            System.out.println(task);
-            Scanner scanner = new Scanner(System.in);
-            System.out.println("Input task name:");
-            String name = scanner.nextLine();
-            System.out.println("Input task description:");
-            String description = scanner.nextLine();
-            task.setName(name);
-            task.setDescription(description);
-        }else {
-            System.out.println("Task id: "+id+" does not found!");
+    public Task remove(String taskID) {
+        if (StringValidator.isNumeric(taskID)) {
+            return taskDao.remove(Integer.parseInt(taskID));
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Task edit(Task oldTask, String newName, String newDescription) {
+
+        if (StringValidator.validate(newName) && StringValidator.validate(newDescription)) {
+            Task newTask = new Task(newName,newDescription, oldTask.getProjectUUID());
+            newTask.setId(oldTask.getId());
+            newTask.setStartDate(oldTask.getStartDate());
+            newTask.setEndDate(oldTask.getEndDate());
+            return taskDao.merge(newTask);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public Task findOne(String taskID) {
+        if (StringValidator.validate(taskID) && StringValidator.isNumeric(taskID)) {
+            return taskDao.findOne(Integer.parseInt(taskID));
+        } else {
+            return null;
         }
     }
 }

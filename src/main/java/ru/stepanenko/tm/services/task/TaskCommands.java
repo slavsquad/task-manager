@@ -1,14 +1,16 @@
 package ru.stepanenko.tm.services.task;
 
+import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Task;
 
+import java.util.Collection;
 import java.util.UUID;
 
 public interface TaskCommands {
-    void clear();
-    void create(Task task);
-    void list(UUID projectUUID);
-    void list(UUID projectUUID, int id);
-    void remove(int id);
-    void edit(int id);
+    boolean clear(UUID projectUUID);
+    Task create(String name,String description,UUID projectUUID);
+    Collection<Task> findAllByProjectUUID(UUID projectUUID);
+    Task remove(String taskID);
+    Task edit(Task oldTask, String newName, String newDescription);
+    Task findOne(String taskID);
 }

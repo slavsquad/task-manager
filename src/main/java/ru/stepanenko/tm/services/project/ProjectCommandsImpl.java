@@ -22,11 +22,11 @@ public class ProjectCommandsImpl implements ProjectCommands {
     }
 
     @Override
-    public boolean create(String name, String description) {
+    public Project create(String name, String description) {
         if (StringValidator.validate(name) && StringValidator.validate(description)) {
             return projectDao.persist(new Project(name, description));
         } else {
-            return false;
+            return null;
         }
     }
 
@@ -54,22 +54,16 @@ public class ProjectCommandsImpl implements ProjectCommands {
     }
 
     @Override
-    public Project edit(String projectID, String name, String description) {
-        if (StringValidator.validate(projectID) && StringValidator.isNumeric(projectID) &&
-                StringValidator.validate(name) && StringValidator.validate(description)){
-            Project oldProject = projectDao.findOne(Integer.parseInt(projectID));
-            if (oldProject!=null){
-                Project newProject = new Project(name,description);
-                newProject.setUuid(oldProject.getUuid());
-                newProject.setId(oldProject.getId());
-                newProject.setStartDate(oldProject.getStartDate());
-                newProject.setEndDate(oldProject.getEndDate());
-                projectDao.merge(newProject);
-                return newProject;
-            }else {
-                return null;
-            }
-        }else {
+    public Project edit(Project oldProject, String newName, String newDescription) {
+        if (StringValidator.validate(newName) && StringValidator.validate(newDescription)) {
+            Project newProject = new Project(newName, newDescription);
+            newProject.setUuid(oldProject.getUuid());
+            newProject.setId(oldProject.getId());
+            newProject.setStartDate(oldProject.getStartDate());
+            newProject.setEndDate(oldProject.getEndDate());
+            projectDao.merge(newProject);
+            return newProject;
+        } else {
             return null;
         }
     }
