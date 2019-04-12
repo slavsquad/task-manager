@@ -2,19 +2,20 @@ package ru.stepanenko.tm.entity;
 
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.UUID;
 
 public abstract class BaseEntity {
-    protected int id;
+    protected String id;
     protected String name;
     protected String description;
-    protected LocalDateTime startDate;
-    protected LocalDateTime endDate;
+    protected LocalDateTime startDate = null;
+    protected LocalDateTime endDate = null;
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -55,7 +56,7 @@ public abstract class BaseEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         BaseEntity that = (BaseEntity) o;
-        return id == that.id &&
+        return Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(startDate, that.startDate) &&

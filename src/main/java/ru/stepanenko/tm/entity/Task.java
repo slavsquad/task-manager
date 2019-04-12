@@ -2,36 +2,37 @@ package ru.stepanenko.tm.entity;
 
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Task extends BaseEntity {
-    private UUID projectUUID;
+    private String projectID;
 
-    public Task(String name, String description, UUID projectUUID) {
+    public Task(String id, String name, String description, String projectID) {
+        this.id = id;
         this.name = name;
         this.description = description;
-        this.projectUUID = projectUUID;
-
+        this.projectID = projectID;
     }
 
-    public UUID getProjectUUID() {
-        return projectUUID;
+    public String getProjectID() {
+        return projectID;
     }
 
-    public void setProjectUUID(UUID projectUUID) {
-        this.projectUUID = projectUUID;
+    public void setProjectID(String projectID) {
+        this.projectID = projectID;
     }
 
     @Override
     public String toString() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
         return "Task{" +
-                "id=" + id +
+                "projectID=" + projectID +
+                ", id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", startDate=" + startDate.format(formatter) +
                 ", endDate=" + endDate +
                 '}';
+
     }
 
     @Override
@@ -40,11 +41,11 @@ public class Task extends BaseEntity {
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
         Task task = (Task) o;
-        return Objects.equals(projectUUID, task.projectUUID);
+        return Objects.equals(projectID, task.projectID);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), projectUUID);
+        return Objects.hash(super.hashCode(), projectID);
     }
 }

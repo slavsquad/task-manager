@@ -1,21 +1,19 @@
 package ru.stepanenko.tm.config;
 
-import ru.stepanenko.tm.App;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Task;
-import ru.stepanenko.tm.repository.project.ProjectDao;
-import ru.stepanenko.tm.repository.project.ProjectDaoHashMap;
-import ru.stepanenko.tm.repository.task.TaskDao;
-import ru.stepanenko.tm.repository.task.TaskDaoHashMap;
-import ru.stepanenko.tm.services.project.ProjectCommands;
-import ru.stepanenko.tm.services.project.ProjectCommandsImpl;
-import ru.stepanenko.tm.services.task.TaskCommands;
-import ru.stepanenko.tm.services.task.TaskCommandsImpl;
+import ru.stepanenko.tm.api.repository.IProjectRepository;
+import ru.stepanenko.tm.repository.ProjectRepository;
+import ru.stepanenko.tm.api.repository.ITaskRepository;
+import ru.stepanenko.tm.repository.TaskRepository;
+import ru.stepanenko.tm.api.services.IProjectService;
+import ru.stepanenko.tm.services.ProjectService;
+import ru.stepanenko.tm.api.services.ITaskService;
+import ru.stepanenko.tm.services.TaskService;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.Scanner;
-
-
 
 public class Bootstrap {
 
@@ -32,46 +30,39 @@ public class Bootstrap {
     private static final String HELP = "help";
     private static final String EXIT = "exit";
 
-    ProjectCommands projectCommands;
-    TaskCommands taskCommands;
+    IProjectService IProjectService;
+    ITaskService ITaskService;
 
     public void init() {
-        ProjectDao projectDao = new ProjectDaoHashMap();
-        TaskDao taskDao = new TaskDaoHashMap();
-
-        Project project1 = new Project("My_project_1", "Description for my project 1");
-        Project project2 = new Project("My_project_2", "Description for my project 2");
-        Project project3 = new Project("My_project_3", "Description for my project 3");
-        Project project4 = new Project("My_project_4", "Description for my project 4");
-
-        projectDao.persist(project1);
-        projectDao.persist(project2);
-        projectDao.persist(project3);
-        projectDao.persist(project4);
-
-        taskDao.persist(new Task("task_1", "Description for task 1", project1.getUuid()));
-        taskDao.persist(new Task("task_2", "Description for task 2", project1.getUuid()));
-        taskDao.persist(new Task("task_3", "Description for task 3", project1.getUuid()));
-        taskDao.persist(new Task("task_4", "Description for task 4", project1.getUuid()));
-
-        taskDao.persist(new Task("task_1", "Description for task 1", project2.getUuid()));
-        taskDao.persist(new Task("task_2", "Description for task 2", project2.getUuid()));
-        taskDao.persist(new Task("task_3", "Description for task 3", project2.getUuid()));
-
-        taskDao.persist(new Task("task_1", "Description for task 1", project3.getUuid()));
-        taskDao.persist(new Task("task_2", "Description for task 2", project3.getUuid()));
-
-        taskDao.persist(new Task("task_1", "Description for task 1", project4.getUuid()));
 
 
-        projectCommands = new ProjectCommandsImpl(projectDao);
-        taskCommands = new TaskCommandsImpl(taskDao);
+        IProjectRepository IProjectRepository = new ProjectRepository();
+        ITaskRepository ITaskRepository = new TaskRepository();
+        IProjectService = new ProjectService(IProjectRepository);
+        ITaskService = new TaskService(ITaskRepository);
+
+
+
+        //----------------------------------------- test data-------------------------------------------
+        IProjectService.create("My_project_1", "Description for my project 1");
+        IProjectService.create("My_project_2", "Description for my project 2");
+        IProjectService.create("My_project_3", "Description for my project 3");
+        IProjectService.create("My_project_4", "Description for my project 4");
+
+
+        for (Project project:IProjectService.findAll()){
+            ITaskService.create("task_1", "Description for task 1", project.getId());
+            ITaskService.create("task_2", "Description for task 2", project.getId());
+            ITaskService.create("task_3", "Description for task 3", project.getId());
+            ITaskService.create("task_4", "Description for task 4", project.getId());
+        }
+        //----------------------------------------------------------------------------------------------
+
 
 
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
         Scanner scanner = new Scanner(System.in);
-
 
         while (true) {
             System.out.println("\nPlease input your command:");
@@ -127,12 +118,13 @@ public class Bootstrap {
             }
         }
     }
-    private  void projectCreate(Scanner scanner) {
+
+    private void projectCreate(Scanner scanner) {
         System.out.println("Please input project name:");
         String name = scanner.nextLine();
         System.out.println("Please input project description:");
         String description = scanner.nextLine();
-        if (projectCommands.create(name, description) != null) {
+        if (IProjectService.create(name, description)) {
             System.out.println("Project " + name + " is create!");
         } else {
             System.out.println("Project " + name + " does not create!");
@@ -140,23 +132,19 @@ public class Bootstrap {
         }
     }
 
-    private  void projectClear() {
-
-        if (projectCommands.clear()) {
-            System.out.println("Project is clear!");
-        } else {
-            System.out.println("Project does not clear!");
-        }
+    private void projectClear() {
+        IProjectService.clear();
+        System.out.println("Project is clear!");
     }
 
-    private  void projectList(Scanner scanner) {
-        System.out.print("Press ENTER for print all project or input id project: ");
+    private void projectList(Scanner scanner) {
+        System.out.print("Press ENTER for print all project or input project name: ");
         String projectID = scanner.nextLine();
         //list for all projects
         if ("".equals(projectID)) {
-            printCollection(projectCommands.findAll());
+            printCollection(IProjectService.findAll());
         } else {//list for selected project
-            Project project = projectCommands.findOne(projectID);
+            Project project = IProjectService.findOne(projectID);
             if (project == null) {
                 System.out.println("Project with id: " + projectID + " does not exist!");
             } else {
@@ -165,10 +153,11 @@ public class Bootstrap {
         }
     }
 
-    private  void projectRemove(Scanner scanner) {
+    private void projectRemove(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.print("Please input project ID for remove: ");
         String projectID = scanner.nextLine();
-        Project project = projectCommands.remove(projectID);
+        Project project = IProjectService.remove(projectID);
         if (project != null) {
             System.out.println("Project " + project.getName() + " is remove!");
         } else {
@@ -177,11 +166,12 @@ public class Bootstrap {
 
     }
 
-    private  void projectEdit(Scanner scanner) {
+    private void projectEdit(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.print("Please input project ID for edit: ");
         String projectID = scanner.nextLine();
 
-        Project oldProject = (projectCommands.findOne(projectID));
+        Project oldProject = (IProjectService.findOne(projectID));
         if (oldProject != null) {
             System.out.println("Input new project's name: ");
             String newName = scanner.nextLine();
@@ -189,7 +179,7 @@ public class Bootstrap {
             System.out.println("Input new project's description: ");
             String newDescription = scanner.nextLine();
 
-            Project project = projectCommands.edit(oldProject, newName, newDescription);
+            Project project = IProjectService.edit(projectID, newName, newDescription);
 
             if (project != null) {
                 System.out.println("Project " + project.getName() + " is update!");
@@ -201,34 +191,32 @@ public class Bootstrap {
         }
     }
 
-    private  void taskClear(Scanner scanner) {
+    private void taskClear(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
 
-        Project project = (projectCommands.findOne(projectID));
+        Project project = (IProjectService.findOne(projectID));
         if (project != null) {
-            if (taskCommands.clear(project.getUuid())) {
-                System.out.println("All tasks for project id:" + projectID + " clear.");
-            } else {
-                System.out.println("Tasks for project id:" + projectID + " does not found!");
-            }
+            ITaskService.clear(projectID);
+            System.out.println("All tasks for project id:" + projectID + " clear.");
         } else {
             System.out.println("Project id: " + projectID + " does not found!");
         }
     }
 
-    private  void taskCreate(Scanner scanner) {
+    private void taskCreate(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
 
-        Project project = (projectCommands.findOne(projectID));
+        Project project = (IProjectService.findOne(projectID));
         if (project != null) {
             System.out.println("Please input task name:");
             String name = scanner.nextLine();
             System.out.println("Please input task description:");
             String description = scanner.nextLine();
-            Task task = taskCommands.create(name, description, project.getUuid());
-            if (task != null) {
+            if (ITaskService.create(name, description, projectID)) {
                 System.out.println("Task " + name + " is create!");
             } else {
                 System.out.println("Task " + name + " does not create!");
@@ -239,21 +227,22 @@ public class Bootstrap {
         }
     }
 
-    private  void taskList(Scanner scanner) {
+    private void taskList(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
-        Project project = projectCommands.findOne(projectID);
+        Project project = IProjectService.findOne(projectID);
         if (project != null) {
 
+            printCollection(ITaskService.findAllByProjectID(projectID));
             System.out.print("Please input ID task or press ENTER for print all task: ");
             String taskID = scanner.nextLine();
 
             if ("".equals(taskID)) {
-                printCollection(taskCommands.findAllByProjectUUID(project.getUuid()));
+                printCollection(ITaskService.findAllByProjectID(projectID));
             } else {
-                Task task = taskCommands.findOne(taskID);
-                if (task != null) {
-                    System.out.println(task);
+                if (ITaskService.findOne(taskID) != null) {
+                    System.out.println(ITaskService.findOne(taskID));
                 } else {
                     System.out.println("Task id: " + taskID + " does not found!");
                 }
@@ -263,41 +252,41 @@ public class Bootstrap {
         }
     }
 
-    private  void taskRemove(Scanner scanner) {
+    private void taskRemove(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
-        Project project = projectCommands.findOne(projectID);
+        Project project = IProjectService.findOne(projectID);
         if (project != null) {
             System.out.println("Please input ID task for remove:");
             String taskID = scanner.nextLine();
-            Task task = taskCommands.remove(taskID);
+            Task task = ITaskService.remove(taskID);
             if (task != null) {
                 System.out.println("Task id: " + task.getId() + " is remove!");
             } else {
                 System.out.println("Task id: " + taskID + " is not found!");
             }
-
         } else {
             System.out.println("Project id " + projectID + " does not found!");
         }
     }
 
-    private  void taskEdit(Scanner scanner) {
+    private void taskEdit(Scanner scanner) {
+        printCollection(IProjectService.findAll());
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
-        Project project = projectCommands.findOne(projectID);
+        Project project = IProjectService.findOne(projectID);
         if (project != null) {
             System.out.println("Please input ID task for edit:");
             String taskID = scanner.nextLine();
-            Task oldTask = taskCommands.findOne(taskID);
-            if (oldTask != null) {
+            if (ITaskService.findOne(taskID) != null) {
                 System.out.println("Input new task's name: ");
                 String newName = scanner.nextLine();
 
                 System.out.println("Input new task's description: ");
                 String newDescription = scanner.nextLine();
 
-                Task task = taskCommands.edit(oldTask, newName, newDescription);
+                Task task = ITaskService.edit(taskID, newName, newDescription);
                 if (task != null) {
                     System.out.println("Task id: " + task.getId() + "edit is complete!");
                 } else {
@@ -313,7 +302,7 @@ public class Bootstrap {
         }
     }
 
-    private  void help() {
+    private void help() {
         System.out.println("project-clear: Remove all projects.\n" +
                 "project-create: Create new project.\n" +
                 "project-list: Show all project or selected project.\n" +
@@ -326,11 +315,11 @@ public class Bootstrap {
                 "exit: quit from application.");
     }
 
-    private  void exit() {
+    private void exit() {
         System.exit(0);
     }
 
-    private  <T> void printCollection(Collection<T> collection) {
+    private <T> void printCollection(Collection<T> collection) {
         if (collection.size() != 0) {
             collection.forEach(System.out::println);
         } else {
