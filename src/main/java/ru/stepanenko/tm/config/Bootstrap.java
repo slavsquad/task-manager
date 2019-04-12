@@ -42,7 +42,6 @@ public class Bootstrap {
         ITaskService = new TaskService(ITaskRepository);
 
 
-
         //----------------------------------------- test data-------------------------------------------
         IProjectService.create("My_project_1", "Description for my project 1");
         IProjectService.create("My_project_2", "Description for my project 2");
@@ -50,14 +49,13 @@ public class Bootstrap {
         IProjectService.create("My_project_4", "Description for my project 4");
 
 
-        for (Project project:IProjectService.findAll()){
+        for (Project project : IProjectService.findAll()) {
             ITaskService.create("task_1", "Description for task 1", project.getId());
             ITaskService.create("task_2", "Description for task 2", project.getId());
             ITaskService.create("task_3", "Description for task 3", project.getId());
             ITaskService.create("task_4", "Description for task 4", project.getId());
         }
         //----------------------------------------------------------------------------------------------
-
 
 
         System.out.println("==Welcome to Task manager!==\n" +
