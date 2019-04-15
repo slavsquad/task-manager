@@ -1,10 +1,14 @@
 package ru.stepanenko.tm.entity;
 
-import java.time.format.DateTimeFormatter;
+import ru.stepanenko.tm.util.DateFormatter;
+
 import java.util.Objects;
 
 public class Task extends BaseEntity {
     private String projectID;
+
+    public Task() {
+    }
 
     public Task(String id, String name, String description, String projectID) {
         this.id = id;
@@ -23,16 +27,14 @@ public class Task extends BaseEntity {
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm dd.MM.yyyy");
         return "Task{" +
                 "projectID=" + projectID +
                 ", id=" + id +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", startDate=" + startDate.format(formatter) +
+                ", startDate=" + DateFormatter.format(startDate) +
                 ", endDate=" + endDate +
                 '}';
-
     }
 
     @Override

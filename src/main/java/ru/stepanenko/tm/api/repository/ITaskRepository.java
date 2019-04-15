@@ -8,8 +8,8 @@ public interface ITaskRepository {
 
     Task findOne(String id);
     Collection<Task> findAll();
-    boolean removeAll();
+    void removeAll();
     Task remove(String id);
-    void persist(String name, String description, String projectID);
-    Task merge(String id, String newName, String newDescription);
+    Task persist(Task task);
+    Task merge(Task task);
 }

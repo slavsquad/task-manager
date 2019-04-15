@@ -6,9 +6,9 @@ public class StringValidator {
         return string.chars().allMatch(Character::isDigit);
     }
 
-    public static boolean validate(String... strings){
-        for (String string:strings){
-            if (string == null || string.isEmpty()){
+    public static boolean validate(String... strings) {
+        for (String string : strings) {
+            if (string == null || string.isEmpty()) {
                 return false;
             }
         }

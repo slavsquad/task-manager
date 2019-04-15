@@ -3,11 +3,9 @@ package ru.stepanenko.tm.repository;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.entity.Project;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 public class ProjectRepository implements IProjectRepository {
 
@@ -34,22 +32,13 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public void persist(String name, String description) {
-        Project project = new Project(UUID.randomUUID().toString(), name, description);
-        project.setStartDate(LocalDateTime.now());
-        projects.put(project.getId(), project);
+    public Project persist(Project project) {
+        return merge(project);
     }
 
     @Override
-    public Project merge(String id, String newName, String newDescription) {
-        Project oldProject = findOne(id);
-        Project newProject = new Project(id,newName,newDescription);
-        newProject.setStartDate(oldProject.getStartDate());
-        newProject.setEndDate(oldProject.getEndDate());
-        return projects.put(id, newProject);
-    }
-
-    public Map<String, Project> getProjects() {
-        return projects;
+    public Project merge(Project project) {
+        projects.put(project.getId(), project);
+        return project;
     }
 }

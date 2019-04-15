@@ -6,13 +6,11 @@ import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.repository.TaskRepository;
-import ru.stepanenko.tm.api.services.IProjectService;
-import ru.stepanenko.tm.services.ProjectService;
-import ru.stepanenko.tm.api.services.ITaskService;
-import ru.stepanenko.tm.services.TaskService;
-
+import ru.stepanenko.tm.api.service.IProjectService;
+import ru.stepanenko.tm.service.ProjectService;
+import ru.stepanenko.tm.api.service.ITaskService;
+import ru.stepanenko.tm.service.TaskService;
 import java.util.Collection;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Bootstrap {
@@ -122,7 +120,7 @@ public class Bootstrap {
         String name = scanner.nextLine();
         System.out.println("Please input project description:");
         String description = scanner.nextLine();
-        if (IProjectService.create(name, description)) {
+        if (IProjectService.create(name, description) != null) {
             System.out.println("Project " + name + " is create!");
         } else {
             System.out.println("Project " + name + " does not create!");
@@ -207,14 +205,13 @@ public class Bootstrap {
         printCollection(IProjectService.findAll());
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
-
         Project project = (IProjectService.findOne(projectID));
         if (project != null) {
             System.out.println("Please input task name:");
             String name = scanner.nextLine();
             System.out.println("Please input task description:");
             String description = scanner.nextLine();
-            if (ITaskService.create(name, description, projectID)) {
+            if (ITaskService.create(name, description, projectID) != null) {
                 System.out.println("Task " + name + " is create!");
             } else {
                 System.out.println("Task " + name + " does not create!");
@@ -256,6 +253,7 @@ public class Bootstrap {
         String projectID = scanner.nextLine();
         Project project = IProjectService.findOne(projectID);
         if (project != null) {
+            printCollection(ITaskService.findAllByProjectID(projectID));
             System.out.println("Please input ID task for remove:");
             String taskID = scanner.nextLine();
             Task task = ITaskService.remove(taskID);
@@ -275,6 +273,7 @@ public class Bootstrap {
         String projectID = scanner.nextLine();
         Project project = IProjectService.findOne(projectID);
         if (project != null) {
+            printCollection(ITaskService.findAllByProjectID(projectID));
             System.out.println("Please input ID task for edit:");
             String taskID = scanner.nextLine();
             if (ITaskService.findOne(taskID) != null) {
@@ -283,7 +282,6 @@ public class Bootstrap {
 
                 System.out.println("Input new task's description: ");
                 String newDescription = scanner.nextLine();
-
                 Task task = ITaskService.edit(taskID, newName, newDescription);
                 if (task != null) {
                     System.out.println("Task id: " + task.getId() + "edit is complete!");

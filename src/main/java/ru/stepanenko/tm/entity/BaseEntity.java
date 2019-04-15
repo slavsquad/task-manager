@@ -1,15 +1,18 @@
 package ru.stepanenko.tm.entity;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 public abstract class BaseEntity {
     protected String id;
     protected String name;
     protected String description;
-    protected LocalDateTime startDate = null;
-    protected LocalDateTime endDate = null;
+    protected Date startDate;
+    protected Date endDate;
+
+    public BaseEntity() {
+        startDate = new Date();
+    }
 
     public String getId() {
         return id;
@@ -35,36 +38,19 @@ public abstract class BaseEntity {
         this.description = description;
     }
 
-    public LocalDateTime getStartDate() {
+    public Date getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(LocalDateTime startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
     }
 
-    public LocalDateTime getEndDate() {
+    public Date getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(LocalDateTime endDate) {
+    public void setEndDate(Date endDate) {
         this.endDate = endDate;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        BaseEntity that = (BaseEntity) o;
-        return Objects.equals(id, that.id) &&
-                Objects.equals(name, that.name) &&
-                Objects.equals(description, that.description) &&
-                Objects.equals(startDate, that.startDate) &&
-                Objects.equals(endDate, that.endDate);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id, name, description, startDate, endDate);
     }
 }
