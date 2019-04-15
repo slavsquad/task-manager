@@ -4,10 +4,10 @@ import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.util.StringValidator;
+
 import java.util.*;
 
 public class TaskService implements ITaskService {
-
     private ITaskRepository ITaskRepository;
 
     public TaskService(ITaskRepository ITaskRepository) {
@@ -24,17 +24,13 @@ public class TaskService implements ITaskService {
 
     @Override
     public Task create(String name, String description, String projectID) {
-        if (!StringValidator.validate(name, description, projectID)) {
-            return null;
-        }
+        if (!StringValidator.validate(name, description, projectID)) return null;
         return ITaskRepository.persist(new Task(UUID.randomUUID().toString(), name, description, projectID));
     }
 
     @Override
     public Collection<Task> findAllByProjectID(String projectID) {
-        if (!StringValidator.validate(projectID)) {
-            return null;
-        }
+        if (!StringValidator.validate(projectID)) return null;
         Collection<Task> tasks = ITaskRepository.findAll();
         Collection<Task> tasksByProjectID = new ArrayList<>();
         for (Task task : tasks) {
@@ -47,17 +43,13 @@ public class TaskService implements ITaskService {
 
     @Override
     public Task remove(String id) {
-        if (!StringValidator.validate(id)) {
-            return null;
-        }
+        if (!StringValidator.validate(id)) return null;
         return ITaskRepository.remove(id);
     }
 
     @Override
     public Task edit(String id, String name, String description) {
-        if (!StringValidator.validate(id, name, description)) {
-            return null;
-        }
+        if (!StringValidator.validate(id, name, description)) return null;
         Task task = findOne(id);
         task.setName(name);
         task.setDescription(description);
@@ -66,9 +58,7 @@ public class TaskService implements ITaskService {
 
     @Override
     public Task findOne(String id) {
-        if (!StringValidator.validate(id)) {
-            return null;
-        }
+        if (!StringValidator.validate(id)) return null;
         return ITaskRepository.findOne(id);
     }
 }
