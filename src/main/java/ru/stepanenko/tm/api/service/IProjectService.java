@@ -1,7 +1,6 @@
 package ru.stepanenko.tm.api.service;
 
 import ru.stepanenko.tm.entity.Project;
-
 import java.util.Collection;
 
 public interface IProjectService {

@@ -1,7 +1,6 @@
 package ru.stepanenko.tm.api.repository;
 
 import ru.stepanenko.tm.entity.User;
-
 import java.util.Collection;
 
 public interface IUserRepository {
