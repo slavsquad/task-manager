@@ -1,6 +1,7 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.user;
 
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
 public class UserLogoutCommand extends AbstractCommand {

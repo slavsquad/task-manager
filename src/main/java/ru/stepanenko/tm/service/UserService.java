@@ -3,11 +3,9 @@ package ru.stepanenko.tm.service;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.util.HashCode;
-import ru.stepanenko.tm.util.Role;
+import ru.stepanenko.tm.util.HashUtil;
+import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.util.StringValidator;
-
-import java.security.NoSuchAlgorithmException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -29,7 +27,7 @@ public class UserService implements IUserService {
     public User create(String login, String password, String role) {
         if (!StringValidator.validate(login, password, role)) return null;
         if (getUserRole(role) == null) return null;
-        return userRepository.persist(new User(login, HashCode.md5(password), getUserRole(role)));
+        return userRepository.persist(new User(login, HashUtil.md5(password), getUserRole(role)));
     }
 
     @Override
@@ -50,7 +48,7 @@ public class UserService implements IUserService {
         if (getUserRole(role) == null) return null;
         User user = findById(id);
         user.setLogin(login);
-        user.setPassword(HashCode.md5(password));
+        user.setPassword(HashUtil.md5(password));
         user.setRole(getUserRole(role));
         return userRepository.merge(user);
     }
@@ -82,7 +80,7 @@ public class UserService implements IUserService {
     @Override
     public boolean authenticationUser(String login, String password){
         User user = findByLogin(login);
-        if (user == null || !HashCode.md5(password).equals(user.getPassword())) return false;
+        if (user == null || !HashUtil.md5(password).equals(user.getPassword())) return false;
         setCurrentUser(user);
         return true;
     }

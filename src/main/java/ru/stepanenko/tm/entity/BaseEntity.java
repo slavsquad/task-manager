@@ -4,8 +4,8 @@ import java.util.UUID;
 
 public abstract class BaseEntity {
     protected String id = UUID.randomUUID().toString();
-    protected String name;
-    protected String description;
+    protected String name = "";
+    protected String description = "";
 
     public BaseEntity() {
     }

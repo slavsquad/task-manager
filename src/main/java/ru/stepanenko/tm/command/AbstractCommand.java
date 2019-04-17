@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command;
 
 public abstract class AbstractCommand {
 

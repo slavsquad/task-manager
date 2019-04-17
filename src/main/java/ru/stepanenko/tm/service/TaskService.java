@@ -23,9 +23,9 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task create(String name, String description, String projectID) {
-        if (!StringValidator.validate(name, description, projectID)) return null;
-        return ITaskRepository.persist(new Task(name, description, projectID));
+    public Task create(String name, String description, String projectID, String userID) {
+        if (!StringValidator.validate(name, description, projectID, userID)) return null;
+        return ITaskRepository.persist(new Task(name, description, projectID, userID));
     }
 
     @Override

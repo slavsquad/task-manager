@@ -5,7 +5,7 @@ import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashCode {
+public class HashUtil {
     public static String md5(String string) {
         String result = null;
         try {

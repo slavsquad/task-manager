@@ -1,26 +1,27 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.user;
 
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.util.Role;
+import ru.stepanenko.tm.enumerate.Role;
 
 import java.util.Scanner;
 
-public class UserChangePasswordCommand extends AbstractCommand {
+public class UserRegisterCommand extends AbstractCommand {
     private IUserService userService;
 
-    public UserChangePasswordCommand(IUserService userService) {
+    public UserRegisterCommand(IUserService userService) {
         this.userService = userService;
     }
 
     @Override
     public String getName() {
-        return "user-change-pass";
+        return "user-register";
     }
 
     @Override
     public String getDescription() {
-        return "Change user password.";
+        return "Registration new user.";
     }
 
     @Override
@@ -33,14 +34,15 @@ public class UserChangePasswordCommand extends AbstractCommand {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Please input user name:");
         String login = scanner.nextLine();
-        User user = userService.findByLogin(login);
-        if (user != null) {
+        if (userService.findByLogin(login) == null) {
             System.out.println("Please input password:");
             String password = scanner.nextLine();
-            if (userService.edit(user.getId(), user.getLogin(), password, user.getRole().toString()) != null) {
-                System.out.println("User " + user.getLogin() + " password changed!");
+            System.out.println("Please input user role(admin or user):");
+            String role = scanner.nextLine();
+            if (userService.create(login, password, role) != null) {
+                System.out.println("User " + login + " created!");
             } else {
-                System.out.println("Incorrect input role!");
+                System.out.println("User " + login + " is not created!");
             }
         } else {
             System.out.println("User name already exist!");

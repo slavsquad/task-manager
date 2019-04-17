@@ -1,29 +1,30 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.project;
 
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class ProjectListCommand extends AbstractCommand {
-    private IProjectService projectService;
-    private IUserService userService;
+public class ProjectRemoveCommand extends AbstractCommand {
+    IProjectService projectService;
+    IUserService userService;
 
-    public ProjectListCommand(IProjectService projectService, IUserService userService) {
+    public ProjectRemoveCommand(IProjectService projectService, IUserService userService) {
         this.projectService = projectService;
         this.userService = userService;
     }
 
     @Override
     public String getName() {
-        return "project-list";
+        return "project-remove";
     }
 
     @Override
     public String getDescription() {
-        return "Show all project or selected project.";
+        return "Remove selected project.";
     }
 
     @Override
@@ -37,21 +38,16 @@ public class ProjectListCommand extends AbstractCommand {
             System.out.println("List of projects is empty!");
             return;
         }
+        Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAll(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
-        System.out.print("Press ENTER for print all project or input project id: ");
-        Scanner scanner = new Scanner(System.in);
+        System.out.print("Please input project ID for remove: ");
         String projectID = scanner.nextLine();
-        //list for all projects
-        if ("".equals(projectID)) {
-            projectService.findAll(currentUser.getId()).forEach(System.out::println);
-        } else {//list for selected project
-            Project project = projectService.findOne(projectID);
-            if (project == null) {
-                System.out.println("Project with id: " + projectID + " does not exist!");
-            } else {
-                System.out.println(project);
-            }
+        Project project = projectService.remove(projectID);
+        if (project != null) {
+            System.out.println("Project " + project.getName() + " is remove!");
+        } else {
+            System.out.println("Project id: " + projectID + " does not found!");
         }
     }
 }

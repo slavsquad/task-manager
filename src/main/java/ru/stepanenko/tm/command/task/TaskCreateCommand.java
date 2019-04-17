@@ -1,29 +1,33 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.task;
 
 import ru.stepanenko.tm.api.service.IProjectService;
+import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class ProjectRemoveCommand extends AbstractCommand {
+public class TaskCreateCommand extends AbstractCommand {
     IProjectService projectService;
+    ITaskService taskService;
     IUserService userService;
 
-    public ProjectRemoveCommand(IProjectService projectService, IUserService userService) {
+    public TaskCreateCommand(IProjectService projectService, ITaskService taskService, IUserService userService) {
         this.projectService = projectService;
+        this.taskService = taskService;
         this.userService = userService;
     }
 
     @Override
     public String getName() {
-        return "project-remove";
+        return "task-create";
     }
 
     @Override
     public String getDescription() {
-        return "Remove selected project.";
+        return "Create new task.";
     }
 
     @Override
@@ -40,11 +44,20 @@ public class ProjectRemoveCommand extends AbstractCommand {
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAll(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
-        System.out.print("Please input project ID for remove: ");
+        System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
-        Project project = projectService.remove(projectID);
+        Project project = (projectService.findOne(projectID));
         if (project != null) {
-            System.out.println("Project " + project.getName() + " is remove!");
+            System.out.println("Please input task name:");
+            String name = scanner.nextLine();
+            System.out.println("Please input task description:");
+            String description = scanner.nextLine();
+            if (taskService.create(name, description, projectID, currentUser.getId()) != null) {
+                System.out.println("Task " + name + " is create!");
+            } else {
+                System.out.println("Task " + name + " does not create!");
+                System.out.println("Task name or description can't be empty!");
+            }
         } else {
             System.out.println("Project id: " + projectID + " does not found!");
         }

@@ -5,18 +5,20 @@ import ru.stepanenko.tm.util.DateFormatter;
 import java.util.Date;
 
 public class Task extends BaseEntity {
-    private String projectID;
-    private Date startDate;
-    private Date endDate;
+    private String projectID = "";
+    private Date dateStart = null;
+    private Date dateEnd = null;
+    private String userID = "";
 
     public Task() {
     }
 
-    public Task(String name, String description, String projectID) {
+    public Task(String name, String description, String projectID, String userID) {
         this.name = name;
         this.description = description;
-        this.startDate = new Date();
+        this.dateStart = new Date();
         this.projectID = projectID;
+        this.userID = userID;
     }
 
     public String getProjectID() {
@@ -27,31 +29,40 @@ public class Task extends BaseEntity {
         this.projectID = projectID;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getDateStart() {
+        return dateStart;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setDateStart(Date dateStart) {
+        this.dateStart = dateStart;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getDateEnd() {
+        return dateEnd;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setDateEnd(Date dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
     }
 
     @Override
     public String toString() {
         return "Task{" +
-                "projectID=" + projectID +
-                ", id=" + id +
+                "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", startDate=" + DateFormatter.format(startDate) +
-                ", endDate=" + endDate +
+                ", dateStart=" + dateStart +
+                ", dateEnd=" + dateEnd +
+                ", projectID='" + projectID + '\'' +
+                ", userID='" + userID + '\'' +
                 '}';
     }
 }

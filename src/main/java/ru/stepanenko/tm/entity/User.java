@@ -1,11 +1,11 @@
 package ru.stepanenko.tm.entity;
 
-import ru.stepanenko.tm.util.Role;
+import ru.stepanenko.tm.enumerate.Role;
 
 public class User extends BaseEntity {
-    private String login;
-    private String password;
-    private Role role;
+    private String login = "";
+    private String password = "";
+    private Role role = Role.USER;
 
     public User() {
     }

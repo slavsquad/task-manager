@@ -1,20 +1,20 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.task;
 
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class TaskEditCommand extends AbstractCommand {
+public class TaskListCommand extends AbstractCommand {
     IProjectService projectService;
     ITaskService taskService;
     IUserService userService;
 
-    public TaskEditCommand(IProjectService projectService, ITaskService taskService, IUserService userService) {
+    public TaskListCommand(IProjectService projectService, ITaskService taskService, IUserService userService) {
         this.projectService = projectService;
         this.taskService = taskService;
         this.userService = userService;
@@ -22,12 +22,12 @@ public class TaskEditCommand extends AbstractCommand {
 
     @Override
     public String getName() {
-        return "task-edit";
+        return "task-list";
     }
 
     @Override
     public String getDescription() {
-        return "Edit selected task.";
+        return "Show all tasks or selected task.";
     }
 
     @Override
@@ -54,24 +54,18 @@ public class TaskEditCommand extends AbstractCommand {
             }
             System.out.println("List of task:");
             taskService.findAllByProjectID(projectID).forEach(e -> System.out.println("id: " + e.getId()));
-            System.out.println("Please input ID task for edit:");
+            System.out.print("Please input ID task or press ENTER for print all task: ");
             String id = scanner.nextLine();
-            if (taskService.findOne(id) != null) {
-                System.out.println("Input new task's name: ");
-                String name = scanner.nextLine();
-                System.out.println("Input new task's description: ");
-                String description = scanner.nextLine();
-                Task task = taskService.edit(id, name, description);
-                if (task != null) {
-                    System.out.println("Task id: " + task.getId() + "edit is complete!");
-                } else {
-                    System.out.println("Task name or description can't be empty!");
-                }
 
+            if ("".equals(id)) {
+                taskService.findAllByProjectID(projectID).forEach(System.out::println);
             } else {
-                System.out.println("Task id: " + id + " is not found!");
+                if (taskService.findOne(id) != null) {
+                    System.out.println(taskService.findOne(id));
+                } else {
+                    System.out.println("Task id: " + id + " does not found!");
+                }
             }
-
         } else {
             System.out.println("Project id " + projectID + " does not found!");
         }

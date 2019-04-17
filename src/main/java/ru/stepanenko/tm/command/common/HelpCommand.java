@@ -1,4 +1,6 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.common;
+
+import ru.stepanenko.tm.command.AbstractCommand;
 
 public class HelpCommand extends AbstractCommand {
 

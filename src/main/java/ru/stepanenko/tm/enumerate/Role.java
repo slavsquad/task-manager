@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.util;
+package ru.stepanenko.tm.enumerate;
 
 public enum Role {
     USER("user"), ADMINISTRATOR("admin");

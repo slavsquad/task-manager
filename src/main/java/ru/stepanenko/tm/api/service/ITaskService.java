@@ -6,7 +6,7 @@ import java.util.Collection;
 public interface ITaskService {
 
     void clear(String projectID);
-    Task create(String name, String description, String projectID);
+    Task create(String name, String description, String projectID, String userID);
     Collection<Task> findAllByProjectID(String projectID);
     Task remove(String id);
     Task edit(String id, String name, String description);

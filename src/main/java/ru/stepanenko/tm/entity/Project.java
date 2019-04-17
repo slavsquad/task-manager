@@ -5,8 +5,8 @@ import ru.stepanenko.tm.util.DateFormatter;
 import java.util.Date;
 
 public class Project extends BaseEntity {
-    private Date startDate;
-    private Date endDate;
+    private Date dateStart;
+    private Date dateEnd;
     private String userID;
 
     public Project() {
@@ -15,24 +15,24 @@ public class Project extends BaseEntity {
     public Project(String name, String description, String userID) {
         this.name = name;
         this.description = description;
-        this.startDate = new Date();
+        this.dateStart = new Date();
         this.userID = userID;
     }
 
-    public Date getStartDate() {
-        return startDate;
+    public Date getDateStart() {
+        return dateStart;
     }
 
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
+    public void setDateStart(Date dateStart) {
+        this.dateStart = dateStart;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public Date getDateEnd() {
+        return dateEnd;
     }
 
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public void setDateEnd(Date dateEnd) {
+        this.dateEnd = dateEnd;
     }
 
     public String getUserID() {
@@ -49,8 +49,8 @@ public class Project extends BaseEntity {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", startDate=" + DateFormatter.format(startDate) +
-                ", endDate=" + endDate +
+                ", startDate=" + DateFormatter.format(dateStart) +
+                ", endDate=" + dateEnd +
                 ", userID='" + userID + '\'' +
                 '}';
     }

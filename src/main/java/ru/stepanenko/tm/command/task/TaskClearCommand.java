@@ -1,8 +1,9 @@
-package ru.stepanenko.tm.Command;
+package ru.stepanenko.tm.command.task;
 
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.User;
 
