@@ -1,15 +1,19 @@
 package ru.stepanenko.tm.Command;
 
 import ru.stepanenko.tm.api.service.IProjectService;
+import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Project;
+import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
 public class ProjectListCommand extends AbstractCommand {
     private IProjectService projectService;
+    private IUserService userService;
 
-    public ProjectListCommand(IProjectService projectService) {
+    public ProjectListCommand(IProjectService projectService, IUserService userService) {
         this.projectService = projectService;
+        this.userService = userService;
     }
 
     @Override
@@ -24,14 +28,23 @@ public class ProjectListCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
+        User currentUser = userService.getCurrentUser();
+        if (currentUser == null) {
+            System.out.println("This command available only login user!");
+            return;
+        }
+        if (projectService.findAll(currentUser.getId()).isEmpty()){
+            System.out.println("List of projects is empty!");
+            return;
+        }
         System.out.println("List of projects:");
-        projectService.findAll().forEach(e -> System.out.println("id: " + e.getId()));
+        projectService.findAll(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
         System.out.print("Press ENTER for print all project or input project id: ");
+        Scanner scanner = new Scanner(System.in);
         String projectID = scanner.nextLine();
         //list for all projects
         if ("".equals(projectID)) {
-            projectService.findAll().forEach(System.out::println);
+            projectService.findAll(currentUser.getId()).forEach(System.out::println);
         } else {//list for selected project
             Project project = projectService.findOne(projectID);
             if (project == null) {

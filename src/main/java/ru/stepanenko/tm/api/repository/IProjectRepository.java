@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.api.repository;
 
 import ru.stepanenko.tm.entity.Project;
+
 import java.util.Collection;
 
 public interface IProjectRepository {

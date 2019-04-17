@@ -2,18 +2,20 @@ package ru.stepanenko.tm.entity;
 
 import ru.stepanenko.tm.util.DateFormatter;
 
-import java.util.Objects;
+import java.util.Date;
 
 public class Task extends BaseEntity {
     private String projectID;
+    private Date startDate;
+    private Date endDate;
 
     public Task() {
     }
 
-    public Task(String id, String name, String description, String projectID) {
-        this.id = id;
+    public Task(String name, String description, String projectID) {
         this.name = name;
         this.description = description;
+        this.startDate = new Date();
         this.projectID = projectID;
     }
 
@@ -23,6 +25,22 @@ public class Task extends BaseEntity {
 
     public void setProjectID(String projectID) {
         this.projectID = projectID;
+    }
+
+    public Date getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(Date startDate) {
+        this.startDate = startDate;
+    }
+
+    public Date getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(Date endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -35,19 +53,5 @@ public class Task extends BaseEntity {
                 ", startDate=" + DateFormatter.format(startDate) +
                 ", endDate=" + endDate +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
-        Task task = (Task) o;
-        return Objects.equals(projectID, task.projectID);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), projectID);
     }
 }

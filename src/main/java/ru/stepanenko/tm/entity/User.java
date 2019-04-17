@@ -2,15 +2,15 @@ package ru.stepanenko.tm.entity;
 
 import ru.stepanenko.tm.util.Role;
 
-public class User {
+public class User extends BaseEntity {
     private String login;
     private String password;
-    String role;
+    private Role role;
 
     public User() {
     }
 
-    public User(String login, String password, String role) {
+    public User(String login, String password, Role role) {
         this.login = login;
         this.password = password;
         this.role = role;
@@ -32,11 +32,21 @@ public class User {
         this.password = password;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", login='" + login + '\'' +
+                ", password='" + password + '\'' +
+                ", role='" + role + '\'' +
+                '}';
     }
 }

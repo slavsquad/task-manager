@@ -1,11 +1,12 @@
 package ru.stepanenko.tm.api.repository;
 
 import ru.stepanenko.tm.entity.User;
+
 import java.util.Collection;
 
 public interface IUserRepository {
 
-    User findOne(String login);
+    User findOne(String id);
     Collection<User> findAll();
     void removeAll();
     User remove(String login);

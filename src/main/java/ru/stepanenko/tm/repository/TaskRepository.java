@@ -2,12 +2,12 @@ package ru.stepanenko.tm.repository;
 
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
+
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class TaskRepository implements ITaskRepository {
-
     private Map<String, Task> tasks = new HashMap<>();
 
     @Override

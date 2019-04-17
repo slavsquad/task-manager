@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class UserRepository implements IUserRepository {
-    Map<String,User> users = new HashMap<>();
+    private Map<String, User> users = new HashMap<>();
 
     @Override
-    public User findOne(String login) {
-        return users.get(login);
+    public User findOne(String id) {
+        return users.get(id);
     }
 
     @Override
@@ -27,8 +27,8 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User remove(String login) {
-        return users.remove(login);
+    public User remove(String id) {
+        return users.remove(id);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class UserRepository implements IUserRepository {
 
     @Override
     public User merge(User user) {
-        users.put(user.getLogin(),user);
+        users.put(user.getId(), user);
         return user;
     }
 }
