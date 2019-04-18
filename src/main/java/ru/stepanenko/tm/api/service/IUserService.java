@@ -6,13 +6,13 @@ import java.util.Collection;
 public interface IUserService {
 
     void clear();
-    User create(String login, String password, String role);
+    User create(final String login, final String password, final String role);
     Collection<User> findAll();
-    User remove(String login);
-    User edit(String id, String login, String password, String role);
-    User findById(String id);
+    User remove(final String login);
+    User edit(final String id, final String login, final String password, final String role);
+    User findById(final String id);
     User getCurrentUser();
-    User findByLogin(String login);
-    void setCurrentUser(User user);
-    boolean authenticationUser(String login, String password);
+    User findByLogin(final String login);
+    void setCurrentUser(final User user);
+    boolean authenticationUser(final String login, final String password);
 }

@@ -7,11 +7,11 @@ import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class ProjectCreateCommand extends AbstractCommand {
-    IProjectService projectService;
-    IUserService userService;
+public final class ProjectCreateCommand extends AbstractCommand {
+    private final IProjectService projectService;
+    private final IUserService userService;
 
-    public ProjectCreateCommand(IProjectService projectService, IUserService userService) {
+    public ProjectCreateCommand(final IProjectService projectService, final IUserService userService) {
         this.projectService = projectService;
         this.userService = userService;
     }

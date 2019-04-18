@@ -7,11 +7,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProjectRepository implements IProjectRepository {
-    private Map<String, Project> projects = new HashMap<>();
+public final class ProjectRepository implements IProjectRepository {
+    final private Map<String, Project> projects = new HashMap<>();
 
     @Override
-    public Project findOne(String id) {
+    public Project findOne(final String id) {
         return projects.get(id);
     }
 
@@ -26,17 +26,17 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     @Override
-    public Project remove(String id) {
+    public Project remove(final String id) {
         return projects.remove(id);
     }
 
     @Override
-    public Project persist(Project project) {
+    public Project persist(final Project project) {
         return merge(project);
     }
 
     @Override
-    public Project merge(Project project) {
+    public Project merge(final Project project) {
         projects.put(project.getId(), project);
         return project;
     }

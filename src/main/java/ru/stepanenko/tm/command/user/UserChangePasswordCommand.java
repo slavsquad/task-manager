@@ -7,10 +7,10 @@ import ru.stepanenko.tm.enumerate.Role;
 
 import java.util.Scanner;
 
-public class UserChangePasswordCommand extends AbstractCommand {
-    private IUserService userService;
+public final class UserChangePasswordCommand extends AbstractCommand {
+    private final IUserService userService;
 
-    public UserChangePasswordCommand(IUserService userService) {
+    public UserChangePasswordCommand(final IUserService userService) {
         this.userService = userService;
     }
 

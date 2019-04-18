@@ -7,11 +7,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class TaskRepository implements ITaskRepository {
-    private Map<String, Task> tasks = new HashMap<>();
+public final class TaskRepository implements ITaskRepository {
+    final private Map<String, Task> tasks = new HashMap<>();
 
     @Override
-    public Task findOne(String id) {
+    public Task findOne(final String id) {
         return tasks.get(id);
     }
 
@@ -26,17 +26,17 @@ public class TaskRepository implements ITaskRepository {
     }
 
     @Override
-    public Task remove(String id) {
+    public Task remove(final String id) {
         return tasks.remove(id);
     }
 
     @Override
-    public Task persist(Task task) {
+    public Task persist(final Task task) {
         return merge(task);
     }
 
     @Override
-    public Task merge(Task task) {
+    public Task merge(final Task task) {
         tasks.put(task.getId(), task);
         return task;
     }

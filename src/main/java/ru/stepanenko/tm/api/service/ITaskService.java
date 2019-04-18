@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public interface ITaskService {
 
-    void clear(String projectID);
-    Task create(String name, String description, String projectID, String userID);
-    Collection<Task> findAllByProjectID(String projectID);
-    Task remove(String id);
-    Task edit(String id, String name, String description);
-    Task findOne(String id);
+    void clear(final String projectID);
+    Task create(final String name, final String description, final String projectID, final String userID);
+    Collection<Task> findAllByProjectID(final String projectID);
+    Task remove(final String id);
+    Task edit(final String id, final String name, final String description);
+    Task findOne(final String id);
 }

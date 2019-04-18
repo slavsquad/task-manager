@@ -4,10 +4,10 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
-public class UserLogoutCommand extends AbstractCommand {
-    private IUserService userService;
+public final class UserLogoutCommand extends AbstractCommand {
+    private final IUserService userService;
 
-    public UserLogoutCommand(IUserService userService) {
+    public UserLogoutCommand(final IUserService userService) {
         this.userService = userService;
     }
 

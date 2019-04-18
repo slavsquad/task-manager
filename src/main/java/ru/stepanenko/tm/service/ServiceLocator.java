@@ -11,14 +11,13 @@ import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.repository.TaskRepository;
 import ru.stepanenko.tm.repository.UserRepository;
 
-public class ServiceLocator implements IServiceLocator {
-    private IProjectRepository projectRepository = new ProjectRepository();
-    private ITaskRepository taskRepository = new TaskRepository();
-    private IUserRepository userRepository = new UserRepository();
-
-    private IProjectService projectService = new ProjectService(projectRepository);
-    private ITaskService taskService = new TaskService(taskRepository);
-    private IUserService userService = new UserService(userRepository);
+public final class ServiceLocator implements IServiceLocator {
+    final private IProjectRepository projectRepository = new ProjectRepository();
+    final private ITaskRepository taskRepository = new TaskRepository();
+    final private IUserRepository userRepository = new UserRepository();
+    final private IProjectService projectService = new ProjectService(projectRepository);
+    final private ITaskService taskService = new TaskService(taskRepository);
+    final private IUserService userService = new UserService(userRepository);
 
     @Override
     public IProjectService getProjectService() {

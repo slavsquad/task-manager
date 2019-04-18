@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public interface IProjectRepository {
 
-    Project findOne(String id);
+    Project findOne(final String id);
     Collection<Project> findAll();
     void removeAll();
-    Project remove(String id);
-    Project persist(Project project);
-    Project merge(Project project);
+    Project remove(final String id);
+    Project persist(final Project project);
+    Project merge(final Project project);
 }

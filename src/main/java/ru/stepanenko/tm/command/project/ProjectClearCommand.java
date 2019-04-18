@@ -5,11 +5,11 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
-public class ProjectClearCommand extends AbstractCommand {
-    private IProjectService projectService;
-    private IUserService userService;
+public final class ProjectClearCommand extends AbstractCommand {
+    private final IProjectService projectService;
+    private final IUserService userService;
 
-    public ProjectClearCommand(IProjectService projectService, IUserService userService) {
+    public ProjectClearCommand(final IProjectService projectService, final IUserService userService) {
         this.projectService = projectService;
         this.userService = userService;
     }

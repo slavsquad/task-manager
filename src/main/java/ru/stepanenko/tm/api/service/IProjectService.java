@@ -6,9 +6,9 @@ import java.util.Collection;
 public interface IProjectService {
 
     void clear();
-    Project create(String name, String description, String userID);
+    Project create(final String name, final String description, final String userID);
     Collection<Project> findAll(String userID);
-    Project findOne(String id);
-    Project remove(String id);
-    Project edit(String id, String name, String description);
+    Project findOne(final String id);
+    Project remove(final String id);
+    Project edit(final String id, final String name, final String description);
 }

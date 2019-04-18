@@ -8,10 +8,10 @@ import ru.stepanenko.tm.util.StringValidator;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class ProjectService implements IProjectService {
-    private IProjectRepository projectRepository;
+public final class ProjectService implements IProjectService {
+    private final IProjectRepository projectRepository;
 
-    public ProjectService(IProjectRepository IProjectRepository) {
+    public ProjectService(final IProjectRepository IProjectRepository) {
         this.projectRepository = IProjectRepository;
     }
 
@@ -21,13 +21,13 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Project create(String name, String description, String userID) {
+    public Project create(final String name, final String description, final String userID) {
         if (!StringValidator.validate(name, description, userID)) return null;
         return projectRepository.persist(new Project(name, description, userID));
     }
 
     @Override
-    public Collection<Project> findAll(String userID) {
+    public Collection<Project> findAll(final String userID) {
         if (!StringValidator.validate(userID)) return null;
         Collection<Project> userProjects = new ArrayList<>();
         for (Project project : projectRepository.findAll()) {
@@ -39,19 +39,19 @@ public class ProjectService implements IProjectService {
     }
 
     @Override
-    public Project findOne(String id) {
+    public Project findOne(final String id) {
         if (!StringValidator.validate(id)) return null;
         return projectRepository.findOne(id);
     }
 
     @Override
-    public Project remove(String id) {
+    public Project remove(final String id) {
         if (!StringValidator.validate(id)) return null;
         return projectRepository.remove(id);
     }
 
     @Override
-    public Project edit(String id, String name, String description) {
+    public Project edit(final String id, final String name, final String description) {
         if (!StringValidator.validate(id, name, description)) return null;
         Project project = findOne(id);
         project.setName(name);

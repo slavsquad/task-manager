@@ -6,10 +6,10 @@ import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class UserProfileEditCommand extends AbstractCommand {
-    IUserService userService;
+public final class UserProfileEditCommand extends AbstractCommand {
+    private final IUserService userService;
 
-    public UserProfileEditCommand(IUserService userService) {
+    public UserProfileEditCommand(final IUserService userService) {
         this.userService = userService;
     }
 

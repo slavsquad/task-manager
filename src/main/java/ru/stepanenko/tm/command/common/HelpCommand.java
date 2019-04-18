@@ -2,7 +2,7 @@ package ru.stepanenko.tm.command.common;
 
 import ru.stepanenko.tm.command.AbstractCommand;
 
-public class HelpCommand extends AbstractCommand {
+public final class HelpCommand extends AbstractCommand {
 
     @Override
     public String getName() {

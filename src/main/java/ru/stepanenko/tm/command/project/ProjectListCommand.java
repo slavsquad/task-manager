@@ -8,11 +8,11 @@ import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class ProjectListCommand extends AbstractCommand {
-    private IProjectService projectService;
-    private IUserService userService;
+public final class ProjectListCommand extends AbstractCommand {
+    private final IProjectService projectService;
+    private final IUserService userService;
 
-    public ProjectListCommand(IProjectService projectService, IUserService userService) {
+    public ProjectListCommand(final IProjectService projectService, final IUserService userService) {
         this.projectService = projectService;
         this.userService = userService;
     }

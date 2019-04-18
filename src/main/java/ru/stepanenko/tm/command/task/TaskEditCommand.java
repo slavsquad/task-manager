@@ -10,12 +10,12 @@ import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class TaskEditCommand extends AbstractCommand {
-    IProjectService projectService;
-    ITaskService taskService;
-    IUserService userService;
+public final class TaskEditCommand extends AbstractCommand {
+    private final IProjectService projectService;
+    private final  ITaskService taskService;
+    private final IUserService userService;
 
-    public TaskEditCommand(IProjectService projectService, ITaskService taskService, IUserService userService) {
+    public TaskEditCommand(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
         this.projectService = projectService;
         this.taskService = taskService;
         this.userService = userService;

@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public interface IUserRepository {
 
-    User findOne(String id);
+    User findOne(final String id);
     Collection<User> findAll();
     void removeAll();
-    User remove(String login);
-    User persist(User user);
-    User merge(User user);
+    User remove(final String login);
+    User persist(final User user);
+    User merge(final User user);
 }

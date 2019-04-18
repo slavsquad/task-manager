@@ -5,7 +5,7 @@ public enum Role {
 
     private final String displayName;
 
-    Role(String role){
+    Role(final String role){
         displayName = role;
     }
 

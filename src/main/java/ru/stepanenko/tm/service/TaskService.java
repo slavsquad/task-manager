@@ -7,15 +7,15 @@ import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.*;
 
-public class TaskService implements ITaskService {
+public final class TaskService implements ITaskService {
     private ITaskRepository ITaskRepository;
 
-    public TaskService(ITaskRepository ITaskRepository) {
+    public TaskService(final ITaskRepository ITaskRepository) {
         this.ITaskRepository = ITaskRepository;
     }
 
     @Override
-    public void clear(String projectID) {
+    public void clear(final String projectID) {
         Collection<Task> removalTasks = findAllByProjectID(projectID);
         for (Task task : removalTasks) {
             ITaskRepository.remove(task.getId());
@@ -23,13 +23,13 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task create(String name, String description, String projectID, String userID) {
+    public Task create(final String name, final String description, final String projectID, final String userID) {
         if (!StringValidator.validate(name, description, projectID, userID)) return null;
         return ITaskRepository.persist(new Task(name, description, projectID, userID));
     }
 
     @Override
-    public Collection<Task> findAllByProjectID(String projectID) {
+    public Collection<Task> findAllByProjectID(final String projectID) {
         if (!StringValidator.validate(projectID)) return null;
         Collection<Task> tasks = ITaskRepository.findAll();
         Collection<Task> tasksByProjectID = new ArrayList<>();
@@ -42,13 +42,13 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task remove(String id) {
+    public Task remove(final String id) {
         if (!StringValidator.validate(id)) return null;
         return ITaskRepository.remove(id);
     }
 
     @Override
-    public Task edit(String id, String name, String description) {
+    public Task edit(final String id, final String name, final String description) {
         if (!StringValidator.validate(id, name, description)) return null;
         Task task = findOne(id);
         task.setName(name);
@@ -57,7 +57,7 @@ public class TaskService implements ITaskService {
     }
 
     @Override
-    public Task findOne(String id) {
+    public Task findOne(final String id) {
         if (!StringValidator.validate(id)) return null;
         return ITaskRepository.findOne(id);
     }

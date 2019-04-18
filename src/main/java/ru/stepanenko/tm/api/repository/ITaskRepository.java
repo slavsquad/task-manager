@@ -5,10 +5,10 @@ import java.util.Collection;
 
 public interface ITaskRepository {
 
-    Task findOne(String id);
+    Task findOne(final String id);
     Collection<Task> findAll();
     void removeAll();
-    Task remove(String id);
-    Task persist(Task task);
-    Task merge(Task task);
+    Task remove(final String id);
+    Task persist(final Task task);
+    Task merge(final Task task);
 }

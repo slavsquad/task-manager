@@ -2,7 +2,7 @@ package ru.stepanenko.tm.command.common;
 
 import ru.stepanenko.tm.command.AbstractCommand;
 
-public class ExitCommand extends AbstractCommand {
+public final class ExitCommand extends AbstractCommand {
 
     @Override
     public String getName() {

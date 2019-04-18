@@ -7,10 +7,10 @@ import ru.stepanenko.tm.enumerate.Role;
 
 import java.util.Scanner;
 
-public class UserRegisterCommand extends AbstractCommand {
-    private IUserService userService;
+public final class UserRegisterCommand extends AbstractCommand {
+    private final IUserService userService;
 
-    public UserRegisterCommand(IUserService userService) {
+    public UserRegisterCommand(final IUserService userService) {
         this.userService = userService;
     }
 

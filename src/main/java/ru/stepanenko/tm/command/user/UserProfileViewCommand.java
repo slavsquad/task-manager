@@ -4,10 +4,10 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
-public class UserProfileViewCommand extends AbstractCommand {
-    IUserService userService;
+public final class UserProfileViewCommand extends AbstractCommand {
+    private final IUserService userService;
 
-    public UserProfileViewCommand(IUserService userService) {
+    public UserProfileViewCommand(final IUserService userService) {
         this.userService = userService;
     }
 

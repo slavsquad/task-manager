@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserService implements IUserService {
+public final class UserService implements IUserService {
     private IUserRepository userRepository;
     private User currentUser;
 
@@ -24,7 +24,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User create(String login, String password, String role) {
+    public User create(final String login, final String password, final String role) {
         if (!StringValidator.validate(login, password, role)) return null;
         if (getUserRole(role) == null) return null;
         return userRepository.persist(new User(login, HashUtil.md5(password), getUserRole(role)));
@@ -36,14 +36,14 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User remove(String login) {
+    public User remove(final String login) {
         if (!StringValidator.validate(login)) return null;
         return userRepository.remove(login);
     }
 
 
     @Override
-    public User edit(String id, String login, String password, String role) {
+    public User edit(final String id, final String login, final String password, final String role) {
         if (!StringValidator.validate(id, login, password, role)) return null;
         if (getUserRole(role) == null) return null;
         User user = findById(id);
@@ -54,7 +54,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findById(String id) {
+    public User findById(final String id) {
         if (!StringValidator.validate(id)) return null;
         return userRepository.findOne(id);
     }
@@ -65,7 +65,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public User findByLogin(String login) {
+    public User findByLogin(final String login) {
         if (!StringValidator.validate(login)) return null;
         Collection<User> userCollection = userRepository.findAll();
         for (User user : userCollection) if (login.equals(user.getLogin())) return user;
@@ -73,19 +73,19 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void setCurrentUser(User user) {
+    public void setCurrentUser(final User user) {
         this.currentUser = user;
     }
 
     @Override
-    public boolean authenticationUser(String login, String password){
+    public boolean authenticationUser(final String login, final String password){
         User user = findByLogin(login);
         if (user == null || !HashUtil.md5(password).equals(user.getPassword())) return false;
         setCurrentUser(user);
         return true;
     }
 
-    private Role getUserRole(String role) {
+    private Role getUserRole(final String role) {
         Map<String, Role> userRoles = new HashMap<>(2);
         userRoles.put("admin", Role.ADMINISTRATOR);
         userRoles.put("user", Role.USER);

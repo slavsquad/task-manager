@@ -9,12 +9,12 @@ import ru.stepanenko.tm.entity.User;
 
 import java.util.Scanner;
 
-public class TaskClearCommand extends AbstractCommand {
-    private IProjectService projectService;
-    private ITaskService taskService;
-    private IUserService userService;
+public final class TaskClearCommand extends AbstractCommand {
+    private final IProjectService projectService;
+    private final ITaskService taskService;
+    private final IUserService userService;
 
-    public TaskClearCommand(IProjectService projectService, ITaskService taskService, IUserService userService) {
+    public TaskClearCommand(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
         this.projectService = projectService;
         this.taskService = taskService;
         this.userService = userService;

@@ -8,11 +8,11 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserRepository implements IUserRepository {
+public final class UserRepository implements IUserRepository {
     private Map<String, User> users = new HashMap<>();
 
     @Override
-    public User findOne(String id) {
+    public User findOne(final String id) {
         return users.get(id);
     }
 
@@ -27,17 +27,17 @@ public class UserRepository implements IUserRepository {
     }
 
     @Override
-    public User remove(String id) {
+    public User remove(final String id) {
         return users.remove(id);
     }
 
     @Override
-    public User persist(User user) {
+    public User persist(final User user) {
         return merge(user);
     }
 
     @Override
-    public User merge(User user) {
+    public User merge(final User user) {
         users.put(user.getId(), user);
         return user;
     }

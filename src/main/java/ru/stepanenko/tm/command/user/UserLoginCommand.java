@@ -5,8 +5,8 @@ import ru.stepanenko.tm.command.AbstractCommand;
 
 import java.util.Scanner;
 
-public class UserLoginCommand extends AbstractCommand {
-    private IUserService userService;
+public final class UserLoginCommand extends AbstractCommand {
+    private final IUserService userService;
 
     public UserLoginCommand(IUserService userService) {
         this.userService = userService;
