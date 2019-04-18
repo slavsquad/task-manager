@@ -1,10 +1,8 @@
 package ru.stepanenko.tm.entity;
 
-import ru.stepanenko.tm.util.DateFormatter;
-
 import java.util.Date;
 
-public class Task extends BaseEntity {
+public class Task extends AbstractEntity {
     private String projectID = "";
     private Date dateStart = null;
     private Date dateEnd = null;
@@ -13,7 +11,7 @@ public class Task extends BaseEntity {
     public Task() {
     }
 
-    public Task(String name, String description, String projectID, String userID) {
+    public Task(final String name, final String description, final String projectID, final String userID) {
         this.name = name;
         this.description = description;
         this.dateStart = new Date();
@@ -25,7 +23,7 @@ public class Task extends BaseEntity {
         return projectID;
     }
 
-    public void setProjectID(String projectID) {
+    public void setProjectID(final String projectID) {
         this.projectID = projectID;
     }
 
@@ -33,7 +31,7 @@ public class Task extends BaseEntity {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public void setDateStart(final Date dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -41,7 +39,7 @@ public class Task extends BaseEntity {
         return dateEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public void setDateEnd(final Date dateEnd) {
         this.dateEnd = dateEnd;
     }
 
@@ -49,7 +47,7 @@ public class Task extends BaseEntity {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(final String userID) {
         this.userID = userID;
     }
 

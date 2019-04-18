@@ -4,7 +4,7 @@ import ru.stepanenko.tm.util.DateFormatter;
 
 import java.util.Date;
 
-public class Project extends BaseEntity {
+public class Project extends AbstractEntity {
     private Date dateStart;
     private Date dateEnd;
     private String userID;
@@ -12,7 +12,7 @@ public class Project extends BaseEntity {
     public Project() {
     }
 
-    public Project(String name, String description, String userID) {
+    public Project(final String name, final String description, final String userID) {
         this.name = name;
         this.description = description;
         this.dateStart = new Date();
@@ -23,7 +23,7 @@ public class Project extends BaseEntity {
         return dateStart;
     }
 
-    public void setDateStart(Date dateStart) {
+    public void setDateStart(final Date dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -31,7 +31,7 @@ public class Project extends BaseEntity {
         return dateEnd;
     }
 
-    public void setDateEnd(Date dateEnd) {
+    public void setDateEnd(final Date dateEnd) {
         this.dateEnd = dateEnd;
     }
 
@@ -39,7 +39,7 @@ public class Project extends BaseEntity {
         return userID;
     }
 
-    public void setUserID(String userID) {
+    public void setUserID(final String userID) {
         this.userID = userID;
     }
 

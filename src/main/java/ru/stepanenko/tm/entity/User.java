@@ -2,7 +2,7 @@ package ru.stepanenko.tm.entity;
 
 import ru.stepanenko.tm.enumerate.Role;
 
-public class User extends BaseEntity {
+public class User extends AbstractEntity {
     private String login = "";
     private String password = "";
     private Role role = Role.USER;
@@ -10,7 +10,7 @@ public class User extends BaseEntity {
     public User() {
     }
 
-    public User(String login, String password, Role role) {
+    public User(final String login, final String password, final Role role) {
         this.login = login;
         this.password = password;
         this.role = role;
@@ -20,7 +20,7 @@ public class User extends BaseEntity {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(final String login) {
         this.login = login;
     }
 
@@ -28,7 +28,7 @@ public class User extends BaseEntity {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -36,7 +36,7 @@ public class User extends BaseEntity {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(final Role role) {
         this.role = role;
     }
 
