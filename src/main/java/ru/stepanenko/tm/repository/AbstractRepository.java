@@ -11,7 +11,7 @@ abstract public class AbstractRepository<E extends AbstractEntity> implements IA
     private final Map<String, E> repositoryMap = new HashMap<>();
 
     @Override
-    public E findOne(String id) {
+    public E findOne(final String id) {
         return repositoryMap.get(id);
     }
 
@@ -26,17 +26,17 @@ abstract public class AbstractRepository<E extends AbstractEntity> implements IA
     }
 
     @Override
-    public E remove(String id) {
+    public E remove(final String id) {
         return repositoryMap.remove(id);
     }
 
     @Override
-    public E persist(E entity) {
+    public E persist(final E entity) {
         return merge(entity);
     }
 
     @Override
-    public E merge(E entity) {
+    public E merge(final E entity) {
         repositoryMap.put(entity.getId(), entity);
         return entity;
     }

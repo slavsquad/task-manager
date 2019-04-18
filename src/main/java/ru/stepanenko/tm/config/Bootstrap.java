@@ -86,14 +86,14 @@ public class Bootstrap {
         projectService.create("My_project_3", "Description for my project 3", userService.findByLogin("user").getId());
         projectService.create("My_project_4", "Description for my project 4", userService.findByLogin("user").getId());
 
-        for (Project project : projectService.findAll(userService.findByLogin("admin").getId())) {
+        for (Project project : projectService.findAllByUserId(userService.findByLogin("admin").getId())) {
             taskService.create("task_100", "Description for task 100", project.getId(), userService.findByLogin("admin").getId());
             taskService.create("task_200", "Description for task 200", project.getId(), userService.findByLogin("admin").getId());
             taskService.create("task_300", "Description for task 300", project.getId(), userService.findByLogin("admin").getId());
             taskService.create("task_400", "Description for task 400", project.getId(), userService.findByLogin("admin").getId());
         }
 
-        for (Project project : projectService.findAll(userService.findByLogin("user").getId())) {
+        for (Project project : projectService.findAllByUserId(userService.findByLogin("user").getId())) {
             taskService.create("task_1", "Description for task 1", project.getId(), userService.findByLogin("user").getId());
             taskService.create("task_2", "Description for task 2", project.getId(), userService.findByLogin("user").getId());
             taskService.create("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId());

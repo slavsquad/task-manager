@@ -5,7 +5,6 @@ import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.util.StringValidator;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public final class ProjectService implements IProjectService {
@@ -27,15 +26,14 @@ public final class ProjectService implements IProjectService {
     }
 
     @Override
-    public Collection<Project> findAll(final String userID) {
-        if (!StringValidator.validate(userID)) return null;
-        Collection<Project> userProjects = new ArrayList<>();
-        for (Project project : projectRepository.findAll()) {
-            if (userID.equals(project.getUserID())) {
-                userProjects.add(project);
-            }
-        }
-        return userProjects;
+    public Collection<Project> findAll() {
+        return null;
+    }
+
+    @Override
+    public Collection<Project> findAllByUserId(final String id) {
+        if (!StringValidator.validate(id)) return null;
+        return projectRepository.findAllByUserID(id);
     }
 
     @Override

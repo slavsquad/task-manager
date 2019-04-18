@@ -67,9 +67,7 @@ public final class UserService implements IUserService {
     @Override
     public User findByLogin(final String login) {
         if (!StringValidator.validate(login)) return null;
-        Collection<User> userCollection = userRepository.findAll();
-        for (User user : userCollection) if (login.equals(user.getLogin())) return user;
-        return null;
+        return userRepository.findByLogin(login);
     }
 
     @Override

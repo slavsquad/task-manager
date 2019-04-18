@@ -34,18 +34,18 @@ public final class ProjectListCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (projectService.findAll(currentUser.getId()).isEmpty()){
+        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()){
             System.out.println("List of projects is empty!");
             return;
         }
         System.out.println("List of projects:");
-        projectService.findAll(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
+        projectService.findAllByUserId(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
         System.out.print("Press ENTER for print all project or input project id: ");
         Scanner scanner = new Scanner(System.in);
         String projectID = scanner.nextLine();
         //list for all projects
         if ("".equals(projectID)) {
-            projectService.findAll(currentUser.getId()).forEach(System.out::println);
+            projectService.findAllByUserId(currentUser.getId()).forEach(System.out::println);
         } else {//list for selected project
             Project project = projectService.findOne(projectID);
             if (project == null) {
