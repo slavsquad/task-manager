@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class RoleUtil {
-    static public Role stringToRole(String string) {
+    static public Role stringToRole(final String string) {
         Map<String, Role> userRoles = new HashMap<>(2);
         userRoles.put("admin", Role.ADMINISTRATOR);
         userRoles.put("user", Role.USER);

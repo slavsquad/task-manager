@@ -32,14 +32,14 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
     }
 
     @Override
-    public void removeAllByUserId(String id) {
+    public void removeAllByUserId(final String id) {
         for (Task task : findAllByUserId(id)) {
             remove(task.getId());
         }
     }
 
     @Override
-    public void removeAllByProjectId(String id) {
+    public void removeAllByProjectId(final String id) {
         for (Task task : findAllByUserId(id)) {
             remove(task.getId());
         }

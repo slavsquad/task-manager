@@ -7,7 +7,7 @@ import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.*;
 
-public final class TaskService extends AbstractEntityService<Task> implements ITaskService {
+public final class TaskService extends AbstractEntityService<Task, ITaskRepository> implements ITaskService {
 
     public TaskService(final ITaskRepository taskRepository) {
         super(taskRepository);
@@ -29,26 +29,26 @@ public final class TaskService extends AbstractEntityService<Task> implements IT
     }
 
     @Override
-    public void removeAllByProjectId(String id) {
+    public void removeAllByProjectId(final String id) {
         if (!StringValidator.validate(id)) return;
-        ((ITaskRepository) repository).removeAllByProjectId(id);
+        repository.removeAllByProjectId(id);
     }
 
     @Override
-    public void removeAllByUserId(String id) {
+    public void removeAllByUserId(final String id) {
         if (!StringValidator.validate(id)) return;
-        ((ITaskRepository) repository).removeAllByUserId(id);
+        repository.removeAllByUserId(id);
     }
 
     @Override
     public Collection<Task> findAllByProjectID(final String id) {
         if (!StringValidator.validate(id)) return null;
-        return ((ITaskRepository) repository).findAllByProjectId(id);
+        return repository.findAllByProjectId(id);
     }
 
     @Override
     public Collection<Task> findAllByUserID(final String id) {
         if (!StringValidator.validate(id)) return null;
-        return ((ITaskRepository) repository).findAllByUserId(id);
+        return repository.findAllByUserId(id);
     }
 }

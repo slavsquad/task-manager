@@ -7,7 +7,7 @@ import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.Collection;
 
-public final class ProjectService extends AbstractEntityService<Project> implements IProjectService {
+public final class ProjectService extends AbstractEntityService<Project, IProjectRepository> implements IProjectService {
 
     public ProjectService(final IProjectRepository projectRepository) {
         super(projectRepository);
@@ -22,13 +22,13 @@ public final class ProjectService extends AbstractEntityService<Project> impleme
     @Override
     public Collection<Project> findAllByUserId(final String id) {
         if (!StringValidator.validate(id)) return null;
-        return ((IProjectRepository) repository).findAllByUserID(id);
+        return repository.findAllByUserID(id);
     }
 
     @Override
-    public void removeAllByUserId(String id) {
+    public void removeAllByUserId(final String id) {
         if (!StringValidator.validate(id)) return;
-        ((IProjectRepository) repository).removeAllByUserID(id);
+        repository.removeAllByUserID(id);
     }
 
     @Override

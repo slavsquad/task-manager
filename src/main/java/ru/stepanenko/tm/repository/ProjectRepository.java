@@ -20,7 +20,7 @@ public final class ProjectRepository extends AbstractRepository<Project> impleme
     }
 
     @Override
-    public void removeAllByUserID(String id) {
+    public void removeAllByUserID(final String id) {
         for (Project project : findAllByUserID(id)) {
             remove(project.getId());
         }

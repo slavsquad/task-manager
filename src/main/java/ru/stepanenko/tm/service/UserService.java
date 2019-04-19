@@ -7,7 +7,7 @@ import ru.stepanenko.tm.util.HashUtil;
 import ru.stepanenko.tm.util.RoleUtil;
 import ru.stepanenko.tm.util.StringValidator;
 
-public final class UserService extends AbstractEntityService<User> implements IUserService {
+public final class UserService extends AbstractEntityService<User, IUserRepository> implements IUserService {
     private User currentUser;
 
     public UserService(IUserRepository userRepository) {
@@ -40,7 +40,7 @@ public final class UserService extends AbstractEntityService<User> implements IU
     @Override
     public User findByLogin(final String login) {
         if (!StringValidator.validate(login)) return null;
-        return ((IUserRepository) repository).findByLogin(login);
+        return repository.findByLogin(login);
     }
 
     @Override

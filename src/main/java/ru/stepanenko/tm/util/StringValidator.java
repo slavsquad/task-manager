@@ -2,7 +2,7 @@ package ru.stepanenko.tm.util;
 
 public class StringValidator {
 
-    public static boolean isNumeric(String string) {
+    public static boolean isNumeric(final String string) {
         return string.chars().allMatch(Character::isDigit);
     }
 

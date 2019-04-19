@@ -29,55 +29,36 @@ public class Bootstrap {
     }
 
     private Map<String, AbstractCommand> generateCommands(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
-        final Map<String, AbstractCommand> commandMap = new HashMap<>();
+        final Map<String, AbstractCommand> mapCommand = new HashMap<>();
 
-        final ProjectClearCommand projectClearCommand = new ProjectClearCommand(projectService, userService);
-        final ProjectCreateCommand projectCreateCommand = new ProjectCreateCommand(projectService, userService);
-        final ProjectListCommand projectListCommand = new ProjectListCommand(projectService, userService);
-        final ProjectRemoveCommand projectRemoveCommand = new ProjectRemoveCommand(projectService, userService);
-        final ProjectEditCommand projectEditCommand = new ProjectEditCommand(projectService, userService);
+        registerCommand(new ProjectClearCommand(projectService, userService), mapCommand);
+        registerCommand(new ProjectCreateCommand(projectService, userService), mapCommand);
+        registerCommand(new ProjectListCommand(projectService, userService), mapCommand);
+        registerCommand(new ProjectRemoveCommand(projectService, userService), mapCommand);
+        registerCommand(new ProjectEditCommand(projectService, userService), mapCommand);
 
-        final TaskClearCommand taskCleanCommand = new TaskClearCommand(projectService, taskService, userService);
-        final TaskCreateCommand taskCreateCommand = new TaskCreateCommand(projectService, taskService, userService);
-        final TaskListCommand taskListCommand = new TaskListCommand(projectService, taskService, userService);
-        final TaskRemoveCommand taskRemoveCommand = new TaskRemoveCommand(projectService, taskService, userService);
-        final TaskEditCommand taskEditCommand = new TaskEditCommand(projectService, taskService, userService);
+        registerCommand(new TaskClearCommand(projectService, taskService, userService), mapCommand);
+        registerCommand(new TaskCreateCommand(projectService, taskService, userService), mapCommand);
+        registerCommand(new TaskListCommand(projectService, taskService, userService), mapCommand);
+        registerCommand(new TaskRemoveCommand(projectService, taskService, userService), mapCommand);
+        registerCommand(new TaskEditCommand(projectService, taskService, userService), mapCommand);
 
-        final UserLoginCommand userLoginCommand = new UserLoginCommand(userService);
-        final UserLogoutCommand userLogoutCommand = new UserLogoutCommand(userService);
-        final UserRegisterCommand userRegisterCommand = new UserRegisterCommand(userService);
-        final UserProfileViewCommand userProfileViewCommand = new UserProfileViewCommand(userService);
-        final UserChangePasswordCommand userChangePasswordCommand = new UserChangePasswordCommand(userService);
-        final UserProfileEditCommand userProfileEditCommand = new UserProfileEditCommand(userService);
+        registerCommand(new UserLoginCommand(userService), mapCommand);
+        registerCommand(new UserLogoutCommand(userService), mapCommand);
+        registerCommand(new UserRegisterCommand(userService), mapCommand);
+        registerCommand(new UserProfileViewCommand(userService), mapCommand);
+        registerCommand(new UserChangePasswordCommand(userService), mapCommand);
+        registerCommand(new UserProfileEditCommand(userService), mapCommand);
 
-        final HelpCommand helpCommand = new HelpCommand();
-        final ExitCommand exitCommand = new ExitCommand();
-        final AboutCommand aboutCommand = new AboutCommand();
+        registerCommand(new HelpCommand(), mapCommand);
+        registerCommand(new ExitCommand(), mapCommand);
+        registerCommand(new AboutCommand(), mapCommand);
 
-        commandMap.put(projectClearCommand.getName(), projectClearCommand);
-        commandMap.put(projectCreateCommand.getName(), projectCreateCommand);
-        commandMap.put(projectListCommand.getName(), projectListCommand);
-        commandMap.put(projectRemoveCommand.getName(), projectRemoveCommand);
-        commandMap.put(projectEditCommand.getName(), projectEditCommand);
+        return mapCommand;
+    }
 
-        commandMap.put(taskCleanCommand.getName(), taskCleanCommand);
-        commandMap.put(taskCreateCommand.getName(), taskCreateCommand);
-        commandMap.put(taskListCommand.getName(), taskListCommand);
-        commandMap.put(taskRemoveCommand.getName(), taskRemoveCommand);
-        commandMap.put(taskEditCommand.getName(), taskEditCommand);
-
-        commandMap.put(userLoginCommand.getName(), userLoginCommand);
-        commandMap.put(userLogoutCommand.getName(), userLogoutCommand);
-        commandMap.put(userRegisterCommand.getName(), userRegisterCommand);
-        commandMap.put(userProfileViewCommand.getName(), userProfileViewCommand);
-        commandMap.put(userChangePasswordCommand.getName(), userChangePasswordCommand);
-        commandMap.put(userProfileEditCommand.getName(), userProfileEditCommand);
-
-        commandMap.put(helpCommand.getName(), helpCommand);
-        commandMap.put(exitCommand.getName(), exitCommand);
-        commandMap.put(aboutCommand.getName(),aboutCommand);
-
-        return commandMap;
+    private void registerCommand(final AbstractCommand abstractCommand, final Map<String, AbstractCommand> command) {
+        command.put(abstractCommand.getName(), abstractCommand);
     }
 
     private void generateTestData(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
@@ -110,7 +91,6 @@ public class Bootstrap {
     private void menu(final Map<String, AbstractCommand> commands) {
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
-
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Please input your command:");
