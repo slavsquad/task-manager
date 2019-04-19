@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public final class ProjectRepository extends AbstractRepository<Project> implements IProjectRepository {
+
     @Override
     public Collection<Project> findAllByUserID(final String id) {
         Collection<Project> userProjects = new ArrayList<>();
@@ -16,5 +17,12 @@ public final class ProjectRepository extends AbstractRepository<Project> impleme
             }
         }
         return userProjects;
+    }
+
+    @Override
+    public void removeAllByUserID(String id) {
+        for (Project project : findAllByUserID(id)) {
+            remove(project.getId());
+        }
     }
 }

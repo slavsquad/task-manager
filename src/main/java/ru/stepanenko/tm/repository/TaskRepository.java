@@ -25,9 +25,23 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
         Collection<Task> tasksByProjectID = new ArrayList<>();
         for (Task task : tasks) {
             if (id.equals(task.getProjectID())) {
-                (tasksByProjectID).add(task);
+                tasksByProjectID.add(task);
             }
         }
         return tasksByProjectID;
+    }
+
+    @Override
+    public void removeAllByUserId(String id) {
+        for (Task task : findAllByUserId(id)) {
+            remove(task.getId());
+        }
+    }
+
+    @Override
+    public void removeAllByProjectId(String id) {
+        for (Task task : findAllByUserId(id)) {
+            remove(task.getId());
+        }
     }
 }

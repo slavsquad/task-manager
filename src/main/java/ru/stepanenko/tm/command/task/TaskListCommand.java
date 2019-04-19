@@ -37,28 +37,37 @@ public final class TaskListCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()){
+        if (taskService.findAllByUserID(currentUser.getId()).isEmpty()) {
+            System.out.println("List of tasks is empty!");
+            return;
+        }
+        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of projects is empty!");
             return;
         }
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAllByUserId(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
-        System.out.println("Please input project id:");
-        String projectID = scanner.nextLine();
-        Project project = projectService.findOne(projectID);
+        System.out.print("Please input project id or press ENTER for print all tasks:");
+        String projectId = scanner.nextLine();
+        if ("".equals(projectId)) {
+            taskService.findAllByUserID(currentUser.getId()).forEach(System.out::println);
+            System.out.println("All task for user: " + currentUser.getLogin() + " has removed!");
+            return;
+        }
+        Project project = projectService.findOne(projectId);
         if (project != null) {
-            if (taskService.findAllByProjectID(projectID).isEmpty()) {
-                System.out.println("List task for project id:" + projectID + " is empty!");
+            if (taskService.findAllByProjectID(projectId).isEmpty()) {
+                System.out.println("List task for project id:" + projectId + " is empty!");
                 return;
             }
             System.out.println("List of task:");
-            taskService.findAllByProjectID(projectID).forEach(e -> System.out.println("id: " + e.getId()));
+            taskService.findAllByProjectID(projectId).forEach(e -> System.out.println("id: " + e.getId()));
             System.out.print("Please input ID task or press ENTER for print all task: ");
             String id = scanner.nextLine();
 
             if ("".equals(id)) {
-                taskService.findAllByProjectID(projectID).forEach(System.out::println);
+                taskService.findAllByProjectID(projectId).forEach(System.out::println);
             } else {
                 if (taskService.findOne(id) != null) {
                     System.out.println(taskService.findOne(id));
@@ -67,7 +76,7 @@ public final class TaskListCommand extends AbstractCommand {
                 }
             }
         } else {
-            System.out.println("Project id " + projectID + " does not found!");
+            System.out.println("Project id " + projectId + " does not found!");
         }
     }
 }

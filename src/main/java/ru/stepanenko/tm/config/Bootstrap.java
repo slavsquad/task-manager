@@ -3,6 +3,7 @@ package ru.stepanenko.tm.config;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.command.*;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.command.common.AboutCommand;
 import ru.stepanenko.tm.command.common.ExitCommand;
 import ru.stepanenko.tm.command.common.HelpCommand;
 import ru.stepanenko.tm.command.project.*;
@@ -51,19 +52,19 @@ public class Bootstrap {
 
         final HelpCommand helpCommand = new HelpCommand();
         final ExitCommand exitCommand = new ExitCommand();
+        final AboutCommand aboutCommand = new AboutCommand();
 
         commandMap.put(projectClearCommand.getName(), projectClearCommand);
         commandMap.put(projectCreateCommand.getName(), projectCreateCommand);
         commandMap.put(projectListCommand.getName(), projectListCommand);
         commandMap.put(projectRemoveCommand.getName(), projectRemoveCommand);
         commandMap.put(projectEditCommand.getName(), projectEditCommand);
+
         commandMap.put(taskCleanCommand.getName(), taskCleanCommand);
         commandMap.put(taskCreateCommand.getName(), taskCreateCommand);
         commandMap.put(taskListCommand.getName(), taskListCommand);
         commandMap.put(taskRemoveCommand.getName(), taskRemoveCommand);
         commandMap.put(taskEditCommand.getName(), taskEditCommand);
-        commandMap.put(helpCommand.getName(), helpCommand);
-        commandMap.put(exitCommand.getName(), exitCommand);
 
         commandMap.put(userLoginCommand.getName(), userLoginCommand);
         commandMap.put(userLogoutCommand.getName(), userLogoutCommand);
@@ -71,6 +72,10 @@ public class Bootstrap {
         commandMap.put(userProfileViewCommand.getName(), userProfileViewCommand);
         commandMap.put(userChangePasswordCommand.getName(), userChangePasswordCommand);
         commandMap.put(userProfileEditCommand.getName(), userProfileEditCommand);
+
+        commandMap.put(helpCommand.getName(), helpCommand);
+        commandMap.put(exitCommand.getName(), exitCommand);
+        commandMap.put(aboutCommand.getName(),aboutCommand);
 
         return commandMap;
     }

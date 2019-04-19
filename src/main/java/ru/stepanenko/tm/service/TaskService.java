@@ -7,43 +7,16 @@ import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.*;
 
-public final class TaskService implements ITaskService {
-    private ITaskRepository taskRepository;
+public final class TaskService extends AbstractEntityService<Task> implements ITaskService {
 
-    public TaskService(final ITaskRepository ITaskRepository) {
-        this.taskRepository = ITaskRepository;
-    }
-
-    @Override
-    public void clear(final String projectID) {
-        Collection<Task> removalTasks = findAllByProjectID(projectID);
-        for (Task task : removalTasks) {
-            taskRepository.remove(task.getId());
-        }
+    public TaskService(final ITaskRepository taskRepository) {
+        super(taskRepository);
     }
 
     @Override
     public Task create(final String name, final String description, final String projectID, final String userID) {
         if (!StringValidator.validate(name, description, projectID, userID)) return null;
-        return taskRepository.persist(new Task(name, description, projectID, userID));
-    }
-
-    @Override
-    public Collection<Task> findAllByProjectID(final String id) {
-        if (!StringValidator.validate(id)) return null;
-        return taskRepository.findAllByProjectId(id);
-    }
-
-    @Override
-    public Collection<Task> findAllByUserID(final String id) {
-        if (!StringValidator.validate(id)) return null;
-        return taskRepository.findAllByUserId(id);
-    }
-
-    @Override
-    public Task remove(final String id) {
-        if (!StringValidator.validate(id)) return null;
-        return taskRepository.remove(id);
+        return repository.persist(new Task(name, description, projectID, userID));
     }
 
     @Override
@@ -52,12 +25,30 @@ public final class TaskService implements ITaskService {
         Task task = findOne(id);
         task.setName(name);
         task.setDescription(description);
-        return taskRepository.merge(task);
+        return repository.merge(task);
     }
 
     @Override
-    public Task findOne(final String id) {
+    public void removeAllByProjectId(String id) {
+        if (!StringValidator.validate(id)) return;
+        ((ITaskRepository) repository).removeAllByProjectId(id);
+    }
+
+    @Override
+    public void removeAllByUserId(String id) {
+        if (!StringValidator.validate(id)) return;
+        ((ITaskRepository) repository).removeAllByUserId(id);
+    }
+
+    @Override
+    public Collection<Task> findAllByProjectID(final String id) {
         if (!StringValidator.validate(id)) return null;
-        return taskRepository.findOne(id);
+        return ((ITaskRepository) repository).findAllByProjectId(id);
+    }
+
+    @Override
+    public Collection<Task> findAllByUserID(final String id) {
+        if (!StringValidator.validate(id)) return null;
+        return ((ITaskRepository) repository).findAllByUserId(id);
     }
 }

@@ -7,45 +7,28 @@ import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.Collection;
 
-public final class ProjectService implements IProjectService {
-    private final IProjectRepository projectRepository;
+public final class ProjectService extends AbstractEntityService<Project> implements IProjectService {
 
-    public ProjectService(final IProjectRepository IProjectRepository) {
-        this.projectRepository = IProjectRepository;
-    }
-
-    @Override
-    public void clear() {
-        projectRepository.removeAll();
+    public ProjectService(final IProjectRepository projectRepository) {
+        super(projectRepository);
     }
 
     @Override
     public Project create(final String name, final String description, final String userID) {
         if (!StringValidator.validate(name, description, userID)) return null;
-        return projectRepository.persist(new Project(name, description, userID));
-    }
-
-    @Override
-    public Collection<Project> findAll() {
-        return null;
+        return repository.persist(new Project(name, description, userID));
     }
 
     @Override
     public Collection<Project> findAllByUserId(final String id) {
         if (!StringValidator.validate(id)) return null;
-        return projectRepository.findAllByUserID(id);
+        return ((IProjectRepository) repository).findAllByUserID(id);
     }
 
     @Override
-    public Project findOne(final String id) {
-        if (!StringValidator.validate(id)) return null;
-        return projectRepository.findOne(id);
-    }
-
-    @Override
-    public Project remove(final String id) {
-        if (!StringValidator.validate(id)) return null;
-        return projectRepository.remove(id);
+    public void removeAllByUserId(String id) {
+        if (!StringValidator.validate(id)) return;
+        ((IProjectRepository) repository).removeAllByUserID(id);
     }
 
     @Override
@@ -54,6 +37,6 @@ public final class ProjectService implements IProjectService {
         Project project = findOne(id);
         project.setName(name);
         project.setDescription(description);
-        return projectRepository.merge(project);
+        return repository.merge(project);
     }
 }

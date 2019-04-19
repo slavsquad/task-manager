@@ -15,7 +15,7 @@ public class HashUtil {
             final byte[] resultByte = messageDigest.digest();
             BigInteger bigInt = new BigInteger(1, resultByte);
             result = bigInt.toString(16);
-        }catch (NoSuchAlgorithmException e){
+        } catch (NoSuchAlgorithmException e) {
             System.out.println("Algorithm is not available in the environment!");
         }
         return result;

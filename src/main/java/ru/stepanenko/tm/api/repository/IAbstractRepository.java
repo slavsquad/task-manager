@@ -3,6 +3,7 @@ package ru.stepanenko.tm.api.repository;
 import java.util.Collection;
 
 public interface IAbstractRepository<E> {
+
     E findOne(final String id);
     Collection<E> findAll();
     void removeAll();

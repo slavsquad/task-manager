@@ -34,7 +34,7 @@ public final class ProjectRemoveCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()){
+        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of projects is empty!");
             return;
         }

@@ -12,7 +12,7 @@ import java.util.Scanner;
 
 public final class TaskEditCommand extends AbstractCommand {
     private final IProjectService projectService;
-    private final  ITaskService taskService;
+    private final ITaskService taskService;
     private final IUserService userService;
 
     public TaskEditCommand(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
@@ -38,7 +38,11 @@ public final class TaskEditCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()){
+        if (taskService.findAllByUserID(currentUser.getId()).isEmpty()) {
+            System.out.println("List of task is empty!");
+            return;
+        }
+        if (projectService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of projects is empty!");
             return;
         }

@@ -31,8 +31,7 @@ public final class ProjectClearCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-
-        projectService.clear();
-        System.out.println("Project is clear!");
+        projectService.removeAllByUserId(currentUser.getId());
+        System.out.println("All project is remove!");
     }
 }
