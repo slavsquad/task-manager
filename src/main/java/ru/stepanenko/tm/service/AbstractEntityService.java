@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.service;
 
+import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.IAbstractRepository;
 import ru.stepanenko.tm.api.service.IAbstractEntityService;
@@ -8,13 +9,10 @@ import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.Collection;
 
+@AllArgsConstructor
 public abstract class AbstractEntityService<E extends AbstractEntity, R extends IAbstractRepository<E>> implements IAbstractEntityService<E> {
     @NotNull
     protected R repository;
-
-    public AbstractEntityService(@NotNull final R repository) {
-        this.repository = repository;
-    }
 
     @Override
     public void clear() {

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.entity.AbstractEntity;
 import ru.stepanenko.tm.entity.User;
 
 public final class ProjectClearCommand extends AbstractCommand {
