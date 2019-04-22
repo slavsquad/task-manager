@@ -1,25 +1,16 @@
 package ru.stepanenko.tm.command.project;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IProjectService;
+import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
-import java.util.Scanner;
-
+@NoArgsConstructor
 public final class ProjectCreateCommand extends AbstractCommand {
-    @NotNull
-    private final IProjectService projectService;
-    @NotNull
-    private final IUserService userService;
-
-    public ProjectCreateCommand(@NotNull final IProjectService projectService, @NotNull final IUserService userService) {
-        this.projectService = projectService;
-        this.userService = userService;
-    }
-
     @Override
     public String getName() {
         return "project-create";
@@ -32,20 +23,21 @@ public final class ProjectCreateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @NotNull final IProjectService projectService = serviceLocator.getProjectService();
+        @NotNull final IUserService userService = serviceLocator.getUserService();
+        @NotNull final ITerminalService terminalService = serviceLocator.getTerminalService();
         @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             System.out.println("This command available only login user!");
             return;
         }
-        @NotNull
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Please input project name:");
         @NotNull
-        String name = scanner.nextLine();
+        String name = terminalService.nextLine();
         System.out.println("Please input project description:");
         @NotNull
-        String description = scanner.nextLine();
+        String description = terminalService.nextLine();
         if (projectService.create(name, description, currentUser.getId()) != null) {
             System.out.println("Project " + name + " is create!");
         } else {

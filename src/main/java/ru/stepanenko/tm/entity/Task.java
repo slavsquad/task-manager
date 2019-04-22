@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Date;
 
@@ -13,9 +14,9 @@ import java.util.Date;
 public class Task extends AbstractEntity {
     @NotNull
     private String projectID = "";
-    @NotNull
+    @Nullable
     private Date dateStart = null;
-    @NotNull
+    @Nullable
     private Date dateEnd = null;
     @NotNull
     private String userID = "";

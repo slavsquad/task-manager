@@ -5,12 +5,6 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.command.*;
 import ru.stepanenko.tm.api.service.IUserService;
-import ru.stepanenko.tm.command.common.AboutCommand;
-import ru.stepanenko.tm.command.common.ExitCommand;
-import ru.stepanenko.tm.command.common.HelpCommand;
-import ru.stepanenko.tm.command.project.*;
-import ru.stepanenko.tm.command.task.*;
-import ru.stepanenko.tm.command.user.*;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
@@ -19,44 +13,37 @@ import ru.stepanenko.tm.enumerate.Role;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class Bootstrap {
+    @NotNull
+    final IServiceLocator serviceLocator = new ServiceLocator();
 
-    public void init() {
-        @NotNull
-        final IServiceLocator serviceLocator = new ServiceLocator();
-        generateTestData(serviceLocator.getProjectService(), serviceLocator.getTaskService(), serviceLocator.getUserService());
-        Map<String, AbstractCommand> commands = generateCommands(serviceLocator.getProjectService(), serviceLocator.getTaskService(), serviceLocator.getUserService());
-        menu(commands);
+    public void init(Class[] arrayCommands) {
+        generateTestData(serviceLocator);
+        menu(initializeCommands(serviceLocator, arrayCommands));
     }
 
-    private Map<String, AbstractCommand> generateCommands(@NotNull final IProjectService projectService, @NotNull final ITaskService taskService, @NotNull final IUserService userService) {
+    private Map<String, AbstractCommand> initializeCommands(@NotNull final IServiceLocator serviceLocator, @NotNull final Class[] arrayCommands) {
         @NotNull final Map<String, AbstractCommand> mapCommand = new HashMap<>();
 
-        registerCommand(new ProjectClearCommand(projectService, userService), mapCommand);
-        registerCommand(new ProjectCreateCommand(projectService, userService), mapCommand);
-        registerCommand(new ProjectListCommand(projectService, userService), mapCommand);
-        registerCommand(new ProjectRemoveCommand(projectService, userService), mapCommand);
-        registerCommand(new ProjectEditCommand(projectService, userService), mapCommand);
+        for (Class command : arrayCommands) {
+            if (command.getSuperclass().equals(AbstractCommand.class)) {
+                try {
+                    AbstractCommand abstractCommand = (AbstractCommand) command.newInstance();
+                    abstractCommand.setServiceLocator(serviceLocator);
+                    registerCommand(abstractCommand, mapCommand);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
-        registerCommand(new TaskClearCommand(projectService, taskService, userService), mapCommand);
-        registerCommand(new TaskCreateCommand(projectService, taskService, userService), mapCommand);
-        registerCommand(new TaskListCommand(projectService, taskService, userService), mapCommand);
-        registerCommand(new TaskRemoveCommand(projectService, taskService, userService), mapCommand);
-        registerCommand(new TaskEditCommand(projectService, taskService, userService), mapCommand);
 
-        registerCommand(new UserLoginCommand(userService), mapCommand);
-        registerCommand(new UserLogoutCommand(userService), mapCommand);
-        registerCommand(new UserRegisterCommand(userService), mapCommand);
-        registerCommand(new UserProfileViewCommand(userService), mapCommand);
-        registerCommand(new UserChangePasswordCommand(userService), mapCommand);
-        registerCommand(new UserProfileEditCommand(userService), mapCommand);
 
-        registerCommand(new HelpCommand(), mapCommand);
-        registerCommand(new ExitCommand(), mapCommand);
-        registerCommand(new AboutCommand(), mapCommand);
-
+        /*
+         */
         return mapCommand;
     }
 
@@ -64,7 +51,10 @@ public class Bootstrap {
         command.put(abstractCommand.getName(), abstractCommand);
     }
 
-    private void generateTestData(@NotNull final IProjectService projectService, @NotNull final ITaskService taskService, @NotNull final IUserService userService) {
+    private void generateTestData(IServiceLocator serviceLocator) {
+        @NotNull final IProjectService projectService = serviceLocator.getProjectService();
+        @NotNull final ITaskService taskService = serviceLocator.getTaskService();
+        @NotNull final IUserService userService = serviceLocator.getUserService();
         //----------------------------------------- test data-------------------------------------------
         userService.create("admin", "admin", Role.ADMINISTRATOR.toString());
         userService.create("user", "user", Role.USER.toString());
@@ -94,12 +84,11 @@ public class Bootstrap {
     private void menu(@NotNull final Map<String, AbstractCommand> commands) {
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
-        @NotNull
-        Scanner scanner = new Scanner(System.in);
+
         while (true) {
             System.out.println("Please input your command:");
             @NotNull
-            String commandName = scanner.nextLine();
+            String commandName = serviceLocator.getTerminalService().nextLine();
             @Nullable
             AbstractCommand command = commands.get(commandName);
             if (command != null) {

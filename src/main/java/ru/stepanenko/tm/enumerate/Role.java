@@ -8,7 +8,7 @@ public enum Role {
     @NotNull
     private final String displayName;
 
-    Role(@NotNull final String role){
+    Role(@NotNull final String role) {
         displayName = role;
     }
 

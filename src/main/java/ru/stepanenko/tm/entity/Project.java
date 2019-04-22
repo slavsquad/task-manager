@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.util.DateFormatter;
 
 import java.util.Date;
@@ -13,9 +14,9 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 public class Project extends AbstractEntity {
-    @NotNull
+    @Nullable
     private Date dateStart;
-    @NotNull
+    @Nullable
     private Date dateEnd;
     @NotNull
     private String userID;

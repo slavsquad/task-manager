@@ -1,23 +1,13 @@
 package ru.stepanenko.tm.command.project;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.IProjectService;
-import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.entity.AbstractEntity;
 import ru.stepanenko.tm.entity.User;
 
+@NoArgsConstructor
 public final class ProjectClearCommand extends AbstractCommand {
-    @NotNull
-    private final IProjectService projectService;
-    @NotNull
-    private final IUserService userService;
-
-    public ProjectClearCommand(@NotNull final IProjectService projectService, @NotNull final IUserService userService) {
-        this.projectService = projectService;
-        this.userService = userService;
-    }
-
     @Override
     public String getName() {
         return "project-clear";
@@ -30,8 +20,10 @@ public final class ProjectClearCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull
-        User currentUser = userService.getCurrentUser();
+        User currentUser = serviceLocator.getUserService().getCurrentUser();
+
         if (currentUser == null) {
             System.out.println("This command available only login user!");
             return;

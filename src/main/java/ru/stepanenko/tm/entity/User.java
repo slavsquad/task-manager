@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Role;
 
 @Getter
@@ -12,12 +13,13 @@ import ru.stepanenko.tm.enumerate.Role;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User extends AbstractEntity {
-    @NotNull
+    @Nullable
     private String login = "";
-    @NotNull
+    @Nullable
     private String password = "";
     @NotNull
     private Role role = Role.USER;
+
     @Override
     public String toString() {
         return "User{" +

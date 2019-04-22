@@ -1,19 +1,14 @@
 package ru.stepanenko.tm.command.user;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
+@NoArgsConstructor
 public final class UserProfileViewCommand extends AbstractCommand {
-    @NotNull
-    private final IUserService userService;
-
-    public UserProfileViewCommand(@NotNull final IUserService userService) {
-        this.userService = userService;
-    }
-
     @Override
     public String getName() {
         return "user-profile-view";
@@ -26,6 +21,7 @@ public final class UserProfileViewCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @NotNull final IUserService userService = serviceLocator.getUserService();
         @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {

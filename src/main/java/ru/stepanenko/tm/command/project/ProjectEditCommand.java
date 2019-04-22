@@ -1,25 +1,16 @@
 package ru.stepanenko.tm.command.project;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IProjectService;
+import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 
-import java.util.Scanner;
-
+@NoArgsConstructor
 public final class ProjectEditCommand extends AbstractCommand {
-    @NotNull
-    private final IProjectService projectService;
-    @NotNull
-    private final IUserService userService;
-
-    public ProjectEditCommand(@NotNull final IProjectService projectService, @NotNull final IUserService userService) {
-        this.projectService = projectService;
-        this.userService = userService;
-    }
-
     @Override
     public String getName() {
         return "project-edit";
@@ -32,6 +23,9 @@ public final class ProjectEditCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @NotNull final IProjectService projectService = serviceLocator.getProjectService();
+        @NotNull final IUserService userService = serviceLocator.getUserService();
+        @NotNull final ITerminalService terminalService = serviceLocator.getTerminalService();
         @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {
@@ -42,17 +36,15 @@ public final class ProjectEditCommand extends AbstractCommand {
             System.out.println("List of projects is empty!");
             return;
         }
-        @NotNull
-        Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAllByUserId(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
         System.out.print("Please input project ID for edit: ");
-        String projectID = scanner.nextLine();
+        String projectID = terminalService.nextLine();
         if (projectService.findOne(projectID) != null) {
             System.out.println("Input new project's name: ");
-            String name = scanner.nextLine();
+            String name = terminalService.nextLine();
             System.out.println("Input new project's description: ");
-            String description = scanner.nextLine();
+            String description = terminalService.nextLine();
             if (projectService.edit(projectID, name, description) != null) {
                 System.out.println("Project " + name + " is update!");
             } else {
