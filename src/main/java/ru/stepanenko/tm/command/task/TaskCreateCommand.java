@@ -1,5 +1,7 @@
 package ru.stepanenko.tm.command.task;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -10,11 +12,14 @@ import ru.stepanenko.tm.entity.User;
 import java.util.Scanner;
 
 public final class TaskCreateCommand extends AbstractCommand {
+    @NotNull
     private final IProjectService projectService;
+    @NotNull
     private final ITaskService taskService;
+    @NotNull
     private final IUserService userService;
 
-    public TaskCreateCommand(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
+    public TaskCreateCommand(@NotNull final IProjectService projectService, @NotNull final ITaskService taskService, @NotNull final IUserService userService) {
         this.projectService = projectService;
         this.taskService = taskService;
         this.userService = userService;
@@ -32,6 +37,7 @@ public final class TaskCreateCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             System.out.println("This command available only login user!");
@@ -41,11 +47,13 @@ public final class TaskCreateCommand extends AbstractCommand {
             System.out.println("List of projects is empty!");
             return;
         }
+        @NotNull
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAllByUserId(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
+        @Nullable
         Project project = (projectService.findOne(projectID));
         if (project != null) {
             System.out.println("Please input task name:");

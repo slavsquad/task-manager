@@ -1,5 +1,7 @@
 package ru.stepanenko.tm.command.project;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
@@ -8,10 +10,12 @@ import ru.stepanenko.tm.entity.User;
 import java.util.Scanner;
 
 public final class ProjectEditCommand extends AbstractCommand {
+    @NotNull
     private final IProjectService projectService;
+    @NotNull
     private final IUserService userService;
 
-    public ProjectEditCommand(final IProjectService projectService, final IUserService userService) {
+    public ProjectEditCommand(@NotNull final IProjectService projectService, @NotNull final IUserService userService) {
         this.projectService = projectService;
         this.userService = userService;
     }
@@ -28,6 +32,7 @@ public final class ProjectEditCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             System.out.println("This command available only login user!");
@@ -37,6 +42,7 @@ public final class ProjectEditCommand extends AbstractCommand {
             System.out.println("List of projects is empty!");
             return;
         }
+        @NotNull
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAllByUserId(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));

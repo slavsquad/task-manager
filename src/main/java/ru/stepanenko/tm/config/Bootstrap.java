@@ -1,5 +1,7 @@
 package ru.stepanenko.tm.config;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.command.*;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -22,14 +24,15 @@ import java.util.Scanner;
 public class Bootstrap {
 
     public void init() {
+        @NotNull
         final IServiceLocator serviceLocator = new ServiceLocator();
         generateTestData(serviceLocator.getProjectService(), serviceLocator.getTaskService(), serviceLocator.getUserService());
         Map<String, AbstractCommand> commands = generateCommands(serviceLocator.getProjectService(), serviceLocator.getTaskService(), serviceLocator.getUserService());
         menu(commands);
     }
 
-    private Map<String, AbstractCommand> generateCommands(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
-        final Map<String, AbstractCommand> mapCommand = new HashMap<>();
+    private Map<String, AbstractCommand> generateCommands(@NotNull final IProjectService projectService, @NotNull final ITaskService taskService, @NotNull final IUserService userService) {
+        @NotNull final Map<String, AbstractCommand> mapCommand = new HashMap<>();
 
         registerCommand(new ProjectClearCommand(projectService, userService), mapCommand);
         registerCommand(new ProjectCreateCommand(projectService, userService), mapCommand);
@@ -57,11 +60,11 @@ public class Bootstrap {
         return mapCommand;
     }
 
-    private void registerCommand(final AbstractCommand abstractCommand, final Map<String, AbstractCommand> command) {
+    private void registerCommand(@NotNull final AbstractCommand abstractCommand, @NotNull final Map<String, AbstractCommand> command) {
         command.put(abstractCommand.getName(), abstractCommand);
     }
 
-    private void generateTestData(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
+    private void generateTestData(@NotNull final IProjectService projectService, @NotNull final ITaskService taskService, @NotNull final IUserService userService) {
         //----------------------------------------- test data-------------------------------------------
         userService.create("admin", "admin", Role.ADMINISTRATOR.toString());
         userService.create("user", "user", Role.USER.toString());
@@ -88,13 +91,16 @@ public class Bootstrap {
         //----------------------------------------------------------------------------------------------
     }
 
-    private void menu(final Map<String, AbstractCommand> commands) {
+    private void menu(@NotNull final Map<String, AbstractCommand> commands) {
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
+        @NotNull
         Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("Please input your command:");
+            @NotNull
             String commandName = scanner.nextLine();
+            @Nullable
             AbstractCommand command = commands.get(commandName);
             if (command != null) {
                 command.execute();

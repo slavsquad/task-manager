@@ -1,5 +1,7 @@
 package ru.stepanenko.tm.service;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.User;
@@ -8,23 +10,25 @@ import ru.stepanenko.tm.util.RoleUtil;
 import ru.stepanenko.tm.util.StringValidator;
 
 public final class UserService extends AbstractEntityService<User, IUserRepository> implements IUserService {
+    @Nullable
     private User currentUser;
 
-    public UserService(IUserRepository userRepository) {
+    public UserService(@NotNull IUserRepository userRepository) {
         super(userRepository);
     }
 
     @Override
-    public User create(final String login, final String password, final String role) {
+    public User create(@NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(login, password, role)) return null;
         if (RoleUtil.stringToRole(role) == null) return null;
         return repository.persist(new User(login, HashUtil.md5(password), RoleUtil.stringToRole(role)));
     }
 
     @Override
-    public User edit(final String id, final String login, final String password, final String role) {
+    public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(id, login, password, role)) return null;
         if (RoleUtil.stringToRole(role) == null) return null;
+        @NotNull
         User user = findOne(id);
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
@@ -38,18 +42,19 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public User findByLogin(final String login) {
+    public User findByLogin(@NotNull final String login) {
         if (!StringValidator.validate(login)) return null;
         return repository.findByLogin(login);
     }
 
     @Override
-    public void setCurrentUser(final User user) {
+    public void setCurrentUser(@Nullable final User user) {
         this.currentUser = user;
     }
 
     @Override
-    public boolean authenticationUser(final String login, final String password) {
+    public boolean authenticationUser(@NotNull final String login, @NotNull final String password) {
+        @Nullable
         User user = findByLogin(login);
         if (user == null || !HashUtil.md5(password).equals(user.getPassword())) return false;
         setCurrentUser(user);

@@ -1,18 +1,22 @@
 package ru.stepanenko.tm.entity;
 
+import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.util.DateFormatter;
 
 import java.util.Date;
 
 public class Project extends AbstractEntity {
+    @NotNull
     private Date dateStart;
+    @NotNull
     private Date dateEnd;
+    @NotNull
     private String userID;
 
     public Project() {
     }
 
-    public Project(final String name, final String description, final String userID) {
+    public Project(@NotNull final String name, @NotNull final String description, @NotNull final String userID) {
         this.name = name;
         this.description = description;
         this.dateStart = new Date();
@@ -23,7 +27,7 @@ public class Project extends AbstractEntity {
         return dateStart;
     }
 
-    public void setDateStart(final Date dateStart) {
+    public void setDateStart(@NotNull final Date dateStart) {
         this.dateStart = dateStart;
     }
 
@@ -31,7 +35,7 @@ public class Project extends AbstractEntity {
         return dateEnd;
     }
 
-    public void setDateEnd(final Date dateEnd) {
+    public void setDateEnd(@NotNull final Date dateEnd) {
         this.dateEnd = dateEnd;
     }
 
@@ -39,7 +43,7 @@ public class Project extends AbstractEntity {
         return userID;
     }
 
-    public void setUserID(final String userID) {
+    public void setUserID(@NotNull final String userID) {
         this.userID = userID;
     }
 

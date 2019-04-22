@@ -1,16 +1,20 @@
 package ru.stepanenko.tm.entity;
 
+import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.enumerate.Role;
 
 public class User extends AbstractEntity {
+    @NotNull
     private String login = "";
+    @NotNull
     private String password = "";
+    @NotNull
     private Role role = Role.USER;
 
     public User() {
     }
 
-    public User(final String login, final String password, final Role role) {
+    public User(@NotNull final String login,@NotNull final String password,@NotNull final Role role) {
         this.login = login;
         this.password = password;
         this.role = role;
@@ -20,7 +24,7 @@ public class User extends AbstractEntity {
         return login;
     }
 
-    public void setLogin(final String login) {
+    public void setLogin(@NotNull final String login) {
         this.login = login;
     }
 
@@ -28,7 +32,7 @@ public class User extends AbstractEntity {
         return password;
     }
 
-    public void setPassword(final String password) {
+    public void setPassword(@NotNull final String password) {
         this.password = password;
     }
 
@@ -36,7 +40,7 @@ public class User extends AbstractEntity {
         return role;
     }
 
-    public void setRole(final Role role) {
+    public void setRole(@NotNull final Role role) {
         this.role = role;
     }
 

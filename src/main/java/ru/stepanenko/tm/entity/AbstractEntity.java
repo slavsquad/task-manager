@@ -1,10 +1,15 @@
 package ru.stepanenko.tm.entity;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.UUID;
 
 public abstract class AbstractEntity {
+    @NotNull
     protected String id = UUID.randomUUID().toString();
+    @NotNull
     protected String name = "";
+    @NotNull
     protected String description = "";
 
     public AbstractEntity() {
@@ -14,7 +19,7 @@ public abstract class AbstractEntity {
         return id;
     }
 
-    public void setId(final String id) {
+    public void setId(@NotNull final String id) {
         this.id = id;
     }
 
@@ -22,7 +27,7 @@ public abstract class AbstractEntity {
         return name;
     }
 
-    public void setName(final String name) {
+    public void setName(@NotNull final String name) {
         this.name = name;
     }
 
@@ -30,7 +35,7 @@ public abstract class AbstractEntity {
         return description;
     }
 
-    public void setDescription(final String description) {
+    public void setDescription(@NotNull final String description) {
         this.description = description;
     }
 }

@@ -1,13 +1,14 @@
 package ru.stepanenko.tm.api.service;
 
+import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Project;
 
 import java.util.Collection;
 
 public interface IProjectService extends IAbstractEntityService<Project> {
 
-    Project create(final String name, final String description, final String userID);
-    Project edit(final String id, final String name, final String description);
-    Collection<Project> findAllByUserId(String id);
-    void removeAllByUserId(String id);
+    Project create(@NotNull final String name, @NotNull final String description, @NotNull final String userID);
+    Project edit(@NotNull final String id, @NotNull final String name, @NotNull final String description);
+    Collection<Project> findAllByUserId(@NotNull final String id);
+    void removeAllByUserId(@NotNull final String id);
 }

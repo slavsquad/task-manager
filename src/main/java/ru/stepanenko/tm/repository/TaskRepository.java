@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.repository;
 
+import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
 
@@ -9,7 +10,8 @@ import java.util.Collection;
 public final class TaskRepository extends AbstractRepository<Task> implements ITaskRepository {
 
     @Override
-    public Collection<Task> findAllByUserId(final String id) {
+    public Collection<Task> findAllByUserId(@NotNull final String id) {
+        @NotNull
         Collection<Task> userTasks = new ArrayList<>();
         for (Task task : findAll()) {
             if (id.equals(task.getUserID())) {
@@ -20,10 +22,10 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
     }
 
     @Override
-    public Collection<Task> findAllByProjectId(final String id) {
-        Collection<Task> tasks = findAll();
+    public Collection<Task> findAllByProjectId(@NotNull final String id) {
+        @NotNull
         Collection<Task> tasksByProjectID = new ArrayList<>();
-        for (Task task : tasks) {
+        for (Task task : findAll()) {
             if (id.equals(task.getProjectID())) {
                 tasksByProjectID.add(task);
             }
@@ -32,15 +34,15 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
     }
 
     @Override
-    public void removeAllByUserId(final String id) {
+    public void removeAllByUserId(@NotNull final String id) {
         for (Task task : findAllByUserId(id)) {
             remove(task.getId());
         }
     }
 
     @Override
-    public void removeAllByProjectId(final String id) {
-        for (Task task : findAllByUserId(id)) {
+    public void removeAllByProjectId(@NotNull final String id) {
+        for (Task task : findAllByProjectId(id)) {
             remove(task.getId());
         }
     }

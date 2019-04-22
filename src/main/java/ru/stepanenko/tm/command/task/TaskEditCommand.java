@@ -1,5 +1,7 @@
 package ru.stepanenko.tm.command.task;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -11,11 +13,14 @@ import ru.stepanenko.tm.entity.User;
 import java.util.Scanner;
 
 public final class TaskEditCommand extends AbstractCommand {
+    @NotNull
     private final IProjectService projectService;
+    @NotNull
     private final ITaskService taskService;
+    @NotNull
     private final IUserService userService;
 
-    public TaskEditCommand(final IProjectService projectService, final ITaskService taskService, final IUserService userService) {
+    public TaskEditCommand(@NotNull final IProjectService projectService, @NotNull final ITaskService taskService, @NotNull final IUserService userService) {
         this.projectService = projectService;
         this.taskService = taskService;
         this.userService = userService;
@@ -33,6 +38,7 @@ public final class TaskEditCommand extends AbstractCommand {
 
     @Override
     public void execute() {
+        @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) {
             System.out.println("This command available only login user!");
@@ -46,11 +52,13 @@ public final class TaskEditCommand extends AbstractCommand {
             System.out.println("List of projects is empty!");
             return;
         }
+        @NotNull
         Scanner scanner = new Scanner(System.in);
         System.out.println("List of projects:");
         projectService.findAllByUserId(currentUser.getId()).forEach(e -> System.out.println("id: " + e.getId()));
         System.out.println("Please input project id:");
         String projectID = scanner.nextLine();
+        @Nullable
         Project project = projectService.findOne(projectID);
         if (project != null) {
             if (taskService.findAllByProjectID(projectID).isEmpty()) {
@@ -60,12 +68,16 @@ public final class TaskEditCommand extends AbstractCommand {
             System.out.println("List of task:");
             taskService.findAllByProjectID(projectID).forEach(e -> System.out.println("id: " + e.getId()));
             System.out.println("Please input ID task for edit:");
+            @NotNull
             String id = scanner.nextLine();
             if (taskService.findOne(id) != null) {
                 System.out.println("Input new task's name: ");
+                @NotNull
                 String name = scanner.nextLine();
                 System.out.println("Input new task's description: ");
+                @NotNull
                 String description = scanner.nextLine();
+                @Nullable
                 Task task = taskService.edit(id, name, description);
                 if (task != null) {
                     System.out.println("Task id: " + task.getId() + "edit is complete!");

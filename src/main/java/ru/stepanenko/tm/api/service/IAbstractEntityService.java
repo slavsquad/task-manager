@@ -1,12 +1,14 @@
 package ru.stepanenko.tm.api.service;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Collection;
 
 public interface IAbstractEntityService<E> {
 
     void clear();
-    E findOne(final String id);
-    E remove(final String id);
+    E findOne(@NotNull final String id);
+    E remove(@NotNull final String id);
     Collection<E> findAll();
 }
