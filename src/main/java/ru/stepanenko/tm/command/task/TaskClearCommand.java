@@ -36,7 +36,7 @@ public final class TaskClearCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (taskService.findAllByUserID(currentUser.getId()).isEmpty()) {
+        if (taskService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of task is empty!");
             return;
         }
@@ -58,7 +58,7 @@ public final class TaskClearCommand extends AbstractCommand {
         @Nullable
         Project project = (projectService.findOne(id));
         if (project != null) {
-            if (taskService.findAllByProjectID(id).isEmpty()) {
+            if (taskService.findAllByProjectId(id).isEmpty()) {
                 System.out.println("List task for project id:" + id + " is empty!");
                 return;
             }

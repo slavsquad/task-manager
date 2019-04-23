@@ -6,20 +6,24 @@ import lombok.Setter;
 import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.DateFormatter;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
-public class Project extends AbstractEntity {
+public class Project extends AbstractEntity implements Serializable {
     @Nullable
     private Date dateStart;
     @Nullable
     private Date dateEnd;
     @NotNull
-    private String userID;
+    private String userID = "";
+    @NotNull
+    private Status status = Status.PLANNED;
 
     public Project(@NotNull final String name, @NotNull final String description, @NotNull final String userID) {
         this.name = name;
@@ -28,14 +32,16 @@ public class Project extends AbstractEntity {
         this.userID = userID;
     }
 
+
     @Override
     public String toString() {
         return "Project{" +
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", startDate=" + DateFormatter.format(dateStart) +
-                ", endDate=" + dateEnd +
+                ", dateStart=" + DateFormatter.format(dateStart) +
+                ", dateEnd=" + DateFormatter.format(dateEnd) +
+                ", status=" + status +
                 ", userID='" + userID + '\'' +
                 '}';
     }

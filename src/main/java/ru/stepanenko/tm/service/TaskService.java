@@ -4,6 +4,8 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.util.ComparatorUtil;
+import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.StringValidator;
 
 import java.util.*;
@@ -21,12 +23,19 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     }
 
     @Override
-    public Task edit(@NotNull final String id, @NotNull final String name, @NotNull final String description) {
-        if (!StringValidator.validate(id, name, description)) return null;
+    public Task edit(@NotNull String id, @NotNull String name, @NotNull String description, @NotNull String status) {
+        if (!StringValidator.validate(id, name, description, status)) return null;
+        if (EnumUtil.stringToStatus(status)==null) return null;
         @NotNull
         Task task = findOne(id);
         task.setName(name);
         task.setDescription(description);
+        task.setStatus(EnumUtil.stringToStatus(status));
+        if ("done".equals(status)){
+            task.setDateEnd(new Date());
+        } else {
+            task.setDateEnd(null);
+        }
         return repository.merge(task);
     }
 
@@ -43,13 +52,21 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     }
 
     @Override
-    public Collection<Task> findAllByProjectID(@NotNull final String id) {
+    public Collection<Task> sortAllByUserId(@NotNull String id, @NotNull String comparator) {
+        if (!StringValidator.validate(id, comparator)) return null;
+        if ("order".equals(comparator)) return findAllByUserId(id);
+        if (ComparatorUtil.getTaskComparator(comparator)==null) return null;
+        return repository.sortAllByUserId(id,ComparatorUtil.getTaskComparator(comparator));
+    }
+
+    @Override
+    public Collection<Task> findAllByProjectId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
         return repository.findAllByProjectId(id);
     }
 
     @Override
-    public Collection<Task> findAllByUserID(@NotNull final String id) {
+    public Collection<Task> findAllByUserId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
         return repository.findAllByUserId(id);
     }

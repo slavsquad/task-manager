@@ -45,10 +45,12 @@ public final class ProjectEditCommand extends AbstractCommand {
             String name = terminalService.nextLine();
             System.out.println("Input new project's description: ");
             String description = terminalService.nextLine();
-            if (projectService.edit(projectID, name, description) != null) {
+            System.out.println("Input project's status(planned, in process, done): ");
+            String status = terminalService.nextLine();
+            if (projectService.edit(projectID, name, description, status) != null) {
                 System.out.println("Project " + name + " is update!");
             } else {
-                System.out.println("Project name or description can't be empty!");
+                System.out.println("Project name, description or status can't be empty!");
             }
         } else {
             System.out.println("Project id: " + projectID + " does not found!");

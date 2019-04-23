@@ -4,8 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
 public final class TaskRepository extends AbstractRepository<Task> implements ITaskRepository {
 
@@ -45,5 +44,12 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
         for (Task task : findAllByProjectId(id)) {
             remove(task.getId());
         }
+    }
+
+    @Override
+    public Collection<Task> sortAllByUserId(@NotNull String id, Comparator<Task> comparator) {
+        List<Task> tasks= new ArrayList<>(findAllByUserId(id));
+        Collections.sort(tasks,comparator);
+        return tasks;
     }
 }

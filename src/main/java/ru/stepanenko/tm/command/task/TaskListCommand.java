@@ -35,7 +35,7 @@ public final class TaskListCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (taskService.findAllByUserID(currentUser.getId()).isEmpty()) {
+        if (taskService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of tasks is empty!");
             return;
         }
@@ -49,25 +49,25 @@ public final class TaskListCommand extends AbstractCommand {
         @NotNull
         String projectId = terminalService.nextLine();
         if ("".equals(projectId)) {
-            taskService.findAllByUserID(currentUser.getId()).forEach(System.out::println);
+            taskService.findAllByUserId(currentUser.getId()).forEach(System.out::println);
             System.out.println("All task for user: " + currentUser.getLogin() + " has removed!");
             return;
         }
         @Nullable
         Project project = projectService.findOne(projectId);
         if (project != null) {
-            if (taskService.findAllByProjectID(projectId).isEmpty()) {
+            if (taskService.findAllByProjectId(projectId).isEmpty()) {
                 System.out.println("List task for project id:" + projectId + " is empty!");
                 return;
             }
             System.out.println("List of task:");
-            taskService.findAllByProjectID(projectId).forEach(e -> System.out.println("id: " + e.getId()));
+            taskService.findAllByProjectId(projectId).forEach(e -> System.out.println("id: " + e.getId()));
             System.out.print("Please input ID task or press ENTER for print all task: ");
             @NotNull
             String id = terminalService.nextLine();
 
             if ("".equals(id)) {
-                taskService.findAllByProjectID(projectId).forEach(System.out::println);
+                taskService.findAllByProjectId(projectId).forEach(System.out::println);
             } else {
                 if (taskService.findOne(id) != null) {
                     System.out.println(taskService.findOne(id));

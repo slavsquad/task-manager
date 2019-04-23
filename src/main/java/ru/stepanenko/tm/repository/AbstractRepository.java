@@ -4,13 +4,11 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.IAbstractRepository;
 import ru.stepanenko.tm.entity.AbstractEntity;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 abstract public class AbstractRepository<E extends AbstractEntity> implements IAbstractRepository<E> {
     @NotNull
-    private final Map<String, E> repositoryMap = new HashMap<>();
+    private final Map<String, E> repositoryMap = new LinkedHashMap<>();
 
     @Override
     public E findOne(@NotNull final String id) {

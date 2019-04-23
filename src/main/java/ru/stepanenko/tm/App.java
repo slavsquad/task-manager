@@ -13,10 +13,11 @@ import ru.stepanenko.tm.command.user.*;
 import ru.stepanenko.tm.config.Bootstrap;
 
 
+
 public class App {
     private static final Class[] arrayCommandClasses = new Class[]{ProjectClearCommand.class, ProjectCreateCommand.class, ProjectListCommand.class,
-            ProjectRemoveCommand.class, ProjectEditCommand.class, TaskClearCommand.class, TaskCreateCommand.class,
-            TaskListCommand.class, TaskRemoveCommand.class, TaskEditCommand.class, UserLoginCommand.class, UserLogoutCommand.class,
+            ProjectRemoveCommand.class, ProjectEditCommand.class, ProjectListSortCommand.class, TaskClearCommand.class, TaskCreateCommand.class,
+            TaskListCommand.class, TaskRemoveCommand.class, TaskEditCommand.class, TaskListSortCommand.class, UserLoginCommand.class, UserLogoutCommand.class,
             UserRegisterCommand.class, UserProfileViewCommand.class, UserChangePasswordCommand.class, UserProfileEditCommand.class,
             HelpCommand.class, ExitCommand.class, AboutCommand.class};
 

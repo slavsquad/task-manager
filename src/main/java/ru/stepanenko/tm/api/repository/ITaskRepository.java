@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Task;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 public interface ITaskRepository extends IAbstractRepository<Task> {
 
@@ -11,4 +12,5 @@ public interface ITaskRepository extends IAbstractRepository<Task> {
     Collection<Task> findAllByProjectId(@NotNull final String id);
     void removeAllByUserId(@NotNull final String id);
     void removeAllByProjectId(@NotNull final String id);
+    Collection<Task> sortAllByUserId(@NotNull final String id, Comparator<Task> comparator);
 }

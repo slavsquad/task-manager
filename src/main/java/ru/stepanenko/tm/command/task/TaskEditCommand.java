@@ -36,7 +36,7 @@ public final class TaskEditCommand extends AbstractCommand {
             System.out.println("This command available only login user!");
             return;
         }
-        if (taskService.findAllByUserID(currentUser.getId()).isEmpty()) {
+        if (taskService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of task is empty!");
             return;
         }
@@ -51,12 +51,12 @@ public final class TaskEditCommand extends AbstractCommand {
         @Nullable
         Project project = projectService.findOne(projectID);
         if (project != null) {
-            if (taskService.findAllByProjectID(projectID).isEmpty()) {
+            if (taskService.findAllByProjectId(projectID).isEmpty()) {
                 System.out.println("List task for project id:" + projectID + " is empty!");
                 return;
             }
             System.out.println("List of task:");
-            taskService.findAllByProjectID(projectID).forEach(e -> System.out.println("id: " + e.getId()));
+            taskService.findAllByProjectId(projectID).forEach(e -> System.out.println("id: " + e.getId()));
             System.out.println("Please input ID task for edit:");
             @NotNull
             String id = terminalService.nextLine();
@@ -67,8 +67,11 @@ public final class TaskEditCommand extends AbstractCommand {
                 System.out.println("Input new task's description: ");
                 @NotNull
                 String description = terminalService.nextLine();
+                System.out.println("Input task's status(planned, in process, done: ");
+                @NotNull
+                String status = terminalService.nextLine();
                 @Nullable
-                Task task = taskService.edit(id, name, description);
+                Task task = taskService.edit(id, name, description, status);
                 if (task != null) {
                     System.out.println("Task id: " + task.getId() + "edit is complete!");
                 } else {
