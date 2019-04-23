@@ -3,6 +3,7 @@ package ru.stepanenko.tm.api.repository;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Comparator;
 
 public interface IAbstractRepository<E> {
 
