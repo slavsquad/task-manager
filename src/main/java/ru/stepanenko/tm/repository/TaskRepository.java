@@ -2,6 +2,7 @@ package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
+import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Task;
 
 import java.util.*;
@@ -51,5 +52,16 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
         List<Task> tasks= new ArrayList<>(findAllByUserId(id));
         Collections.sort(tasks,comparator);
         return tasks;
+    }
+
+    @Override
+    public Collection<Task> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
+        List<Task> findTasks = new ArrayList<>();
+        for (Task task: findAllByUserId(userId)) {
+            if (task.getName().contains(name) || task.getDescription().contains(description)) {
+                findTasks.add(task);
+            }
+        }
+        return findTasks;
     }
 }

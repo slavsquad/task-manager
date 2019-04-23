@@ -8,7 +8,8 @@ import java.util.Comparator;
 
 public interface IProjectRepository extends IAbstractRepository<Project> {
 
-    Collection<Project> findAllByUserID(@NotNull final String id);
+    Collection<Project> findAllByUserId(@NotNull final String id);
     void removeAllByUserID(@NotNull final String id);
     Collection<Project> sortAllByUserId(@NotNull final String id, Comparator<Project> comparator);
+    Collection<Project> findAllByPartOfNameOrDescription(@NotNull final String name, @NotNull final String description, @NotNull final String userId);
 }

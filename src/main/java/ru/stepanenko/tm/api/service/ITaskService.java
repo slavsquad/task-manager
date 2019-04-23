@@ -14,4 +14,5 @@ public interface ITaskService extends IAbstractEntityService<Task> {
     void removeAllByProjectId(@NotNull final String id);
     void removeAllByUserId(@NotNull final String id);
     Collection<Task> sortAllByUserId(@NotNull final String id, @NotNull final String comparator);
+    Collection<Task> findAllByPartOfNameOrDescription(@NotNull final String name, @NotNull final String description, @NotNull final String userId);
 }

@@ -43,7 +43,7 @@ public final class ProjectService extends AbstractEntityService<Project, IProjec
     @Override
     public Collection<Project> findAllByUserId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
-        return repository.findAllByUserID(id);
+        return repository.findAllByUserId(id);
     }
 
     @Override
@@ -58,5 +58,11 @@ public final class ProjectService extends AbstractEntityService<Project, IProjec
         if ("order".equals(comparator)) return findAllByUserId(id);
         if (ComparatorUtil.getProjectComparator(comparator)==null) return null;
         return repository.sortAllByUserId(id,ComparatorUtil.getProjectComparator(comparator));
+    }
+
+    @Override
+    public Collection<Project> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
+        if (!StringValidator.validate(name, description, userId)) return null;
+        return repository.findAllByPartOfNameOrDescription(name, description, userId);
     }
 }

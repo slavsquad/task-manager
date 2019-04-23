@@ -60,6 +60,12 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     }
 
     @Override
+    public Collection<Task> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
+        if (!StringValidator.validate(name, description, userId)) return null;
+        return repository.findAllByPartOfNameOrDescription(name, description, userId);
+    }
+
+    @Override
     public Collection<Task> findAllByProjectId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
         return repository.findAllByProjectId(id);
