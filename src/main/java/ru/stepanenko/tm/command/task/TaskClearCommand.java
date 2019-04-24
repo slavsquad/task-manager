@@ -10,6 +10,7 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class TaskClearCommand extends AbstractCommand {
@@ -24,7 +25,7 @@ public final class TaskClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws UserNoLoginException {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final ITaskService taskService = serviceLocator.getTaskService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
@@ -32,10 +33,7 @@ public final class TaskClearCommand extends AbstractCommand {
 
         @Nullable
         User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            System.out.println("This command available only login user!");
-            return;
-        }
+        if (currentUser == null) throw new UserNoLoginException();
         if (taskService.findAllByUserId(currentUser.getId()).isEmpty()) {
             System.out.println("List of task is empty!");
             return;

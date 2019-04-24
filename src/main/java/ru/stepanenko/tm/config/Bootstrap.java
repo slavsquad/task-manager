@@ -8,6 +8,10 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.LoginEmptyException;
+import ru.stepanenko.tm.exception.PasswordEmptyException;
+import ru.stepanenko.tm.exception.UserNoLoginException;
 import ru.stepanenko.tm.service.ServiceLocator;
 import ru.stepanenko.tm.enumerate.Role;
 
@@ -91,7 +95,12 @@ public class Bootstrap {
             @Nullable
             AbstractCommand command = commands.get(commandName);
             if (command != null) {
-                command.execute();
+                try {
+                    command.execute();
+                } catch (AuthenticationSecurityException e) {
+                    System.out.println("Exception! Please read, before continue:");
+                    System.out.println(e);
+                }
             } else {
                 System.out.println("Incorrect input, please try again!");
             }

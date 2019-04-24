@@ -16,16 +16,20 @@ public final class HelpCommand extends AbstractCommand {
 
     @Override
     public void execute() {
-        System.out.println("project-removeAllByProjectId: Remove all projects.\n" +
+        System.out.println("project-clear: Remove all projects.\n" +
                 "project-create: Create new project.\n" +
                 "project-edit: Edit selected project.\n" +
                 "project-list: Show all project or selected project.\n" +
                 "project-remove: Remove selected project.\n" +
-                "task-removeAllByProjectId: Remove all tasks.\n" +
+                "project-list-sort: Sorted list project by: order, dateStart, dateEnd or status.\n" +
+                "project-find: Find project by part of name or description.\n" +
+                "task-clear: Remove all tasks.\n" +
                 "task-create: Create new task.\n" +
                 "task-edit: Edit selected task.\n" +
                 "task-list: Show all tasks or selected task.\n" +
                 "task-remove: Remove selected task.\n" +
+                "task-list-sort: Sorted list task by: order, dateStart, dateEnd or status.\n" +
+                "task-find: Find task by part of name or description.\n" +
                 "user-login: Login user.\n" +
                 "user-logout: Login logout.\n" +
                 "user-profile-edit: Edit current user profile.\n" +

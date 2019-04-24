@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class UserProfileViewCommand extends AbstractCommand {
@@ -20,14 +21,11 @@ public final class UserProfileViewCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws UserNoLoginException {
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @Nullable
         User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            System.out.println("Before view user profile, make login!");
-            return;
-        }
+        if (currentUser == null) throw new UserNoLoginException();
         System.out.println(currentUser);
     }
 }

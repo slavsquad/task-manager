@@ -8,6 +8,7 @@ import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class ProjectCreateCommand extends AbstractCommand {
@@ -22,16 +23,13 @@ public final class ProjectCreateCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
+    public void execute() throws UserNoLoginException {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @NotNull final ITerminalService terminalService = serviceLocator.getTerminalService();
         @Nullable
         User currentUser = userService.getCurrentUser();
-        if (currentUser == null) {
-            System.out.println("This command available only login user!");
-            return;
-        }
+        if (currentUser == null) throw new UserNoLoginException();
         System.out.println("Please input project name:");
         @NotNull
         String name = terminalService.nextLine();
