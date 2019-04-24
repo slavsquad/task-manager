@@ -8,6 +8,7 @@ import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.LoginEmptyException;
 import ru.stepanenko.tm.exception.PasswordEmptyException;
+import ru.stepanenko.tm.exception.WrongLoginOrPasswordException;
 import ru.stepanenko.tm.util.StringValidator;
 
 @NoArgsConstructor
@@ -34,13 +35,7 @@ public final class UserLoginCommand extends AbstractCommand {
         @NotNull
         String password = terminalService.nextLine();
         if (!StringValidator.validate(password)) throw new PasswordEmptyException();
-
-        if (userService.authenticationUser(login, password)) {
-            System.out.println("Welcome to task manager " + login);
-        } else {
-            System.out.println("User name or password does not correct!");
-        }
+        if (!userService.authenticationUser(login, password)) throw new WrongLoginOrPasswordException();
+        System.out.println("User '"+login+"' login in application!");
     }
-
-
 }

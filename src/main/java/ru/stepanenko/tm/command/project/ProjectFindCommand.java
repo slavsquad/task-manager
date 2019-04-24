@@ -42,11 +42,11 @@ public class ProjectFindCommand extends AbstractCommand {
         @NotNull
         String description = terminalService.nextLine();
 
-        Collection<Project> findProjects = projectService.findAllByPartOfNameOrDescription(name,description,currentUser.getId());
-        if (findProjects!=null){
-            System.out.println("Find projects by part of name '"+name+"' or part of description '"+description+"' :");
+        Collection<Project> findProjects = projectService.findAllByPartOfNameOrDescription(name, description, currentUser.getId());
+        if (findProjects != null) {
+            System.out.println("Find projects by part of name '" + name + "' or part of description '" + description + "' :");
             findProjects.forEach(System.out::println);
-        }else {
+        } else {
             System.out.println("Projects does not found or parameters were empty!");
         }
     }

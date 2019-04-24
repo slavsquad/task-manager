@@ -8,10 +8,7 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
-import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.LoginEmptyException;
-import ru.stepanenko.tm.exception.PasswordEmptyException;
-import ru.stepanenko.tm.exception.UserNoLoginException;
+import ru.stepanenko.tm.exception.*;
 import ru.stepanenko.tm.service.ServiceLocator;
 import ru.stepanenko.tm.enumerate.Role;
 
@@ -97,7 +94,28 @@ public class Bootstrap {
             if (command != null) {
                 try {
                     command.execute();
-                } catch (AuthenticationSecurityException e) {
+
+                }catch (UserNoLoginException e){
+                    System.out.println(e);
+                    System.out.println("For login in application run the command: user-login");
+                }
+                catch (LoginEmptyException e){
+                    System.out.println(e);
+                    System.out.println("Try again input correct login!");
+                }
+                catch (PasswordEmptyException e){
+                    System.out.println(e);
+                    System.out.println("Try again input correct password!");
+                }
+                catch (WrongLoginOrPasswordException e){
+                    System.out.println(e);
+                    System.out.println("User name or password does not correct!");
+                }
+                catch (ForbiddenCommandException e) {
+                    System.out.println(e);
+                    System.out.println("This command available only administrator!");
+                }
+                catch (AuthenticationSecurityException e) {
                     System.out.println("Exception! Please read, before continue:");
                     System.out.println(e);
                 }

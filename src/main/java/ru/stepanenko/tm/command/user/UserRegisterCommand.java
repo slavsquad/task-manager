@@ -8,6 +8,8 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.ForbiddenCommandException;
 import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
@@ -23,12 +25,13 @@ public final class UserRegisterCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws UserNoLoginException {
+    public void execute() throws AuthenticationSecurityException {
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @NotNull final ITerminalService terminalService = serviceLocator.getTerminalService();
         @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) throw new UserNoLoginException();
+        if(!currentUser.getRole().equals(Role.ADMINISTRATOR)) throw new ForbiddenCommandException();
         System.out.println("Please input user name:");
         @NotNull
         String login = terminalService.nextLine();
