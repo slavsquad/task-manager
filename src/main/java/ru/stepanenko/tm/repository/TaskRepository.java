@@ -49,15 +49,15 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
 
     @Override
     public Collection<Task> sortAllByUserId(@NotNull String id, Comparator<Task> comparator) {
-        List<Task> tasks= new ArrayList<>(findAllByUserId(id));
-        Collections.sort(tasks,comparator);
+        List<Task> tasks = new ArrayList<>(findAllByUserId(id));
+        Collections.sort(tasks, comparator);
         return tasks;
     }
 
     @Override
     public Collection<Task> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
         List<Task> findTasks = new ArrayList<>();
-        for (Task task: findAllByUserId(userId)) {
+        for (Task task : findAllByUserId(userId)) {
             if (task.getName().contains(name) || task.getDescription().contains(description)) {
                 findTasks.add(task);
             }

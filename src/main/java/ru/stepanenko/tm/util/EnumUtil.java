@@ -17,7 +17,7 @@ public class EnumUtil {
         return userRoles.get(string);
     }
 
-    static public Status stringToStatus(@Nullable final String string){
+    static public Status stringToStatus(@Nullable final String string) {
         @NotNull
         Map<String, Status> statusMap = new HashMap<>(3);
         statusMap.put("in process", Status.INPROCESS);

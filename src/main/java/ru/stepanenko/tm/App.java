@@ -13,7 +13,6 @@ import ru.stepanenko.tm.command.user.*;
 import ru.stepanenko.tm.config.Bootstrap;
 
 
-
 public class App {
     private static final Class[] arrayCommandClasses = new Class[]{ProjectClearCommand.class, ProjectCreateCommand.class,
             ProjectListCommand.class, ProjectRemoveCommand.class, ProjectEditCommand.class, ProjectListSortCommand.class,

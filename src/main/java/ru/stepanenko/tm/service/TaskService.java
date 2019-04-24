@@ -25,13 +25,13 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     @Override
     public Task edit(@NotNull String id, @NotNull String name, @NotNull String description, @NotNull String status) {
         if (!StringValidator.validate(id, name, description, status)) return null;
-        if (EnumUtil.stringToStatus(status)==null) return null;
+        if (EnumUtil.stringToStatus(status) == null) return null;
         @NotNull
         Task task = findOne(id);
         task.setName(name);
         task.setDescription(description);
         task.setStatus(EnumUtil.stringToStatus(status));
-        if ("done".equals(status)){
+        if ("done".equals(status)) {
             task.setDateEnd(new Date());
         } else {
             task.setDateEnd(null);
@@ -55,8 +55,8 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     public Collection<Task> sortAllByUserId(@NotNull String id, @NotNull String comparator) {
         if (!StringValidator.validate(id, comparator)) return null;
         if ("order".equals(comparator)) return findAllByUserId(id);
-        if (ComparatorUtil.getTaskComparator(comparator)==null) return null;
-        return repository.sortAllByUserId(id,ComparatorUtil.getTaskComparator(comparator));
+        if (ComparatorUtil.getTaskComparator(comparator) == null) return null;
+        return repository.sortAllByUserId(id, ComparatorUtil.getTaskComparator(comparator));
     }
 
     @Override

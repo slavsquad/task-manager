@@ -56,8 +56,8 @@ public final class ProjectService extends AbstractEntityService<Project, IProjec
     public Collection<Project> sortAllByUserId(@NotNull String id, @NotNull String comparator) {
         if (!StringValidator.validate(id, comparator)) return null;
         if ("order".equals(comparator)) return findAllByUserId(id);
-        if (ComparatorUtil.getProjectComparator(comparator)==null) return null;
-        return repository.sortAllByUserId(id,ComparatorUtil.getProjectComparator(comparator));
+        if (ComparatorUtil.getProjectComparator(comparator) == null) return null;
+        return repository.sortAllByUserId(id, ComparatorUtil.getProjectComparator(comparator));
     }
 
     @Override
