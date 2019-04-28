@@ -4,6 +4,7 @@ import ru.stepanenko.tm.command.AbstractCommand;
 import com.jcabi.manifests.Manifests;
 
 public class AboutCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "about";

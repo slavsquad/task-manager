@@ -11,6 +11,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class UserProfileEditCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "user-profile-edit";

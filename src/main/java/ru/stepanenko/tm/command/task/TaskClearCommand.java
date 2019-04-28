@@ -14,6 +14,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class TaskClearCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "task-clear";

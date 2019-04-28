@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class EnumUtil {
+
     static public Role stringToRole(@Nullable final String string) {
         @NotNull
         Map<String, Role> userRoles = new HashMap<>(2);

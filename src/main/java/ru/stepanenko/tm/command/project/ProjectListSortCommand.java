@@ -13,6 +13,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 import java.util.*;
 
 public class ProjectListSortCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "project-sort-list";

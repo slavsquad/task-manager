@@ -8,6 +8,7 @@ import ru.stepanenko.tm.enumerate.Status;
 import java.util.*;
 
 public class ComparatorUtil {
+
     public static Comparator<Project> getProjectComparator(@NotNull final String comparator) {
         Comparator<Project> comparatorDateStart = new Comparator<Project>() {
             @Override

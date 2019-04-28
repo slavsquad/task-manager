@@ -3,23 +3,29 @@ package ru.stepanenko.tm.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.DateFormatter;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
+@XmlRootElement(name = "project")
+@XmlAccessorType (XmlAccessType.FIELD)
 public class Project extends AbstractEntity implements Serializable {
+
     @Nullable
-    private Date dateStart;
+    private Date dateStart=null;
     @Nullable
-    private Date dateEnd;
+    private Date dateEnd=null;
     @NotNull
     private String userID = "";
     @NotNull

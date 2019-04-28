@@ -11,6 +11,7 @@ import ru.stepanenko.tm.entity.User;
 
 @NoArgsConstructor
 public final class ProjectEditCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "project-edit";

@@ -6,6 +6,7 @@ import ru.stepanenko.tm.api.service.ITerminalService;
 import java.util.Scanner;
 
 public class TerminalService implements ITerminalService {
+
     @NotNull
     final Scanner scanner = new Scanner(System.in);
 

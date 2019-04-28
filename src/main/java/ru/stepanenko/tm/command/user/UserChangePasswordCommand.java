@@ -11,6 +11,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class UserChangePasswordCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "user-change-pass";

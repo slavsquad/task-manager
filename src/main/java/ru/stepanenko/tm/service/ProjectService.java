@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.entity.Project;
+import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.ComparatorUtil;
 import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.StringValidator;
@@ -32,7 +33,7 @@ public final class ProjectService extends AbstractEntityService<Project, IProjec
         project.setName(name);
         project.setDescription(description);
         project.setStatus(EnumUtil.stringToStatus(status));
-        if ("done".equals(status)) {
+        if (Status.DONE == EnumUtil.stringToStatus(status)) {
             project.setDateEnd(new Date());
         } else {
             project.setDateEnd(null);

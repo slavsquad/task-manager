@@ -10,6 +10,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class UserProfileViewCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "user-profile-view";

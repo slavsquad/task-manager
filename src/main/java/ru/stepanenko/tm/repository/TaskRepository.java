@@ -2,7 +2,6 @@ package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
-import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Task;
 
 import java.util.*;

@@ -11,6 +11,7 @@ import java.util.Collection;
 
 @AllArgsConstructor
 public abstract class AbstractEntityService<E extends AbstractEntity, R extends IAbstractRepository<E>> implements IAbstractEntityService<E> {
+
     @NotNull
     protected R repository;
 
@@ -29,6 +30,11 @@ public abstract class AbstractEntityService<E extends AbstractEntity, R extends 
     public E remove(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
         return repository.remove(id);
+    }
+
+    @Override
+    public Collection<E> recovery(Collection<E> collection) {
+        return repository.recovery(collection);
     }
 
     @Override

@@ -10,6 +10,7 @@ import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.StringValidator;
 
 public final class UserService extends AbstractEntityService<User, IUserRepository> implements IUserService {
+
     @Nullable
     private User currentUser;
 

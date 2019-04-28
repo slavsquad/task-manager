@@ -2,10 +2,8 @@ package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.enumerate.Status;
 
 import java.util.Collection;
-import java.util.Date;
 
 public interface IProjectService extends IAbstractEntityService<Project> {
 

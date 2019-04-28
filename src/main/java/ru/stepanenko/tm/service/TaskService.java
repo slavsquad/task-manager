@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.ComparatorUtil;
 import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.StringValidator;
@@ -31,7 +32,7 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
         task.setName(name);
         task.setDescription(description);
         task.setStatus(EnumUtil.stringToStatus(status));
-        if ("done".equals(status)) {
+        if (Status.DONE == EnumUtil.stringToStatus(status)) {
             task.setDateEnd(new Date());
         } else {
             task.setDateEnd(null);

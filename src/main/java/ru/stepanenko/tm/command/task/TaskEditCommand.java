@@ -15,6 +15,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class TaskEditCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "task-edit";

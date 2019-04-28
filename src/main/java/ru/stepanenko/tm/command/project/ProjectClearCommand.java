@@ -9,6 +9,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class ProjectClearCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "project-clear";

@@ -6,7 +6,8 @@ import ru.stepanenko.tm.entity.AbstractEntity;
 
 import java.util.*;
 
-abstract public class AbstractRepository<E extends AbstractEntity> implements IAbstractRepository<E> {
+public abstract class AbstractRepository<E extends AbstractEntity> implements IAbstractRepository<E> {
+
     @NotNull
     private final Map<String, E> repositoryMap = new LinkedHashMap<>();
 
@@ -39,5 +40,14 @@ abstract public class AbstractRepository<E extends AbstractEntity> implements IA
     public E merge(@NotNull final E entity) {
         repositoryMap.put(entity.getId(), entity);
         return entity;
+    }
+
+    @Override
+    public Collection<E> recovery(@NotNull Collection<E> collection) {
+        removeAll();
+        for (E entity : collection) {
+            persist(entity);
+        }
+        return collection;
     }
 }

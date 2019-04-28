@@ -6,13 +6,14 @@ import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.exception.UserNoLoginException;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.exception.UserNoLoginException;
 
 import java.util.Collection;
 
 public class TaskListSortCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "task-list-sort";

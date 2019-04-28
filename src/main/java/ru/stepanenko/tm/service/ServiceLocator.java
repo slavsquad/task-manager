@@ -10,6 +10,7 @@ import ru.stepanenko.tm.repository.TaskRepository;
 import ru.stepanenko.tm.repository.UserRepository;
 
 public final class ServiceLocator implements IServiceLocator {
+
     @NotNull
     final private IProjectRepository projectRepository = new ProjectRepository();
     @NotNull

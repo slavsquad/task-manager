@@ -13,6 +13,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
 public final class ProjectRemoveCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "project-remove";

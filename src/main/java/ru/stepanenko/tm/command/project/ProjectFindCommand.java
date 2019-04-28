@@ -13,6 +13,7 @@ import ru.stepanenko.tm.exception.UserNoLoginException;
 import java.util.Collection;
 
 public class ProjectFindCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "project-find";

@@ -1,0 +1,202 @@
+<Domain>
+  <projects>
+    <projects>
+      <description>Description for my project 1</description>
+      <id>ed579d6f-4c2d-46c5-9486-5540b9a90d65</id>
+      <name>My_project_1</name>
+      <dateStart>2019-04-28T18:17:36.919+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </projects>
+    <projects>
+      <description>Description for my project 2</description>
+      <id>a02afa33-44d9-41dc-9197-b0542ebc4516</id>
+      <name>My_project_2</name>
+      <dateStart>2019-04-28T18:17:36.919+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </projects>
+    <projects>
+      <description>Description for my project 3</description>
+      <id>9cbddc3e-aea3-44f2-91eb-838c08c6ee26</id>
+      <name>My_project_3</name>
+      <dateStart>2019-04-28T18:17:36.919+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </projects>
+    <projects>
+      <description>Description for my project 4</description>
+      <id>851e0c17-e2e0-4d97-bb98-db93d3417b75</id>
+      <name>My_project_4</name>
+      <dateStart>2019-04-28T18:17:36.919+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </projects>
+  </projects>
+  <tasks>
+    <tasks>
+      <description>Description for task 100</description>
+      <id>86530c1a-e988-4138-b2ff-caeded14732b</id>
+      <name>task_100</name>
+      <projectID>ed579d6f-4c2d-46c5-9486-5540b9a90d65</projectID>
+      <dateStart>2019-04-28T18:17:36.920+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 200</description>
+      <id>aee855c8-0275-4cb9-945e-3f8b7d300af7</id>
+      <name>task_200</name>
+      <projectID>ed579d6f-4c2d-46c5-9486-5540b9a90d65</projectID>
+      <dateStart>2019-04-28T18:17:36.920+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 300</description>
+      <id>fe4e9554-be65-446e-a3e5-1588247e1098</id>
+      <name>task_300</name>
+      <projectID>ed579d6f-4c2d-46c5-9486-5540b9a90d65</projectID>
+      <dateStart>2019-04-28T18:17:36.920+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 400</description>
+      <id>9bceb092-ab48-44e8-8c70-a8afd20bf1b0</id>
+      <name>task_400</name>
+      <projectID>ed579d6f-4c2d-46c5-9486-5540b9a90d65</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 100</description>
+      <id>4ba4ce21-3988-4d01-924f-08012f320bad</id>
+      <name>task_100</name>
+      <projectID>a02afa33-44d9-41dc-9197-b0542ebc4516</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 200</description>
+      <id>1d3b1176-ded0-4c45-a351-33106cc50b16</id>
+      <name>task_200</name>
+      <projectID>a02afa33-44d9-41dc-9197-b0542ebc4516</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 300</description>
+      <id>73974f3d-6521-4199-9ec8-dd7a53577bbd</id>
+      <name>task_300</name>
+      <projectID>a02afa33-44d9-41dc-9197-b0542ebc4516</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 400</description>
+      <id>4156f025-8f9d-498d-acea-dc1be2dd1b27</id>
+      <name>task_400</name>
+      <projectID>a02afa33-44d9-41dc-9197-b0542ebc4516</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>ecc9066a-8d60-4988-b00f-5dac3e95a250</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 1</description>
+      <id>e2da6e0d-085a-4c2f-8373-a77d4010f20c</id>
+      <name>task_1</name>
+      <projectID>9cbddc3e-aea3-44f2-91eb-838c08c6ee26</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 2</description>
+      <id>d8a2a213-affd-4a8b-8076-debea620a439</id>
+      <name>task_2</name>
+      <projectID>9cbddc3e-aea3-44f2-91eb-838c08c6ee26</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 3</description>
+      <id>576296da-98de-41c2-8b19-f675f9e14af7</id>
+      <name>task_3</name>
+      <projectID>9cbddc3e-aea3-44f2-91eb-838c08c6ee26</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 4</description>
+      <id>823d49a0-d341-4170-8b0e-7a7684d72c9f</id>
+      <name>task_4</name>
+      <projectID>9cbddc3e-aea3-44f2-91eb-838c08c6ee26</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 1</description>
+      <id>2abc6228-5987-426c-9614-26491d16c1ee</id>
+      <name>task_1</name>
+      <projectID>851e0c17-e2e0-4d97-bb98-db93d3417b75</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 2</description>
+      <id>6299db04-7844-41bc-bb92-665b1e3e70de</id>
+      <name>task_2</name>
+      <projectID>851e0c17-e2e0-4d97-bb98-db93d3417b75</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 3</description>
+      <id>2e2a556c-cc2e-4735-8639-b62d07b406c8</id>
+      <name>task_3</name>
+      <projectID>851e0c17-e2e0-4d97-bb98-db93d3417b75</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+    <tasks>
+      <description>Description for task 4</description>
+      <id>a26cc3dd-b65f-4675-8404-44fb778b7808</id>
+      <name>task_4</name>
+      <projectID>851e0c17-e2e0-4d97-bb98-db93d3417b75</projectID>
+      <dateStart>2019-04-28T18:17:36.921+03:00</dateStart>
+      <userID>71242a19-1b98-4953-b3b6-fa4e2182c3a3</userID>
+      <status>PLANNED</status>
+    </tasks>
+  </tasks>
+  <users>
+    <users>
+      <id>ecc9066a-8d60-4988-b00f-5dac3e95a250</id>
+      <login>admin</login>
+      <password>21232f297a57a5a743894a0e4a801fc3</password>
+      <role>ADMINISTRATOR</role>
+    </users>
+    <users>
+      <id>71242a19-1b98-4953-b3b6-fa4e2182c3a3</id>
+      <login>user</login>
+      <password>ee11cbb19052e40b07aac0ca060c23ee</password>
+      <role>USER</role>
+    </users>
+    <users>
+      <id>218ef653-2c56-4f88-866b-f98b4d3e5441</id>
+      <login>root</login>
+      <password>63a9f0ea7bb98050796b649e85481845</password>
+      <role>USER</role>
+    </users>
+  </users>
+</Domain>

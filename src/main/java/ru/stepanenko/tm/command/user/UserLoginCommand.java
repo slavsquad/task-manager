@@ -13,6 +13,7 @@ import ru.stepanenko.tm.util.StringValidator;
 
 @NoArgsConstructor
 public final class UserLoginCommand extends AbstractCommand {
+
     @Override
     public String getName() {
         return "user-login";
