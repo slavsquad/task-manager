@@ -193,7 +193,7 @@
                 <artifactId>maven-dependency-plugin</artifactId>
                 <configuration>
                     <outputDirectory>
-                        ${basedir}/release/lib
+                        ${project.build.directory}/release/lib
                     </outputDirectory>
                     <overWriteReleases>false</overWriteReleases>
                     <overWriteSnapshots>false</overWriteSnapshots>
@@ -220,9 +220,9 @@
                         </goals>
                         <configuration>
                             <outputDirectory>
-                                ${basedir}/release/bin
+                                ${project.build.directory}/release/bin
                             </outputDirectory>
-                            <resources>
+                            <!--<resources>
                                 <resource>
                                     <directory>src/main/resources/properties</directory>
                                     <filtering>true</filtering>
@@ -236,7 +236,7 @@
                                         <include>**/*.png</include>
                                     </includes>
                                 </resource>
-                            </resources>
+                            </resources>-->
                         </configuration>
                     </execution>
                 </executions>

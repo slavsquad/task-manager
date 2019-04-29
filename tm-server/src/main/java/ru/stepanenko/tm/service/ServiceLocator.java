@@ -28,7 +28,7 @@ public final class ServiceLocator implements IServiceLocator {
     @NotNull
     final private ITaskService taskService = new TaskService(taskRepository);
     @NotNull
-    final private IUserService userService = new UserService(userRepository);
+    final private IUserService userService = new UserService(userRepository, projectRepository, taskRepository);
     @NotNull
     final private ITerminalService terminalService = new TerminalService();
     @NotNull

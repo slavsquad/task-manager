@@ -5,6 +5,7 @@ import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.util.Domain;
 
 import java.io.FileOutputStream;
@@ -26,16 +27,7 @@ public class DataSaveSerializationCommand extends AbstractCommand {
 
     @Override
     public void execute(){
-        @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
-        @NotNull final ITaskService taskService = serviceLocator.getTaskService();
-
-        Domain domain = new Domain(new ArrayList<>(projectService.findAll()), new ArrayList<>(taskService.findAll()), new ArrayList<>(userService.findAll()));
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("data.out"))){
-            oos.writeObject(domain);
-            oos.flush();
-        }catch (IOException e){
-            e.printStackTrace();
-        }
+        userService.save(new Session());
     }
 }
