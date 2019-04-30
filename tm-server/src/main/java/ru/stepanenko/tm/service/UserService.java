@@ -57,7 +57,6 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     @NotNull
     private ITaskRepository taskRepository;
 
-
     public UserService(@NotNull final IUserRepository userRepository,
                        @NotNull final IProjectRepository projectRepository,
                        @NotNull final ITaskRepository taskRepository) {
@@ -102,16 +101,16 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public boolean authenticationUser(@NotNull final String login, @NotNull final String password) {
+    public User authenticationUser(@NotNull final String login, @NotNull final String password) {
         @Nullable
         User user = findByLogin(login);
-        if (user == null || !HashUtil.md5(password).equals(user.getPassword())) return false;
+        if (user == null || !HashUtil.md5(password).equals(user.getPassword())) return null;
         setCurrentUser(user);
-        return true;
+        return user;
     }
 
     @Override
-    public void load(@NotNull Session session) {
+    public void load() {
         try(ObjectInputStream oin = new ObjectInputStream(new FileInputStream("tm-server/data.out"))){
             Domain domain = (Domain) oin.readObject();
             projectRepository.recovery(domain.getProjects());
@@ -124,7 +123,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void save(@NotNull Session session) {
+    public void save() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tm-server/data.out"))){
             oos.writeObject(domain);
@@ -136,7 +135,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void loadJaxbXml(@NotNull Session session) {
+    public void loadJaxbXml() {
         try{
             JAXBContext jaxbContext = JAXBContext.newInstance(Domain.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -151,7 +150,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void saveJaxbXml(@NotNull Session session) {
+    public void saveJaxbXml() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
         try(FileWriter fw = new FileWriter("tm-server/data.xml")){
             fw.write(domainToXMLString(domain));
@@ -214,7 +213,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
 
     @Override
-    public void loadJaxbJSON(@NotNull Session session) {
+    public void loadJaxbJSON() {
         try {
             Map<String, Object> properties = new HashMap<String, Object>(3);
             properties.put(MarshallerProperties.MEDIA_TYPE, "application/json");
@@ -235,7 +234,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void saveJaxbJSON(@NotNull Session session) {
+    public void saveJaxbJSON() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
 
         try(FileWriter fw = new FileWriter("tm-server/data.json")){
@@ -277,7 +276,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void loadFasterXml(@NotNull Session session) {
+    public void loadFasterXml() {
         XmlMapper xmlMapper = new XmlMapper();
         try {
             Domain domain = xmlMapper.readValue(new File("tm-server/data.xml"), Domain.class);
@@ -291,7 +290,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void saveFasterXml(@NotNull Session session) {
+    public void saveFasterXml() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
         XmlMapper mapper = new XmlMapper();
         try {
@@ -303,7 +302,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void loadFasterJSON(@NotNull Session session) {
+    public void loadFasterJSON() {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Domain domain = mapper.readValue(new File("tm-server/data.json"), Domain.class);
@@ -317,7 +316,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void saveFasterJSON(@NotNull Session session) {
+    public void saveFasterJSON() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);

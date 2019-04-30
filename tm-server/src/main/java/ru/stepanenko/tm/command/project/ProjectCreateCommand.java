@@ -15,7 +15,7 @@ public final class ProjectCreateCommand extends AbstractCommand {
 
     @Override
     public String getName() {
-        return "project-create";
+        return "project-createProject";
     }
 
     @Override
@@ -38,9 +38,9 @@ public final class ProjectCreateCommand extends AbstractCommand {
         @NotNull
         String description = terminalService.nextLine();
         if (projectService.create(name, description, currentUser.getId()) != null) {
-            System.out.println("Project " + name + " is create!");
+            System.out.println("Project " + name + " is createProject!");
         } else {
-            System.out.println("Project " + name + " does not create!");
+            System.out.println("Project " + name + " does not createProject!");
             System.out.println("Project name or description does not empty");
         }
     }

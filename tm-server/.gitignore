@@ -1,7 +1,0 @@
-*.out
-.idea
-*.jar
-target\
-out\
-bin\
-*.iml

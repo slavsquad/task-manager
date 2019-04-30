@@ -2,12 +2,12 @@ package ru.stepanenko.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
-import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.exception.session.InvalidSessionException;
 import ru.stepanenko.tm.util.SignatureUtil;
 
 import java.io.IOException;
@@ -31,7 +31,8 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
         try (InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream("application.properties")) {
             property.load(resourceStream);
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println(e);
+            return null;
         }
         @NotNull final String cycle = property.getProperty("cycle");
         @NotNull final String salt = property.getProperty("salt");
@@ -43,12 +44,17 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
     }
 
     @Override
-    public boolean validate(@NotNull Session session) {
+    public boolean validate(@NotNull Session session) throws InvalidSessionException {
+        if (session == null) throw new InvalidSessionException("Session must not be null!");
+        if (session.getSignature() == null) throw new InvalidSessionException("Signature must not be null!");
+        if (session.getUserId() == null) throw new InvalidSessionException("User must not be null!");
+        if (session.getTimeStamp() == null) throw new InvalidSessionException("Time must not be null!");
+
         return session.getSignature().equals(findOne(session.getId()).getSignature());
     }
 
     @Override
-    public boolean validateAdmin(@NotNull Session session) {
+    public boolean validateAdmin(@NotNull Session session) throws InvalidSessionException {
         if (validate(session)) {
             User user = serviceLocator.getUserService().findOne(session.getUserId());
             return user.getRole().equals(Role.ADMINISTRATOR);

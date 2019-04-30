@@ -11,7 +11,7 @@ import ru.stepanenko.tm.command.user.*;
 import ru.stepanenko.tm.config.Bootstrap;
 
 
-public class App {
+public class AppServer {
     private static final Class[] arrayCommandClasses = new Class[]{ProjectClearCommand.class, ProjectCreateCommand.class,
             ProjectListCommand.class, ProjectRemoveCommand.class, ProjectEditCommand.class, ProjectListSortCommand.class,
             ProjectFindCommand.class, TaskClearCommand.class, TaskCreateCommand.class,

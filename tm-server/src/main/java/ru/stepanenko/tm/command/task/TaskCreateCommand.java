@@ -17,7 +17,7 @@ public final class TaskCreateCommand extends AbstractCommand {
 
     @Override
     public String getName() {
-        return "task-create";
+        return "task-createProject";
     }
 
     @Override
@@ -50,9 +50,9 @@ public final class TaskCreateCommand extends AbstractCommand {
             System.out.println("Please input task description:");
             String description = terminalService.nextLine();
             if (taskService.create(name, description, projectID, currentUser.getId()) != null) {
-                System.out.println("Task " + name + " is create!");
+                System.out.println("Task " + name + " is createProject!");
             } else {
-                System.out.println("Task " + name + " does not create!");
+                System.out.println("Task " + name + " does not createProject!");
                 System.out.println("Task name or description can't be empty!");
             }
         } else {

@@ -7,6 +7,7 @@ import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.*;
+import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.repository.SessionRepository;
 import ru.stepanenko.tm.repository.TaskRepository;
@@ -15,6 +16,8 @@ import ru.stepanenko.tm.repository.UserRepository;
 @Getter
 public final class ServiceLocator implements IServiceLocator {
 
+    @NotNull
+    private Session session = new Session();
     @NotNull
     final private IProjectRepository projectRepository = new ProjectRepository();
     @NotNull
@@ -32,5 +35,16 @@ public final class ServiceLocator implements IServiceLocator {
     @NotNull
     final private ITerminalService terminalService = new TerminalService();
     @NotNull
-    final private ISessionService sessionService = new SessionService(sessionRepository,this);
+    final private ISessionService sessionService = new SessionService(sessionRepository, this);
+
+    @NotNull
+    @Override
+    public Session getSession() {
+        return session;
+    }
+
+    @Override
+    public void setSession(@NotNull Session session) {
+        this.session = session;
+    }
 }

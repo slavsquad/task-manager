@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.*;
 import ru.stepanenko.tm.command.*;
 import ru.stepanenko.tm.exception.*;
+import ru.stepanenko.tm.exception.session.InvalidSessionException;
 import ru.stepanenko.tm.service.ServiceLocator;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.entity.Project;
@@ -89,7 +90,7 @@ public class Bootstrap {
                 try {
                     command.execute();
 
-                }catch (AuthenticationSecurityException e){
+                }catch (AuthenticationSecurityException | InvalidSessionException e){
                     System.out.println(e);
                 }
             } else {
