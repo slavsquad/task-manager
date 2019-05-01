@@ -9,7 +9,7 @@ import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.ForbiddenCommandException;
+import ru.stepanenko.tm.exception.ForbiddenActionException;
 import ru.stepanenko.tm.exception.UserNoLoginException;
 
 @NoArgsConstructor
@@ -32,7 +32,7 @@ public final class UserRegisterCommand extends AbstractCommand {
         @Nullable
         User currentUser = userService.getCurrentUser();
         if (currentUser == null) throw new UserNoLoginException();
-        if(!currentUser.getRole().equals(Role.ADMINISTRATOR)) throw new ForbiddenCommandException();
+        if(!currentUser.getRole().equals(Role.ADMINISTRATOR)) throw new ForbiddenActionException();
         System.out.println("Please input user name:");
         @NotNull
         String login = terminalService.nextLine();

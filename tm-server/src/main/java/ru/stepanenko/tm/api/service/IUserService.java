@@ -8,6 +8,7 @@ import ru.stepanenko.tm.entity.User;
 public interface IUserService extends IAbstractEntityService<User> {
 
     User create(@NotNull final String login, @NotNull final String password, @NotNull final String role);
+    User create(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role);
     User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role);
     User getCurrentUser();
     User findByLogin(@NotNull final String login);

@@ -5,14 +5,38 @@ import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.exception.session.InvalidSessionException;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
 import java.util.Collection;
 
+@WebService
 public interface IProjectEndpoint {
 
-    Project createProject(@NotNull final Session session, @NotNull final String name, @NotNull final String description) throws InvalidSessionException;
-    Project editProject(@NotNull final Session session, @NotNull final String id, @NotNull final String name, @NotNull final String description, @NotNull final String status) throws InvalidSessionException;
-    Collection<Project> findAllProjectByUserId(@NotNull final Session session) throws InvalidSessionException;
-    void removeAllProjectByUserId(@NotNull final Session session) throws InvalidSessionException;
-    Collection<Project> sortAllProjectByUserId(@NotNull final Session session, @NotNull final String comparator) throws InvalidSessionException;
-    Collection<Project> findAllProjectByPartOfNameOrDescription(@NotNull final Session session, @NotNull final String name, @NotNull final String description) throws InvalidSessionException;
+    @WebMethod
+    Project createProject(@WebParam(name = "session") @NotNull final Session session,
+                          @WebParam(name = "name") @NotNull final String name,
+                          @WebParam(name = "description") @NotNull final String description) throws InvalidSessionException;
+
+    @WebMethod
+    Project editProject(@WebParam(name = "session") @NotNull final Session session,
+                        @WebParam(name = "id") @NotNull final String id,
+                        @WebParam(name = "name") @NotNull final String name,
+                        @WebParam(name = "description") @NotNull final String description,
+                        @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Project> findAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException;
+
+    @WebMethod
+    void removeAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Project> sortAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session,
+                                               @WebParam(name = "comparator") @NotNull final String comparator) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Project> findAllProjectByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
+                                                                @WebParam(name = "name") @NotNull final String name,
+                                                                @WebParam(name = "description") @NotNull final String description) throws InvalidSessionException;
 }

@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.*;
 import ru.stepanenko.tm.command.*;
+import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.*;
 import ru.stepanenko.tm.exception.session.InvalidSessionException;
 import ru.stepanenko.tm.service.ServiceLocator;
@@ -18,6 +19,7 @@ public class Bootstrap {
     final IServiceLocator serviceLocator = new ServiceLocator();
 
     public void init(Class[] arrayCommands) {
+        generateTestUsers(serviceLocator);
         //generateTestData(serviceLocator);
         menu(initializeCommands(serviceLocator, arrayCommands));
     }
@@ -45,15 +47,24 @@ public class Bootstrap {
         command.put(abstractCommand.getName(), abstractCommand);
     }
 
+    private void generateTestUsers(IServiceLocator serviceLocator) {
+        @NotNull final IProjectService projectService = serviceLocator.getProjectService();
+        @NotNull final ITaskService taskService = serviceLocator.getTaskService();
+        @NotNull final IUserService userService = serviceLocator.getUserService();
+        @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
+
+        //----------------------------------------- test users-------------------------------------------
+        userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250","admin", "admin", Role.ADMINISTRATOR.toString());
+        userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", Role.USER.toString());
+        userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441","root", "root", Role.USER.toString());
+    }
+
     private void generateTestData(IServiceLocator serviceLocator) {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final ITaskService taskService = serviceLocator.getTaskService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
         //----------------------------------------- test data-------------------------------------------
-        userService.create("admin", "admin", Role.ADMINISTRATOR.toString());
-        userService.create("user", "user", Role.USER.toString());
-        userService.create("root", "root", Role.USER.toString());
 
         projectService.create("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId());
         projectService.create("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId());

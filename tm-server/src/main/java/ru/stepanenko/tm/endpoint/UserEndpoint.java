@@ -1,13 +1,20 @@
 package ru.stepanenko.tm.endpoint;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
+import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.exception.ForbiddenActionException;
 import ru.stepanenko.tm.exception.session.InvalidSessionException;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+
+@NoArgsConstructor
 public class UserEndpoint implements IUserEndpoint {
 
     @NotNull
@@ -16,91 +23,114 @@ public class UserEndpoint implements IUserEndpoint {
     @NotNull
     private ISessionService sessionService;
 
-    public UserEndpoint(@NotNull IUserService userService, @NotNull ISessionService sessionService) {
-        this.userService = userService;
-        this.sessionService = sessionService;
+    public UserEndpoint(@NotNull final IServiceLocator serviceLocator) {
+        this.userService = serviceLocator.getUserService();
+        this.sessionService = serviceLocator.getSessionService();
     }
 
     @Override
-    public User createUser(@NotNull Session session, @NotNull String login, @NotNull String password, @NotNull String role) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return null;
+    @WebMethod
+    public User createUser(@WebParam(name = "session") @NotNull final Session session,
+                           @WebParam(name = "login") @NotNull final String login,
+                           @WebParam(name = "password") @NotNull final String password,
+                           @WebParam(name = "role") @NotNull final String role) throws InvalidSessionException {
+        if (!sessionService.validateAdmin(session)) throw new InvalidSessionException("Session is invalid!");
         return userService.create(login, password, role);
     }
 
     @Override
-    public User editUser(@NotNull Session session, @NotNull String id, @NotNull String login, @NotNull String password, @NotNull String role) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return null;
+    @WebMethod
+    public User editUser(@WebParam(name = "session") @NotNull final Session session,
+                         @WebParam(name = "id") @NotNull final String id,
+                         @WebParam(name = "login") @NotNull final String login,
+                         @WebParam(name = "password") @NotNull final String password,
+                         @WebParam(name = "role") @NotNull final String role) throws InvalidSessionException {
+        if (!sessionService.validateAdmin(session)) throw new InvalidSessionException("Session is invalid!");
         return userService.edit(id, login, password, role);
     }
 
     @Override
-    public User findUserByLogin(@NotNull Session session, @NotNull String login) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return null;
+    @WebMethod
+    public User findUserByLogin(@WebParam(name = "session") @NotNull final Session session,
+                                @WebParam(name = "login") @NotNull final String login) throws InvalidSessionException {
+        if (!sessionService.validateAdmin(session)) throw new InvalidSessionException("Session is invalid!");
         return userService.findByLogin(login);
     }
 
     @Override
-    public User authenticationUser(@NotNull String login, @NotNull String password) throws InvalidSessionException {
-        return userService.authenticationUser(login,password);
+    @WebMethod
+    public User authenticationUser(@WebParam(name = "login") @NotNull final String login,
+                                   @WebParam(name = "password") @NotNull final String password) throws InvalidSessionException {
+        return userService.authenticationUser(login, password);
     }
 
     @Override
-    public void loadUserData(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void loadUserData(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.loadData();
     }
 
     @Override
-    public void saveUserData(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void saveUserData(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.saveData();
     }
 
     @Override
-    public void loadUserDataJaxbXml(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void loadUserDataJaxbXml(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.loadDataJaxbXml();
     }
 
     @Override
-    public void saveUserDataJaxbXml(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void saveUserDataJaxbXml(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.saveDataJaxbXml();
     }
 
     @Override
-    public void loadUserDataFasterXml(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void loadUserDataFasterXml(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.loadDataFasterXml();
     }
 
     @Override
-    public void saveUserDataFasterXml(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void saveUserDataFasterXml(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.saveDataFasterXml();
     }
 
     @Override
-    public void loadUserDataJaxbJSON(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void loadUserDataJaxbJSON(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.loadDataJaxbJSON();
     }
 
     @Override
-    public void saveUserDataJaxbJSON(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void saveUserDataJaxbJSON(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.saveDataJaxbJSON();
     }
 
     @Override
-    public void loadUserDataFasterJSON(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void loadUserDataFasterJSON(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.loadDataFasterJSON();
     }
 
     @Override
-    public void saveUserDataFasterJSON(@NotNull Session session) throws InvalidSessionException {
-        if (!sessionService.validateAdmin(session)) return ;
+    @WebMethod
+    public void saveUserDataFasterJSON(@WebParam(name = "session") @NotNull Session session) throws InvalidSessionException, ForbiddenActionException {
+        if (!sessionService.validateAdmin(session)) throw new ForbiddenActionException();
         userService.saveDataFasterJSON();
     }
 }

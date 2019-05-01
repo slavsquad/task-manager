@@ -5,16 +5,46 @@ import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.exception.session.InvalidSessionException;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
 import java.util.Collection;
-
+@WebService
 public interface ITaskEndpoint {
 
-    Task createTask(@NotNull final Session session, @NotNull final String name, @NotNull final String description, @NotNull final String projectID) throws InvalidSessionException;
-    Task editTask(@NotNull final Session session, @NotNull final String id, @NotNull final String name, @NotNull final String description, @NotNull final String status) throws InvalidSessionException;
-    Collection<Task> findAllTaskByProjectId(@NotNull final Session session, @NotNull final String id) throws InvalidSessionException;
-    Collection<Task> findAllTaskByUserId(@NotNull final Session session) throws InvalidSessionException;
-    void removeAllTaskByProjectId(@NotNull final Session session, @NotNull final String id) throws InvalidSessionException;
-    void removeAllTaskByUserId(@NotNull final Session session) throws InvalidSessionException;
-    Collection<Task> sortAllTaskByUserId(@NotNull final Session session, @NotNull final String comparator) throws InvalidSessionException;
-    Collection<Task> findAllTaskByPartOfNameOrDescription(@NotNull final Session session, @NotNull final String name, @NotNull final String description) throws InvalidSessionException;
+    @WebMethod
+    Task createTask(@WebParam(name = "session") @NotNull final Session session,
+                    @WebParam(name = "name") @NotNull final String name,
+                    @WebParam(name = "description") @NotNull final String description,
+                    @WebParam(name = "projectId") @NotNull final String projectId) throws InvalidSessionException;
+
+    @WebMethod
+    Task editTask(@WebParam(name = "session") @NotNull final Session session,
+                  @WebParam(name = "id") @NotNull final String id,
+                  @WebParam(name = "name") @NotNull final String name,
+                  @WebParam(name = "description") @NotNull final String description,
+                  @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Task> findAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
+                                            @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Task> findAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException;
+
+    @WebMethod
+    void removeAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
+                                  @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException;
+
+    @WebMethod
+    void removeAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Task> sortAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session,
+                                         @WebParam(name = "comparator") @NotNull final String comparator) throws InvalidSessionException;
+
+    @WebMethod
+    Collection<Task> findAllTaskByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
+                                                          @WebParam(name = "name") @NotNull final String name,
+                                                          @WebParam(name = "description") @NotNull final String description) throws InvalidSessionException;
 }

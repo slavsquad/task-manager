@@ -8,11 +8,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
+import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.endpoint.UserEndpoint;
 import ru.stepanenko.tm.entity.Session;
+import ru.stepanenko.tm.exception.ForbiddenActionException;
+import ru.stepanenko.tm.exception.session.InvalidSessionException;
 import ru.stepanenko.tm.util.Domain;
 
 import javax.json.Json;
@@ -53,8 +57,8 @@ public class DataSaveJaxBJSONCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() {
-        @NotNull final IUserService userService = serviceLocator.getUserService();
-        userService.saveJaxbJSON(new Session());
+    public void execute() throws InvalidSessionException, ForbiddenActionException {
+        IUserEndpoint userEndpoint = new UserEndpoint(serviceLocator.getUserService(),serviceLocator.getSessionService());
+        userEndpoint.saveUserDataJaxbJSON(serviceLocator.getSession());
     }
 }

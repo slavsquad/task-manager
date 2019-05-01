@@ -1,15 +1,21 @@
 package ru.stepanenko.tm.endpoint;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
+import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.exception.session.InvalidSessionException;
 
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
 import java.util.Collection;
-
+@WebService
+@NoArgsConstructor
 public class TaskEndpoint implements ITaskEndpoint {
 
     @NotNull
@@ -18,57 +24,77 @@ public class TaskEndpoint implements ITaskEndpoint {
     @NotNull
     private ITaskService taskService;
 
-    public TaskEndpoint(@NotNull ISessionService sessionService, @NotNull ITaskService taskService) {
-        this.sessionService = sessionService;
-        this.taskService = taskService;
+    public TaskEndpoint(@NotNull final IServiceLocator serviceLocator) {
+        this.sessionService = serviceLocator.getSessionService();
+        this.taskService = serviceLocator.getTaskService();
     }
 
     @Override
-    public Task createTask(@NotNull Session session, @NotNull String name, @NotNull String description, @NotNull String projectID) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return null;
-        return taskService.create(name, description, projectID, session.getUserId());
+    @WebMethod
+    public Task createTask(@WebParam(name = "session") @NotNull final Session session,
+                           @WebParam(name = "name") @NotNull final String name,
+                           @WebParam(name = "description") @NotNull final String description,
+                           @WebParam(name = "projectId") @NotNull final String projectId) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return taskService.create(name, description, projectId, session.getUserId());
     }
 
     @Override
-    public Task editTask(@NotNull Session session, @NotNull String id, @NotNull String name, @NotNull String description, @NotNull String status) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return null;
+    @WebMethod
+    public Task editTask(@WebParam(name = "session") @NotNull final Session session,
+                         @WebParam(name = "id") @NotNull final String id,
+                         @WebParam(name = "name") @NotNull final String name,
+                         @WebParam(name = "description") @NotNull final String description,
+                         @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.edit(id, name, description, status);
     }
 
     @Override
-    public Collection<Task> findAllTaskByProjectId(@NotNull Session session, @NotNull String id) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return null;
+    @WebMethod
+    public Collection<Task> findAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
+                                                   @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.findAllByProjectId(id);
     }
 
     @Override
-    public Collection<Task> findAllTaskByUserId(@NotNull Session session) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return null;
+    @WebMethod
+    public Collection<Task> findAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.findAllByUserId(session.getUserId());
     }
 
     @Override
-    public void removeAllTaskByProjectId(@NotNull Session session, @NotNull String id) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return;
+    @WebMethod
+    public void removeAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
+                                         @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         taskService.removeAllByProjectId(id);
     }
 
     @Override
-    public void removeAllTaskByUserId(@NotNull Session session) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return;
+    @WebMethod
+    public void removeAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         taskService.removeAllByUserId(session.getUserId());
 
     }
 
     @Override
-    public Collection<Task> sortAllTaskByUserId(@NotNull Session session, @NotNull String comparator) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return null;
+    @WebMethod
+    public Collection<Task> sortAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session,
+                                                @WebParam(name = "comparator") @NotNull final String comparator) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.sortAllByUserId(session.getUserId(),comparator);
     }
 
     @Override
-    public Collection<Task> findAllTaskByPartOfNameOrDescription(@NotNull Session session, @NotNull String name, @NotNull String description) throws InvalidSessionException {
-        if(!sessionService.validate(session)) return null;
+    @WebMethod
+    public Collection<Task> findAllTaskByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
+                                                                 @WebParam(name = "name") @NotNull final String name,
+                                                                 @WebParam(name = "description") @NotNull final String description) throws InvalidSessionException {
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.findAllByPartOfNameOrDescription(name,description,session.getUserId());
     }
 }
