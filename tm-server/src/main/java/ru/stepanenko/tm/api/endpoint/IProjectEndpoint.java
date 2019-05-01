@@ -26,6 +26,14 @@ public interface IProjectEndpoint {
                         @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException;
 
     @WebMethod
+    Project findOneProject(@WebParam(name = "session") @NotNull final Session session,
+                           @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException;
+
+    @WebMethod
+    Project removeProject(@WebParam(name = "session") @NotNull final Session session,
+                          @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException;
+
+    @WebMethod
     Collection<Project> findAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException;
 
     @WebMethod

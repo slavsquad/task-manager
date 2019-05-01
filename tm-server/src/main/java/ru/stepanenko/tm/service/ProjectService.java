@@ -42,6 +42,18 @@ public final class ProjectService extends AbstractEntityService<Project, IProjec
     }
 
     @Override
+    public Project findOne(@NotNull String id, @NotNull String userId) {
+        if (!StringValidator.validate(id, userId)) return null;
+        return repository.findOne(id, userId);
+    }
+
+    @Override
+    public Project remove(@NotNull String id, @NotNull String userId) {
+        if (!StringValidator.validate(id, userId)) return null;
+        return repository.remove(id, userId);
+    }
+
+    @Override
     public Collection<Project> findAllByUserId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
         return repository.findAllByUserId(id);

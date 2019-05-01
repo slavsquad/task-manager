@@ -19,6 +19,9 @@ import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.LoginOrPasswordEmpty;
+import ru.stepanenko.tm.exception.WrongLoginOrPasswordException;
 import ru.stepanenko.tm.util.Domain;
 import ru.stepanenko.tm.util.HashUtil;
 import ru.stepanenko.tm.util.EnumUtil;
@@ -109,10 +112,11 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public User authenticationUser(@NotNull final String login, @NotNull final String password) {
+    public User authenticationUser(@NotNull final String login, @NotNull final String password) throws AuthenticationSecurityException {
+        if (!StringValidator.validate(login,password)) throw new LoginOrPasswordEmpty();
         @Nullable
         User user = findByLogin(login);
-        if (user == null || !HashUtil.md5(password).equals(user.getPassword())) return null;
+        if (user == null || !HashUtil.md5(password).equals(user.getPassword())) throw new WrongLoginOrPasswordException();
         setCurrentUser(user);
         return user;
     }

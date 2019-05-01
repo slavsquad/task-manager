@@ -21,15 +21,31 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
     }
 
     @Override
-    public Collection<Task> findAllByProjectId(@NotNull final String id) {
+    public Collection<Task> findAllByProjectId(@NotNull String id, @NotNull String userId) {
         @NotNull
         Collection<Task> tasksByProjectID = new ArrayList<>();
         for (Task task : findAll()) {
-            if (id.equals(task.getProjectID())) {
+            if (id.equals(task.getProjectID()) && userId.equals(task.getUserID())) {
                 tasksByProjectID.add(task);
             }
         }
         return tasksByProjectID;
+    }
+
+    @Override
+    public Task findOne(@NotNull final String id, @NotNull final String userId) {
+        @NotNull final Task task = findOne(id);
+        @NotNull Collection<Task> tasks = findAllByUserId(userId);
+        if (task == null) return null;
+        if (tasks.isEmpty()) return null;
+        if (!tasks.contains(task)) return null;
+        return task;
+    }
+
+    @Override
+    public Task remove(@NotNull String id, @NotNull String userId) {
+        if (findOne(id, userId)==null) return null;
+        return remove(id);
     }
 
     @Override
@@ -40,8 +56,8 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
     }
 
     @Override
-    public void removeAllByProjectId(@NotNull final String id) {
-        for (Task task : findAllByProjectId(id)) {
+    public void removeAllByProjectId(@NotNull final String id, @NotNull final String userId) {
+        for (Task task : findAllByProjectId(id, userId)) {
             remove(task.getId());
         }
     }

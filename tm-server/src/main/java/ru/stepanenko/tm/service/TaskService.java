@@ -41,9 +41,21 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     }
 
     @Override
-    public void removeAllByProjectId(@NotNull final String id) {
-        if (!StringValidator.validate(id)) return;
-        repository.removeAllByProjectId(id);
+    public Task findOne(@NotNull final String id, @NotNull final String userId) {
+        if (!StringValidator.validate(id, userId)) return null;
+        return repository.findOne(id, userId);
+    }
+
+    @Override
+    public Task remove(@NotNull String id, @NotNull String userId) {
+        if (!StringValidator.validate(id, userId)) return null;
+        return repository.remove(id, userId);
+    }
+
+    @Override
+    public void removeAllByProjectId(@NotNull final String id, @NotNull final String userId) {
+        if (!StringValidator.validate(id, userId)) return;
+        repository.removeAllByProjectId(id, userId);
     }
 
     @Override
@@ -67,9 +79,9 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     }
 
     @Override
-    public Collection<Task> findAllByProjectId(@NotNull final String id) {
-        if (!StringValidator.validate(id)) return null;
-        return repository.findAllByProjectId(id);
+    public Collection<Task> findAllByProjectId(@NotNull final String id, @NotNull final String userId) {
+        if (!StringValidator.validate(id, userId)) return null;
+        return repository.findAllByProjectId(id, userId);
     }
 
     @Override

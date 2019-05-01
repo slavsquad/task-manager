@@ -31,10 +31,6 @@ public interface IUserEndpoint {
                          @WebParam(name = "login") @NotNull final String login) throws InvalidSessionException;
 
     @WebMethod
-    User authenticationUser(@WebParam(name = "login") @NotNull final String login,
-                            @WebParam(name = "password") @NotNull final String password) throws InvalidSessionException;
-
-    @WebMethod
     void loadUserData(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException, ForbiddenActionException;
 
     @WebMethod

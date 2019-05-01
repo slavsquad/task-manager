@@ -14,6 +14,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Collection;
+
 @WebService
 @NoArgsConstructor
 public class TaskEndpoint implements ITaskEndpoint {
@@ -35,7 +36,7 @@ public class TaskEndpoint implements ITaskEndpoint {
                            @WebParam(name = "name") @NotNull final String name,
                            @WebParam(name = "description") @NotNull final String description,
                            @WebParam(name = "projectId") @NotNull final String projectId) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.create(name, description, projectId, session.getUserId());
     }
 
@@ -46,22 +47,38 @@ public class TaskEndpoint implements ITaskEndpoint {
                          @WebParam(name = "name") @NotNull final String name,
                          @WebParam(name = "description") @NotNull final String description,
                          @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.edit(id, name, description, status);
+    }
+
+    @Override
+    @WebMethod
+    public Task findOneTask(@WebParam(name = "session") @NotNull final Session session,
+                            @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return taskService.findOne(id, session.getUserId());
+    }
+
+    @Override
+    @WebMethod
+    public Task removeTask(@WebParam(name = "session") @NotNull final Session session,
+                           @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return taskService.remove(id, session.getUserId());
     }
 
     @Override
     @WebMethod
     public Collection<Task> findAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
                                                    @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
-        return taskService.findAllByProjectId(id);
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return taskService.findAllByProjectId(id, session.getUserId());
     }
 
     @Override
     @WebMethod
     public Collection<Task> findAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return taskService.findAllByUserId(session.getUserId());
     }
 
@@ -69,14 +86,14 @@ public class TaskEndpoint implements ITaskEndpoint {
     @WebMethod
     public void removeAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
                                          @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
-        taskService.removeAllByProjectId(id);
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        taskService.removeAllByProjectId(id, session.getUserId());
     }
 
     @Override
     @WebMethod
     public void removeAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         taskService.removeAllByUserId(session.getUserId());
 
     }
@@ -85,8 +102,8 @@ public class TaskEndpoint implements ITaskEndpoint {
     @WebMethod
     public Collection<Task> sortAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session,
                                                 @WebParam(name = "comparator") @NotNull final String comparator) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
-        return taskService.sortAllByUserId(session.getUserId(),comparator);
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return taskService.sortAllByUserId(session.getUserId(), comparator);
     }
 
     @Override
@@ -94,7 +111,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     public Collection<Task> findAllTaskByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
                                                                  @WebParam(name = "name") @NotNull final String name,
                                                                  @WebParam(name = "description") @NotNull final String description) throws InvalidSessionException {
-        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
-        return taskService.findAllByPartOfNameOrDescription(name,description,session.getUserId());
+        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return taskService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
     }
 }

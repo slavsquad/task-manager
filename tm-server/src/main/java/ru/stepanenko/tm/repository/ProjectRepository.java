@@ -21,6 +21,22 @@ public final class ProjectRepository extends AbstractRepository<Project> impleme
     }
 
     @Override
+    public Project findOne(@NotNull String id, @NotNull String userId) {
+        @NotNull final Project project = findOne(id);
+        @NotNull Collection<Project> projects = findAllByUserId(userId);
+        if (project==null) return null;
+        if (projects.isEmpty()) return null;
+        if (!projects.contains(project)) return null;
+        return project;
+    }
+
+    @Override
+    public Project remove(@NotNull String id, @NotNull String userId) {
+        if (findOne(id, userId)==null) return null;
+        return remove(id);
+    }
+
+    @Override
     public void removeAllByUserID(@NotNull final String id) {
         for (Project project : findAllByUserId(id)) {
             remove(project.getId());

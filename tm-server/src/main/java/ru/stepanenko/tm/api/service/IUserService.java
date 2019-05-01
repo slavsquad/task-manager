@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.LoginOrPasswordEmpty;
+import ru.stepanenko.tm.exception.WrongLoginOrPasswordException;
 
 public interface IUserService extends IAbstractEntityService<User> {
 
@@ -13,7 +16,7 @@ public interface IUserService extends IAbstractEntityService<User> {
     User getCurrentUser();
     User findByLogin(@NotNull final String login);
     void setCurrentUser(@Nullable final User user);
-    User authenticationUser(@NotNull final String login, @NotNull final String password);
+    User authenticationUser(@NotNull final String login, @NotNull final String password) throws AuthenticationSecurityException;
     void loadData();
     void saveData();
     void loadDataJaxbXml();

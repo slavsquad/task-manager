@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.endpoint;
 
-import com.sun.corba.se.spi.activation.EndPointInfo;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
@@ -14,7 +13,6 @@ import ru.stepanenko.tm.exception.session.InvalidSessionException;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import javax.xml.ws.Endpoint;
 import java.util.Collection;
 
 @WebService
@@ -50,6 +48,22 @@ public class ProjectEndpoint implements IProjectEndpoint {
                         @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException{
         if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
         return projectService.edit(id, name, description, status);
+    }
+
+    @Override
+    @WebMethod
+    public Project findOneProject(@WebParam(name = "session") @NotNull final Session session,
+                                  @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException{
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return projectService.findOne(id, session.getUserId());
+    }
+
+    @Override
+    @WebMethod
+    public Project removeProject(@WebParam(name = "session") @NotNull final Session session,
+                                 @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException{
+        if(!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+        return projectService.remove(id, session.getUserId());
     }
 
     @Override

@@ -1,50 +1,41 @@
 package ru.stepanenko.tm.config;
 
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.*;
-import ru.stepanenko.tm.command.*;
-import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.exception.*;
-import ru.stepanenko.tm.exception.session.InvalidSessionException;
+import ru.stepanenko.tm.endpoint.ProjectEndpoint;
+import ru.stepanenko.tm.endpoint.SessionEndpoint;
+import ru.stepanenko.tm.endpoint.TaskEndpoint;
+import ru.stepanenko.tm.endpoint.UserEndpoint;
+
 import ru.stepanenko.tm.service.ServiceLocator;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.entity.Project;
 
-import java.util.HashMap;
-import java.util.Map;
+import javax.xml.ws.Endpoint;
 
 public class Bootstrap {
     @NotNull
     final IServiceLocator serviceLocator = new ServiceLocator();
 
-    public void init(Class[] arrayCommands) {
+    public void init() {
         generateTestUsers(serviceLocator);
+
         //generateTestData(serviceLocator);
-        menu(initializeCommands(serviceLocator, arrayCommands));
+        initEndpoint(serviceLocator);
     }
 
-    private Map<String, AbstractCommand> initializeCommands(@NotNull final IServiceLocator serviceLocator, @NotNull final Class[] arrayCommands) {
-        @NotNull final Map<String, AbstractCommand> mapCommand = new HashMap<>();
-
-        for (Class command : arrayCommands) {
-            if (command.getSuperclass().equals(AbstractCommand.class)) {
-                try {
-                    AbstractCommand abstractCommand = (AbstractCommand) command.newInstance();
-                    abstractCommand.setServiceLocator(serviceLocator);
-                    registerCommand(abstractCommand, mapCommand);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return mapCommand;
+    private void initEndpoint(IServiceLocator serviceLocator){
+        registryEndpoint(new ProjectEndpoint(serviceLocator));
+        registryEndpoint(new TaskEndpoint(serviceLocator));
+        registryEndpoint(new UserEndpoint(serviceLocator));
+        registryEndpoint(new SessionEndpoint(serviceLocator));
     }
 
-    private void registerCommand(@NotNull final AbstractCommand abstractCommand, @NotNull final Map<String, AbstractCommand> command) {
-        command.put(abstractCommand.getName(), abstractCommand);
+    private void registryEndpoint(Object endpoint){
+        if (endpoint==null) return;
+        String wsdl = "http://localhost:8080/"+endpoint.getClass().getSimpleName()+"?wsdl";
+        Endpoint.publish(wsdl,endpoint);
+        System.out.println(wsdl);
     }
 
     private void generateTestUsers(IServiceLocator serviceLocator) {
@@ -85,28 +76,5 @@ public class Bootstrap {
             taskService.create("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId());
         }
         //----------------------------------------------------------------------------------------------
-    }
-
-    private void menu(@NotNull final Map<String, AbstractCommand> commands) {
-        System.out.println("==Welcome to Task manager!==\n" +
-                "Input help for more information");
-
-        while (true) {
-            System.out.println("Please input your command:");
-            @NotNull
-            String commandName = serviceLocator.getTerminalService().nextLine();
-            @Nullable
-            AbstractCommand command = commands.get(commandName);
-            if (command != null) {
-                try {
-                    command.execute();
-
-                }catch (AuthenticationSecurityException | InvalidSessionException e){
-                    System.out.println(e);
-                }
-            } else {
-                System.out.println("Incorrect input, please try again!");
-            }
-        }
     }
 }

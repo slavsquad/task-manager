@@ -9,6 +9,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Collection;
+
 @WebService
 public interface ITaskEndpoint {
 
@@ -24,6 +25,14 @@ public interface ITaskEndpoint {
                   @WebParam(name = "name") @NotNull final String name,
                   @WebParam(name = "description") @NotNull final String description,
                   @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException;
+
+    @WebMethod
+    Task findOneTask(@WebParam(name = "session") @NotNull final Session session,
+                     @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException;
+
+    @WebMethod
+    Task removeTask(@WebParam(name = "session") @NotNull final Session session,
+                    @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException;
 
     @WebMethod
     Collection<Task> findAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,

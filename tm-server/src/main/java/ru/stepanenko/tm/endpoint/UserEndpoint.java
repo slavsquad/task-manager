@@ -13,7 +13,9 @@ import ru.stepanenko.tm.exception.session.InvalidSessionException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
+import javax.jws.WebService;
 
+@WebService
 @NoArgsConstructor
 public class UserEndpoint implements IUserEndpoint {
 
@@ -55,13 +57,6 @@ public class UserEndpoint implements IUserEndpoint {
                                 @WebParam(name = "login") @NotNull final String login) throws InvalidSessionException {
         if (!sessionService.validateAdmin(session)) throw new InvalidSessionException("Session is invalid!");
         return userService.findByLogin(login);
-    }
-
-    @Override
-    @WebMethod
-    public User authenticationUser(@WebParam(name = "login") @NotNull final String login,
-                                   @WebParam(name = "password") @NotNull final String password) throws InvalidSessionException {
-        return userService.authenticationUser(login, password);
     }
 
     @Override
