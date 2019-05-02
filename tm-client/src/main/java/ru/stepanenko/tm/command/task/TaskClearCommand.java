@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
+
 import java.util.Collection;
 
 @NoArgsConstructor
@@ -22,12 +23,12 @@ public final class TaskClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws InvalidSessionException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
-
+        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.print("Please input project id or press ENTER for remove all tasks:");
         @NotNull final String id = terminalService.nextLine();
         if ("".equals(id)) {

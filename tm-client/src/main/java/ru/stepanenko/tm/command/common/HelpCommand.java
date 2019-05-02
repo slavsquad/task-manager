@@ -38,6 +38,7 @@ public final class HelpCommand extends AbstractCommand {
                 "user-profile-view: View current user profile.\n" +
                 "user-register: Register new user.\n" +
                 "user-change-pass: Change user's password .\n" +
+                "user-list: Print list of users.\n" +
                 "help: Show all commands.\n" +
                 "exit: quit from application.");
     }

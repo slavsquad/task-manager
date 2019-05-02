@@ -1,4 +1,6 @@
 *.out
+**/docs/
+**/release/
 *.idea
-*.jar
 *.iml
+data.*

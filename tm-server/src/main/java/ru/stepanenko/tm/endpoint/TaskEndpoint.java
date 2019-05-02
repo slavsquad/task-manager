@@ -8,7 +8,7 @@ import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.Task;
-import ru.stepanenko.tm.exception.session.InvalidSessionException;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -35,8 +35,8 @@ public class TaskEndpoint implements ITaskEndpoint {
     public Task createTask(@WebParam(name = "session") @NotNull final Session session,
                            @WebParam(name = "name") @NotNull final String name,
                            @WebParam(name = "description") @NotNull final String description,
-                           @WebParam(name = "projectId") @NotNull final String projectId) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                           @WebParam(name = "projectId") @NotNull final String projectId) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.create(name, description, projectId, session.getUserId());
     }
 
@@ -46,54 +46,54 @@ public class TaskEndpoint implements ITaskEndpoint {
                          @WebParam(name = "id") @NotNull final String id,
                          @WebParam(name = "name") @NotNull final String name,
                          @WebParam(name = "description") @NotNull final String description,
-                         @WebParam(name = "status") @NotNull final String status) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                         @WebParam(name = "status") @NotNull final String status) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.edit(id, name, description, status);
     }
 
     @Override
     @WebMethod
     public Task findOneTask(@WebParam(name = "session") @NotNull final Session session,
-                            @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                            @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.findOne(id, session.getUserId());
     }
 
     @Override
     @WebMethod
     public Task removeTask(@WebParam(name = "session") @NotNull final Session session,
-                           @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                           @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.remove(id, session.getUserId());
     }
 
     @Override
     @WebMethod
     public Collection<Task> findAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
-                                                   @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                                                   @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.findAllByProjectId(id, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+    public Collection<Task> findAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.findAllByUserId(session.getUserId());
     }
 
     @Override
     @WebMethod
     public void removeAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
-                                         @WebParam(name = "id") @NotNull final String id) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                                         @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         taskService.removeAllByProjectId(id, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public void removeAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+    public void removeAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         taskService.removeAllByUserId(session.getUserId());
 
     }
@@ -101,8 +101,8 @@ public class TaskEndpoint implements ITaskEndpoint {
     @Override
     @WebMethod
     public Collection<Task> sortAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session,
-                                                @WebParam(name = "comparator") @NotNull final String comparator) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                                                @WebParam(name = "comparator") @NotNull final String comparator) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.sortAllByUserId(session.getUserId(), comparator);
     }
 
@@ -110,8 +110,8 @@ public class TaskEndpoint implements ITaskEndpoint {
     @WebMethod
     public Collection<Task> findAllTaskByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
                                                                  @WebParam(name = "name") @NotNull final String name,
-                                                                 @WebParam(name = "description") @NotNull final String description) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+                                                                 @WebParam(name = "description") @NotNull final String description) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return taskService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
     }
 }

@@ -22,6 +22,7 @@ public final class SignatureUtil {
             return null;
         }
     }
+
     @Nullable
     public static String sign(
             @Nullable final String value,

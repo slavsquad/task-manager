@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.enumerate;
 
 import org.jetbrains.annotations.NotNull;
+
 import java.io.Serializable;
 
 public enum Role implements Serializable {

@@ -44,7 +44,7 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
 
     @Override
     public Task remove(@NotNull String id, @NotNull String userId) {
-        if (findOne(id, userId)==null) return null;
+        if (findOne(id, userId) == null) return null;
         return remove(id);
     }
 

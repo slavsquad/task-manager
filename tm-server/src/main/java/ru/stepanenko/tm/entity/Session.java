@@ -12,7 +12,7 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 
-public class Session extends AbstractEntity{
+public class Session extends AbstractEntity {
     @Nullable
     private String userId;
     @Nullable

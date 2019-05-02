@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.endpoint.*;
 
 public interface IEndpointServiceLocator {
+
     ProjectEndpoint getProjectEndpoint();
     TaskEndpoint getTaskEndpoint();
     UserEndpoint getUserEndpoint();

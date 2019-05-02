@@ -2,6 +2,7 @@ package ru.stepanenko.tm.endpoint;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
@@ -9,7 +10,6 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.session.InvalidSessionException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -33,17 +33,23 @@ public class SessionEndpoint implements ISessionEndpoint {
 
     @Override
     @WebMethod
-    public Session openSession(@WebParam(name="login") @NotNull final String login,
-                               @WebParam(name="password") @NotNull final String password) throws AuthenticationSecurityException, IOException {
+    public Session openSession(@WebParam(name = "login") @NotNull final String login,
+                               @WebParam(name = "password") @NotNull final String password) throws AuthenticationSecurityException, IOException {
         @NotNull
-        User loggedUser = userService.authenticationUser(login,password);
+        User loggedUser = userService.authenticationUser(login, password);
         return sessionService.create(loggedUser.getId());
     }
 
     @Override
     @WebMethod
-    public Session closeSession(@WebParam(name = "session") @NotNull final Session session) throws InvalidSessionException {
-        if (!sessionService.validate(session)) throw new InvalidSessionException("Session is invalid!");
+    public boolean validateSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException {
+        return sessionService.validate(session);
+    }
+
+    @Override
+    @WebMethod
+    public Session closeSession(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
+        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
         return sessionService.remove(session.getId());
     }
 

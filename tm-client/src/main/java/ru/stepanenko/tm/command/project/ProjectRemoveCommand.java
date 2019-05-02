@@ -5,7 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.InvalidSessionException_Exception;
+import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
 import ru.stepanenko.tm.endpoint.Project;
 import ru.stepanenko.tm.endpoint.ProjectEndpoint;
 import ru.stepanenko.tm.endpoint.Session;
@@ -24,10 +24,11 @@ public final class ProjectRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws InvalidSessionException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.print("Please input project ID for remove: ");
         @NotNull
         String id = terminalService.nextLine();

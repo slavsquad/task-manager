@@ -15,16 +15,12 @@ public class EndpointServiceLocator implements IEndpointServiceLocator {
 
     @NotNull
     private final ProjectEndpoint projectEndpoint = new ProjectEndpointService().getProjectEndpointPort();
-
     @NotNull
     private final TaskEndpoint taskEndpoint = new TaskEndpointService().getTaskEndpointPort();
-
     @NotNull
     private final UserEndpoint userEndpoint = new UserEndpointService().getUserEndpointPort();
-
     @NotNull
     private final SessionEndpoint sessionEndpoint = new SessionEndpointService().getSessionEndpointPort();
-
     @NotNull
     private final ITerminalService terminalService = new TerminalService();
 

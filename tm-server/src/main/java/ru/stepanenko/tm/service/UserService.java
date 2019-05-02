@@ -16,12 +16,9 @@ import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.LoginOrPasswordEmpty;
-import ru.stepanenko.tm.exception.WrongLoginOrPasswordException;
 import ru.stepanenko.tm.util.Domain;
 import ru.stepanenko.tm.util.HashUtil;
 import ru.stepanenko.tm.util.EnumUtil;
@@ -50,9 +47,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class UserService extends AbstractEntityService<User, IUserRepository> implements IUserService {
-
-    @Nullable
-    private User currentUser;
 
     @NotNull
     private IProjectRepository projectRepository;
@@ -96,8 +90,13 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public User getCurrentUser() {
-        return currentUser;
+    public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password) {
+        if (!StringValidator.validate(id, login, password)) return null;
+        @NotNull
+        User user = findOne(id);
+        user.setLogin(login);
+        user.setPassword(HashUtil.md5(password));
+        return repository.merge(user);
     }
 
     @Override
@@ -107,29 +106,25 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     }
 
     @Override
-    public void setCurrentUser(@Nullable final User user) {
-        this.currentUser = user;
-    }
-
-    @Override
     public User authenticationUser(@NotNull final String login, @NotNull final String password) throws AuthenticationSecurityException {
-        if (!StringValidator.validate(login,password)) throw new LoginOrPasswordEmpty();
+        if (!StringValidator.validate(login, password))
+            throw new AuthenticationSecurityException("User login or password must not be empty!");
         @Nullable
         User user = findByLogin(login);
-        if (user == null || !HashUtil.md5(password).equals(user.getPassword())) throw new WrongLoginOrPasswordException();
-        setCurrentUser(user);
+        if (user == null || !HashUtil.md5(password).equals(user.getPassword()))
+            throw new AuthenticationSecurityException("Wrong login or password!");
         return user;
     }
 
     @Override
     public void loadData() {
-        try(ObjectInputStream oin = new ObjectInputStream(new FileInputStream("tm-server/data.out"))){
+        try (ObjectInputStream oin = new ObjectInputStream(new FileInputStream("tm-server/data.out"))) {
             Domain domain = (Domain) oin.readObject();
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
             repository.recovery(domain.getUsers());
             System.out.println("Success all data load!");
-        }catch (IOException | ClassNotFoundException e){
+        } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
     }
@@ -137,10 +132,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     @Override
     public void saveData() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tm-server/data.out"))){
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tm-server/data.out"))) {
             oos.writeObject(domain);
             oos.flush();
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
@@ -148,10 +143,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
     @Override
     public void loadDataJaxbXml() {
-        try{
+        try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Domain.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            Domain domain = (Domain)unmarshaller.unmarshal( new File("tm-server/data.xml") );
+            Domain domain = (Domain) unmarshaller.unmarshal(new File("tm-server/data.xml"));
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
             repository.recovery(domain.getUsers());
@@ -164,16 +159,16 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     @Override
     public void saveDataJaxbXml() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
-        try(FileWriter fw = new FileWriter("tm-server/data.xml")){
+        try (FileWriter fw = new FileWriter("tm-server/data.xml")) {
             fw.write(domainToXMLString(domain));
             System.out.println("Success, fll data save in file!");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private String domainToXMLString(Domain domain){
-        try{
+    private String domainToXMLString(Domain domain) {
+        try {
             JAXBContext context = JAXBContext.newInstance(Domain.class);
             Marshaller marshaller = context.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.FALSE);
@@ -249,10 +244,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     public void saveDataJaxbJSON() {
         Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
 
-        try(FileWriter fw = new FileWriter("tm-server/data.json")){
+        try (FileWriter fw = new FileWriter("tm-server/data.json")) {
             fw.write(domainToJsonString(domain));
             System.out.println("Success, all data save in file!");
-        }catch (IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -279,8 +274,8 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
             scriptEngine.put("jsonString", jsonString);
-            scriptEngine.eval("result = JSON.stringify(JSON.parse(jsonString), null, "+indent+")");
-            return  (String) scriptEngine.get("result");
+            scriptEngine.eval("result = JSON.stringify(JSON.parse(jsonString), null, " + indent + ")");
+            return (String) scriptEngine.get("result");
         } catch (ScriptException e) {
             e.printStackTrace();
         }

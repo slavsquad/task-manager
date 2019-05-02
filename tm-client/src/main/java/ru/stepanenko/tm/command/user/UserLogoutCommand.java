@@ -2,11 +2,8 @@ package ru.stepanenko.tm.command.user;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.exception.UserNoLoginException;
+import ru.stepanenko.tm.endpoint.*;
 
 @NoArgsConstructor
 public final class UserLogoutCommand extends AbstractCommand {
@@ -22,12 +19,15 @@ public final class UserLogoutCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws UserNoLoginException {
-        @NotNull final IUserService userService = endpointServiceLocator.getUserService();
-        @Nullable
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) throw new UserNoLoginException();
-        userService.setCurrentUser(null);
-        System.out.println("User: '" + currentUser.getLogin() + "' logout!");
+    public void execute() throws AuthenticationSecurityException_Exception {
+        @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
+        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @NotNull final SessionEndpoint sessionEndpoint = endpointServiceLocator.getSessionEndpoint();
+        sessionEndpoint.validateSession(currentSession);
+        @NotNull final String login = userEndpoint.getUserBySession(currentSession).getLogin();
+        sessionEndpoint.closeSession(currentSession);
+        System.out.println("Session id:" + currentSession.getId() + " was close!");
+        System.out.println("User " + login + " logout!");
+        endpointServiceLocator.setSession(null);
     }
 }

@@ -19,13 +19,13 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @XmlRootElement(name = "project")
-@XmlAccessorType (XmlAccessType.FIELD)
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Project extends AbstractEntity implements Serializable {
 
     @Nullable
-    private Date dateStart=null;
+    private Date dateStart = null;
     @Nullable
-    private Date dateEnd=null;
+    private Date dateEnd = null;
     @NotNull
     private String userID = "";
     @NotNull

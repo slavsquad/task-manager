@@ -13,6 +13,7 @@ import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.repository.SessionRepository;
 import ru.stepanenko.tm.repository.TaskRepository;
 import ru.stepanenko.tm.repository.UserRepository;
+
 public final class ServiceLocator implements IServiceLocator {
 
     @Getter
@@ -22,13 +23,10 @@ public final class ServiceLocator implements IServiceLocator {
 
     @NotNull
     final private IProjectRepository projectRepository = new ProjectRepository();
-
     @NotNull
     final private ITaskRepository taskRepository = new TaskRepository();
-
     @NotNull
     final private IUserRepository userRepository = new UserRepository();
-
     @NotNull
     final private ISessionRepository sessionRepository = new SessionRepository();
 
@@ -43,10 +41,6 @@ public final class ServiceLocator implements IServiceLocator {
     @Getter
     @NotNull
     final private IUserService userService = new UserService(userRepository, projectRepository, taskRepository);
-
-    @Getter
-    @NotNull
-    final private ITerminalService terminalService = new TerminalService();
 
     @Getter
     @NotNull

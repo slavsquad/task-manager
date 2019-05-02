@@ -8,7 +8,6 @@ public interface IServiceLocator {
     IProjectService getProjectService();
     ITaskService getTaskService();
     IUserService getUserService();
-    ITerminalService getTerminalService();
     ISessionService getSessionService();
     Session getSession();
     void setSession(@NotNull final Session session);

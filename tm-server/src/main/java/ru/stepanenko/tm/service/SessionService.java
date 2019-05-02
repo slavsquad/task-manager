@@ -1,13 +1,14 @@
 package ru.stepanenko.tm.service;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
-import ru.stepanenko.tm.exception.session.InvalidSessionException;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.util.SignatureUtil;
 
 import java.io.IOException;
@@ -43,18 +44,23 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
     }
 
     @Override
-    public boolean validate(@NotNull Session session) throws InvalidSessionException {
-        if (session == null) throw new InvalidSessionException("Session must not be null!");
-        if (session.getSignature() == null) throw new InvalidSessionException("Signature must not be null!");
-        if (session.getUserId() == null) throw new InvalidSessionException("User must not be null!");
-        if (session.getTimeStamp() == null) throw new InvalidSessionException("Time must not be null!");
-        if (findOne(session.getId()) == null) throw new InvalidSessionException("Session not found!");
+    public boolean validate(@Nullable Session session) throws AuthenticationSecurityException {
+        if (session == null)
+            throw new AuthenticationSecurityException("Session is invalid: \nSession must not be null! Please re-login!");
+        if (session.getSignature() == null)
+            throw new AuthenticationSecurityException("Session is invalid: \nSignature must not be null! Please re-login!");
+        if (session.getUserId() == null)
+            throw new AuthenticationSecurityException("Session is invalid: \nUser must not be null! Please re-login!");
+        if (session.getTimeStamp() == null)
+            throw new AuthenticationSecurityException("Session is invalid: \nTime must not be null! Please re-login!");
+        if (findOne(session.getId()) == null)
+            throw new AuthenticationSecurityException("Session is invalid: \nSession not found! Please re-login!");
 
         return session.getSignature().equals(findOne(session.getId()).getSignature());
     }
 
     @Override
-    public boolean validateAdmin(@NotNull Session session) throws InvalidSessionException {
+    public boolean validateAdmin(@Nullable Session session) throws AuthenticationSecurityException {
         if (validate(session)) {
             User user = userRepository.findOne(session.getUserId());
             return user.getRole().equals(Role.ADMINISTRATOR);

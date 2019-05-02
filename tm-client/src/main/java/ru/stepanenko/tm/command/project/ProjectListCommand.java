@@ -4,7 +4,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.InvalidSessionException_Exception;
+import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
 import ru.stepanenko.tm.endpoint.Project;
 import ru.stepanenko.tm.endpoint.ProjectEndpoint;
 import ru.stepanenko.tm.endpoint.Session;
@@ -25,11 +25,11 @@ public final class ProjectListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws InvalidSessionException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
-
+        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("List of projects:");
         @NotNull final Collection<Project> findProjects = projectEndpoint.findAllProjectByUserId(currentSession);
         if (findProjects != null && !findProjects.isEmpty()) {

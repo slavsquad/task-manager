@@ -12,30 +12,39 @@ import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.entity.Project;
 
 import javax.xml.ws.Endpoint;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 
 public class Bootstrap {
-    @NotNull
-    final IServiceLocator serviceLocator = new ServiceLocator();
-
-    public void init() {
+    public void init(Class[] endpoints) {
+        @NotNull final IServiceLocator serviceLocator = new ServiceLocator();
         generateTestUsers(serviceLocator);
-
         //generateTestData(serviceLocator);
-        initEndpoint(serviceLocator);
+        registryEndpoint(endpoints, serviceLocator);
     }
 
-    private void initEndpoint(IServiceLocator serviceLocator){
-        registryEndpoint(new ProjectEndpoint(serviceLocator));
-        registryEndpoint(new TaskEndpoint(serviceLocator));
-        registryEndpoint(new UserEndpoint(serviceLocator));
-        registryEndpoint(new SessionEndpoint(serviceLocator));
-    }
+    private void registryEndpoint(Class[] endpoints, IServiceLocator serviceLocator) {
 
-    private void registryEndpoint(Object endpoint){
-        if (endpoint==null) return;
-        String wsdl = "http://localhost:8080/"+endpoint.getClass().getSimpleName()+"?wsdl";
-        Endpoint.publish(wsdl,endpoint);
-        System.out.println(wsdl);
+        for (Class endpoint:endpoints){
+            if (endpoint == null) continue;
+            Constructor endpointConstructor = null;
+            try {
+                endpointConstructor = endpoint.getConstructor(IServiceLocator.class);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            }
+            String wsdl = "http://localhost:8080/" + endpoint.getSimpleName() + "?wsdl";
+            try {
+                Endpoint.publish(wsdl, endpointConstructor.newInstance(serviceLocator));
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+            System.out.println(wsdl);
+        }
     }
 
     private void generateTestUsers(IServiceLocator serviceLocator) {
@@ -45,9 +54,9 @@ public class Bootstrap {
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
 
         //----------------------------------------- test users-------------------------------------------
-        userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250","admin", "admin", Role.ADMINISTRATOR.toString());
+        userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", Role.ADMINISTRATOR.toString());
         userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", Role.USER.toString());
-        userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441","root", "root", Role.USER.toString());
+        userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", Role.USER.toString());
     }
 
     private void generateTestData(IServiceLocator serviceLocator) {

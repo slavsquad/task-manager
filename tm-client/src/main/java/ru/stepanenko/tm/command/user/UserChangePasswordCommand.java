@@ -4,10 +4,8 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.exception.UserNoLoginException;
+import ru.stepanenko.tm.endpoint.*;
 
 @NoArgsConstructor
 public final class UserChangePasswordCommand extends AbstractCommand {
@@ -23,29 +21,25 @@ public final class UserChangePasswordCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws UserNoLoginException {
-        @NotNull final IUserService userService = endpointServiceLocator.getUserService();
+    public void execute() throws AuthenticationSecurityException_Exception {
+        @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) throw new UserNoLoginException();
-
+        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input user name:");
-        @NotNull
-        String login = terminalService.nextLine();
-        @Nullable
-        User user = userService.findByLogin(login);
+        @NotNull final String login = terminalService.nextLine();
+        @Nullable final User user = userEndpoint.findUserByLogin(currentSession, login);
         if (user != null) {
             System.out.println("Please input password:");
             @NotNull
             String password = terminalService.nextLine();
-            if (userService.edit(user.getId(), user.getLogin(), password, user.getRole().toString()) != null) {
-                System.out.println("User " + user.getLogin() + " password changed!");
+            if (userEndpoint.changeUserPassword(currentSession, user.getId(), user.getLogin(), password, user.getRole().toString()) != null) {
+                System.out.println("User " + login + " password changed!");
             } else {
-                System.out.println("Incorrect input role!");
+                System.out.println("Password does not change!!");
             }
         } else {
-            System.out.println("User name already exist!");
+            System.out.println("User does not found!");
         }
     }
 }

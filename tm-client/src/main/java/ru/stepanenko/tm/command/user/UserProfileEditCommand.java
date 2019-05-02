@@ -4,10 +4,8 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.exception.UserNoLoginException;
+import ru.stepanenko.tm.endpoint.*;
 
 @NoArgsConstructor
 public final class UserProfileEditCommand extends AbstractCommand {
@@ -23,26 +21,25 @@ public final class UserProfileEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws UserNoLoginException {
-        @NotNull final IUserService userService = endpointServiceLocator.getUserService();
+    public void execute() throws AuthenticationSecurityException_Exception {
+        @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable
-        User currentUser = userService.getCurrentUser();
-        if (currentUser == null) throw new UserNoLoginException();
-        System.out.println(currentUser);//print user profile
+        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        System.out.println("Welcome to editor user: " + userEndpoint.getUserBySession(currentSession) + "profile: ");
         System.out.println("Please input login: ");
         @NotNull
         String login = terminalService.nextLine();
         @Nullable
-        User user = userService.findByLogin(login);
+        User user = userEndpoint.findUserByLogin(currentSession, login);
         if (user == null) {
             System.out.println("Please input password:");
             @NotNull
             String password = terminalService.nextLine();
-            if (userService.edit(currentUser.getId(), login, password, currentUser.getRole().toString()) != null) {
+            if (userEndpoint.editUserProfile(currentSession, login, password) != null) {
                 System.out.println("User profile had been changed!");
             } else {
-                System.out.println("Incorrect input role!");
+                System.out.println("Incorrect input login or password!");
             }
         } else {
             System.out.println("Login already exist!");
