@@ -1,68 +1,201 @@
 package ru.stepanenko.tm.repository;
 
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.enumerate.Status;
+import ru.stepanenko.tm.util.DateFormatter;
+import ru.stepanenko.tm.util.FieldConst;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.*;
 
-public final class TaskRepository extends AbstractRepository<Task> implements ITaskRepository {
+@AllArgsConstructor
+public final class TaskRepository implements ITaskRepository {
 
-    @Override
-    public Collection<Task> findAllByUserId(@NotNull final String id) {
-        @NotNull
-        Collection<Task> userTasks = new ArrayList<>();
-        for (Task task : findAll()) {
-            if (id.equals(task.getUserID())) {
-                userTasks.add(task);
-            }
-        }
-        return userTasks;
-    }
+    @NotNull
+    private final Connection connection;
 
-    @Override
-    public Collection<Task> findAllByProjectId(@NotNull String id, @NotNull String userId) {
-        @NotNull
-        Collection<Task> tasksByProjectID = new ArrayList<>();
-        for (Task task : findAll()) {
-            if (id.equals(task.getProjectID()) && userId.equals(task.getUserID())) {
-                tasksByProjectID.add(task);
-            }
-        }
-        return tasksByProjectID;
-    }
-
-    @Override
-    public Task findOne(@NotNull final String id, @NotNull final String userId) {
-        @NotNull final Task task = findOne(id);
-        @NotNull Collection<Task> tasks = findAllByUserId(userId);
-        if (task == null) return null;
-        if (tasks.isEmpty()) return null;
-        if (!tasks.contains(task)) return null;
+    @Nullable
+    @SneakyThrows
+    private Task fetch(@Nullable final ResultSet row) {
+        if (row == null) return null;
+        @NotNull final Task task = new Task();
+        task.setId(row.getString(FieldConst.ID));
+        task.setName(row.getString(FieldConst.NAME));
+        task.setDescription(row.getString(FieldConst.DESCRIPTION));
+        task.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
+        task.setDateEnd(row.getDate(FieldConst.DATA_END));
+        task.setStatus(Status.valueOf(row.getString(FieldConst.STATUS)));
+        task.setUserID(row.getString(FieldConst.USER_ID));
+        task.setProjectID(row.getString(FieldConst.PROJECT_ID));
         return task;
     }
 
     @Override
+    @SneakyThrows
+    public Task findOne(@NotNull final String id) {
+        @NotNull final String query = "SELECT * FROM app_task WHERE id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        return fetch(resultSet);
+    }
+
+    @Override
+    @SneakyThrows
+    public Collection<Task> findAll() {
+        @NotNull final String query = "SELECT * FROM app_task";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final List<Task> result = new ArrayList<>();
+        while (resultSet.next()) result.add(fetch(resultSet));
+        return result;
+    }
+
+    @Override
+    @SneakyThrows
+    public void removeAll() {
+        @NotNull final String query = "DELETE FROM app_task";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.executeUpdate();
+    }
+
+    @Override
+    @SneakyThrows
+    public Task remove(@NotNull final String id) {
+        @NotNull final String query = "DELETE FROM app_task where id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        @NotNull final Task task = findOne(id);
+        statement.setString(1, id);
+        statement.executeUpdate();
+        return task;
+    }
+
+    @Override
+    @SneakyThrows
+    public Task persist(@NotNull final Task task) {
+        @NotNull final String query = "INSERT into app_task(id, name, description, dateBegin, dateEnd, status, user_id, project_id) values (?, ?, ?, ?, ?, ?, ?, ?)";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, task.getId());
+        statement.setString(2, task.getName());
+        statement.setString(3, task.getDescription());
+        statement.setString(4, DateFormatter.format(task.getDateBegin()));
+        statement.setString(5, DateFormatter.format(task.getDateEnd()));
+        statement.setString(6, task.getStatus().toString());
+        statement.setString(7, task.getUserID());
+        statement.setString(8, task.getProjectID());
+        statement.executeUpdate();
+        return task;
+    }
+
+    @Override
+    @SneakyThrows
+    public Task merge(@NotNull final Task task) {
+        @NotNull final String query = "UPDATE app_task SET name = ?, description = ?, dateBegin = ?, dateEnd = ?, status = ? where id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, task.getName());
+        statement.setString(2, task.getDescription());
+        statement.setString(3, DateFormatter.format(task.getDateBegin()));
+        statement.setString(4, DateFormatter.format(task.getDateEnd()));
+        statement.setString(5, task.getStatus().toString());
+        statement.setString(6, task.getId());
+        statement.executeUpdate();
+        return task;
+    }
+
+    @Override
+    @SneakyThrows
+    public Collection<Task> recovery(@NotNull Collection<Task> collection) {
+        removeAll();
+        for (Task task : collection) {
+            persist(task);
+        }
+        return collection;
+    }
+
+    @Override
+    @SneakyThrows
+    public Connection getConnection() {
+        return connection;
+    }
+
+    @Override
+    @SneakyThrows
+    public Collection<Task> findAllByUserId(@NotNull final String id) {
+        @NotNull final String query = "SELECT * FROM app_task WHERE user_id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final List<Task> result = new ArrayList<>();
+        while (resultSet.next()) result.add(fetch(resultSet));
+        return result;
+    }
+
+    @Override
+    @SneakyThrows
+    public Collection<Task> findAllByProjectId(@NotNull String id, @NotNull String userId) {
+        @NotNull final String query = "SELECT * FROM app_task WHERE project_id = ? AND user_id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        statement.setString(2, userId);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final List<Task> result = new ArrayList<>();
+        while (resultSet.next()) result.add(fetch(resultSet));
+        return result;
+    }
+
+    @Override
+    @SneakyThrows
+    public Task findOne(@NotNull final String id, @NotNull final String userId) {
+        @NotNull final String query = "SELECT * FROM app_task WHERE id = ? AND user_id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        statement.setString(2, userId);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        return fetch(resultSet);
+    }
+
+    @Override
+    @SneakyThrows
     public Task remove(@NotNull String id, @NotNull String userId) {
-        if (findOne(id, userId) == null) return null;
-        return remove(id);
+        @NotNull final String query = "DELETE FROM app_task where id = ? AND user_id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        @NotNull final Task task = findOne(id, userId);
+        statement.setString(1, id);
+        statement.setString(2, userId);
+        statement.executeUpdate();
+        return task;
     }
 
     @Override
+    @SneakyThrows
     public void removeAllByUserId(@NotNull final String id) {
-        for (Task task : findAllByUserId(id)) {
-            remove(task.getId());
-        }
+        @NotNull final String query = "DELETE FROM app_task where user_id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        statement.executeUpdate();
     }
 
     @Override
+    @SneakyThrows
     public void removeAllByProjectId(@NotNull final String id, @NotNull final String userId) {
-        for (Task task : findAllByProjectId(id, userId)) {
-            remove(task.getId());
-        }
+        @NotNull final String query = "DELETE FROM app_task where project_id = ? AND user_id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        statement.setString(2, userId);
+        statement.executeUpdate();
     }
 
     @Override
+    @SneakyThrows
     public Collection<Task> sortAllByUserId(@NotNull String id, Comparator<Task> comparator) {
         List<Task> tasks = new ArrayList<>(findAllByUserId(id));
         Collections.sort(tasks, comparator);
@@ -70,6 +203,7 @@ public final class TaskRepository extends AbstractRepository<Task> implements IT
     }
 
     @Override
+    @SneakyThrows
     public Collection<Task> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
         List<Task> findTasks = new ArrayList<>();
         for (Task task : findAllByUserId(userId)) {

@@ -11,7 +11,6 @@ import ru.stepanenko.tm.util.DateFormatter;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -25,7 +24,7 @@ public class Task extends AbstractEntity implements Serializable {
     @NotNull
     private String projectID = "";
     @Nullable
-    private Date dateStart = null;
+    private Date dateBegin = null;
     @Nullable
     private Date dateEnd = null;
     @NotNull
@@ -36,7 +35,7 @@ public class Task extends AbstractEntity implements Serializable {
     public Task(@NotNull final String name, @NotNull final String description, @NotNull final String projectID, @NotNull final String userID) {
         this.name = name;
         this.description = description;
-        this.dateStart = new Date();
+        this.dateBegin = new Date();
         this.projectID = projectID;
         this.userID = userID;
     }
@@ -47,7 +46,7 @@ public class Task extends AbstractEntity implements Serializable {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
-                ", dateStart=" + DateFormatter.format(dateStart) +
+                ", dateBegin=" + DateFormatter.format(dateBegin) +
                 ", dateEnd=" + DateFormatter.format(dateEnd) +
                 ", status=" + status +
                 ", projectID='" + projectID + '\'' +

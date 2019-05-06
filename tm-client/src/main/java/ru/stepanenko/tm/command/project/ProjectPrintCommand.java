@@ -33,7 +33,7 @@ public class ProjectPrintCommand extends AbstractCommand {
             System.out.println("id: " + findProject.getId() +
                     "\nname: " + findProject.getName() +
                     "\ndescription: " + findProject.getDescription() +
-                    "\ndata start: " + findProject.getDateStart() +
+                    "\ndata start: " + findProject.getDateBegin() +
                     "\ndata end: " + findProject.getDateEnd() +
                     "\nstatus: " + findProject.getStatus());
         } else {

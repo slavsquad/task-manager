@@ -21,7 +21,7 @@ public class TaskListSortCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "Sorted list task by: order, dateStart, dateEnd or status";
+        return "Sorted list task by: order, dateBegin, dateEnd or status";
     }
 
     @Override
@@ -30,7 +30,7 @@ public class TaskListSortCommand extends AbstractCommand {
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.println("Please input how to sort list task(order, dateStart, dateEnd, status)");
+        System.out.println("Please input how to sort list task(order, dateBegin, dateEnd, status)");
         @NotNull final String comparator = terminalService.nextLine();
         Collection<Task> sortedTasks = taskEndpoint.sortAllTaskByUserId(currentSession, comparator);
         if (sortedTasks != null && !sortedTasks.isEmpty()) {
@@ -38,7 +38,7 @@ public class TaskListSortCommand extends AbstractCommand {
             sortedTasks.forEach(e -> System.out.println("id: " + e.getId() +
                     " name: " + e.getName() +
                     " description: " + e.getDescription() +
-                    " data start: " + e.getDateStart() +
+                    " data start: " + e.getDateBegin() +
                     " data end: " + e.getDateEnd() +
                     " status: " + e.getStatus()));
         } else {

@@ -1,48 +1,31 @@
 package ru.stepanenko.tm.service;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.api.repository.IProjectRepository;
-import ru.stepanenko.tm.api.repository.ISessionRepository;
-import ru.stepanenko.tm.api.repository.ITaskRepository;
-import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.*;
-import ru.stepanenko.tm.entity.Session;
-import ru.stepanenko.tm.repository.ProjectRepository;
-import ru.stepanenko.tm.repository.SessionRepository;
-import ru.stepanenko.tm.repository.TaskRepository;
-import ru.stepanenko.tm.repository.UserRepository;
 
 public final class ServiceLocator implements IServiceLocator {
 
     @Getter
-    @Setter
     @NotNull
-    private Session session = new Session();
-
-    @NotNull
-    final private IProjectRepository projectRepository = new ProjectRepository();
-    @NotNull
-    final private ITaskRepository taskRepository = new TaskRepository();
-    @NotNull
-    final private IUserRepository userRepository = new UserRepository();
-    @NotNull
-    final private ISessionRepository sessionRepository = new SessionRepository();
+    final private IProjectService projectService;
 
     @Getter
     @NotNull
-    final private IProjectService projectService = new ProjectService(projectRepository);
+    final private ITaskService taskService;
 
     @Getter
     @NotNull
-    final private ITaskService taskService = new TaskService(taskRepository);
+    final private IUserService userService;
 
     @Getter
     @NotNull
-    final private IUserService userService = new UserService(userRepository, projectRepository, taskRepository);
+    final private ISessionService sessionService;
 
-    @Getter
-    @NotNull
-    final private ISessionService sessionService = new SessionService(sessionRepository, userRepository);
+    public ServiceLocator(@NotNull IProjectService projectService, @NotNull ITaskService taskService, @NotNull IUserService userService, @NotNull ISessionService sessionService) {
+        this.projectService = projectService;
+        this.taskService = taskService;
+        this.userService = userService;
+        this.sessionService = sessionService;
+    }
 }

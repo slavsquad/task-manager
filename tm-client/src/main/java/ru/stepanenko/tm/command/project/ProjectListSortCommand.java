@@ -21,7 +21,7 @@ public class ProjectListSortCommand extends AbstractCommand {
 
     @Override
     public String getDescription() {
-        return "Sorted list project by: order, dateStart, dateEnd or status";
+        return "Sorted list project by: order, dateBegin, dateEnd or status";
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ProjectListSortCommand extends AbstractCommand {
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.println("Please input how to sort list project(order, dateStart, dateEnd, status)");
+        System.out.println("Please input how to sort list project(order, dateBegin, dateEnd, status)");
         @NotNull final String comparator = terminalService.nextLine();
         Collection<Project> sortedProjects = projectEndpoint.sortAllProjectByUserId(currentSession, comparator);
         if (sortedProjects != null && !sortedProjects.isEmpty()) {
@@ -38,7 +38,7 @@ public class ProjectListSortCommand extends AbstractCommand {
             sortedProjects.forEach(e -> System.out.println("id: " + e.getId() +
                     " name: " + e.getName() +
                     " description: " + e.getDescription() +
-                    " data start: " + e.getDateStart() +
+                    " data start: " + e.getDateBegin() +
                     " data end: " + e.getDateEnd() +
                     " status: " + e.getStatus()));
         } else {

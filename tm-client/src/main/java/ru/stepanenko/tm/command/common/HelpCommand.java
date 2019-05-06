@@ -22,7 +22,7 @@ public final class HelpCommand extends AbstractCommand {
                 "project-list: Show all project or selected project.\n" +
                 "project-print: Print project by id.\n" +
                 "project-remove: Remove selected project.\n" +
-                "project-list-sort: Sorted list project by: order, dateStart, dateEnd or status.\n" +
+                "project-list-sort: Sorted list project by: order, dateBegin, dateEnd or status.\n" +
                 "project-find: Find project by part of name or description.\n" +
                 "task-clear: Remove all tasks.\n" +
                 "task-createProject: Create new task.\n" +
@@ -30,7 +30,7 @@ public final class HelpCommand extends AbstractCommand {
                 "task-list: Show all tasks or selected task.\n" +
                 "task-print: Print task by id.\n" +
                 "task-remove: Remove selected task.\n" +
-                "task-list-sort: Sorted list task by: order, dateStart, dateEnd or status.\n" +
+                "task-list-sort: Sorted list task by: order, dateBegin, dateEnd or status.\n" +
                 "task-find: Find task by part of name or description.\n" +
                 "user-login: Login user.\n" +
                 "user-logout: Login logout.\n" +

@@ -13,8 +13,8 @@ public class ComparatorUtil {
         Comparator<Project> comparatorDateStart = new Comparator<Project>() {
             @Override
             public int compare(Project o1, Project o2) {
-                Date date1 = o1.getDateStart();
-                Date date2 = o2.getDateStart();
+                Date date1 = o1.getDateBegin();
+                Date date2 = o2.getDateBegin();
                 if (date1 == null) {
                     date1 = new Date(Long.MAX_VALUE);
                 }
@@ -50,7 +50,7 @@ public class ComparatorUtil {
         };
 
         Map<String, Comparator<Project>> comparators = new HashMap<>(3);
-        comparators.put("dateStart", comparatorDateStart);
+        comparators.put("dateBegin", comparatorDateStart);
         comparators.put("dateEnd", comparatorDateEnd);
         comparators.put("status", comparatorStatus);
 
@@ -61,8 +61,8 @@ public class ComparatorUtil {
         Comparator<Task> comparatorDateStart = new Comparator<Task>() {
             @Override
             public int compare(Task o1, Task o2) {
-                Date date1 = o1.getDateStart();
-                Date date2 = o2.getDateStart();
+                Date date1 = o1.getDateBegin();
+                Date date2 = o2.getDateBegin();
                 if (date1 == null) {
                     date1 = new Date(Long.MAX_VALUE);
                 }
@@ -98,7 +98,7 @@ public class ComparatorUtil {
         };
 
         Map<String, Comparator<Task>> comparators = new HashMap<>(3);
-        comparators.put("dateStart", comparatorDateStart);
+        comparators.put("dateBegin", comparatorDateStart);
         comparators.put("dateEnd", comparatorDateEnd);
         comparators.put("status", comparatorStatus);
 

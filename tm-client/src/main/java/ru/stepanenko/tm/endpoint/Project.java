@@ -18,7 +18,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;complexContent&gt;
  *     &lt;extension base="{http://endpoint.tm.stepanenko.ru/}abstractEntity"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="dateStart" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
+ *         &lt;element name="dateBegin" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
  *         &lt;element name="dateEnd" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
  *         &lt;element name="userID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="status" type="{http://endpoint.tm.stepanenko.ru/}status" minOccurs="0"/&gt;
@@ -32,7 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "project", propOrder = {
-    "dateStart",
+    "dateBegin",
     "dateEnd",
     "userID",
     "status"
@@ -42,7 +42,7 @@ public class Project
 {
 
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar dateStart;
+    protected XMLGregorianCalendar dateBegin;
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar dateEnd;
     protected String userID;
@@ -50,27 +50,27 @@ public class Project
     protected Status status;
 
     /**
-     * Gets the value of the dateStart property.
+     * Gets the value of the dateBegin property.
      * 
      * @return
      *     possible object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getDateStart() {
-        return dateStart;
+    public XMLGregorianCalendar getDateBegin() {
+        return dateBegin;
     }
 
     /**
-     * Sets the value of the dateStart property.
+     * Sets the value of the dateBegin property.
      * 
      * @param value
      *     allowed object is
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setDateStart(XMLGregorianCalendar value) {
-        this.dateStart = value;
+    public void setDateBegin(XMLGregorianCalendar value) {
+        this.dateBegin = value;
     }
 
     /**

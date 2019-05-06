@@ -1,15 +1,130 @@
 package ru.stepanenko.tm.repository;
 
 
+import lombok.AllArgsConstructor;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.util.FieldConst;
 
-public final class UserRepository extends AbstractRepository<User> implements IUserRepository {
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+@AllArgsConstructor
+public final class UserRepository implements IUserRepository {
+
+    @NotNull
+    private final Connection connection;
+
+    @Nullable
+    @SneakyThrows
+    private User fetch(@Nullable final ResultSet row) {
+        if (row == null) return null;
+        @NotNull final User user = new User();
+        user.setId(row.getString(FieldConst.ID));
+        user.setLogin(row.getString(FieldConst.LOGIN));
+        user.setRole(Role.valueOf(row.getString(FieldConst.ROLE)));
+        user.setPassword(row.getString(FieldConst.PASSWORD));
+        return user;
+    }
 
     @Override
+    @SneakyThrows
+    public User findOne(@NotNull final String id) {
+        @NotNull final String query = "SELECT * FROM app_user WHERE id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        return fetch(resultSet);
+    }
+
+    @Override
+    @SneakyThrows
+    public Collection<User> findAll() {
+        @NotNull final String query = "SELECT * FROM app_user";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final List<User> result = new ArrayList<>();
+        while (resultSet.next()) result.add(fetch(resultSet));
+        return result;
+    }
+
+    @Override
+    @SneakyThrows
+    public void removeAll() {
+        @NotNull final String query = "DELETE FROM app_user";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.executeUpdate();
+    }
+
+    @Override
+    @SneakyThrows
+    public User remove(@NotNull final String id) {
+        @NotNull final String query = "DELETE FROM app_user where id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        @NotNull final User user = findOne(id);
+        statement.setString(1, id);
+        statement.executeUpdate();
+        return user;
+    }
+
+    @Override
+    @SneakyThrows
+    public User persist(@NotNull final User user) {
+        @NotNull final String query = "INSERT INTO app_user(id, login, passwordHash, role) VALUES(?, ?, ?, ?)";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, user.getId());
+        statement.setString(2, user.getLogin());
+        statement.setString(3, user.getPassword());
+        statement.setString(4, user.getRole().toString());
+        statement.executeUpdate();
+        return user;
+    }
+
+    @Override
+    @SneakyThrows
+    public User merge(@NotNull final User user) {
+        @NotNull final String query = "UPDATE app_user SET login = ?, passwordHash = ?, role= ? where id = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, user.getLogin());
+        statement.setString(2, user.getPassword());
+        statement.setString(3, user.getRole().toString());
+        statement.setString(4, user.getId());
+        statement.executeUpdate();
+        return user;
+    }
+
+    @Override
+    @SneakyThrows
+    public Collection<User> recovery(@NotNull Collection<User> collection) {
+        removeAll();
+        for (User user : collection) {
+            persist(user);
+        }
+        return collection;
+    }
+
+    @Override
+    public Connection getConnection() {
+        return connection;
+    }
+
+    @Override
+    @SneakyThrows
     public User findByLogin(@NotNull final String login) {
-        for (User user : findAll()) if (login.equals(user.getLogin())) return user;
-        return null;
+        @NotNull final String query = "SELECT * FROM app_user WHERE login = ?";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, login);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        resultSet.next();
+        return fetch(resultSet);
     }
 }

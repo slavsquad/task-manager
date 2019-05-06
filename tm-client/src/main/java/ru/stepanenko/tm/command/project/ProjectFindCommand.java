@@ -40,7 +40,7 @@ public class ProjectFindCommand extends AbstractCommand {
             findProjects.forEach(e -> System.out.println("id: " + e.getId() +
                     " name: " + e.getName() +
                     " description: " + e.getDescription() +
-                    " data start: " + e.getDateStart() +
+                    " data start: " + e.getDateBegin() +
                     " data end: " + e.getDateEnd() +
                     " status: " + e.getStatus()));
         } else {

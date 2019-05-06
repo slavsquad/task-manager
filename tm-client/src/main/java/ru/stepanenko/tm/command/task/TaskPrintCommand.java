@@ -32,7 +32,7 @@ public class TaskPrintCommand extends AbstractCommand {
             System.out.println("id: " + task.getId() +
                     "\nname: " + task.getName() +
                     "\ndescription: " + task.getDescription() +
-                    "\ndata start: " + task.getDateStart() +
+                    "\ndata start: " + task.getDateBegin() +
                     "\ndata end: " + task.getDateEnd() +
                     "\nstatus: " + task.getStatus());
         } else {

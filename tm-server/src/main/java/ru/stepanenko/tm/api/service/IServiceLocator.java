@@ -9,6 +9,4 @@ public interface IServiceLocator {
     ITaskService getTaskService();
     IUserService getUserService();
     ISessionService getSessionService();
-    Session getSession();
-    void setSession(@NotNull final Session session);
 }
