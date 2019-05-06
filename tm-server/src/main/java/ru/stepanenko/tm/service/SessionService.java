@@ -44,7 +44,7 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
     }
 
     @Override
-    public boolean validate(@Nullable Session session) throws AuthenticationSecurityException {
+    public void validate(@Nullable Session session) throws AuthenticationSecurityException {
         if (session == null)
             throw new AuthenticationSecurityException("Session is invalid: \nSession must not be null! Please re-login!");
         if (session.getSignature() == null)
@@ -55,16 +55,15 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
             throw new AuthenticationSecurityException("Session is invalid: \nTime must not be null! Please re-login!");
         if (findOne(session.getId()) == null)
             throw new AuthenticationSecurityException("Session is invalid: \nSession not found! Please re-login!");
-
-        return session.getSignature().equals(findOne(session.getId()).getSignature());
+        if (!session.getSignature().equals(findOne(session.getId()).getSignature()))
+            throw new AuthenticationSecurityException("Session is invalid: \nSession signature is wrong! Please re-login!");
     }
 
     @Override
-    public boolean validateAdmin(@Nullable Session session) throws AuthenticationSecurityException {
-        if (validate(session)) {
-            User user = userRepository.findOne(session.getUserId());
-            return user.getRole().equals(Role.ADMINISTRATOR);
-        }
-        return false;
+    public void validateAdmin(@Nullable Session session) throws AuthenticationSecurityException {
+        validate(session);
+        User user = userRepository.findOne(session.getUserId());
+        if (!user.getRole().equals(Role.ADMINISTRATOR))
+            throw new AuthenticationSecurityException("Forbidden action for your role!");
     }
 }

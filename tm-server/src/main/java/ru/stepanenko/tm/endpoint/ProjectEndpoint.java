@@ -34,7 +34,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     public Project createProject(@WebParam(name = "session") @NotNull final Session session,
                                  @WebParam(name = "name") @NotNull final String name,
                                  @WebParam(name = "description") @NotNull final String description) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.create(name, description, session.getUserId());
     }
 
@@ -45,7 +45,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
                                @WebParam(name = "name") @NotNull final String name,
                                @WebParam(name = "description") @NotNull final String description,
                                @WebParam(name = "status") @NotNull final String status) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.edit(id, name, description, status);
     }
 
@@ -53,7 +53,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public Project findOneProject(@WebParam(name = "session") @NotNull final Session session,
                                   @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.findOne(id, session.getUserId());
     }
 
@@ -61,21 +61,21 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public Project removeProject(@WebParam(name = "session") @NotNull final Session session,
                                  @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.remove(id, session.getUserId());
     }
 
     @Override
     @WebMethod
     public Collection<Project> findAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.findAllByUserId(session.getUserId());
     }
 
     @Override
     @WebMethod
     public void removeAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         projectService.removeAllByUserId(session.getUserId());
     }
 
@@ -83,7 +83,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public Collection<Project> sortAllProjectByUserId(@WebParam(name = "session") @NotNull final Session session,
                                                       @WebParam(name = "comparator") @NotNull final String comparator) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.sortAllByUserId(session.getUserId(), comparator);
     }
 
@@ -92,7 +92,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     public Collection<Project> findAllProjectByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
                                                                        @WebParam(name = "name") @NotNull final String name,
                                                                        @WebParam(name = "description") @NotNull final String description) throws AuthenticationSecurityException {
-        if (!sessionService.validate(session)) throw new AuthenticationSecurityException("Session is invalid!");
+        sessionService.validate(session);
         return projectService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
     }
 }

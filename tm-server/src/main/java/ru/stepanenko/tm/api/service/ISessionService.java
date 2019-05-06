@@ -10,6 +10,6 @@ import java.io.IOException;
 public interface ISessionService extends IAbstractEntityService<Session> {
 
     Session create(@NotNull final String userId) throws IOException;
-    boolean validate(@Nullable final Session session) throws AuthenticationSecurityException;
-    boolean validateAdmin(@Nullable final Session session) throws AuthenticationSecurityException;
+    void validate(@Nullable final Session session) throws AuthenticationSecurityException;
+    void validateAdmin(@Nullable final Session session) throws AuthenticationSecurityException;
 }

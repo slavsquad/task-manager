@@ -18,7 +18,7 @@ public interface ISessionEndpoint {
                         @WebParam(name = "password") @NotNull final String password) throws AuthenticationSecurityException, IOException;
 
     @WebMethod
-    boolean validateSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException;
+    void validateSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException;
 
     @WebMethod
     Session closeSession(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
