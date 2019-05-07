@@ -1,17 +1,17 @@
 package ru.stepanenko.tm.util;
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.util.Properties;
 
 public class ConnectionDB {
-    static public Connection create(@NotNull final String url, @NotNull final String user, @NotNull final String password){
-        try (Connection conn = DriverManager.getConnection(url, user, password)) {
-            return conn;
-        } catch (Exception e) {
-            System.out.println("sdfasdfasdfasdfadfasdf");
-            e.printStackTrace();
-        }
-        return null;
+    @SneakyThrows
+    static public Connection create(@NotNull final Properties properties){
+        @NotNull final String url = properties.getProperty("url");
+        @NotNull final String user = properties.getProperty("user");
+        @NotNull final String password = properties.getProperty("password");
+        return DriverManager.getConnection(url, user, password);
     }
 }

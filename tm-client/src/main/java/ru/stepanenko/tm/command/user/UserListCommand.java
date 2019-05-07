@@ -21,7 +21,7 @@ public class UserListCommand extends AbstractCommand {
     public void execute() throws AuthenticationSecurityException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
         userEndpoint.findAllUser(currentSession).forEach(e -> System.out.println("id: " + e.getId() +
                 " login: " + e.getLogin() +
                 " role: " + e.getRole()));

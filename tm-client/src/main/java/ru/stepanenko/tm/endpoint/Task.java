@@ -5,7 +5,6 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlSchemaType;
 import javax.xml.bind.annotation.XmlType;
-import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
@@ -19,8 +18,8 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *     &lt;extension base="{http://endpoint.tm.stepanenko.ru/}abstractEntity"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="projectID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="dateBegin" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
- *         &lt;element name="dateEnd" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
+ *         &lt;element name="dateBegin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="dateEnd" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="userID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="status" type="{http://endpoint.tm.stepanenko.ru/}status" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
@@ -44,10 +43,8 @@ public class Task
 {
 
     protected String projectID;
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar dateBegin;
-    @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar dateEnd;
+    protected String dateBegin;
+    protected String dateEnd;
     protected String userID;
     @XmlSchemaType(name = "string")
     protected Status status;
@@ -81,10 +78,10 @@ public class Task
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getDateBegin() {
+    public String getDateBegin() {
         return dateBegin;
     }
 
@@ -93,10 +90,10 @@ public class Task
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setDateBegin(XMLGregorianCalendar value) {
+    public void setDateBegin(String value) {
         this.dateBegin = value;
     }
 
@@ -105,10 +102,10 @@ public class Task
      * 
      * @return
      *     possible object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public XMLGregorianCalendar getDateEnd() {
+    public String getDateEnd() {
         return dateEnd;
     }
 
@@ -117,10 +114,10 @@ public class Task
      * 
      * @param value
      *     allowed object is
-     *     {@link XMLGregorianCalendar }
+     *     {@link String }
      *     
      */
-    public void setDateEnd(XMLGregorianCalendar value) {
+    public void setDateEnd(String value) {
         this.dateEnd = value;
     }
 

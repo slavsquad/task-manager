@@ -41,8 +41,11 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull final Session session = fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return session;
     }
 
     @Override
@@ -53,6 +56,8 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final ResultSet resultSet = statement.executeQuery();
         @NotNull final List<Session> result = new ArrayList<>();
         while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
         return result;
     }
 
@@ -62,6 +67,7 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final String query = "DELETE FROM app_session";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override
@@ -72,6 +78,7 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final Session session = findOne(id);
         statement.setString(1, id);
         statement.executeUpdate();
+        statement.close();
         return session;
     }
 
@@ -85,6 +92,7 @@ public final class SessionRepository implements ISessionRepository {
         statement.setString(3, DateFormatter.format(session.getTimeStamp()));
         statement.setString(4, session.getUserId());
         statement.executeUpdate();
+        statement.close();
         return session;
     }
 
@@ -96,13 +104,13 @@ public final class SessionRepository implements ISessionRepository {
         statement.setString(1, session.getSignature());
         statement.setString(2, DateFormatter.format(session.getTimeStamp()));
         statement.setString(3, session.getId());
+        statement.close();
         return session;
     }
 
     @Override
     @SneakyThrows
     public Collection<Session> recovery(@NotNull Collection<Session> collection) {
-        removeAll();
         for (Session session : collection) {
             persist(session);
         }

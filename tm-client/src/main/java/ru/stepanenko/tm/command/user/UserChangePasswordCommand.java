@@ -25,7 +25,7 @@ public final class UserChangePasswordCommand extends AbstractCommand {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
         System.out.println("Please input user name:");
         @NotNull final String login = terminalService.nextLine();
         @Nullable final User user = userEndpoint.findUserByLogin(currentSession, login);

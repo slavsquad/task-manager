@@ -47,6 +47,12 @@ public class SessionEndpoint implements ISessionEndpoint {
 
     @Override
     @WebMethod
+    public void validateAdminSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException{
+        sessionService.validateAdmin(session);
+    }
+
+    @Override
+    @WebMethod
     public Session closeSession(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
         sessionService.validate(session);
         return sessionService.remove(session.getId());

@@ -11,7 +11,7 @@ public class FieldConst {
     @NotNull public static final String STATUS = "status";
     @NotNull public static final String ROLE = "role";
     @NotNull public static final String LOGIN = "login";
-    @NotNull public static final String PASSWORD = "password";
+    @NotNull public static final String PASSWORD = "passwordHash";
     @NotNull public static final String USER_ID = "user_id";
     @NotNull public static final String SIGNATURE = "signature";
     @NotNull public static final String TIMESTAMP = "timestamp";

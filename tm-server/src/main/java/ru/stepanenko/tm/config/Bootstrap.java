@@ -1,15 +1,12 @@
 package ru.stepanenko.tm.config;
 
 import org.jetbrains.annotations.NotNull;
+import ru.stepanenko.tm.AppServer;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.*;
-import ru.stepanenko.tm.endpoint.ProjectEndpoint;
-import ru.stepanenko.tm.endpoint.SessionEndpoint;
-import ru.stepanenko.tm.endpoint.TaskEndpoint;
-import ru.stepanenko.tm.endpoint.UserEndpoint;
 
 import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.repository.SessionRepository;
@@ -19,26 +16,32 @@ import ru.stepanenko.tm.service.*;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.util.ConnectionDB;
+import ru.stepanenko.tm.util.PropertesLoader;
 
 import javax.xml.ws.Endpoint;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.util.Properties;
 
 public class Bootstrap {
-    public void init(Class[] endpoints, Connection connection) {
+    public void init(Class[] endpoints) {
+
+        @NotNull final Properties properties = PropertesLoader.load(AppServer.class);
+        Connection connection = ConnectionDB.create(properties);
+
         @NotNull final IProjectRepository projectRepository = new ProjectRepository(connection);
         @NotNull final ITaskRepository taskRepository = new TaskRepository(connection);
         @NotNull final IUserRepository userRepository = new UserRepository(connection);
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(connection);
         @NotNull final IProjectService projectService = new ProjectService(projectRepository);
         @NotNull final ITaskService taskService = new TaskService(taskRepository);
-        @NotNull final IUserService userService = new UserService(userRepository, projectRepository, taskRepository);
-        @NotNull final ISessionService sessionService = new SessionService(sessionRepository, userRepository);
+        @NotNull final IUserService userService = new UserService(userRepository, projectRepository, taskRepository, sessionRepository);
+        @NotNull final ISessionService sessionService = new SessionService(sessionRepository, userRepository, properties);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
 
-        generateTestUsers(serviceLocator);
-        //generateTestData(serviceLocator);
+        if (userRepository.findAll() == null || userRepository.findAll().isEmpty()) generateTestUsers(serviceLocator);
+        generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
     }
 

@@ -12,7 +12,6 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.util.SignatureUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Date;
 import java.util.Properties;
 
@@ -21,21 +20,20 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
     @NotNull
     private final IUserRepository userRepository;
 
-    public SessionService(@NotNull final ISessionRepository repository, @NotNull final IUserRepository userRepository) {
+    @NotNull private final Properties properties;
+
+    public SessionService(@NotNull final ISessionRepository repository,
+                          @NotNull final IUserRepository userRepository,
+                          @NotNull final Properties properties) {
         super(repository);
         this.userRepository = userRepository;
+        this.properties = properties;
     }
 
     @Override
     public Session create(@NotNull String userId) throws IOException {
-        @NotNull final Properties property = new Properties();
-        try (InputStream resourceStream = this.getClass().getClassLoader().getResourceAsStream("application.properties")) {
-            property.load(resourceStream);
-        } catch (IOException e) {
-            throw new IOException(e);
-        }
-        @NotNull final String cycle = property.getProperty("cycle");
-        @NotNull final String salt = property.getProperty("salt");
+        @NotNull final String cycle = properties.getProperty("cycle");
+        @NotNull final String salt = properties.getProperty("salt");
         @NotNull final Session session = new Session();
         session.setTimeStamp(new Date());
         session.setUserId(userId);

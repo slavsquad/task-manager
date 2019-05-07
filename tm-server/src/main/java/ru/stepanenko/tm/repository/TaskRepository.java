@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.entity.Task;
-import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.DateFormatter;
+import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.FieldConst;
 
 import java.sql.Connection;
@@ -31,7 +31,7 @@ public final class TaskRepository implements ITaskRepository {
         task.setDescription(row.getString(FieldConst.DESCRIPTION));
         task.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
         task.setDateEnd(row.getDate(FieldConst.DATA_END));
-        task.setStatus(Status.valueOf(row.getString(FieldConst.STATUS)));
+        task.setStatus(EnumUtil.stringToStatus(row.getString(FieldConst.STATUS)));
         task.setUserID(row.getString(FieldConst.USER_ID));
         task.setProjectID(row.getString(FieldConst.PROJECT_ID));
         return task;
@@ -44,8 +44,11 @@ public final class TaskRepository implements ITaskRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull final Task task = fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return task;
     }
 
     @Override
@@ -56,6 +59,8 @@ public final class TaskRepository implements ITaskRepository {
         @NotNull final ResultSet resultSet = statement.executeQuery();
         @NotNull final List<Task> result = new ArrayList<>();
         while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
         return result;
     }
 
@@ -65,6 +70,7 @@ public final class TaskRepository implements ITaskRepository {
         @NotNull final String query = "DELETE FROM app_task";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override
@@ -75,6 +81,7 @@ public final class TaskRepository implements ITaskRepository {
         @NotNull final Task task = findOne(id);
         statement.setString(1, id);
         statement.executeUpdate();
+        statement.close();
         return task;
     }
 
@@ -92,6 +99,7 @@ public final class TaskRepository implements ITaskRepository {
         statement.setString(7, task.getUserID());
         statement.setString(8, task.getProjectID());
         statement.executeUpdate();
+        statement.close();
         return task;
     }
 
@@ -107,13 +115,13 @@ public final class TaskRepository implements ITaskRepository {
         statement.setString(5, task.getStatus().toString());
         statement.setString(6, task.getId());
         statement.executeUpdate();
+        statement.close();
         return task;
     }
 
     @Override
     @SneakyThrows
     public Collection<Task> recovery(@NotNull Collection<Task> collection) {
-        removeAll();
         for (Task task : collection) {
             persist(task);
         }
@@ -159,8 +167,11 @@ public final class TaskRepository implements ITaskRepository {
         statement.setString(1, id);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull Task task = fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return task;
     }
 
     @Override
@@ -172,6 +183,7 @@ public final class TaskRepository implements ITaskRepository {
         statement.setString(1, id);
         statement.setString(2, userId);
         statement.executeUpdate();
+        statement.close();
         return task;
     }
 
@@ -182,6 +194,7 @@ public final class TaskRepository implements ITaskRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override
@@ -192,6 +205,7 @@ public final class TaskRepository implements ITaskRepository {
         statement.setString(1, id);
         statement.setString(2, userId);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override

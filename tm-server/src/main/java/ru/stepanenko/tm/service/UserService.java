@@ -12,6 +12,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
+import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -54,12 +55,17 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     @NotNull
     private ITaskRepository taskRepository;
 
+    @NotNull
+    private ISessionRepository sessionRepository;
+
     public UserService(@NotNull final IUserRepository userRepository,
                        @NotNull final IProjectRepository projectRepository,
-                       @NotNull final ITaskRepository taskRepository) {
+                       @NotNull final ITaskRepository taskRepository,
+                       @NotNull final ISessionRepository sessionRepository) {
         super(userRepository);
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
@@ -120,10 +126,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     public void loadData() {
         try (ObjectInputStream oin = new ObjectInputStream(new FileInputStream("tm-server/data.out"))) {
             Domain domain = (Domain) oin.readObject();
+            taskRepository.removeAll();//cascade delete on, but as a precaution
+            projectRepository.removeAll();
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
-            repository.recovery(domain.getUsers());
-            System.out.println("Success all data load!");
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -131,7 +137,7 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
     @Override
     public void saveData() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
+        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tm-server/data.out"))) {
             oos.writeObject(domain);
             oos.flush();
@@ -147,10 +153,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
             JAXBContext jaxbContext = JAXBContext.newInstance(Domain.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             Domain domain = (Domain) unmarshaller.unmarshal(new File("tm-server/data.xml"));
+            taskRepository.removeAll();//cascade delete on, but as a precaution
+            projectRepository.removeAll();
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
-            repository.recovery(domain.getUsers());
-            System.out.println("Success all data load!");
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -158,10 +164,9 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
     @Override
     public void saveDataJaxbXml() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
+        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
         try (FileWriter fw = new FileWriter("tm-server/data.xml")) {
             fw.write(domainToXMLString(domain));
-            System.out.println("Success, fll data save in file!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -226,14 +231,14 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
             properties.put(MarshallerProperties.MEDIA_TYPE, "application/json");
             properties.put(MarshallerProperties.JSON_INCLUDE_ROOT, Boolean.FALSE);
             properties.put(MarshallerProperties.JSON_WRAPPER_AS_ARRAY_NAME, Boolean.TRUE);
-            JAXBContext context = JAXBContextFactory.createContext(new Class[]{Domain.class, Project.class, Task.class, User.class}, properties);
+            JAXBContext context = JAXBContextFactory.createContext(new Class[]{Domain.class}, properties);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             StreamSource json = new StreamSource("tm-server/data.json");
             Domain domain = unmarshaller.unmarshal(json, Domain.class).getValue();
+            taskRepository.removeAll();//cascade delete on, but as a precaution
+            projectRepository.removeAll();
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
-            repository.recovery(domain.getUsers());
-            System.out.println("Success all data load!");
         } catch (JAXBException e) {
             e.printStackTrace();
         }
@@ -242,11 +247,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
     @Override
     public void saveDataJaxbJSON() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
+        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
 
         try (FileWriter fw = new FileWriter("tm-server/data.json")) {
             fw.write(domainToJsonString(domain));
-            System.out.println("Success, all data save in file!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -287,10 +291,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
         XmlMapper xmlMapper = new XmlMapper();
         try {
             Domain domain = xmlMapper.readValue(new File("tm-server/data.xml"), Domain.class);
+            taskRepository.removeAll();//cascade delete on, but as a precaution
+            projectRepository.removeAll();
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
-            repository.recovery(domain.getUsers());
-            System.out.println("Success all data load!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -298,11 +302,10 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
     @Override
     public void saveDataFasterXml() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
+        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
         XmlMapper mapper = new XmlMapper();
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File("tm-server/data.xml"), domain);
-            System.out.println("Success all data was save!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -311,12 +314,13 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     @Override
     public void loadDataFasterJSON() {
         ObjectMapper mapper = new ObjectMapper();
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
         try {
             Domain domain = mapper.readValue(new File("tm-server/data.json"), Domain.class);
+            taskRepository.removeAll();//cascade delete on, but as a precaution
+            projectRepository.removeAll();
             projectRepository.recovery(domain.getProjects());
             taskRepository.recovery(domain.getTasks());
-            repository.recovery(domain.getUsers());
-            System.out.println("Success all data load!");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -324,12 +328,11 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
 
     @Override
     public void saveDataFasterJSON() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()), new ArrayList<>(repository.findAll()));
+        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
         ObjectMapper mapper = new ObjectMapper();
-        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.KEBAB_CASE);
+        mapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File("tm-server/data.json"), domain);
-            System.out.println("Success all data was save!");
         } catch (IOException e) {
             e.printStackTrace();
         }

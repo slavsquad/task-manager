@@ -6,8 +6,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.DateFormatter;
+import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.FieldConst;
 
 import java.sql.Connection;
@@ -31,7 +31,7 @@ public final class ProjectRepository implements IProjectRepository {
         project.setDescription(row.getString(FieldConst.DESCRIPTION));
         project.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
         project.setDateEnd(row.getDate(FieldConst.DATA_END));
-        project.setStatus(Status.valueOf(row.getString(FieldConst.STATUS)));
+        project.setStatus(EnumUtil.stringToStatus(row.getString(FieldConst.STATUS)));
         project.setUserID(row.getString(FieldConst.USER_ID));
         return project;
     }
@@ -44,8 +44,11 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull final Project project =  fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return project;
     }
 
     @Override
@@ -57,6 +60,8 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final ResultSet resultSet = statement.executeQuery();
         @NotNull final List<Project> result = new ArrayList<>();
         while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
         return result;
     }
 
@@ -67,6 +72,7 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final String query = "DELETE FROM app_project";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override
@@ -78,6 +84,7 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final Project project = findOne(id);
         statement.setString(1, id);
         statement.executeUpdate();
+        statement.close();
         return project;
     }
 
@@ -95,6 +102,7 @@ public final class ProjectRepository implements IProjectRepository {
         statement.setString(6, project.getStatus().toString());
         statement.setString(7, project.getUserID());
         statement.executeUpdate();
+        statement.close();
         return project;
     }
 
@@ -111,6 +119,7 @@ public final class ProjectRepository implements IProjectRepository {
         statement.setString(5, project.getStatus().toString());
         statement.setString(6, project.getId());
         statement.executeUpdate();
+        statement.close();
         return project;
     }
 
@@ -118,7 +127,6 @@ public final class ProjectRepository implements IProjectRepository {
     @Nullable
     @SneakyThrows
     public Collection<Project> recovery(@NotNull Collection<Project> collection) {
-        removeAll();
         for (Project project : collection) {
             persist(project);
         }
@@ -140,6 +148,8 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final ResultSet resultSet = statement.executeQuery();
         @NotNull final List<Project> result = new ArrayList<>();
         while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
         return result;
     }
 
@@ -152,8 +162,11 @@ public final class ProjectRepository implements IProjectRepository {
         statement.setString(1, id);
         statement.setString(2, userId);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull Project project = fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return project;
     }
 
     @Override
@@ -166,6 +179,7 @@ public final class ProjectRepository implements IProjectRepository {
         statement.setString(1, id);
         statement.setString(2, userId);
         statement.executeUpdate();
+        statement.close();
         return project;
     }
 
@@ -177,6 +191,7 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override

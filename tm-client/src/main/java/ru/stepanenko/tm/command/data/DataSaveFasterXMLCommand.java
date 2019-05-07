@@ -22,7 +22,7 @@ public class DataSaveFasterXMLCommand extends AbstractCommand {
     public void execute() throws AuthenticationSecurityException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
         userEndpoint.saveUserDataFasterXml(currentSession);
         System.out.println("Success all data save!");
     }

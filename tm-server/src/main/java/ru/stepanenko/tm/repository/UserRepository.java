@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.FieldConst;
 
 import java.sql.Connection;
@@ -30,7 +30,7 @@ public final class UserRepository implements IUserRepository {
         @NotNull final User user = new User();
         user.setId(row.getString(FieldConst.ID));
         user.setLogin(row.getString(FieldConst.LOGIN));
-        user.setRole(Role.valueOf(row.getString(FieldConst.ROLE)));
+        user.setRole(EnumUtil.stringToRole(row.getString(FieldConst.ROLE)));
         user.setPassword(row.getString(FieldConst.PASSWORD));
         return user;
     }
@@ -42,8 +42,11 @@ public final class UserRepository implements IUserRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull User user = fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return user;
     }
 
     @Override
@@ -54,6 +57,8 @@ public final class UserRepository implements IUserRepository {
         @NotNull final ResultSet resultSet = statement.executeQuery();
         @NotNull final List<User> result = new ArrayList<>();
         while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
         return result;
     }
 
@@ -63,6 +68,7 @@ public final class UserRepository implements IUserRepository {
         @NotNull final String query = "DELETE FROM app_user";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.executeUpdate();
+        statement.close();
     }
 
     @Override
@@ -73,6 +79,7 @@ public final class UserRepository implements IUserRepository {
         @NotNull final User user = findOne(id);
         statement.setString(1, id);
         statement.executeUpdate();
+        statement.close();
         return user;
     }
 
@@ -86,6 +93,7 @@ public final class UserRepository implements IUserRepository {
         statement.setString(3, user.getPassword());
         statement.setString(4, user.getRole().toString());
         statement.executeUpdate();
+        statement.close();
         return user;
     }
 
@@ -99,6 +107,7 @@ public final class UserRepository implements IUserRepository {
         statement.setString(3, user.getRole().toString());
         statement.setString(4, user.getId());
         statement.executeUpdate();
+        statement.close();
         return user;
     }
 
@@ -121,10 +130,13 @@ public final class UserRepository implements IUserRepository {
     @SneakyThrows
     public User findByLogin(@NotNull final String login) {
         @NotNull final String query = "SELECT * FROM app_user WHERE login = ?";
-        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        @NotNull final PreparedStatement statement =  connection.prepareStatement(query);
         statement.setString(1, login);
         @NotNull final ResultSet resultSet = statement.executeQuery();
-        resultSet.next();
-        return fetch(resultSet);
+        if (!resultSet.next()) return null;
+        @NotNull final User user = fetch(resultSet);
+        resultSet.close();
+        statement.close();
+        return user;
     }
 }

@@ -21,5 +21,8 @@ public interface ISessionEndpoint {
     void validateSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException;
 
     @WebMethod
+    void validateAdminSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException;
+
+    @WebMethod
     Session closeSession(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
 }

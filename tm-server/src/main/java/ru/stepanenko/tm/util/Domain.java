@@ -30,9 +30,4 @@ public class Domain implements Serializable {
     @XmlElementWrapper(name = "tasks")
     @XmlElement(name = "tasks")
     private Collection<Task> tasks;
-    @NotNull
-    @XmlElementWrapper(name = "users")
-    @XmlElement(name = "users")
-    private Collection<User> users;
-
 }
