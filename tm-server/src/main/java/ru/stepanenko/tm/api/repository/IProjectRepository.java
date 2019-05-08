@@ -1,28 +1,116 @@
 package ru.stepanenko.tm.api.repository;
 
-import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Project;
+import java.sql.Connection;
 import java.util.Collection;
-import java.util.Comparator;
+import org.apache.ibatis.annotations.*;
 
-public interface IProjectRepository extends IAbstractRepository<Project> {
+public interface IProjectRepository {
 
-    @SneakyThrows
+    @NotNull String SELECT_BY_ID = "SELECT * FROM app_project WHERE id = #{id}";
+    @NotNull String SELECT_ALL = "SELECT * FROM app_project";
+    @NotNull String DELETE_ALL = "DELETE FROM app_project";
+    @NotNull String DELETE_BY_ID = "DELETE FROM app_project where id =#{id}";
+    @NotNull String INSERT = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) values (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId})";
+    @NotNull String UPDATE = "UPDATE app_project SET name = #{name}, description = #{description}, dateBegin = #{dateBegin}, dateEnd = #{dateEnd}, status = #{status} where id = #{id}";
+    @NotNull String SELECT_BY_USER_ID = "SELECT * FROM app_project WHERE user_id = #{id}";
+    @NotNull String SELECT_BY_ID_AND_USER_ID = "SELECT * FROM app_project WHERE id = #{id} AND user_id = #{userId}";
+    @NotNull String DELETE_BY_ID_AND_USER_ID = "DELETE FROM app_project WHERE id = #{id} AND user_id = #{userId}";
+    @NotNull String DELETE_ALL_BY_USER_ID = "DELETE FROM app_project WHERE user_id = #{id}";
+    @NotNull String SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC = "SELECT * FROM app_project WHERE user_id = #{id} ORDER BY #{parameter} DESC";
+    @NotNull String SELECT_ALL_BY_USER_ID_LIKE_NAME_AND_DESCRIPTION = "SELECT * FROM app_project WHERE user_id = #{id} and (name LIKE #{name} OR description LIKE #{description})";
+
+    @Select(SELECT_BY_ID)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "dateBegin", column = "dateBegin"),
+            @Result(property = "dateEnd", column = "dateEnd"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "userId", column = "user_id")
+    })
+    Project findOne(@NotNull final String id);
+
+    @Select(SELECT_ALL)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "dateBegin", column = "dateBegin"),
+            @Result(property = "dateEnd", column = "dateEnd"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "userId", column = "user_id")
+    })
+    Collection<Project> findAll();
+
+    @Delete(DELETE_ALL)
+    Integer removeAll();
+
+    @Delete(DELETE_BY_ID)
+    Integer remove(@NotNull final String id);
+
+    @Insert(INSERT)
+    Integer persist(@NotNull final Project project);
+
+    @Update(UPDATE)
+    Integer merge(@NotNull final Project project);
+
+    Connection getConnection();
+
+    @Select(SELECT_BY_USER_ID)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "dateBegin", column = "dateBegin"),
+            @Result(property = "dateEnd", column = "dateEnd"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "userId", column = "user_id")
+    })
     Collection<Project> findAllByUserId(@NotNull final String id);
 
-    @SneakyThrows
+    @Select(SELECT_BY_ID_AND_USER_ID)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "dateBegin", column = "dateBegin"),
+            @Result(property = "dateEnd", column = "dateEnd"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "userId", column = "user_id")
+    })
     Project findOne(@NotNull final String id, @NotNull final String userId);
 
-    @SneakyThrows
-    Project remove(@NotNull final String id, @NotNull final String userId);
+    @Delete(DELETE_BY_ID_AND_USER_ID)
+    Integer remove(@NotNull final String id, @NotNull final String userId);
 
-    @SneakyThrows
+    @Delete(DELETE_ALL_BY_USER_ID)
     void removeAllByUserID(@NotNull final String id);
 
-    @SneakyThrows
-    Collection<Project> sortAllByUserId(@NotNull final String id, Comparator<Project> comparator);
+    @Select(SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "dateBegin", column = "dateBegin"),
+            @Result(property = "dateEnd", column = "dateEnd"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "userId", column = "user_id")
+    })
+    Collection<Project> sortAllByUserId(@NotNull final String id, @NotNull final String parameter);
 
-    @SneakyThrows
+
+    @Select(SELECT_ALL_BY_USER_ID_LIKE_NAME_AND_DESCRIPTION)
+    @Results(value = {
+            @Result(property = "id", column = "id"),
+            @Result(property = "name", column = "name"),
+            @Result(property = "description", column = "description"),
+            @Result(property = "dateBegin", column = "dateBegin"),
+            @Result(property = "dateEnd", column = "dateEnd"),
+            @Result(property = "status", column = "status"),
+            @Result(property = "userId", column = "user_id")
+    })
     Collection<Project> findAllByPartOfNameOrDescription(@NotNull final String name, @NotNull final String description, @NotNull final String userId);
 }

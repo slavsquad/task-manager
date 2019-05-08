@@ -29,7 +29,7 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final Session session = new Session();
         session.setId(row.getString(FieldConst.ID));
         session.setSignature(row.getString(FieldConst.SIGNATURE));
-        session.setTimeStamp(row.getDate(FieldConst.TIMESTAMP));
+        session.setTimestamp(row.getDate(FieldConst.TIMESTAMP));
         session.setUserId(row.getString(FieldConst.USER_ID));
         return session;
     }
@@ -89,7 +89,7 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, session.getId());
         statement.setString(2, session.getSignature());
-        statement.setString(3, DateFormatter.format(session.getTimeStamp()));
+        statement.setString(3, DateFormatter.format(session.getTimestamp()));
         statement.setString(4, session.getUserId());
         statement.executeUpdate();
         statement.close();
@@ -102,7 +102,7 @@ public final class SessionRepository implements ISessionRepository {
         @NotNull final String query = "UPDATE app_session SET signature = ?, timestamp = ? where id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, session.getSignature());
-        statement.setString(2, DateFormatter.format(session.getTimeStamp()));
+        statement.setString(2, DateFormatter.format(session.getTimestamp()));
         statement.setString(3, session.getId());
         statement.close();
         return session;

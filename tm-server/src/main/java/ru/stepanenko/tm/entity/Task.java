@@ -25,7 +25,7 @@ import java.util.Date;
 public class Task extends AbstractEntity implements Serializable {
 
     @NotNull
-    private String projectID = "";
+    private String projectId = "";
     @Nullable
     @JsonFormat(pattern = "yyyy-MM-dd")
     @XmlJavaTypeAdapter(DateAdapter.class)
@@ -35,16 +35,16 @@ public class Task extends AbstractEntity implements Serializable {
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateEnd = null;
     @NotNull
-    private String userID = "";
+    private String userId = "";
     @NotNull
     private Status status = Status.PLANNED;
 
-    public Task(@NotNull final String name, @NotNull final String description, @NotNull final String projectID, @NotNull final String userID) {
+    public Task(@NotNull final String name, @NotNull final String description, @NotNull final String projectId, @NotNull final String userId) {
         this.name = name;
         this.description = description;
         this.dateBegin = new Date();
-        this.projectID = projectID;
-        this.userID = userID;
+        this.projectId = projectId;
+        this.userId = userId;
     }
 
     @Override
@@ -56,8 +56,8 @@ public class Task extends AbstractEntity implements Serializable {
                 ", dateBegin=" + DateFormatter.format(dateBegin) +
                 ", dateEnd=" + DateFormatter.format(dateEnd) +
                 ", status=" + status +
-                ", projectID='" + projectID + '\'' +
-                ", userId='" + userID + '\'' +
+                ", projectId='" + projectId + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

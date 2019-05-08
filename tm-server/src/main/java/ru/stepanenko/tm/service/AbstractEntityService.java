@@ -2,7 +2,6 @@ package ru.stepanenko.tm.service;
 
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.api.repository.IAbstractRepository;
 import ru.stepanenko.tm.api.service.IAbstractEntityService;
 import ru.stepanenko.tm.entity.AbstractEntity;
 import ru.stepanenko.tm.util.StringValidator;

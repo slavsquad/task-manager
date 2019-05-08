@@ -32,7 +32,7 @@ public final class ProjectRepository implements IProjectRepository {
         project.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
         project.setDateEnd(row.getDate(FieldConst.DATA_END));
         project.setStatus(EnumUtil.stringToStatus(row.getString(FieldConst.STATUS)));
-        project.setUserID(row.getString(FieldConst.USER_ID));
+        project.setUserId(row.getString(FieldConst.USER_ID));
         return project;
     }
 
@@ -68,7 +68,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public void removeAll()  {
+    public Integer removeAll()  {
         @NotNull final String query = "DELETE FROM app_project";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.executeUpdate();
@@ -78,7 +78,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project remove(@NotNull final String id)  {
+    public Integer remove(@NotNull final String id)  {
         @NotNull final String query = "DELETE FROM app_project where id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         @NotNull final Project project = findOne(id);
@@ -91,16 +91,16 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project persist(@NotNull final Project project)  {
+    public Integer persist(@NotNull final Project project)  {
         @NotNull final String query = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) values (?, ?, ?, ?, ?, ?, ? )";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        statement.setString(1, project.getId());
+        statement.setString(1, project.getId()  );
         statement.setString(2, project.getName());
         statement.setString(3, project.getDescription());
         statement.setString(4, DateFormatter.format(project.getDateBegin()));
         statement.setString(5, DateFormatter.format(project.getDateEnd()));
         statement.setString(6, project.getStatus().toString());
-        statement.setString(7, project.getUserID());
+        statement.setString(7, project.getUserId());
         statement.executeUpdate();
         statement.close();
         return project;
@@ -109,7 +109,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project merge(@NotNull final Project project)  {
+    public Integer merge(@NotNull final Project project)  {
         @NotNull final String query = "UPDATE app_project SET name = ?, description = ?, dateBegin = ?, dateEnd = ?, status = ? where id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, project.getName());
@@ -172,7 +172,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project remove(@NotNull String id, @NotNull String userId)  {
+    public Integer remove(@NotNull String id, @NotNull String userId)  {
         @NotNull final String query = "DELETE FROM app_project where id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         @NotNull final Project project = findOne(id, userId);
@@ -197,7 +197,10 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> sortAllByUserId(@NotNull final String id, Comparator<Project> comparator)  {
+    public Collection<Project> sortAllByUserId(@NotNull final String id, @NotNull final String parameter)  {
+        @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ? ORDER BY ? DESC";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, id);
         List<Project> projects = new ArrayList<>(findAllByUserId(id));
         Collections.sort(projects, comparator);
         return projects;

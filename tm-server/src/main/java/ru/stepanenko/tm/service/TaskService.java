@@ -55,7 +55,7 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     @Override
     public void removeAllByProjectId(@NotNull final String id, @NotNull final String userId) {
         if (!StringValidator.validate(id, userId)) return;
-        repository.removeAllByProjectId(id, userId);
+        repository.removeAllByProjectAndUserId(id, userId);
     }
 
     @Override
@@ -81,7 +81,7 @@ public final class TaskService extends AbstractEntityService<Task, ITaskReposito
     @Override
     public Collection<Task> findAllByProjectId(@NotNull final String id, @NotNull final String userId) {
         if (!StringValidator.validate(id, userId)) return null;
-        return repository.findAllByProjectId(id, userId);
+        return repository.findAllByProjectAndUserId(id, userId);
     }
 
     @Override

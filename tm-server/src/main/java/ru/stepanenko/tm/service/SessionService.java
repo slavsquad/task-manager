@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
+import ru.stepanenko.tm.api.service.IPropertyService;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
@@ -13,29 +14,28 @@ import ru.stepanenko.tm.util.SignatureUtil;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Properties;
 
 public class SessionService extends AbstractEntityService<Session, ISessionRepository> implements ISessionService {
 
     @NotNull
     private final IUserRepository userRepository;
 
-    @NotNull private final Properties properties;
+    @NotNull private final IPropertyService propertyService;
 
     public SessionService(@NotNull final ISessionRepository repository,
                           @NotNull final IUserRepository userRepository,
-                          @NotNull final Properties properties) {
+                          @NotNull final IPropertyService propertyService) {
         super(repository);
         this.userRepository = userRepository;
-        this.properties = properties;
+        this.propertyService = propertyService;
     }
 
     @Override
     public Session create(@NotNull String userId) throws IOException {
-        @NotNull final String cycle = properties.getProperty("cycle");
-        @NotNull final String salt = properties.getProperty("salt");
+        @NotNull final String cycle = propertyService.getCycle();
+        @NotNull final String salt = propertyService.getSalt();
         @NotNull final Session session = new Session();
-        session.setTimeStamp(new Date());
+        session.setTimestamp(new Date());
         session.setUserId(userId);
         session.setSignature(SignatureUtil.sign(session, salt, Integer.parseInt(cycle)));
         return repository.persist(session);
@@ -49,7 +49,7 @@ public class SessionService extends AbstractEntityService<Session, ISessionRepos
             throw new AuthenticationSecurityException("Session is invalid: \nSignature must not be null! Please re-login!");
         if (session.getUserId() == null)
             throw new AuthenticationSecurityException("Session is invalid: \nUser must not be null! Please re-login!");
-        if (session.getTimeStamp() == null)
+        if (session.getTimestamp() == null)
             throw new AuthenticationSecurityException("Session is invalid: \nTime must not be null! Please re-login!");
         if (findOne(session.getId()) == null)
             throw new AuthenticationSecurityException("Session is invalid: \nSession not found! Please re-login!");

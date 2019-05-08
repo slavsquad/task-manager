@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *       &lt;sequence&gt;
  *         &lt;element name="dateBegin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="dateEnd" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="userID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="status" type="{http://endpoint.tm.stepanenko.ru/}status" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/extension&gt;
@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "project", propOrder = {
     "dateBegin",
     "dateEnd",
-    "userID",
+    "userId",
     "status"
 })
 public class Project
@@ -95,7 +95,7 @@ public class Project
     }
 
     /**
-     * Gets the value of the userID property.
+     * Gets the value of the userId property.
      * 
      * @return
      *     possible object is
@@ -107,7 +107,7 @@ public class Project
     }
 
     /**
-     * Sets the value of the userID property.
+     * Sets the value of the userId property.
      * 
      * @param value
      *     allowed object is

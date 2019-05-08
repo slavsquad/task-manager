@@ -1,6 +1,14 @@
 package ru.stepanenko.tm.config;
 
+import org.apache.ibatis.datasource.pooled.PooledDataSource;
+import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.apache.ibatis.session.SqlSessionFactoryBuilder;
+import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.AppServer;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
@@ -16,20 +24,17 @@ import ru.stepanenko.tm.service.*;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.util.ConnectionDB;
-import ru.stepanenko.tm.util.PropertesLoader;
 
+import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
-import java.util.Properties;
 
 public class Bootstrap {
+    @NotNull final IPropertyService propertyService = new PropertyService();
     public void init(Class[] endpoints) {
-
-        @NotNull final Properties properties = PropertesLoader.load(AppServer.class);
-        Connection connection = ConnectionDB.create(properties);
-
+        Connection connection = ConnectionDB.create(propertyService.getJdbcURL(), propertyService.getJdbcUser(), propertyService.getJdbcPassword());
         @NotNull final IProjectRepository projectRepository = new ProjectRepository(connection);
         @NotNull final ITaskRepository taskRepository = new TaskRepository(connection);
         @NotNull final IUserRepository userRepository = new UserRepository(connection);
@@ -37,9 +42,8 @@ public class Bootstrap {
         @NotNull final IProjectService projectService = new ProjectService(projectRepository);
         @NotNull final ITaskService taskService = new TaskService(taskRepository);
         @NotNull final IUserService userService = new UserService(userRepository, projectRepository, taskRepository, sessionRepository);
-        @NotNull final ISessionService sessionService = new SessionService(sessionRepository, userRepository, properties);
+        @NotNull final ISessionService sessionService = new SessionService(sessionRepository, userRepository, propertyService);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
-
         if (userRepository.findAll() == null || userRepository.findAll().isEmpty()) generateTestUsers(serviceLocator);
         generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
@@ -79,6 +83,25 @@ public class Bootstrap {
         userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", Role.ADMINISTRATOR.toString());
         userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", Role.USER.toString());
         userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", Role.USER.toString());
+    }
+
+    public SqlSessionFactory getSqlSessionFactory() {
+        @Nullable final String user = propertyService.getJdbcUser();
+        @Nullable final String password = propertyService.getJdbcPassword();
+        @Nullable final String url = propertyService.getJdbcURL();
+        @Nullable final String driver = propertyService.getJdbcDriver();
+        final DataSource dataSource =
+                new PooledDataSource(driver, url, user, password);
+        final TransactionFactory transactionFactory =
+                new JdbcTransactionFactory();
+        final Environment environment =
+                new Environment("development", transactionFactory, dataSource);
+        final Configuration configuration = new Configuration(environment);
+        configuration.addMapper(UserRepository.class);
+        configuration.addMapper(ProjectRepository.class);
+        configuration.addMapper(SessionRepository.class);
+        configuration.addMapper(TaskRepository.class);
+        return new SqlSessionFactoryBuilder().build(configuration);
     }
 
     private void generateTestData(IServiceLocator serviceLocator) {

@@ -17,10 +17,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;extension base="{http://endpoint.tm.stepanenko.ru/}abstractEntity"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="projectID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="projectId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="dateBegin" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="dateEnd" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="userID" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="userId" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="status" type="{http://endpoint.tm.stepanenko.ru/}status" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/extension&gt;
@@ -32,10 +32,10 @@ import javax.xml.bind.annotation.XmlType;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "task", propOrder = {
-    "projectID",
+    "projectId",
     "dateBegin",
     "dateEnd",
-    "userID",
+    "userId",
     "status"
 })
 public class Task
@@ -50,7 +50,7 @@ public class Task
     protected Status status;
 
     /**
-     * Gets the value of the projectID property.
+     * Gets the value of the projectId property.
      * 
      * @return
      *     possible object is
@@ -62,7 +62,7 @@ public class Task
     }
 
     /**
-     * Sets the value of the projectID property.
+     * Sets the value of the projectId property.
      * 
      * @param value
      *     allowed object is
@@ -122,7 +122,7 @@ public class Task
     }
 
     /**
-     * Gets the value of the userID property.
+     * Gets the value of the userId property.
      * 
      * @return
      *     possible object is
@@ -134,7 +134,7 @@ public class Task
     }
 
     /**
-     * Sets the value of the userID property.
+     * Sets the value of the userId property.
      * 
      * @param value
      *     allowed object is

@@ -1,9 +1,6 @@
 package ru.stepanenko.tm.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.databind.annotation.JsonAppend;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -36,15 +33,15 @@ public class Project extends AbstractEntity implements Serializable {
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateEnd = null;
     @NotNull
-    private String userID = "";
+    private String userId = "";
     @NotNull
     private Status status = Status.PLANNED;
 
-    public Project(@NotNull final String name, @NotNull final String description, @NotNull final String userID) {
+    public Project(@NotNull final String name, @NotNull final String description, @NotNull final String userId) {
         this.name = name;
         this.description = description;
         this.dateBegin = new Date();
-        this.userID = userID;
+        this.userId = userId;
     }
 
 
@@ -57,7 +54,7 @@ public class Project extends AbstractEntity implements Serializable {
                 ", dateBegin=" + DateFormatter.format(dateBegin) +
                 ", dateEnd=" + DateFormatter.format(dateEnd) +
                 ", status=" + status +
-                ", userId='" + userID + '\'' +
+                ", userId='" + userId + '\'' +
                 '}';
     }
 }

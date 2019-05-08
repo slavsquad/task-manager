@@ -19,17 +19,17 @@ public final class ProjectService extends AbstractEntityService<Project, IProjec
     }
 
     @Override
-    public Project create(@NotNull final String name, @NotNull final String description, @NotNull final String userID) {
-        if (!StringValidator.validate(name, description, userID)) return null;
-        return repository.persist(new Project(name, description, userID));
+    public Project create(@NotNull final String name, @NotNull final String description, @NotNull final String userId) {
+        if (!StringValidator.validate(name, description, userId)) return null;
+        return repository.persist(new Project(name, description, userId));
     }
 
     @Override
-    public Project edit(@NotNull String id, @NotNull String name, @NotNull String description, @NotNull String status) {
+    public Project edit(@NotNull String id, @NotNull String name, @NotNull String description, @NotNull String status, @NotNull String userId) {
         if (!StringValidator.validate(id, name, description, status)) return null;
         if (EnumUtil.stringToStatus(status) == null) return null;
         @NotNull
-        Project project = findOne(id);
+        Project project = findOne(id, userId);
         project.setName(name);
         project.setDescription(description);
         project.setStatus(EnumUtil.stringToStatus(status));

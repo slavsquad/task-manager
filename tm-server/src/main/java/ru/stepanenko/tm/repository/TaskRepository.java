@@ -32,8 +32,8 @@ public final class TaskRepository implements ITaskRepository {
         task.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
         task.setDateEnd(row.getDate(FieldConst.DATA_END));
         task.setStatus(EnumUtil.stringToStatus(row.getString(FieldConst.STATUS)));
-        task.setUserID(row.getString(FieldConst.USER_ID));
-        task.setProjectID(row.getString(FieldConst.PROJECT_ID));
+        task.setUserId(row.getString(FieldConst.USER_ID));
+        task.setProjectId(row.getString(FieldConst.PROJECT_ID));
         return task;
     }
 
@@ -96,8 +96,8 @@ public final class TaskRepository implements ITaskRepository {
         statement.setString(4, DateFormatter.format(task.getDateBegin()));
         statement.setString(5, DateFormatter.format(task.getDateEnd()));
         statement.setString(6, task.getStatus().toString());
-        statement.setString(7, task.getUserID());
-        statement.setString(8, task.getProjectID());
+        statement.setString(7, task.getUserId());
+        statement.setString(8, task.getProjectId());
         statement.executeUpdate();
         statement.close();
         return task;
@@ -148,7 +148,7 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Collection<Task> findAllByProjectId(@NotNull String id, @NotNull String userId) {
+    public Collection<Task> findAllByProjectAndUserId(@NotNull String id, @NotNull String userId) {
         @NotNull final String query = "SELECT * FROM app_task WHERE project_id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -199,7 +199,7 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public void removeAllByProjectId(@NotNull final String id, @NotNull final String userId) {
+    public void removeAllByProjectAndUserId(@NotNull final String id, @NotNull final String userId) {
         @NotNull final String query = "DELETE FROM app_task where project_id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
