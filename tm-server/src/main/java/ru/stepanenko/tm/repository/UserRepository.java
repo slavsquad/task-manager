@@ -64,61 +64,51 @@ public final class UserRepository implements IUserRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll() {
+    public Integer removeAll() {
         @NotNull final String query = "DELETE FROM app_user";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
+        return result;
     }
 
     @Override
     @SneakyThrows
-    public User remove(@NotNull final String id) {
-        @NotNull final String query = "DELETE FROM app_user where id = ?";
+    public Integer remove(@NotNull final String id) {
+        @NotNull final String query = "DELETE FROM app_user WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        @NotNull final User user = findOne(id);
         statement.setString(1, id);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return user;
+        return result;
     }
 
     @Override
     @SneakyThrows
-    public User persist(@NotNull final User user) {
+    public Integer persist(@NotNull final User user) {
         @NotNull final String query = "INSERT INTO app_user(id, login, passwordHash, role) VALUES(?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, user.getId());
         statement.setString(2, user.getLogin());
         statement.setString(3, user.getPassword());
         statement.setString(4, user.getRole().toString());
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return user;
+        return result;
     }
 
     @Override
     @SneakyThrows
-    public User merge(@NotNull final User user) {
-        @NotNull final String query = "UPDATE app_user SET login = ?, passwordHash = ?, role= ? where id = ?";
+    public Integer merge(@NotNull final User user) {
+        @NotNull final String query = "UPDATE app_user SET login = ?, passwordHash = ?, role= ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, user.getLogin());
         statement.setString(2, user.getPassword());
         statement.setString(3, user.getRole().toString());
         statement.setString(4, user.getId());
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return user;
-    }
-
-    @Override
-    @SneakyThrows
-    public Collection<User> recovery(@NotNull Collection<User> collection) {
-        removeAll();
-        for (User user : collection) {
-            persist(user);
-        }
-        return collection;
+        return result;
     }
 
     @Override

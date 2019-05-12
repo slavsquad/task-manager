@@ -45,7 +45,7 @@ public final class ProjectRepository implements IProjectRepository {
         statement.setString(1, id);
         @NotNull final ResultSet resultSet = statement.executeQuery();
         if (!resultSet.next()) return null;
-        @NotNull final Project project =  fetch(resultSet);
+        @NotNull final Project project = fetch(resultSet);
         resultSet.close();
         statement.close();
         return project;
@@ -68,49 +68,49 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer removeAll()  {
+    public Integer removeAll() {
         @NotNull final String query = "DELETE FROM app_project";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
+        return result;
     }
 
     @Override
     @Nullable
     @SneakyThrows
-    public Integer remove(@NotNull final String id)  {
+    public Integer remove(@NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_project where id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        @NotNull final Project project = findOne(id);
         statement.setString(1, id);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return project;
+        return result;
     }
 
     @Override
     @Nullable
     @SneakyThrows
-    public Integer persist(@NotNull final Project project)  {
-        @NotNull final String query = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) values (?, ?, ?, ?, ?, ?, ? )";
+    public Integer persist(@NotNull final Project project) {
+        @NotNull final String query = "INSERT INTO app_project(id, name, description, dateBegin, dateEnd, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ? )";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        statement.setString(1, project.getId()  );
+        statement.setString(1, project.getId());
         statement.setString(2, project.getName());
         statement.setString(3, project.getDescription());
         statement.setString(4, DateFormatter.format(project.getDateBegin()));
         statement.setString(5, DateFormatter.format(project.getDateEnd()));
         statement.setString(6, project.getStatus().toString());
         statement.setString(7, project.getUserId());
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return project;
+        return result;
     }
 
     @Override
     @Nullable
     @SneakyThrows
-    public Integer merge(@NotNull final Project project)  {
-        @NotNull final String query = "UPDATE app_project SET name = ?, description = ?, dateBegin = ?, dateEnd = ?, status = ? where id = ?";
+    public Integer merge(@NotNull final Project project) {
+        @NotNull final String query = "UPDATE app_project SET name = ?, description = ?, dateBegin = ?, dateEnd = ?, status = ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, project.getName());
         statement.setString(2, project.getDescription());
@@ -118,19 +118,9 @@ public final class ProjectRepository implements IProjectRepository {
         statement.setString(4, DateFormatter.format(project.getDateEnd()));
         statement.setString(5, project.getStatus().toString());
         statement.setString(6, project.getId());
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return project;
-    }
-
-    @Override
-    @Nullable
-    @SneakyThrows
-    public Collection<Project> recovery(@NotNull Collection<Project> collection) {
-        for (Project project : collection) {
-            persist(project);
-        }
-        return collection;
+        return result;
     }
 
     @Override
@@ -141,7 +131,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> findAllByUserId(@NotNull final String id)  {
+    public Collection<Project> findAllByUserId(@NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -156,7 +146,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project findOne(@NotNull String id, @NotNull String userId)  {
+    public Project findOne(@NotNull String id, @NotNull String userId) {
         @NotNull final String query = "SELECT * FROM app_project WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -172,50 +162,58 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer remove(@NotNull String id, @NotNull String userId)  {
-        @NotNull final String query = "DELETE FROM app_project where id = ? AND user_id = ?";
+    public Integer remove(@NotNull String id, @NotNull String userId) {
+        @NotNull final String query = "DELETE FROM app_project WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        @NotNull final Project project = findOne(id, userId);
         statement.setString(1, id);
         statement.setString(2, userId);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return project;
+        return result;
     }
 
     @Override
     @Nullable
     @SneakyThrows
-    public void removeAllByUserID(@NotNull final String id)  {
-        @NotNull final String query = "DELETE FROM app_project where user_id = ?";
+    public Integer removeAllByUserID(@NotNull final String id) {
+        @NotNull final String query = "DELETE FROM app_project WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
+        return result;
     }
 
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> sortAllByUserId(@NotNull final String id, @NotNull final String parameter)  {
+    public Collection<Project> sortAllByUserId(@NotNull final String id, @NotNull final String parameter) {
         @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ? ORDER BY ? DESC";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
-        List<Project> projects = new ArrayList<>(findAllByUserId(id));
-        Collections.sort(projects, comparator);
-        return projects;
+        statement.setString(2, parameter);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final List<Project> result = new ArrayList<>();
+        while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
+        return result;
     }
 
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId)  {
-        List<Project> findProjects = new ArrayList<>();
-        for (Project project : findAllByUserId(userId)) {
-            if (project.getName().contains(name) || project.getDescription().contains(description)) {
-                findProjects.add(project);
-            }
-        }
-        return findProjects;
+    public Collection<Project> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
+        @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ? and (name LIKE ? OR description LIKE ?)";
+        @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
+        statement.setString(1, userId);
+        statement.setString(2, name);
+        statement.setString(3, description);
+        @NotNull final ResultSet resultSet = statement.executeQuery();
+        @NotNull final List<Project> result = new ArrayList<>();
+        while (resultSet.next()) result.add(fetch(resultSet));
+        resultSet.close();
+        statement.close();
+        return result;
     }
 }

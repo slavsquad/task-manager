@@ -63,58 +63,50 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     @SneakyThrows
-    public void removeAll() {
+    public Integer removeAll() {
         @NotNull final String query = "DELETE FROM app_session";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
+        return result;
     }
 
     @Override
     @SneakyThrows
-    public Session remove(@NotNull final String id) {
-        @NotNull final String query = "DELETE FROM app_session where id = ?";
+    public Integer remove(@NotNull final String id) {
+        @NotNull final String query = "DELETE FROM app_session WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
-        @NotNull final Session session = findOne(id);
         statement.setString(1, id);
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return session;
+        return result;
     }
 
     @Override
     @SneakyThrows
-    public Session persist(@NotNull final Session session) {
-        @NotNull final String query = "INSERT into app_session(id, signature, timestamp, user_id) values (?, ?, ?, ?)";
+    public Integer persist(@NotNull final Session session) {
+        @NotNull final String query = "INSERT INTO app_session(id, signature, timestamp, user_id) VALUES (?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, session.getId());
         statement.setString(2, session.getSignature());
         statement.setString(3, DateFormatter.format(session.getTimestamp()));
         statement.setString(4, session.getUserId());
-        statement.executeUpdate();
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return session;
+        return result;
     }
 
     @Override
     @SneakyThrows
-    public Session merge(@NotNull final Session session) {
-        @NotNull final String query = "UPDATE app_session SET signature = ?, timestamp = ? where id = ?";
+    public Integer merge(@NotNull final Session session) {
+        @NotNull final String query = "UPDATE app_session SET signature = ?, timestamp = ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, session.getSignature());
         statement.setString(2, DateFormatter.format(session.getTimestamp()));
         statement.setString(3, session.getId());
+        @NotNull final Integer result = statement.executeUpdate();
         statement.close();
-        return session;
-    }
-
-    @Override
-    @SneakyThrows
-    public Collection<Session> recovery(@NotNull Collection<Session> collection) {
-        for (Session session : collection) {
-            persist(session);
-        }
-        return collection;
+        return result;
     }
 
     @Override

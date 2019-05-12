@@ -45,7 +45,7 @@ public class Bootstrap {
         @NotNull final ISessionService sessionService = new SessionService(sessionRepository, userRepository, propertyService);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
         if (userRepository.findAll() == null || userRepository.findAll().isEmpty()) generateTestUsers(serviceLocator);
-        generateTestData(serviceLocator);
+       // generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
     }
 
@@ -97,10 +97,10 @@ public class Bootstrap {
         final Environment environment =
                 new Environment("development", transactionFactory, dataSource);
         final Configuration configuration = new Configuration(environment);
-        configuration.addMapper(UserRepository.class);
-        configuration.addMapper(ProjectRepository.class);
-        configuration.addMapper(SessionRepository.class);
-        configuration.addMapper(TaskRepository.class);
+        configuration.addMapper(IUserRepository.class);
+        configuration.addMapper(IProjectRepository.class);
+        configuration.addMapper(ISessionRepository.class);
+        configuration.addMapper(ITaskRepository.class);
         return new SqlSessionFactoryBuilder().build(configuration);
     }
 

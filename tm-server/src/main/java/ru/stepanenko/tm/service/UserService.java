@@ -44,25 +44,26 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathFactory;
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public final class UserService extends AbstractEntityService<User, IUserRepository> implements IUserService {
+public final class UserService implements IUserService {
 
     @NotNull
-    private IProjectRepository projectRepository;
-
+    private final IUserRepository repository;
     @NotNull
-    private ITaskRepository taskRepository;
-
+    private final IProjectRepository projectRepository;
     @NotNull
-    private ISessionRepository sessionRepository;
+    private final ITaskRepository taskRepository;
+    @NotNull
+    private final ISessionRepository sessionRepository;
 
     public UserService(@NotNull final IUserRepository userRepository,
                        @NotNull final IProjectRepository projectRepository,
                        @NotNull final ITaskRepository taskRepository,
                        @NotNull final ISessionRepository sessionRepository) {
-        super(userRepository);
+        this.repository = userRepository;
         this.projectRepository = projectRepository;
         this.taskRepository = taskRepository;
         this.sessionRepository = sessionRepository;
@@ -72,43 +73,73 @@ public final class UserService extends AbstractEntityService<User, IUserReposito
     public User create(@NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(login, password, role)) return null;
         if (EnumUtil.stringToRole(role) == null) return null;
-        return repository.persist(new User(login, HashUtil.md5(password), EnumUtil.stringToRole(role)));
+        @NotNull final User user = new User(login, HashUtil.md5(password), EnumUtil.stringToRole(role));
+        repository.persist(user);
+        return findOne(user.getId());
     }
 
     public User create(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(id, login, password, role)) return null;
         if (EnumUtil.stringToRole(role) == null) return null;
-        User user = new User(login, HashUtil.md5(password), EnumUtil.stringToRole(role));
+        @NotNull final User user = new User(login, HashUtil.md5(password), EnumUtil.stringToRole(role));
         user.setId(id);
-        return repository.persist(user);
+        repository.persist(user);
+        return findOne(user.getId());
     }
 
     @Override
     public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(id, login, password, role)) return null;
         if (EnumUtil.stringToRole(role) == null) return null;
-        @NotNull
-        User user = findOne(id);
+        @NotNull User user = findOne(id);
+        if (user==null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
         user.setRole(EnumUtil.stringToRole(role));
-        return repository.merge(user);
+        repository.merge(user);
+        return findOne(user.getId());
     }
 
     @Override
     public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password) {
         if (!StringValidator.validate(id, login, password)) return null;
-        @NotNull
-        User user = findOne(id);
+        @Nullable User user = findOne(id);
+        if (user==null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
-        return repository.merge(user);
+        repository.merge(user);
+        return findOne(user.getId());
     }
 
     @Override
     public User findByLogin(@NotNull final String login) {
         if (!StringValidator.validate(login)) return null;
         return repository.findByLogin(login);
+    }
+
+    @Override
+    public void clear() {
+        repository.removeAll();
+    }
+
+    @Override
+    public User findOne(@NotNull String id) {
+        if(!StringValidator.validate(id)) return null;
+        return repository.findOne(id);
+    }
+
+    @Override
+    public User remove(@NotNull String id) {
+        if(!StringValidator.validate(id)) return null;
+        @Nullable final User user = findOne(id);
+        if (user==null) return null;
+        repository.remove(id);
+        return user;
+    }
+
+    @Override
+    public Collection<User> findAll() {
+        return repository.findAll();
     }
 
     @Override

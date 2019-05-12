@@ -12,7 +12,7 @@ public interface IProjectRepository {
     @NotNull String SELECT_ALL = "SELECT * FROM app_project";
     @NotNull String DELETE_ALL = "DELETE FROM app_project";
     @NotNull String DELETE_BY_ID = "DELETE FROM app_project where id =#{id}";
-    @NotNull String INSERT = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) values (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId})";
+    @NotNull String INSERT = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) VALUES (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId})";
     @NotNull String UPDATE = "UPDATE app_project SET name = #{name}, description = #{description}, dateBegin = #{dateBegin}, dateEnd = #{dateEnd}, status = #{status} where id = #{id}";
     @NotNull String SELECT_BY_USER_ID = "SELECT * FROM app_project WHERE user_id = #{id}";
     @NotNull String SELECT_BY_ID_AND_USER_ID = "SELECT * FROM app_project WHERE id = #{id} AND user_id = #{userId}";
@@ -87,7 +87,7 @@ public interface IProjectRepository {
     Integer remove(@NotNull final String id, @NotNull final String userId);
 
     @Delete(DELETE_ALL_BY_USER_ID)
-    void removeAllByUserID(@NotNull final String id);
+    Integer removeAllByUserID(@NotNull final String id);
 
     @Select(SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC)
     @Results(value = {
@@ -113,4 +113,10 @@ public interface IProjectRepository {
             @Result(property = "userId", column = "user_id")
     })
     Collection<Project> findAllByPartOfNameOrDescription(@NotNull final String name, @NotNull final String description, @NotNull final String userId);
+
+    default void recovery(@NotNull final Collection<Project> collection){
+        for (Project project:collection){
+            persist(project);
+        }
+    }
 }

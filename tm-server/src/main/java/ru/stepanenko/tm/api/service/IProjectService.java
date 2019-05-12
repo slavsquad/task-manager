@@ -5,12 +5,19 @@ import ru.stepanenko.tm.entity.Project;
 
 import java.util.Collection;
 
-public interface IProjectService extends IAbstractEntityService<Project> {
+public interface IProjectService {
 
     Project create(@NotNull final String name, @NotNull final String description, @NotNull final String userID);
-    Project edit(@NotNull final String id, @NotNull final String name, @NotNull final String description, @NotNull final String status);
+    Project edit(@NotNull final String id, @NotNull final String name, @NotNull final String description, @NotNull final String status, @NotNull String userId);
     Project findOne(@NotNull final String id, @NotNull final String userId);
     Project remove(@NotNull final String id, @NotNull final String userId);
+
+    void clear();
+    Project findOne(@NotNull final String id);
+    Project remove(@NotNull final String id);
+    void recovery(@NotNull final Collection<Project> collection);
+
+    Collection<Project> findAll();
     Collection<Project> findAllByUserId(@NotNull final String id);
     void removeAllByUserId(@NotNull final String id);
     Collection<Project> sortAllByUserId(@NotNull final String id, @NotNull final String comparator);

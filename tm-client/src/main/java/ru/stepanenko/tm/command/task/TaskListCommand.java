@@ -38,7 +38,7 @@ public final class TaskListCommand extends AbstractCommand {
                 System.out.println("List task is empty!");
                 return;
             }
-            findTasks.forEach(e -> System.out.println("id:" + e.getId() + " name:" + e.getName() + " project_id:" + e.getProjectID()));
+            findTasks.forEach(e -> System.out.println("id:" + e.getId() + " name:" + e.getName() + " project_id:" + e.getProjectId()));
             return;
         }
 

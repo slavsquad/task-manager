@@ -46,7 +46,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
                                @WebParam(name = "description") @NotNull final String description,
                                @WebParam(name = "status") @NotNull final String status) throws AuthenticationSecurityException {
         sessionService.validate(session);
-        return projectService.edit(id, name, description, status);
+        return projectService.edit(id, name, description, status, session.getUserId());
     }
 
     @Override

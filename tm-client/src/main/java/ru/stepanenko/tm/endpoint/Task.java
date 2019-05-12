@@ -42,10 +42,10 @@ public class Task
     extends AbstractEntity
 {
 
-    protected String projectID;
+    protected String projectId;
     protected String dateBegin;
     protected String dateEnd;
-    protected String userID;
+    protected String userId;
     @XmlSchemaType(name = "string")
     protected Status status;
 
@@ -57,8 +57,8 @@ public class Task
      *     {@link String }
      *     
      */
-    public String getProjectID() {
-        return projectID;
+    public String getProjectId() {
+        return projectId;
     }
 
     /**
@@ -69,8 +69,8 @@ public class Task
      *     {@link String }
      *     
      */
-    public void setProjectID(String value) {
-        this.projectID = value;
+    public void setProjectId(String value) {
+        this.projectId = value;
     }
 
     /**
@@ -129,8 +129,8 @@ public class Task
      *     {@link String }
      *     
      */
-    public String getUserID() {
-        return userID;
+    public String getUserId() {
+        return userId;
     }
 
     /**
@@ -141,8 +141,8 @@ public class Task
      *     {@link String }
      *     
      */
-    public void setUserID(String value) {
-        this.userID = value;
+    public void setUserId(String value) {
+        this.userId = value;
     }
 
     /**

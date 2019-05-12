@@ -41,7 +41,7 @@ public class Session
 
     protected String signature;
     @XmlSchemaType(name = "dateTime")
-    protected XMLGregorianCalendar timeStamp;
+    protected XMLGregorianCalendar timestamp;
     protected String userId;
 
     /**
@@ -76,8 +76,8 @@ public class Session
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public XMLGregorianCalendar getTimeStamp() {
-        return timeStamp;
+    public XMLGregorianCalendar getTimestamp() {
+        return timestamp;
     }
 
     /**
@@ -88,8 +88,8 @@ public class Session
      *     {@link XMLGregorianCalendar }
      *     
      */
-    public void setTimeStamp(XMLGregorianCalendar value) {
-        this.timeStamp = value;
+    public void setTimestamp(XMLGregorianCalendar value) {
+        this.timestamp = value;
     }
 
     /**
