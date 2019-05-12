@@ -3,6 +3,7 @@ package ru.stepanenko.tm.api.service;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.util.Domain;
 
 import java.util.Collection;
 
@@ -48,4 +49,8 @@ public interface IUserService {
     void loadDataFasterJSON();
 
     void saveDataFasterJSON();
+
+    void loadAllDataFromDomain(@NotNull final Domain domain);
+
+    Domain saveAllDataToDomain();
 }

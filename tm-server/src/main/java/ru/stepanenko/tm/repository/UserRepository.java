@@ -30,7 +30,7 @@ public final class UserRepository implements IUserRepository {
         @NotNull final User user = new User();
         user.setId(row.getString(FieldConst.ID));
         user.setLogin(row.getString(FieldConst.LOGIN));
-        user.setRole(EnumUtil.stringToRole(row.getString(FieldConst.ROLE)));
+        user.setRole(row.getString(FieldConst.ROLE));
         user.setPassword(row.getString(FieldConst.PASSWORD));
         return user;
     }

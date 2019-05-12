@@ -15,7 +15,6 @@ public interface IProjectService {
     void clear();
     Project findOne(@NotNull final String id);
     Project remove(@NotNull final String id);
-    void recovery(@NotNull final Collection<Project> collection);
 
     Collection<Project> findAll();
     Collection<Project> findAllByUserId(@NotNull final String id);

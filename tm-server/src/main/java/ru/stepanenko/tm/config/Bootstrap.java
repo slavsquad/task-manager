@@ -34,18 +34,14 @@ import java.sql.Connection;
 public class Bootstrap {
     @NotNull final IPropertyService propertyService = new PropertyService();
     public void init(Class[] endpoints) {
-        Connection connection = ConnectionDB.create(propertyService.getJdbcURL(), propertyService.getJdbcUser(), propertyService.getJdbcPassword());
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(connection);
-        @NotNull final ITaskRepository taskRepository = new TaskRepository(connection);
-        @NotNull final IUserRepository userRepository = new UserRepository(connection);
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(connection);
-        @NotNull final IProjectService projectService = new ProjectService(projectRepository);
-        @NotNull final ITaskService taskService = new TaskService(taskRepository);
-        @NotNull final IUserService userService = new UserService(userRepository, projectRepository, taskRepository, sessionRepository);
-        @NotNull final ISessionService sessionService = new SessionService(sessionRepository, userRepository, propertyService);
+        @NotNull final SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
+        @NotNull final IProjectService projectService = new ProjectService(sqlSessionFactory);
+        @NotNull final ITaskService taskService = new TaskService(sqlSessionFactory);
+        @NotNull final IUserService userService = new UserService(sqlSessionFactory);
+        @NotNull final ISessionService sessionService = new SessionService(sqlSessionFactory, propertyService);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
-        if (userRepository.findAll() == null || userRepository.findAll().isEmpty()) generateTestUsers(serviceLocator);
-       // generateTestData(serviceLocator);
+        if (userService.findAll() == null || userService.findAll().isEmpty()) generateTestUsers(serviceLocator);
+        generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
     }
 
@@ -80,9 +76,9 @@ public class Bootstrap {
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
 
         //----------------------------------------- test users-------------------------------------------
-        userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", Role.ADMINISTRATOR.toString());
-        userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", Role.USER.toString());
-        userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", Role.USER.toString());
+        userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", "admin");
+        userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", "user");
+        userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", "user");
     }
 
     public SqlSessionFactory getSqlSessionFactory() {

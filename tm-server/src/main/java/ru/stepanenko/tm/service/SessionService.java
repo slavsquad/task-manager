@@ -1,5 +1,8 @@
 package ru.stepanenko.tm.service;
 
+import lombok.AllArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
@@ -17,61 +20,83 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 
+@AllArgsConstructor
 public class SessionService implements ISessionService {
 
     @NotNull
-    private final ISessionRepository repository;
-
+    final SqlSessionFactory sessionFactory;
     @NotNull
-    private final IUserRepository userRepository;
-
-    @NotNull
-    private final IPropertyService propertyService;
-
-    public SessionService(@NotNull final ISessionRepository sessionRepository,
-                          @NotNull final IUserRepository userRepository,
-                          @NotNull final IPropertyService propertyService) {
-        this.repository = sessionRepository;
-        this.userRepository = userRepository;
-        this.propertyService = propertyService;
-    }
+    final IPropertyService propertyService;
 
     @Override
     public void clear() {
-        repository.removeAll();
+        @Nullable SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(ISessionRepository.class).removeAll();
+            session.commit();
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
     }
 
     @Override
     public Session findOne(@NotNull String id) {
-        if(!StringValidator.validate(id)) return null;
-        return repository.findOne(id);
+        if (!StringValidator.validate(id)) return null;
+        try(SqlSession session = sessionFactory.openSession()){
+            return session.getMapper(ISessionRepository.class).findOne(id);
+        }
     }
 
     @Override
     public Session remove(@NotNull String id) {
-        if(!StringValidator.validate(id)) return null;
+        if (!StringValidator.validate(id)) return null;
         @Nullable Session session = findOne(id);
-        if (session==null) return null;
-        repository.remove(id);
-        return session;
+        if (session == null) return null;
+        @Nullable SqlSession sqlSession = null;
+        try {
+            sqlSession = sessionFactory.openSession();
+            sqlSession.getMapper(ISessionRepository.class).remove(id);
+            sqlSession.commit();
+            return session;
+        } catch (Exception e) {
+            if (sqlSession != null) sqlSession.rollback();
+        } finally {
+            if (sqlSession != null) sqlSession.close();
+        }
+        return null;
     }
 
     @Override
     public Collection<Session> findAll() {
-        return repository.findAll();
+        try(SqlSession session = sessionFactory.openSession()){
+            return session.getMapper(ISessionRepository.class).findAll();
+        }
     }
 
     @Override
     public Session create(@NotNull String userId) throws IOException {
-        if(!StringValidator.validate(userId)) return null;
+        if (!StringValidator.validate(userId)) return null;
         @NotNull final String cycle = propertyService.getCycle();
         @NotNull final String salt = propertyService.getSalt();
         @NotNull final Session session = new Session();
         session.setTimestamp(new Date());
         session.setUserId(userId);
         session.setSignature(SignatureUtil.sign(session, salt, Integer.parseInt(cycle)));
-        repository.persist(session);
-        return findOne(session.getId());
+        @Nullable SqlSession sqlSession = null;
+        try {
+            sqlSession = sessionFactory.openSession();
+            sqlSession.getMapper(ISessionRepository.class).persist(session);
+            sqlSession.commit();
+            return session;
+        } catch (Exception e) {
+            if (sqlSession != null) sqlSession.rollback();
+        } finally {
+            if (sqlSession != null) sqlSession.close();
+        }
+        return null;
     }
 
     @Override
@@ -93,8 +118,12 @@ public class SessionService implements ISessionService {
     @Override
     public void validateAdmin(@Nullable Session session) throws AuthenticationSecurityException {
         validate(session);
-        User user = userRepository.findOne(session.getUserId());
-        if (!user.getRole().equals(Role.ADMINISTRATOR))
+        @Nullable User user = null;
+        try(SqlSession sqlSession = sessionFactory.openSession()){
+            user =  sqlSession.getMapper(IUserRepository.class).findOne(session.getUserId());
+        }
+        if (user==null) throw new AuthenticationSecurityException("User does not found!");
+        if (!user.getRole().equals(Role.ADMINISTRATOR.toString()))
             throw new AuthenticationSecurityException("Forbidden action for your role!");
     }
 }

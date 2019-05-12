@@ -19,6 +19,7 @@ public class Session extends AbstractEntity {
     @Nullable
     private Date timestamp;
 
+
     @Override
     public String toString() {
         return "Session{" +

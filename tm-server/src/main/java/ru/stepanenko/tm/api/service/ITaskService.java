@@ -22,17 +22,15 @@ public interface ITaskService{
 
     Task remove(@NotNull final String id);
 
-    void recovery(@NotNull final Collection<Task> collection);
-
     Collection<Task> findAll();
 
     Collection<Task> findAllByProjectId(@NotNull final String id, @NotNull final String userId);
 
     Collection<Task> findAllByUserId(@NotNull final String id);
 
-    Integer removeAllByProjectId(@NotNull final String id, @NotNull final String userId);
+    void removeAllByProjectId(@NotNull final String id, @NotNull final String userId);
 
-    Integer removeAllByUserId(@NotNull final String id);
+    void removeAllByUserId(@NotNull final String id);
 
     Collection<Task> sortAllByUserId(@NotNull final String id, @NotNull final String comparator);
 

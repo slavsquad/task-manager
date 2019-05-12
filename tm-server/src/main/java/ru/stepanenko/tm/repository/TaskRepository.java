@@ -31,7 +31,7 @@ public final class TaskRepository implements ITaskRepository {
         task.setDescription(row.getString(FieldConst.DESCRIPTION));
         task.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
         task.setDateEnd(row.getDate(FieldConst.DATA_END));
-        task.setStatus(EnumUtil.stringToStatus(row.getString(FieldConst.STATUS)));
+        task.setStatus(row.getString(FieldConst.STATUS));
         task.setUserId(row.getString(FieldConst.USER_ID));
         task.setProjectId(row.getString(FieldConst.PROJECT_ID));
         return task;
@@ -153,7 +153,7 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Task findOne(@NotNull final String id, @NotNull final String userId) {
+    public Task findOneByUserId(@NotNull final String id, @NotNull final String userId) {
         @NotNull final String query = "SELECT * FROM app_task WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -168,7 +168,7 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer remove(@NotNull String id, @NotNull String userId) {
+    public Integer removeOneByUserId(@NotNull String id, @NotNull String userId) {
         @NotNull final String query = "DELETE FROM app_task WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);

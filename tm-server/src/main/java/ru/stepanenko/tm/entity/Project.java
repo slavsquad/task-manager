@@ -9,6 +9,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.util.DateAdapter;
 import ru.stepanenko.tm.util.DateFormatter;
+import ru.stepanenko.tm.util.EnumUtil;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -35,6 +36,7 @@ public class Project extends AbstractEntity implements Serializable {
     @NotNull
     private String userId = "";
     @NotNull
+    @Getter
     private Status status = Status.PLANNED;
 
     public Project(@NotNull final String name, @NotNull final String description, @NotNull final String userId) {
@@ -44,6 +46,14 @@ public class Project extends AbstractEntity implements Serializable {
         this.userId = userId;
     }
 
+    public void setStatus(@NotNull final String status) {
+        this.status = EnumUtil.stringToStatus(status);
+    }
+
+    @NotNull
+    public String getStatus() {
+        return status.toString();
+    }
 
     @Override
     public String toString() {

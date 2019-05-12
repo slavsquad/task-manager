@@ -31,7 +31,7 @@ public final class ProjectRepository implements IProjectRepository {
         project.setDescription(row.getString(FieldConst.DESCRIPTION));
         project.setDateBegin(row.getDate(FieldConst.DATA_BEGIN));
         project.setDateEnd(row.getDate(FieldConst.DATA_END));
-        project.setStatus(EnumUtil.stringToStatus(row.getString(FieldConst.STATUS)));
+        project.setStatus(row.getString(FieldConst.STATUS));
         project.setUserId(row.getString(FieldConst.USER_ID));
         return project;
     }
@@ -146,7 +146,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project findOne(@NotNull String id, @NotNull String userId) {
+    public Project findOneByUserId(@NotNull String id, @NotNull String userId) {
         @NotNull final String query = "SELECT * FROM app_project WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -162,7 +162,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer remove(@NotNull String id, @NotNull String userId) {
+    public Integer removeOneByUserId(@NotNull String id, @NotNull String userId) {
         @NotNull final String query = "DELETE FROM app_project WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);

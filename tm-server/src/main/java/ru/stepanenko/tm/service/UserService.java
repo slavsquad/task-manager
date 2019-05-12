@@ -3,6 +3,9 @@ package ru.stepanenko.tm.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+import lombok.AllArgsConstructor;
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.jetbrains.annotations.NotNull;
@@ -12,7 +15,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
-import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -48,43 +50,48 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+@AllArgsConstructor
 public final class UserService implements IUserService {
 
     @NotNull
-    private final IUserRepository repository;
-    @NotNull
-    private final IProjectRepository projectRepository;
-    @NotNull
-    private final ITaskRepository taskRepository;
-    @NotNull
-    private final ISessionRepository sessionRepository;
-
-    public UserService(@NotNull final IUserRepository userRepository,
-                       @NotNull final IProjectRepository projectRepository,
-                       @NotNull final ITaskRepository taskRepository,
-                       @NotNull final ISessionRepository sessionRepository) {
-        this.repository = userRepository;
-        this.projectRepository = projectRepository;
-        this.taskRepository = taskRepository;
-        this.sessionRepository = sessionRepository;
-    }
+    private final SqlSessionFactory sessionFactory;
 
     @Override
     public User create(@NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(login, password, role)) return null;
         if (EnumUtil.stringToRole(role) == null) return null;
-        @NotNull final User user = new User(login, HashUtil.md5(password), EnumUtil.stringToRole(role));
-        repository.persist(user);
-        return findOne(user.getId());
+        @NotNull final User user = new User(login, HashUtil.md5(password), role);
+        @NotNull SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(IUserRepository.class).persist(user);
+            session.commit();
+            return user;
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+        return null;
     }
 
     public User create(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role) {
         if (!StringValidator.validate(id, login, password, role)) return null;
         if (EnumUtil.stringToRole(role) == null) return null;
-        @NotNull final User user = new User(login, HashUtil.md5(password), EnumUtil.stringToRole(role));
+        @NotNull final User user = new User(login, HashUtil.md5(password), role);
         user.setId(id);
-        repository.persist(user);
-        return findOne(user.getId());
+        @NotNull SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(IUserRepository.class).persist(user);
+            session.commit();
+            return user;
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+        return null;
     }
 
     @Override
@@ -92,54 +99,100 @@ public final class UserService implements IUserService {
         if (!StringValidator.validate(id, login, password, role)) return null;
         if (EnumUtil.stringToRole(role) == null) return null;
         @NotNull User user = findOne(id);
-        if (user==null) return null;
+        if (user == null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
-        user.setRole(EnumUtil.stringToRole(role));
-        repository.merge(user);
-        return findOne(user.getId());
+        user.setRole(role);
+        @NotNull SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(IUserRepository.class).merge(user);
+            session.commit();
+            return user;
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+        return null;
     }
 
     @Override
     public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password) {
         if (!StringValidator.validate(id, login, password)) return null;
         @Nullable User user = findOne(id);
-        if (user==null) return null;
+        if (user == null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
-        repository.merge(user);
-        return findOne(user.getId());
+
+        @NotNull SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(IUserRepository.class).merge(user);
+            session.commit();
+            return user;
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+        return null;
     }
 
     @Override
     public User findByLogin(@NotNull final String login) {
         if (!StringValidator.validate(login)) return null;
-        return repository.findByLogin(login);
+        try (SqlSession session = sessionFactory.openSession()) {
+            return session.getMapper(IUserRepository.class).findByLogin(login);
+        }
     }
 
     @Override
     public void clear() {
-        repository.removeAll();
+        @NotNull SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(IUserRepository.class).removeAll();
+            session.commit();
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
     }
 
     @Override
     public User findOne(@NotNull String id) {
-        if(!StringValidator.validate(id)) return null;
-        return repository.findOne(id);
+        if (!StringValidator.validate(id)) return null;
+        try (SqlSession session = sessionFactory.openSession()) {
+            return session.getMapper(IUserRepository.class).findOne(id);
+        }
     }
 
     @Override
     public User remove(@NotNull String id) {
-        if(!StringValidator.validate(id)) return null;
+        if (!StringValidator.validate(id)) return null;
         @Nullable final User user = findOne(id);
-        if (user==null) return null;
-        repository.remove(id);
-        return user;
+        if (user == null) return null;
+        @NotNull SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(IUserRepository.class).remove(id);
+            session.commit();
+            return user;
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+        return null;
     }
 
     @Override
     public Collection<User> findAll() {
-        return repository.findAll();
+        try (SqlSession session = sessionFactory.openSession()) {
+            return session.getMapper(IUserRepository.class).findAll();
+        }
     }
 
     @Override
@@ -155,20 +208,19 @@ public final class UserService implements IUserService {
 
     @Override
     public void loadData() {
+        @Nullable Domain domain = null;
         try (ObjectInputStream oin = new ObjectInputStream(new FileInputStream("tm-server/data.out"))) {
-            Domain domain = (Domain) oin.readObject();
-            taskRepository.removeAll();//cascade delete on, but as a precaution
-            projectRepository.removeAll();
-            projectRepository.recovery(domain.getProjects());
-            taskRepository.recovery(domain.getTasks());
+            domain = (Domain) oin.readObject();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
+            return;
         }
+        loadAllDataFromDomain(domain);
     }
 
     @Override
     public void saveData() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
+        @NotNull final Domain domain = saveAllDataToDomain();
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tm-server/data.out"))) {
             oos.writeObject(domain);
             oos.flush();
@@ -180,22 +232,21 @@ public final class UserService implements IUserService {
 
     @Override
     public void loadDataJaxbXml() {
+        @Nullable Domain domain = null;
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Domain.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-            Domain domain = (Domain) unmarshaller.unmarshal(new File("tm-server/data.xml"));
-            taskRepository.removeAll();//cascade delete on, but as a precaution
-            projectRepository.removeAll();
-            projectRepository.recovery(domain.getProjects());
-            taskRepository.recovery(domain.getTasks());
+            domain = (Domain) unmarshaller.unmarshal(new File("tm-server/data.xml"));
         } catch (JAXBException e) {
             e.printStackTrace();
+            return;
         }
+        loadAllDataFromDomain(domain);
     }
 
     @Override
     public void saveDataJaxbXml() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
+        @NotNull final Domain domain = saveAllDataToDomain();
         try (FileWriter fw = new FileWriter("tm-server/data.xml")) {
             fw.write(domainToXMLString(domain));
         } catch (IOException e) {
@@ -203,7 +254,7 @@ public final class UserService implements IUserService {
         }
     }
 
-    private String domainToXMLString(Domain domain) {
+    private String domainToXMLString(@NotNull final Domain domain) {
         try {
             JAXBContext context = JAXBContext.newInstance(Domain.class);
             Marshaller marshaller = context.createMarshaller();
@@ -218,7 +269,7 @@ public final class UserService implements IUserService {
         return null;
     }
 
-    private String xmlToPretty(String xml, int indent) {
+    private String xmlToPretty(@NotNull final String xml, @NotNull final int indent) {
         try {
             // Turn xml string into a document
             Document document = DocumentBuilderFactory.newInstance()
@@ -257,6 +308,7 @@ public final class UserService implements IUserService {
 
     @Override
     public void loadDataJaxbJSON() {
+        @Nullable Domain domain = null;
         try {
             Map<String, Object> properties = new HashMap<String, Object>(3);
             properties.put(MarshallerProperties.MEDIA_TYPE, "application/json");
@@ -265,21 +317,17 @@ public final class UserService implements IUserService {
             JAXBContext context = JAXBContextFactory.createContext(new Class[]{Domain.class}, properties);
             Unmarshaller unmarshaller = context.createUnmarshaller();
             StreamSource json = new StreamSource("tm-server/data.json");
-            Domain domain = unmarshaller.unmarshal(json, Domain.class).getValue();
-            taskRepository.removeAll();//cascade delete on, but as a precaution
-            projectRepository.removeAll();
-            projectRepository.recovery(domain.getProjects());
-            taskRepository.recovery(domain.getTasks());
+            domain = unmarshaller.unmarshal(json, Domain.class).getValue();
         } catch (JAXBException e) {
             e.printStackTrace();
+            return;
         }
-
+        loadAllDataFromDomain(domain);
     }
 
     @Override
     public void saveDataJaxbJSON() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
-
+        @NotNull final Domain domain = saveAllDataToDomain();
         try (FileWriter fw = new FileWriter("tm-server/data.json")) {
             fw.write(domainToJsonString(domain));
         } catch (IOException e) {
@@ -287,7 +335,7 @@ public final class UserService implements IUserService {
         }
     }
 
-    private String domainToJsonString(Domain domain) {
+    private String domainToJsonString(@NotNull final Domain domain) {
         try {
             Map<String, Object> properties = new HashMap<String, Object>(3);
             properties.put(MarshallerProperties.MEDIA_TYPE, "application/json");
@@ -304,7 +352,7 @@ public final class UserService implements IUserService {
         return null;
     }
 
-    private String jsonToPretty(String jsonString, int indent) {
+    private String jsonToPretty(@NotNull final String jsonString, @NotNull final int indent) {
         try {
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
@@ -319,21 +367,20 @@ public final class UserService implements IUserService {
 
     @Override
     public void loadDataFasterXml() {
+        @Nullable Domain domain = null;
         XmlMapper xmlMapper = new XmlMapper();
         try {
-            Domain domain = xmlMapper.readValue(new File("tm-server/data.xml"), Domain.class);
-            taskRepository.removeAll();//cascade delete on, but as a precaution
-            projectRepository.removeAll();
-            projectRepository.recovery(domain.getProjects());
-            taskRepository.recovery(domain.getTasks());
+            domain = xmlMapper.readValue(new File("tm-server/data.xml"), Domain.class);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+        loadAllDataFromDomain(domain);
     }
 
     @Override
     public void saveDataFasterXml() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
+        @NotNull final Domain domain = saveAllDataToDomain();
         XmlMapper mapper = new XmlMapper();
         try {
             mapper.writerWithDefaultPrettyPrinter().writeValue(new File("tm-server/data.xml"), domain);
@@ -344,22 +391,21 @@ public final class UserService implements IUserService {
 
     @Override
     public void loadDataFasterJSON() {
+        @Nullable Domain domain = null;
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
         try {
-            Domain domain = mapper.readValue(new File("tm-server/data.json"), Domain.class);
-            taskRepository.removeAll();//cascade delete on, but as a precaution
-            projectRepository.removeAll();
-            projectRepository.recovery(domain.getProjects());
-            taskRepository.recovery(domain.getTasks());
+            domain = mapper.readValue(new File("tm-server/data.json"), Domain.class);
         } catch (IOException e) {
             e.printStackTrace();
+            return;
         }
+        loadAllDataFromDomain(domain);
     }
 
     @Override
     public void saveDataFasterJSON() {
-        Domain domain = new Domain(new ArrayList<>(projectRepository.findAll()), new ArrayList<>(taskRepository.findAll()));
+        @NotNull final Domain domain = saveAllDataToDomain();
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
         try {
@@ -367,5 +413,36 @@ public final class UserService implements IUserService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadAllDataFromDomain(@NotNull final Domain domain) {
+        @Nullable SqlSession session = null;
+        try {
+            session = sessionFactory.openSession();
+            session.getMapper(ITaskRepository.class).removeAll();
+            session.getMapper(IProjectRepository.class).removeAll();
+            session.commit();
+            for (Project project : domain.getProjects()) {
+                session.getMapper(IProjectRepository.class).persist(project);
+            }
+            for (Task task : domain.getTasks()) {
+                session.getMapper(ITaskRepository.class).persist(task);
+            }
+            session.commit();
+        } catch (Exception e) {
+            if (session != null) session.rollback();
+        } finally {
+            if (session != null) session.close();
+        }
+    }
+
+    public Domain saveAllDataToDomain() {
+        @NotNull final Domain domain;
+        try (SqlSession session = sessionFactory.openSession()) {
+            @NotNull final Collection<Project> projects = session.getMapper(IProjectRepository.class).findAll();
+            @NotNull final Collection<Task> tasks = session.getMapper(ITaskRepository.class).findAll();
+            domain = new Domain(new ArrayList<>(projects), new ArrayList<>(tasks));
+        }
+        return domain;
     }
 }

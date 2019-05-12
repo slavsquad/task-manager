@@ -1,14 +1,10 @@
 package ru.stepanenko.tm.api.repository;
 
-import lombok.SneakyThrows;
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Task;
-
 import java.sql.Connection;
 import java.util.Collection;
-import java.util.Comparator;
 
 public interface ITaskRepository {
 
@@ -39,7 +35,7 @@ public interface ITaskRepository {
     @NotNull
     String SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC = "SELECT * FROM app_task WHERE user_id = #{id} ORDER BY #{parameter} DESC";
     @NotNull
-    String SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION = "SELECT * FROM app_task WHERE user_id = #{id} and (name LIKE #{name} OR description LIKE #{description})";
+    String SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION = "SELECT * FROM app_task WHERE user_id = #{userId} and (name LIKE #{name} OR description LIKE #{description})";
 
     @Select(SELECT_BY_ID)
     @Results(value = {
@@ -105,7 +101,8 @@ public interface ITaskRepository {
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> findAllByProjectAndUserId(@NotNull final String id, @NotNull final String userId);
+    Collection<Task> findAllByProjectAndUserId(@Param("id") @NotNull final String id,
+                                               @Param("userId") @NotNull final String userId);
 
     @Select(SELECT_BY_ID_AND_USER_ID)
     @Results(value = {
@@ -118,17 +115,20 @@ public interface ITaskRepository {
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Task findOne(@NotNull final String id, @NotNull final String userId);
+    Task findOneByUserId(@Param("id") @NotNull final String id,
+                         @Param("userId") @NotNull final String userId);
 
 
     @Delete(DELETE_BY_ID_AND_USER_ID)
-    Integer remove(@NotNull final String id, @NotNull final String userId);
+    Integer removeOneByUserId(@Param("id") @NotNull final String id,
+                              @Param("userId") @NotNull final String userId);
 
     @Delete(DELETE_ALL_BY_USER_ID)
     Integer removeAllByUserId(@NotNull final String id);
 
     @Delete(DELETE_ALL_BY_PROJECT_AND_USER_ID)
-    Integer removeAllByProjectAndUserId(@NotNull final String id, @NotNull final String userId);
+    Integer removeAllByProjectAndUserId(@Param("id") @NotNull final String id,
+                                        @Param("userId") @NotNull final String userId);
 
     @Select(SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC)
     @Results(value = {
@@ -141,7 +141,8 @@ public interface ITaskRepository {
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> sortAllByUserId(@NotNull final String id, @NotNull final String parameter);
+    Collection<Task> sortAllByUserId(@Param("id") @NotNull final String id,
+                                     @Param("parameter") @NotNull final String parameter);
 
     @Select(SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION)
     @Results(value = {
@@ -154,11 +155,7 @@ public interface ITaskRepository {
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> findAllByPartOfNameOrDescription(@NotNull final String name, @NotNull final String description, @NotNull final String userId);
-
-    default void recovery(@NotNull final Collection<Task> collection) {
-        for (Task task : collection) {
-            persist(task);
-        }
-    }
+    Collection<Task> findAllByPartOfNameOrDescription(@Param("name") @NotNull final String name,
+                                                      @Param("description") @NotNull final String description,
+                                                      @Param("userId") @NotNull final String userId);
 }
