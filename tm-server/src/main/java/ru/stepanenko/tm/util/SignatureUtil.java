@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 public final class SignatureUtil {
+
     @Nullable
     public static String sign(
             @Nullable final Object value,

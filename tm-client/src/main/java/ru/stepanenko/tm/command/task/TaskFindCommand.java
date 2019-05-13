@@ -22,7 +22,7 @@ public class TaskFindCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
@@ -34,16 +34,19 @@ public class TaskFindCommand extends AbstractCommand {
         @NotNull final String description = terminalService.nextLine();
 
         Collection<Task> findTasks = taskEndpoint.findAllTaskByPartOfNameOrDescription(currentSession, name, description);
-        if (findTasks != null) {
-            System.out.println("Find tasks by part of name '" + name + "' or part of description '" + description + "' :");
-            findTasks.forEach(e -> System.out.println("id: " + e.getId() +
-                    " name: " + e.getName() +
-                    " description: " + e.getDescription() +
-                    " data start: " + e.getDateBegin() +
-                    " data end: " + e.getDateEnd() +
-                    " status: " + e.getStatus()));
-        } else {
-            System.out.println("Tasks does not found or parameters were empty!");
+        if (findTasks == null || findTasks.isEmpty()) {
+            System.out.println("Tasks does not found!");
+            return;
         }
+
+        System.out.println("Find tasks by part of name '" + name + "' or part of description '" + description + "' :");
+        findTasks.forEach(e -> System.out.println("id: " + e.getId() +
+                " name: " + e.getName() +
+                " description: " + e.getDescription() +
+                " data start: " + e.getDateBegin() +
+                " data end: " + e.getDateEnd() +
+                " status: " + e.getStatus()));
     }
 }
+
+

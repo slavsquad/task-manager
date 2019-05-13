@@ -29,24 +29,31 @@ public class Project extends AbstractEntity implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateBegin = null;
+
     @Nullable
     @JsonFormat(pattern = "yyyy-MM-dd")
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateEnd = null;
+
     @NotNull
     private String userId = "";
-    @NotNull
+
     @Getter
+    @NotNull
     private Status status = Status.PLANNED;
 
-    public Project(@NotNull final String name, @NotNull final String description, @NotNull final String userId) {
+    public Project(
+            @NotNull final String name,
+            @NotNull final String description,
+            @NotNull final String userId) {
         this.name = name;
         this.description = description;
         this.dateBegin = new Date();
         this.userId = userId;
     }
 
-    public void setStatus(@NotNull final String status) {
+    public void setStatus(
+            @NotNull final String status) {
         this.status = EnumUtil.stringToStatus(status);
     }
 

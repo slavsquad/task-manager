@@ -21,23 +21,20 @@ public class ProjectPrintCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.print("Please input project ID for print: ");
+        System.out.println("Please input project ID for print: ");
         @NotNull final String id = terminalService.nextLine();
         @Nullable final Project findProject = projectEndpoint.findOneProject(currentSession, id);
-        if (findProject != null) {
-            System.out.println("id: " + findProject.getId() +
-                    "\nname: " + findProject.getName() +
-                    "\ndescription: " + findProject.getDescription() +
-                    "\ndata start: " + findProject.getDateBegin() +
-                    "\ndata end: " + findProject.getDateEnd() +
-                    "\nstatus: " + findProject.getStatus());
-        } else {
-            System.out.println("Project with id: " + id + " does not found!");
-        }
+        System.out.println("id: " + findProject.getId() +
+                "\nname: " + findProject.getName() +
+                "\ndescription: " + findProject.getDescription() +
+                "\ndata start: " + findProject.getDateBegin() +
+                "\ndata end: " + findProject.getDateEnd() +
+                "\nstatus: " + findProject.getStatus());
+
     }
 }

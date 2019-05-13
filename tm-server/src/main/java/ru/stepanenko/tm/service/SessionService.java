@@ -13,9 +13,9 @@ import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.InputDataValidateException;
 import ru.stepanenko.tm.util.SignatureUtil;
-import ru.stepanenko.tm.util.StringValidator;
-import java.io.IOException;
+import ru.stepanenko.tm.util.InputDataValidator;
 import java.util.Collection;
 import java.util.Date;
 
@@ -28,7 +28,8 @@ public class SessionService implements ISessionService {
     final IPropertyService propertyService;
 
     @Override
-    public void clear() {
+    public void clear()
+            throws InputDataValidateException {
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
@@ -36,24 +37,32 @@ public class SessionService implements ISessionService {
             session.commit();
         } catch (Exception e) {
             if (session != null) session.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
     }
 
     @Override
-    public Session findOne(@NotNull String id) {
-        if (!StringValidator.validate(id)) return null;
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ISessionRepository.class).findOne(id);
+    public Session findOne(
+            @NotNull final String id)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id);
+        try (SqlSession sqlSession = sessionFactory.openSession()) {
+            @Nullable final Session session = sqlSession.getMapper(ISessionRepository.class).findOne(id);
+            if (session == null) throw new InputDataValidateException("Session does not found!");
+            return session;
+        } catch (Exception e) {
+            throw new InputDataValidateException(e.getMessage());
         }
     }
 
     @Override
-    public Session remove(@NotNull String id) {
-        if (!StringValidator.validate(id)) return null;
+    public Session remove(
+            @NotNull final String id)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id);
         @Nullable Session session = findOne(id);
-        if (session == null) return null;
         @Nullable SqlSession sqlSession = null;
         try {
             sqlSession = sessionFactory.openSession();
@@ -62,22 +71,27 @@ public class SessionService implements ISessionService {
             return session;
         } catch (Exception e) {
             if (sqlSession != null) sqlSession.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (sqlSession != null) sqlSession.close();
         }
-        return null;
     }
 
     @Override
-    public Collection<Session> findAll() {
+    public Collection<Session> findAll()
+            throws InputDataValidateException {
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ISessionRepository.class).findAll();
+        } catch (Exception e) {
+            throw new InputDataValidateException(e.getMessage());
         }
     }
 
     @Override
-    public Session create(@NotNull String userId) throws IOException {
-        if (!StringValidator.validate(userId)) return null;
+    public Session create(
+            @NotNull final String userId)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(userId);
         @NotNull final String cycle = propertyService.getCycle();
         @NotNull final String salt = propertyService.getSalt();
         @NotNull final Session session = new Session();
@@ -99,7 +113,9 @@ public class SessionService implements ISessionService {
     }
 
     @Override
-    public void validate(@Nullable Session session) throws AuthenticationSecurityException {
+    public void validate(
+            @Nullable final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         if (session == null)
             throw new AuthenticationSecurityException("Session is invalid: \nSession must not be null! Please re-login!");
         if (session.getSignature() == null)
@@ -115,11 +131,15 @@ public class SessionService implements ISessionService {
     }
 
     @Override
-    public void validateAdmin(@Nullable Session session) throws AuthenticationSecurityException {
+    public void validateAdmin(
+            @Nullable final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         validate(session);
         @Nullable User user = null;
         try (SqlSession sqlSession = sessionFactory.openSession()) {
             user = sqlSession.getMapper(IUserRepository.class).findOne(session.getUserId());
+        } catch (Exception e) {
+            throw new InputDataValidateException(e.getMessage());
         }
         if (user == null) throw new AuthenticationSecurityException("User does not found!");
         if (!user.getRole().equals(Role.ADMINISTRATOR.toString()))

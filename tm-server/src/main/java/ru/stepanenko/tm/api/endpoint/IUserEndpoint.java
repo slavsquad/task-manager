@@ -4,6 +4,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.InputDataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -14,61 +15,93 @@ import java.util.Collection;
 public interface IUserEndpoint {
 
     @WebMethod
-    User createUser(@WebParam(name = "session") @NotNull final Session session,
-                    @WebParam(name = "login") @NotNull final String login,
-                    @WebParam(name = "password") @NotNull final String password,
-                    @WebParam(name = "role") @NotNull final String role) throws AuthenticationSecurityException;
+    User createUser(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "login") @NotNull final String login,
+            @WebParam(name = "password") @NotNull final String password,
+            @WebParam(name = "role") @NotNull final String role)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    User changeUserPassword(@WebParam(name = "session") @NotNull final Session session,
-                            @WebParam(name = "id") @NotNull final String id,
-                            @WebParam(name = "login") @NotNull final String login,
-                            @WebParam(name = "password") @NotNull final String password,
-                            @WebParam(name = "role") @NotNull final String role) throws AuthenticationSecurityException;
+    User changeUserPassword(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "id") @NotNull final String id,
+            @WebParam(name = "login") @NotNull final String login,
+            @WebParam(name = "password") @NotNull final String password,
+            @WebParam(name = "role") @NotNull final String role)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    User editUserProfile(@WebParam(name = "session") @NotNull final Session session,
-                         @WebParam(name = "login") @NotNull final String login,
-                         @WebParam(name = "password") @NotNull final String password) throws AuthenticationSecurityException;
+    User editUserProfile(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "login") @NotNull final String login,
+            @WebParam(name = "password") @NotNull final String password)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    User findUserByLogin(@WebParam(name = "session") @NotNull final Session session,
-                         @WebParam(name = "login") @NotNull final String login) throws AuthenticationSecurityException;
+    User findUserByLogin(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "login") @NotNull final String login)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    User getUserBySession(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    User getUserBySession(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    Collection<User> findAllUser(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    Collection<User> findAllUser(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void loadUserData(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void loadUserData(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void saveUserData(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void saveUserData(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void loadUserDataJaxbXml(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void loadUserDataJaxbXml(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void saveUserDataJaxbXml(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void saveUserDataJaxbXml(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void loadUserDataFasterXml(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void loadUserDataFasterXml(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void saveUserDataFasterXml(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void saveUserDataFasterXml(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void loadUserDataJaxbJSON(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void loadUserDataJaxbJSON(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void saveUserDataJaxbJSON(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void saveUserDataJaxbJSON(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void loadUserDataFasterJSON(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void loadUserDataFasterJSON(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod
-    void saveUserDataFasterJSON(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException;
+    void saveUserDataFasterJSON(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException;
 
 }

@@ -23,13 +23,13 @@ public final class TaskClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.print("Please input project id or press ENTER for remove all tasks:");
+        System.out.println("Please input project id or press ENTER for remove all tasks: ");
         @NotNull final String id = terminalService.nextLine();
         if ("".equals(id)) {
             taskEndpoint.removeAllTaskByUserId(currentSession);
@@ -37,16 +37,12 @@ public final class TaskClearCommand extends AbstractCommand {
             return;
         }
         @Nullable final Project project = projectEndpoint.findOneProject(currentSession, id);
-        if (project != null) {
-            @Nullable final Collection<Task> findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
-            if (findTasks == null || findTasks.isEmpty()) {
-                System.out.println("List task for project id:" + id + " is empty!");
-                return;
-            }
-            taskEndpoint.removeAllTaskByProjectId(currentSession, id);
-            System.out.println("All tasks for project id:" + id + " remove.");
-        } else {
-            System.out.println("Project id: " + id + " does not found!");
+        @Nullable final Collection<Task> findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
+        if (findTasks == null || findTasks.isEmpty()) {
+            System.out.println("List task for project id:" + id + " is empty!");
+            return;
         }
+        taskEndpoint.removeAllTaskByProjectId(currentSession, id);
+        System.out.println("All tasks for project id:" + id + " remove.");
     }
 }

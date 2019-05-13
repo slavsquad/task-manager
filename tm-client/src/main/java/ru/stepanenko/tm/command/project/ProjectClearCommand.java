@@ -4,6 +4,7 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
+import ru.stepanenko.tm.endpoint.InputDataValidateException_Exception;
 import ru.stepanenko.tm.endpoint.ProjectEndpoint;
 import ru.stepanenko.tm.endpoint.Session;
 
@@ -21,7 +22,7 @@ public final class ProjectClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
 

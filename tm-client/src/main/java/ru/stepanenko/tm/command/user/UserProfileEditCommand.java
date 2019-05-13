@@ -21,7 +21,7 @@ public final class UserProfileEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
@@ -36,11 +36,8 @@ public final class UserProfileEditCommand extends AbstractCommand {
             System.out.println("Please input password:");
             @NotNull
             String password = terminalService.nextLine();
-            if (userEndpoint.editUserProfile(currentSession, login, password) != null) {
-                System.out.println("User profile had been changed!");
-            } else {
-                System.out.println("Incorrect input login or password!");
-            }
+            userEndpoint.editUserProfile(currentSession, login, password);
+            System.out.println("User profile had been changed!");
         } else {
             System.out.println("Login already exist!");
         }

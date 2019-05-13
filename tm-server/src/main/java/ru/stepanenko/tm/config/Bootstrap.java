@@ -14,6 +14,7 @@ import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.*;
+import ru.stepanenko.tm.exception.InputDataValidateException;
 import ru.stepanenko.tm.service.*;
 import ru.stepanenko.tm.entity.Project;
 import javax.sql.DataSource;
@@ -32,7 +33,7 @@ public class Bootstrap {
         @NotNull final IUserService userService = new UserService(sqlSessionFactory);
         @NotNull final ISessionService sessionService = new SessionService(sqlSessionFactory, propertyService);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
-        if (userService.findAll() == null || userService.findAll().isEmpty()) generateTestUsers(serviceLocator);
+        generateTestUsers(serviceLocator);
         //generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
     }
@@ -67,10 +68,17 @@ public class Bootstrap {
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
 
+        try {
+            if (userService.findAll() == null || userService.findAll().isEmpty()){
+                userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", "admin");
+                userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", "user");
+                userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", "user");
+            }
+        } catch (InputDataValidateException e) {
+            e.printStackTrace();
+        }
+
         //----------------------------------------- test users-------------------------------------------
-        userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", "admin");
-        userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", "user");
-        userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", "user");
     }
 
     public SqlSessionFactory getSqlSessionFactory() {
@@ -98,25 +106,27 @@ public class Bootstrap {
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
         //----------------------------------------- test data-------------------------------------------
+        try {
+            projectService.create("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId());
+            projectService.create("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId());
+            projectService.create("My_project_3", "Description for my project 3", userService.findByLogin("user").getId());
+            projectService.create("My_project_4", "Description for my project 4", userService.findByLogin("user").getId());
 
-        projectService.create("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId());
-        projectService.create("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId());
-        projectService.create("My_project_3", "Description for my project 3", userService.findByLogin("user").getId());
-        projectService.create("My_project_4", "Description for my project 4", userService.findByLogin("user").getId());
+            for (Project project : projectService.findAllByUserId(userService.findByLogin("admin").getId())) {
+                taskService.create("task_100", "Description for task 100", project.getId(), userService.findByLogin("admin").getId());
+                taskService.create("task_200", "Description for task 200", project.getId(), userService.findByLogin("admin").getId());
+                taskService.create("task_300", "Description for task 300", project.getId(), userService.findByLogin("admin").getId());
+                taskService.create("task_400", "Description for task 400", project.getId(), userService.findByLogin("admin").getId());
+            }
 
-        for (Project project : projectService.findAllByUserId(userService.findByLogin("admin").getId())) {
-            taskService.create("task_100", "Description for task 100", project.getId(), userService.findByLogin("admin").getId());
-            taskService.create("task_200", "Description for task 200", project.getId(), userService.findByLogin("admin").getId());
-            taskService.create("task_300", "Description for task 300", project.getId(), userService.findByLogin("admin").getId());
-            taskService.create("task_400", "Description for task 400", project.getId(), userService.findByLogin("admin").getId());
+            for (Project project : projectService.findAllByUserId(userService.findByLogin("user").getId())) {
+                taskService.create("task_1", "Description for task 1", project.getId(), userService.findByLogin("user").getId());
+                taskService.create("task_2", "Description for task 2", project.getId(), userService.findByLogin("user").getId());
+                taskService.create("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId());
+                taskService.create("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId());
+            }
+        } catch (InputDataValidateException e) {
+            e.printStackTrace();
         }
-
-        for (Project project : projectService.findAllByUserId(userService.findByLogin("user").getId())) {
-            taskService.create("task_1", "Description for task 1", project.getId(), userService.findByLogin("user").getId());
-            taskService.create("task_2", "Description for task 2", project.getId(), userService.findByLogin("user").getId());
-            taskService.create("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId());
-            taskService.create("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId());
-        }
-        //----------------------------------------------------------------------------------------------
     }
 }

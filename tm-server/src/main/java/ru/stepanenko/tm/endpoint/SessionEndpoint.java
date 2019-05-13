@@ -10,6 +10,7 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.InputDataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -26,15 +27,18 @@ public class SessionEndpoint implements ISessionEndpoint {
     @NotNull
     private IUserService userService;
 
-    public SessionEndpoint(@NotNull final IServiceLocator serviceLocator) {
+    public SessionEndpoint(
+            @NotNull final IServiceLocator serviceLocator) {
         this.sessionService = serviceLocator.getSessionService();
         this.userService = serviceLocator.getUserService();
     }
 
     @Override
     @WebMethod
-    public Session openSession(@WebParam(name = "login") @NotNull final String login,
-                               @WebParam(name = "password") @NotNull final String password) throws AuthenticationSecurityException, IOException {
+    public Session openSession(
+            @WebParam(name = "login") @NotNull final String login,
+            @WebParam(name = "password") @NotNull final String password)
+            throws AuthenticationSecurityException, InputDataValidateException {
         @NotNull
         User loggedUser = userService.authenticationUser(login, password);
         return sessionService.create(loggedUser.getId());
@@ -42,19 +46,25 @@ public class SessionEndpoint implements ISessionEndpoint {
 
     @Override
     @WebMethod
-    public void validateSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException {
+    public void validateSession(
+            @WebParam(name = "session") @Nullable final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
     }
 
     @Override
     @WebMethod
-    public void validateAdminSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException {
+    public void validateAdminSession(
+            @WebParam(name = "session") @Nullable final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validateAdmin(session);
     }
 
     @Override
     @WebMethod
-    public Session closeSession(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
+    public Session closeSession(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return sessionService.remove(session.getId());
     }

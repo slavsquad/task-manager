@@ -5,10 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
-import ru.stepanenko.tm.endpoint.Project;
-import ru.stepanenko.tm.endpoint.ProjectEndpoint;
-import ru.stepanenko.tm.endpoint.Session;
+import ru.stepanenko.tm.endpoint.*;
 
 @NoArgsConstructor
 public final class ProjectRemoveCommand extends AbstractCommand {
@@ -24,19 +21,15 @@ public final class ProjectRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.print("Please input project ID for remove: ");
+        System.out.println("Please input project ID for remove: ");
         @NotNull
         String id = terminalService.nextLine();
         @Nullable final Project project = projectEndpoint.removeProject(currentSession, id);
-        if (project != null) {
-            System.out.println("Project " + project.getName() + " is remove!");
-        } else {
-            System.out.println("Project id: " + id + " does not found!");
-        }
+        System.out.println("Project " + project.getName() + " is remove!");
     }
 }

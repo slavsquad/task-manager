@@ -12,10 +12,13 @@ import java.util.Date;
 @NoArgsConstructor
 
 public class Session extends AbstractEntity {
+
     @Nullable
     private String userId;
+
     @Nullable
     private String signature;
+
     @Nullable
     private Date timestamp;
 

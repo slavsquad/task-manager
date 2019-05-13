@@ -9,6 +9,7 @@ import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.InputDataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -25,74 +26,91 @@ public class TaskEndpoint implements ITaskEndpoint {
     @NotNull
     private ITaskService taskService;
 
-    public TaskEndpoint(@NotNull final IServiceLocator serviceLocator) {
+    public TaskEndpoint(
+            @NotNull final IServiceLocator serviceLocator) {
         this.sessionService = serviceLocator.getSessionService();
         this.taskService = serviceLocator.getTaskService();
     }
 
     @Override
     @WebMethod
-    public Task createTask(@WebParam(name = "session") @NotNull final Session session,
-                           @WebParam(name = "name") @NotNull final String name,
-                           @WebParam(name = "description") @NotNull final String description,
-                           @WebParam(name = "projectId") @NotNull final String projectId) throws AuthenticationSecurityException {
+    public Task createTask(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "name") @NotNull final String name,
+            @WebParam(name = "description") @NotNull final String description,
+            @WebParam(name = "projectId") @NotNull final String projectId)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.create(name, description, projectId, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public Task editTask(@WebParam(name = "session") @NotNull final Session session,
-                         @WebParam(name = "id") @NotNull final String id,
-                         @WebParam(name = "name") @NotNull final String name,
-                         @WebParam(name = "description") @NotNull final String description,
-                         @WebParam(name = "status") @NotNull final String status) throws AuthenticationSecurityException {
+    public Task editTask(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "id") @NotNull final String id,
+            @WebParam(name = "name") @NotNull final String name,
+            @WebParam(name = "description") @NotNull final String description,
+            @WebParam(name = "status") @NotNull final String status)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.edit(id, name, description, status);
     }
 
     @Override
     @WebMethod
-    public Task findOneTask(@WebParam(name = "session") @NotNull final Session session,
-                            @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+    public Task findOneTask(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "id") @NotNull final String id)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.findOne(id, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public Task removeTask(@WebParam(name = "session") @NotNull final Session session,
-                           @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+    public Task removeTask(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "id") @NotNull final String id)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.remove(id, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
-                                                   @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+    public Collection<Task> findAllTaskByProjectId(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "id") @NotNull final String id)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.findAllByProjectId(id, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
+    public Collection<Task> findAllTaskByUserId(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.findAllByUserId(session.getUserId());
     }
 
     @Override
     @WebMethod
-    public void removeAllTaskByProjectId(@WebParam(name = "session") @NotNull final Session session,
-                                         @WebParam(name = "id") @NotNull final String id) throws AuthenticationSecurityException {
+    public void removeAllTaskByProjectId(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "id") @NotNull final String id)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         taskService.removeAllByProjectId(id, session.getUserId());
     }
 
     @Override
     @WebMethod
-    public void removeAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session) throws AuthenticationSecurityException {
+    public void removeAllTaskByUserId(
+            @WebParam(name = "session") @NotNull final Session session)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         taskService.removeAllByUserId(session.getUserId());
 
@@ -100,17 +118,21 @@ public class TaskEndpoint implements ITaskEndpoint {
 
     @Override
     @WebMethod
-    public Collection<Task> sortAllTaskByUserId(@WebParam(name = "session") @NotNull final Session session,
-                                                @WebParam(name = "comparator") @NotNull final String comparator) throws AuthenticationSecurityException {
+    public Collection<Task> sortAllTaskByUserId(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "comparator") @NotNull final String comparator)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.sortAllByUserId(session.getUserId(), comparator);
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByPartOfNameOrDescription(@WebParam(name = "session") @NotNull final Session session,
-                                                                 @WebParam(name = "name") @NotNull final String name,
-                                                                 @WebParam(name = "description") @NotNull final String description) throws AuthenticationSecurityException {
+    public Collection<Task> findAllTaskByPartOfNameOrDescription(
+            @WebParam(name = "session") @NotNull final Session session,
+            @WebParam(name = "name") @NotNull final String name,
+            @WebParam(name = "description") @NotNull final String description)
+            throws AuthenticationSecurityException, InputDataValidateException {
         sessionService.validate(session);
         return taskService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
     }

@@ -19,7 +19,7 @@ public final class UserLogoutCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         @NotNull final SessionEndpoint sessionEndpoint = endpointServiceLocator.getSessionEndpoint();

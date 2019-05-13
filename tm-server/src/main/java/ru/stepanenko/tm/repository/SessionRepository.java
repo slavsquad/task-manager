@@ -24,7 +24,8 @@ public final class SessionRepository implements ISessionRepository {
 
     @Nullable
     @SneakyThrows
-    private Session fetch(@Nullable final ResultSet row) {
+    private Session fetch(
+            @Nullable final ResultSet row) {
         if (row == null) return null;
         @NotNull final Session session = new Session();
         session.setId(row.getString(FieldConst.ID));
@@ -36,7 +37,8 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     @SneakyThrows
-    public Session findOne(@NotNull final String id) {
+    public Session findOne(
+            @NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_session WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -73,7 +75,8 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     @SneakyThrows
-    public Integer remove(@NotNull final String id) {
+    public Integer remove(
+            @NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_session WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -84,7 +87,8 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     @SneakyThrows
-    public Integer persist(@NotNull final Session session) {
+    public Integer persist(
+            @NotNull final Session session) {
         @NotNull final String query = "INSERT INTO app_session(id, signature, timestamp, user_id) VALUES (?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, session.getId());
@@ -98,7 +102,8 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     @SneakyThrows
-    public Integer merge(@NotNull final Session session) {
+    public Integer merge(
+            @NotNull final Session session) {
         @NotNull final String query = "UPDATE app_session SET signature = ?, timestamp = ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, session.getSignature());
@@ -117,8 +122,8 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     @SneakyThrows
-    public Collection<Session> findAllByUserId(@NotNull String id) {
-
+    public Collection<Session> findAllByUserId(
+            @NotNull String id) {
         @NotNull final String query = "SELECT * FROM app_session WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);

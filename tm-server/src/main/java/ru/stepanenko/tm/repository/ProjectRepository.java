@@ -23,7 +23,8 @@ public final class ProjectRepository implements IProjectRepository {
 
     @Nullable
     @SneakyThrows
-    private Project fetch(@Nullable final ResultSet row) {
+    private Project fetch(
+            @Nullable final ResultSet row) {
         if (row == null) return null;
         @NotNull final Project project = new Project();
         project.setId(row.getString(FieldConst.ID));
@@ -39,7 +40,8 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project findOne(@NotNull final String id) {
+    public Project findOne(
+            @NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_project WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -79,7 +81,8 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer remove(@NotNull final String id) {
+    public Integer remove(
+            @NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_project where id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -91,7 +94,8 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer persist(@NotNull final Project project) {
+    public Integer persist(
+            @NotNull final Project project) {
         @NotNull final String query = "INSERT INTO app_project(id, name, description, dateBegin, dateEnd, status, user_id) VALUES (?, ?, ?, ?, ?, ?, ? )";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, project.getId());
@@ -109,7 +113,8 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer merge(@NotNull final Project project) {
+    public Integer merge(
+            @NotNull final Project project) {
         @NotNull final String query = "UPDATE app_project SET name = ?, description = ?, dateBegin = ?, dateEnd = ?, status = ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, project.getName());
@@ -131,7 +136,8 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> findAllByUserId(@NotNull final String id) {
+    public Collection<Project> findAllByUserId(
+            @NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -146,7 +152,9 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Project findOneByUserId(@NotNull String id, @NotNull String userId) {
+    public Project findOneByUserId(
+            @NotNull final String id,
+            @NotNull final String userId) {
         @NotNull final String query = "SELECT * FROM app_project WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -162,7 +170,9 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer removeOneByUserId(@NotNull String id, @NotNull String userId) {
+    public Integer removeOneByUserId(
+            @NotNull final String id,
+            @NotNull final String userId) {
         @NotNull final String query = "DELETE FROM app_project WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -175,7 +185,8 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Integer removeAllByUserID(@NotNull final String id) {
+    public Integer removeAllByUserID(
+            @NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_project WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -187,7 +198,9 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> sortAllByUserId(@NotNull final String id, @NotNull final String parameter) {
+    public Collection<Project> sortAllByUserId(
+            @NotNull final String id,
+            @NotNull final String parameter) {
         @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ? ORDER BY ? DESC";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -203,7 +216,10 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     @Nullable
     @SneakyThrows
-    public Collection<Project> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
+    public Collection<Project> findAllByPartOfNameOrDescription(
+            @NotNull final String name,
+            @NotNull final String description,
+            @NotNull final String userId) {
         @NotNull final String query = "SELECT * FROM app_project WHERE user_id = ? and (name LIKE ? OR description LIKE ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, userId);

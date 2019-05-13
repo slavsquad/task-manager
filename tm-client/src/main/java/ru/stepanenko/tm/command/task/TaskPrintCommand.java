@@ -20,23 +20,19 @@ public class TaskPrintCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.println("Input task id for print");
+        System.out.println("Input task id for print: ");
         @NotNull final String id = terminalService.nextLine();
         @Nullable Task task = taskEndpoint.findOneTask(currentSession, id);
-        if (task != null) {
-            System.out.println("id: " + task.getId() +
-                    "\nname: " + task.getName() +
-                    "\ndescription: " + task.getDescription() +
-                    "\ndata start: " + task.getDateBegin() +
-                    "\ndata end: " + task.getDateEnd() +
-                    "\nstatus: " + task.getStatus());
-        } else {
-            System.out.println("Task id: " + id + " is not found!");
-        }
+        System.out.println("id: " + task.getId() +
+                "\nname: " + task.getName() +
+                "\ndescription: " + task.getDescription() +
+                "\ndata start: " + task.getDateBegin() +
+                "\ndata end: " + task.getDateEnd() +
+                "\nstatus: " + task.getStatus());
     }
 }

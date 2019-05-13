@@ -21,7 +21,7 @@ public final class UserChangePasswordCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception  {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
@@ -29,17 +29,10 @@ public final class UserChangePasswordCommand extends AbstractCommand {
         System.out.println("Please input user name:");
         @NotNull final String login = terminalService.nextLine();
         @Nullable final User user = userEndpoint.findUserByLogin(currentSession, login);
-        if (user != null) {
-            System.out.println("Please input password:");
-            @NotNull
-            String password = terminalService.nextLine();
-            if (userEndpoint.changeUserPassword(currentSession, user.getId(), user.getLogin(), password, user.getRole().toString()) != null) {
-                System.out.println("User " + login + " password changed!");
-            } else {
-                System.out.println("Password does not change!!");
-            }
-        } else {
-            System.out.println("User does not found!");
-        }
+        System.out.println("Please input password:");
+        @NotNull
+        String password = terminalService.nextLine();
+        userEndpoint.changeUserPassword(currentSession, user.getId(), user.getLogin(), password, user.getRole().toString());
+        System.out.println("User " + login + " password changed!");
     }
 }

@@ -9,154 +9,93 @@ import java.util.Collection;
 
 public interface ITaskRepository {
 
-    @NotNull
-    String SELECT_BY_ID = "SELECT * FROM app_task WHERE id = #{id}";
-    @NotNull
-    String SELECT_ALL = "SELECT * FROM app_task";
-    @NotNull
-    String DELETE_ALL = "DELETE FROM app_task";
-    @NotNull
-    String DELETE_BY_ID = "DELETE FROM app_task where id = #{id}";
-    @NotNull
-    String INSERT = "INSERT INTO app_task(id, name, description, dateBegin, dateEnd, status, user_id, project_id) VALUES (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId}, #{projectId})";
-    @NotNull
-    String UPDATE = "UPDATE app_task SET name = #{name}, description = #{description}, dateBegin = #{dateBegin}, dateEnd = #{dateEnd}, status = #{status} where id = ?";
-    @NotNull
-    String SELECT_ALL_BY_USER_ID = "SELECT * FROM app_task WHERE user_id = #{userId}";
-    @NotNull
-    String SELECT_ALL_BY_PROJECT_AND_USER_ID = "SELECT * FROM app_task WHERE project_id = #{id} AND user_id = #{userId}";
-    @NotNull
-    String SELECT_BY_ID_AND_USER_ID = "SELECT * FROM app_task WHERE id = #{id} AND user_id = #{userId}";
-    @NotNull
-    String DELETE_BY_ID_AND_USER_ID = "DELETE FROM app_task where id = #{id} AND user_id = #{userId}";
-    @NotNull
-    String DELETE_ALL_BY_USER_ID = "DELETE FROM app_task where user_id = #{id}";
-    @NotNull
-    String DELETE_ALL_BY_PROJECT_AND_USER_ID = "DELETE FROM app_task where project_id = #{id} AND user_id = #{userId}";
-    @NotNull
-    String SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC = "SELECT * FROM app_task WHERE user_id = #{id} ORDER BY #{parameter} DESC";
-    @NotNull
-    String SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION = "SELECT * FROM app_task WHERE user_id = #{userId} and (name LIKE CONCAT(CONCAT('%',#{name}),'%') OR description LIKE CONCAT(CONCAT('%',#{description}),'%'))";
-
-    @Select(SELECT_BY_ID)
+    @Select("SELECT * FROM app_task WHERE id = #{id}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
     Task findOne(@NotNull final String id);
 
-    @Select(SELECT_ALL)
+    @Select("SELECT * FROM app_task")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
     Collection<Task> findAll();
 
-    @Delete(DELETE_ALL)
+    @Delete("DELETE FROM app_task")
     Integer removeAll();
 
-    @Delete(DELETE_BY_ID)
-    Integer remove(@NotNull final String id);
+    @Delete("DELETE FROM app_task where id = #{id}")
+    Integer remove(
+            @NotNull final String id);
 
-    @Insert(INSERT)
-    Integer persist(@NotNull final Task entity);
+    @Insert("INSERT INTO app_task(id, name, description, dateBegin, dateEnd, status, user_id, project_id) VALUES (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId}, #{projectId})")
+    Integer persist(
+            @NotNull final Task entity);
 
-    @Update(UPDATE)
-    Integer merge(@NotNull final Task task);
+    @Update("UPDATE app_task SET name = #{name}, description = #{description}, dateBegin = #{dateBegin}, dateEnd = #{dateEnd}, status = #{status} where id = #{id}")
+    Integer merge(
+            @NotNull final Task task);
 
     Connection getConnection();
 
-    @Select(SELECT_ALL_BY_USER_ID)
+    @Select("SELECT * FROM app_task WHERE user_id = #{userId}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> findAllByUserId(@NotNull final String id);
+    Collection<Task> findAllByUserId(
+            @NotNull final String id);
 
-    @Select(SELECT_ALL_BY_PROJECT_AND_USER_ID)
+    @Select("SELECT * FROM app_task WHERE project_id = #{id} AND user_id = #{userId}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> findAllByProjectAndUserId(@Param("id") @NotNull final String id,
-                                               @Param("userId") @NotNull final String userId);
+    Collection<Task> findAllByProjectAndUserId(
+            @Param("id") @NotNull final String id,
+            @Param("userId") @NotNull final String userId);
 
-    @Select(SELECT_BY_ID_AND_USER_ID)
+    @Select("SELECT * FROM app_task WHERE id = #{id} AND user_id = #{userId}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Task findOneByUserId(@Param("id") @NotNull final String id,
-                         @Param("userId") @NotNull final String userId);
+    Task findOneByUserId(
+            @Param("id") @NotNull final String id,
+            @Param("userId") @NotNull final String userId);
 
+    @Delete("DELETE FROM app_task where id = #{id} AND user_id = #{userId}")
+    Integer removeOneByUserId(
+            @Param("id") @NotNull final String id,
+            @Param("userId") @NotNull final String userId);
 
-    @Delete(DELETE_BY_ID_AND_USER_ID)
-    Integer removeOneByUserId(@Param("id") @NotNull final String id,
-                              @Param("userId") @NotNull final String userId);
+    @Delete("DELETE FROM app_task where user_id = #{id}")
+    Integer removeAllByUserId(
+            @NotNull final String id);
 
-    @Delete(DELETE_ALL_BY_USER_ID)
-    Integer removeAllByUserId(@NotNull final String id);
+    @Delete("DELETE FROM app_task where project_id = #{id} AND user_id = #{userId}")
+    Integer removeAllByProjectAndUserId(
+            @Param("id") @NotNull final String id,
+            @Param("userId") @NotNull final String userId);
 
-    @Delete(DELETE_ALL_BY_PROJECT_AND_USER_ID)
-    Integer removeAllByProjectAndUserId(@Param("id") @NotNull final String id,
-                                        @Param("userId") @NotNull final String userId);
-
-    @Select(SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC)
+    @Select("SELECT * FROM app_task WHERE user_id = #{id} ORDER BY #{parameter} DESC")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> sortAllByUserId(@Param("id") @NotNull final String id,
-                                     @Param("parameter") @NotNull final String parameter);
+    Collection<Task> sortAllByUserId(
+            @Param("id") @NotNull final String id,
+            @Param("parameter") @NotNull final String parameter);
 
-    @Select(SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION)
+    @Select("SELECT * FROM app_task WHERE user_id = #{userId} and (name LIKE CONCAT(CONCAT('%',#{name}),'%') OR description LIKE CONCAT(CONCAT('%',#{description}),'%'))")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "name", column = "name"),
-            @Result(property = "description", column = "description"),
-            @Result(property = "dateBegin", column = "dateBegin"),
-            @Result(property = "dateEnd", column = "dateEnd"),
-            @Result(property = "status", column = "status"),
             @Result(property = "userId", column = "user_id"),
             @Result(property = "projectId", column = "project_id")
     })
-    Collection<Task> findAllByPartOfNameOrDescription(@Param("name") @NotNull final String name,
-                                                      @Param("description") @NotNull final String description,
-                                                      @Param("userId") @NotNull final String userId);
+    Collection<Task> findAllByPartOfNameOrDescription(
+            @Param("name") @NotNull final String name,
+            @Param("description") @NotNull final String description,
+            @Param("userId") @NotNull final String userId);
 }

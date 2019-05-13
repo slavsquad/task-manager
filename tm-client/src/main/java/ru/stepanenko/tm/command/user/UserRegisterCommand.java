@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
+import ru.stepanenko.tm.endpoint.InputDataValidateException_Exception;
 import ru.stepanenko.tm.endpoint.Session;
 import ru.stepanenko.tm.endpoint.UserEndpoint;
 
@@ -22,7 +23,7 @@ public final class UserRegisterCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final Session currentSession = endpointServiceLocator.getSession();
@@ -37,11 +38,8 @@ public final class UserRegisterCommand extends AbstractCommand {
             System.out.println("Please input user role(admin or user):");
             @NotNull
             String role = terminalService.nextLine();
-            if (userEndpoint.createUser(currentSession, login, password, role) != null) {
-                System.out.println("User " + login + " created!");
-            } else {
-                System.out.println("User " + login + " is not created!");
-            }
+            userEndpoint.createUser(currentSession, login, password, role);
+            System.out.println("User " + login + " created!");
         } else {
             System.out.println("User name already exist!");
         }

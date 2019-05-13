@@ -22,10 +22,10 @@ import ru.stepanenko.tm.entity.Project;
 import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.InputDataValidateException;
 import ru.stepanenko.tm.util.Domain;
 import ru.stepanenko.tm.util.HashUtil;
-import ru.stepanenko.tm.util.EnumUtil;
-import ru.stepanenko.tm.util.StringValidator;
+import ru.stepanenko.tm.util.InputDataValidator;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -57,11 +57,15 @@ public final class UserService implements IUserService {
     private final SqlSessionFactory sessionFactory;
 
     @Override
-    public User create(@NotNull final String login, @NotNull final String password, @NotNull final String role) {
-        if (!StringValidator.validate(login, password, role)) return null;
-        if (EnumUtil.stringToRole(role) == null) return null;
+    public User create(
+            @NotNull final String login,
+            @NotNull final String password,
+            @NotNull final String role)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(login, password, role);
+        InputDataValidator.validateRole(role);
         @NotNull final User user = new User(login, HashUtil.md5(password), role);
-        @NotNull SqlSession session = null;
+        @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(IUserRepository.class).persist(user);
@@ -69,18 +73,23 @@ public final class UserService implements IUserService {
             return user;
         } catch (Exception e) {
             if (session != null) session.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
-        return null;
     }
 
-    public User create(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role) {
-        if (!StringValidator.validate(id, login, password, role)) return null;
-        if (EnumUtil.stringToRole(role) == null) return null;
+    public User create(
+            @NotNull final String id,
+            @NotNull final String login,
+            @NotNull final String password,
+            @NotNull final String role)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id, login, password, role);
+        InputDataValidator.validateRole(role);
         @NotNull final User user = new User(login, HashUtil.md5(password), role);
         user.setId(id);
-        @NotNull SqlSession session = null;
+        @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(IUserRepository.class).persist(user);
@@ -88,22 +97,27 @@ public final class UserService implements IUserService {
             return user;
         } catch (Exception e) {
             if (session != null) session.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
-        return null;
     }
 
     @Override
-    public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password, @NotNull final String role) {
-        if (!StringValidator.validate(id, login, password, role)) return null;
-        if (EnumUtil.stringToRole(role) == null) return null;
+    public User edit(
+            @NotNull final String id,
+            @NotNull final String login,
+            @NotNull final String password,
+            @NotNull final String role)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id, login, password, role);
+        InputDataValidator.validateRole(role);
         @NotNull User user = findOne(id);
         if (user == null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
         user.setRole(role);
-        @NotNull SqlSession session = null;
+        @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(IUserRepository.class).merge(user);
@@ -118,14 +132,17 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public User edit(@NotNull final String id, @NotNull final String login, @NotNull final String password) {
-        if (!StringValidator.validate(id, login, password)) return null;
+    public User edit(
+            @NotNull final String id,
+            @NotNull final String login,
+            @NotNull final String password)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id, login, password);
         @Nullable User user = findOne(id);
-        if (user == null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
 
-        @NotNull SqlSession session = null;
+        @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(IUserRepository.class).merge(user);
@@ -133,48 +150,64 @@ public final class UserService implements IUserService {
             return user;
         } catch (Exception e) {
             if (session != null) session.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
-        return null;
     }
 
     @Override
-    public User findByLogin(@NotNull final String login) {
-        if (!StringValidator.validate(login)) return null;
+    public User findByLogin(
+            @NotNull final String login)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(login);
         try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(IUserRepository.class).findByLogin(login);
+            @Nullable final User user = session.getMapper(IUserRepository.class).findByLogin(login);
+            if (user==null) throw new InputDataValidateException("User does not found!");
+            return user;
+        }catch (Exception e){
+            throw new InputDataValidateException(e.getMessage());
         }
     }
 
     @Override
-    public void clear() {
-        @NotNull SqlSession session = null;
+    public void clear()
+            throws InputDataValidateException {
+        @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(IUserRepository.class).removeAll();
             session.commit();
         } catch (Exception e) {
             if (session != null) session.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
     }
 
     @Override
-    public User findOne(@NotNull String id) {
-        if (!StringValidator.validate(id)) return null;
+    public User findOne(
+            @NotNull final String id)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id);
         try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(IUserRepository.class).findOne(id);
+            @Nullable final User user = session.getMapper(IUserRepository.class).findOne(id);
+            if (user==null) throw new InputDataValidateException("User does not found!");
+            return user;
+        }catch (Exception e){
+            throw new InputDataValidateException(e.getMessage());
         }
     }
 
     @Override
-    public User remove(@NotNull String id) {
-        if (!StringValidator.validate(id)) return null;
+    public User remove(
+            @NotNull final String id)
+            throws InputDataValidateException {
+        InputDataValidator.validateString(id);
         @Nullable final User user = findOne(id);
         if (user == null) return null;
-        @NotNull SqlSession session = null;
+        @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(IUserRepository.class).remove(id);
@@ -189,25 +222,30 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public Collection<User> findAll() {
+    public Collection<User> findAll()
+            throws InputDataValidateException {
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IUserRepository.class).findAll();
+        }catch (Exception e){
+            throw new InputDataValidateException(e.getMessage());
         }
     }
 
     @Override
-    public User authenticationUser(@NotNull final String login, @NotNull final String password) throws AuthenticationSecurityException {
-        if (!StringValidator.validate(login, password))
-            throw new AuthenticationSecurityException("User login or password must not be empty!");
-        @Nullable
-        User user = findByLogin(login);
+    public User authenticationUser(
+            @NotNull final String login,
+            @NotNull final String password)
+            throws AuthenticationSecurityException, InputDataValidateException {
+        InputDataValidator.validateString(login, password);
+        @Nullable final User user = findByLogin(login);
         if (user == null || !HashUtil.md5(password).equals(user.getPassword()))
             throw new AuthenticationSecurityException("Wrong login or password!");
         return user;
     }
 
     @Override
-    public void loadData() {
+    public void loadData()
+            throws InputDataValidateException {
         @Nullable Domain domain = null;
         try (ObjectInputStream oin = new ObjectInputStream(new FileInputStream("tm-server/data.out"))) {
             domain = (Domain) oin.readObject();
@@ -219,7 +257,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void saveData() {
+    public void saveData()
+            throws InputDataValidateException {
         @NotNull final Domain domain = saveAllDataToDomain();
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream("tm-server/data.out"))) {
             oos.writeObject(domain);
@@ -231,7 +270,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void loadDataJaxbXml() {
+    public void loadDataJaxbXml()
+            throws InputDataValidateException {
         @Nullable Domain domain = null;
         try {
             JAXBContext jaxbContext = JAXBContext.newInstance(Domain.class);
@@ -245,7 +285,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void saveDataJaxbXml() {
+    public void saveDataJaxbXml()
+            throws InputDataValidateException {
         @NotNull final Domain domain = saveAllDataToDomain();
         try (FileWriter fw = new FileWriter("tm-server/data.xml")) {
             fw.write(domainToXMLString(domain));
@@ -254,7 +295,8 @@ public final class UserService implements IUserService {
         }
     }
 
-    private String domainToXMLString(@NotNull final Domain domain) {
+    private String domainToXMLString(
+            @NotNull final Domain domain) {
         try {
             JAXBContext context = JAXBContext.newInstance(Domain.class);
             Marshaller marshaller = context.createMarshaller();
@@ -269,7 +311,9 @@ public final class UserService implements IUserService {
         return null;
     }
 
-    private String xmlToPretty(@NotNull final String xml, @NotNull final int indent) {
+    private String xmlToPretty(
+            @NotNull final String xml,
+            @NotNull final int indent) {
         try {
             // Turn xml string into a document
             Document document = DocumentBuilderFactory.newInstance()
@@ -307,7 +351,8 @@ public final class UserService implements IUserService {
 
 
     @Override
-    public void loadDataJaxbJSON() {
+    public void loadDataJaxbJSON()
+            throws InputDataValidateException {
         @Nullable Domain domain = null;
         try {
             Map<String, Object> properties = new HashMap<String, Object>(3);
@@ -326,7 +371,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void saveDataJaxbJSON() {
+    public void saveDataJaxbJSON()
+            throws InputDataValidateException {
         @NotNull final Domain domain = saveAllDataToDomain();
         try (FileWriter fw = new FileWriter("tm-server/data.json")) {
             fw.write(domainToJsonString(domain));
@@ -335,7 +381,8 @@ public final class UserService implements IUserService {
         }
     }
 
-    private String domainToJsonString(@NotNull final Domain domain) {
+    private String domainToJsonString(
+            @NotNull final Domain domain) {
         try {
             Map<String, Object> properties = new HashMap<String, Object>(3);
             properties.put(MarshallerProperties.MEDIA_TYPE, "application/json");
@@ -352,7 +399,9 @@ public final class UserService implements IUserService {
         return null;
     }
 
-    private String jsonToPretty(@NotNull final String jsonString, @NotNull final int indent) {
+    private String jsonToPretty(
+            @NotNull final String jsonString,
+            @NotNull final int indent) {
         try {
             ScriptEngineManager manager = new ScriptEngineManager();
             ScriptEngine scriptEngine = manager.getEngineByName("JavaScript");
@@ -366,7 +415,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void loadDataFasterXml() {
+    public void loadDataFasterXml()
+            throws InputDataValidateException {
         @Nullable Domain domain = null;
         XmlMapper xmlMapper = new XmlMapper();
         try {
@@ -379,7 +429,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void saveDataFasterXml() {
+    public void saveDataFasterXml()
+            throws InputDataValidateException {
         @NotNull final Domain domain = saveAllDataToDomain();
         XmlMapper mapper = new XmlMapper();
         try {
@@ -390,7 +441,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void loadDataFasterJSON() {
+    public void loadDataFasterJSON()
+            throws InputDataValidateException {
         @Nullable Domain domain = null;
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
@@ -404,7 +456,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void saveDataFasterJSON() {
+    public void saveDataFasterJSON()
+            throws InputDataValidateException {
         @NotNull final Domain domain = saveAllDataToDomain();
         ObjectMapper mapper = new ObjectMapper();
         mapper.setPropertyNamingStrategy(PropertyNamingStrategy.LOWER_CAMEL_CASE);
@@ -415,13 +468,15 @@ public final class UserService implements IUserService {
         }
     }
 
-    public void loadAllDataFromDomain(@NotNull final Domain domain) {
+    public void loadAllDataFromDomain(
+            @NotNull final Domain domain)
+            throws InputDataValidateException {
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
             session.getMapper(ITaskRepository.class).removeAll();
             session.getMapper(IProjectRepository.class).removeAll();
-            session.commit();
+         //   session.commit();
             for (Project project : domain.getProjects()) {
                 session.getMapper(IProjectRepository.class).persist(project);
             }
@@ -431,17 +486,21 @@ public final class UserService implements IUserService {
             session.commit();
         } catch (Exception e) {
             if (session != null) session.rollback();
+            throw new InputDataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
     }
 
-    public Domain saveAllDataToDomain() {
+    public Domain saveAllDataToDomain()
+            throws InputDataValidateException {
         @NotNull final Domain domain;
         try (SqlSession session = sessionFactory.openSession()) {
             @NotNull final Collection<Project> projects = session.getMapper(IProjectRepository.class).findAll();
             @NotNull final Collection<Task> tasks = session.getMapper(ITaskRepository.class).findAll();
             domain = new Domain(new ArrayList<>(projects), new ArrayList<>(tasks));
+        }catch (Exception e){
+            throw new InputDataValidateException(e.getMessage());
         }
         return domain;
     }

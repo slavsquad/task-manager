@@ -1,43 +1,25 @@
 package ru.stepanenko.tm.api.repository;
 
-import lombok.SneakyThrows;
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.entity.Task;
 import ru.stepanenko.tm.entity.User;
-
 import java.sql.Connection;
 import java.util.Collection;
 
 public interface IUserRepository {
 
-    @NotNull
-    String SELECT_BY_ID = "SELECT id, login, passwordHash, role FROM app_user WHERE id = #{id}";
-    @NotNull
-    String SELECT_ALL = "SELECT id, login, passwordHash, role FROM app_user";
-    @NotNull
-    String DELETE_ALL = "DELETE FROM app_user";
-    @NotNull
-    String DELETE_BY_ID = "DELETE FROM app_user where id = #{id}";
-    @NotNull
-    String INSERT = "INSERT INTO app_user(id, login, passwordHash, role) VALUES(#{id}, #{login}, #{password}, #{role})";
-    @NotNull
-    String UPDATE = "UPDATE app_user SET login = #{login}, passwordHash = #{password}, role = #{role} where id = #{id}";
-    @NotNull
-    String SELECT_BY_LOGIN = "SELECT id, login, passwordHash, role FROM app_user WHERE login = #{login}";
-
-
-    @Select(SELECT_BY_ID)
+    @Select("SELECT id, login, passwordHash, role FROM app_user WHERE id = #{id}")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "login", column = "login"),
             @Result(property = "password", column = "passwordHash"),
             @Result(property = "role", column = "role")
     })
-    User findOne(@NotNull final String id);
+    User findOne(
+            @NotNull final String id);
 
 
-    @Select(SELECT_ALL)
+    @Select("SELECT id, login, passwordHash, role FROM app_user")
     @Results(value = {
             @Result(property = "id", column = "id"),
             @Result(property = "login", column = "login"),
@@ -47,26 +29,27 @@ public interface IUserRepository {
     Collection<User> findAll();
 
 
-    @Delete(DELETE_ALL)
+    @Delete("DELETE FROM app_user")
     Integer removeAll();
 
-    @Delete(DELETE_BY_ID)
-    Integer remove(@NotNull final String id);
+    @Delete("DELETE FROM app_user where id = #{id}")
+    Integer remove(
+            @NotNull final String id);
 
-    @Insert(INSERT)
-    Integer persist(@NotNull final User user);
+    @Insert("INSERT INTO app_user(id, login, passwordHash, role) VALUES(#{id}, #{login}, #{password}, #{role})")
+    Integer persist(
+            @NotNull final User user);
 
-    @Update(UPDATE)
-    Integer merge(@NotNull final User user);
+    @Update("UPDATE app_user SET login = #{login}, passwordHash = #{password}, role = #{role} where id = #{id}")
+    Integer merge(
+            @NotNull final User user);
 
     Connection getConnection();
 
-    @Select(SELECT_BY_LOGIN)
+    @Select("SELECT id, login, passwordHash, role FROM app_user WHERE login = #{login}")
     @Results(value = {
-            @Result(property = "id", column = "id"),
-            @Result(property = "login", column = "login"),
             @Result(property = "password", column = "passwordHash"),
-            @Result(property = "role", column = "role")
     })
-    User findByLogin(@NotNull final String login);
+    User findByLogin(
+            @NotNull final String login);
 }

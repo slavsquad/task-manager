@@ -24,7 +24,8 @@ public final class UserRepository implements IUserRepository {
 
     @Nullable
     @SneakyThrows
-    private User fetch(@Nullable final ResultSet row) {
+    private User fetch(
+            @Nullable final ResultSet row) {
         if (row == null) return null;
         @NotNull final User user = new User();
         user.setId(row.getString(FieldConst.ID));
@@ -36,7 +37,8 @@ public final class UserRepository implements IUserRepository {
 
     @Override
     @SneakyThrows
-    public User findOne(@NotNull final String id) {
+    public User findOne(
+            @NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_user WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -73,7 +75,8 @@ public final class UserRepository implements IUserRepository {
 
     @Override
     @SneakyThrows
-    public Integer remove(@NotNull final String id) {
+    public Integer remove(
+            @NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_user WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -84,7 +87,8 @@ public final class UserRepository implements IUserRepository {
 
     @Override
     @SneakyThrows
-    public Integer persist(@NotNull final User user) {
+    public Integer persist(
+            @NotNull final User user) {
         @NotNull final String query = "INSERT INTO app_user(id, login, passwordHash, role) VALUES(?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, user.getId());
@@ -98,7 +102,8 @@ public final class UserRepository implements IUserRepository {
 
     @Override
     @SneakyThrows
-    public Integer merge(@NotNull final User user) {
+    public Integer merge(
+            @NotNull final User user) {
         @NotNull final String query = "UPDATE app_user SET login = ?, passwordHash = ?, role= ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, user.getLogin());
@@ -117,7 +122,8 @@ public final class UserRepository implements IUserRepository {
 
     @Override
     @SneakyThrows
-    public User findByLogin(@NotNull final String login) {
+    public User findByLogin(
+            @NotNull final String login) {
         @NotNull final String query = "SELECT * FROM app_user WHERE login = ?";
         @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, login);

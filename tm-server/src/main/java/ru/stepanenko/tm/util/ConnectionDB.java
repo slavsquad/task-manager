@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 
 public class ConnectionDB {
+
     @SneakyThrows
     static public Connection create(@NotNull final String url,
                                     @NotNull final String user,

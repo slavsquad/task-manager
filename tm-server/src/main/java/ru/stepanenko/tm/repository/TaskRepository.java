@@ -23,7 +23,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Nullable
     @SneakyThrows
-    private Task fetch(@Nullable final ResultSet row) {
+    private Task fetch(
+            @Nullable final ResultSet row) {
         if (row == null) return null;
         @NotNull final Task task = new Task();
         task.setId(row.getString(FieldConst.ID));
@@ -39,7 +40,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Task findOne(@NotNull final String id) {
+    public Task findOne(
+            @NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_task WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -76,7 +78,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer remove(@NotNull final String id) {
+    public Integer remove(
+            @NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_task WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -88,7 +91,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer persist(@NotNull final Task task) {
+    public Integer persist(
+            @NotNull final Task task) {
         @NotNull final String query = "INSERT INTO app_task(id, name, description, dateBegin, dateEnd, status, user_id, project_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, task.getId());
@@ -106,7 +110,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer merge(@NotNull final Task task) {
+    public Integer merge(
+            @NotNull final Task task) {
         @NotNull final String query = "UPDATE app_task SET name = ?, description = ?, dateBegin = ?, dateEnd = ?, status = ? WHERE id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, task.getName());
@@ -128,7 +133,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Collection<Task> findAllByUserId(@NotNull final String id) {
+    public Collection<Task> findAllByUserId(
+            @NotNull final String id) {
         @NotNull final String query = "SELECT * FROM app_task WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -140,7 +146,9 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Collection<Task> findAllByProjectAndUserId(@NotNull String id, @NotNull String userId) {
+    public Collection<Task> findAllByProjectAndUserId(
+            @NotNull String id,
+            @NotNull String userId) {
         @NotNull final String query = "SELECT * FROM app_task WHERE project_id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -153,7 +161,9 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Task findOneByUserId(@NotNull final String id, @NotNull final String userId) {
+    public Task findOneByUserId(
+            @NotNull final String id,
+            @NotNull final String userId) {
         @NotNull final String query = "SELECT * FROM app_task WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -168,7 +178,9 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer removeOneByUserId(@NotNull String id, @NotNull String userId) {
+    public Integer removeOneByUserId(
+            @NotNull String id,
+            @NotNull String userId) {
         @NotNull final String query = "DELETE FROM app_task WHERE id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -180,7 +192,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer removeAllByUserId(@NotNull final String id) {
+    public Integer removeAllByUserId(
+            @NotNull final String id) {
         @NotNull final String query = "DELETE FROM app_task WHERE user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -191,7 +204,9 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Integer removeAllByProjectAndUserId(@NotNull final String id, @NotNull final String userId) {
+    public Integer removeAllByProjectAndUserId(
+            @NotNull final String id,
+            @NotNull final String userId) {
         @NotNull final String query = "DELETE FROM app_task WHERE project_id = ? AND user_id = ?";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -203,7 +218,9 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Collection<Task> sortAllByUserId(@NotNull final String id, @NotNull final String parameter) {
+    public Collection<Task> sortAllByUserId(
+            @NotNull final String id,
+            @NotNull final String parameter) {
         @NotNull final String query = "SELECT * FROM app_task WHERE user_id = ? ORDER BY ? DESC";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, id);
@@ -218,7 +235,10 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     @SneakyThrows
-    public Collection<Task> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
+    public Collection<Task> findAllByPartOfNameOrDescription(
+            @NotNull final String name,
+            @NotNull final String description,
+            @NotNull final String userId) {
         @NotNull final String query = "SELECT * FROM app_task WHERE user_id = ? AND (name LIKE ? OR description LIKE ?)";
         @NotNull final PreparedStatement statement = getConnection().prepareStatement(query);
         statement.setString(1, userId);

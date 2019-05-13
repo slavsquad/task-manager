@@ -27,21 +27,30 @@ public class Task extends AbstractEntity implements Serializable {
 
     @NotNull
     private String projectId = "";
+
     @Nullable
     @JsonFormat(pattern = "yyyy-MM-dd")
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateBegin = null;
+
     @Nullable
     @JsonFormat(pattern = "yyyy-MM-dd")
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateEnd = null;
+
     @NotNull
     private String userId = "";
-    @NotNull
+
+
     @Getter
+    @NotNull
     private Status status = Status.PLANNED;
 
-    public Task(@NotNull final String name, @NotNull final String description, @NotNull final String projectId, @NotNull final String userId) {
+    public Task(
+            @NotNull final String name,
+            @NotNull final String description,
+            @NotNull final String projectId,
+            @NotNull final String userId) {
         this.name = name;
         this.description = description;
         this.dateBegin = new Date();
@@ -49,7 +58,8 @@ public class Task extends AbstractEntity implements Serializable {
         this.userId = userId;
     }
 
-    public void setStatus(@NotNull final String status) {
+    public void setStatus(
+            @NotNull final String status) {
         this.status = EnumUtil.stringToStatus(status);
     }
 
