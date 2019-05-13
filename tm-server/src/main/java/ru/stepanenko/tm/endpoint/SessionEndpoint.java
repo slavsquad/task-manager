@@ -10,6 +10,7 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.entity.Session;
 import ru.stepanenko.tm.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
@@ -47,7 +48,7 @@ public class SessionEndpoint implements ISessionEndpoint {
 
     @Override
     @WebMethod
-    public void validateAdminSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException{
+    public void validateAdminSession(@WebParam(name = "session") @Nullable final Session session) throws AuthenticationSecurityException {
         sessionService.validateAdmin(session);
     }
 

@@ -15,7 +15,6 @@ import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.util.SignatureUtil;
 import ru.stepanenko.tm.util.StringValidator;
-
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
@@ -45,7 +44,7 @@ public class SessionService implements ISessionService {
     @Override
     public Session findOne(@NotNull String id) {
         if (!StringValidator.validate(id)) return null;
-        try(SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ISessionRepository.class).findOne(id);
         }
     }
@@ -71,7 +70,7 @@ public class SessionService implements ISessionService {
 
     @Override
     public Collection<Session> findAll() {
-        try(SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ISessionRepository.class).findAll();
         }
     }
@@ -119,10 +118,10 @@ public class SessionService implements ISessionService {
     public void validateAdmin(@Nullable Session session) throws AuthenticationSecurityException {
         validate(session);
         @Nullable User user = null;
-        try(SqlSession sqlSession = sessionFactory.openSession()){
-            user =  sqlSession.getMapper(IUserRepository.class).findOne(session.getUserId());
+        try (SqlSession sqlSession = sessionFactory.openSession()) {
+            user = sqlSession.getMapper(IUserRepository.class).findOne(session.getUserId());
         }
-        if (user==null) throw new AuthenticationSecurityException("User does not found!");
+        if (user == null) throw new AuthenticationSecurityException("User does not found!");
         if (!user.getRole().equals(Role.ADMINISTRATOR.toString()))
             throw new AuthenticationSecurityException("Forbidden action for your role!");
     }

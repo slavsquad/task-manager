@@ -1,4 +1,5 @@
 package ru.stepanenko.tm.util;
+
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 
@@ -9,7 +10,7 @@ public class ConnectionDB {
     @SneakyThrows
     static public Connection create(@NotNull final String url,
                                     @NotNull final String user,
-                                    @NotNull final String password){
+                                    @NotNull final String password) {
         return DriverManager.getConnection(url, user, password);
     }
 }

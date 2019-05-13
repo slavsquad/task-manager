@@ -9,30 +9,22 @@ import org.apache.ibatis.transaction.TransactionFactory;
 import org.apache.ibatis.transaction.jdbc.JdbcTransactionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.AppServer;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.*;
-
-import ru.stepanenko.tm.repository.ProjectRepository;
-import ru.stepanenko.tm.repository.SessionRepository;
-import ru.stepanenko.tm.repository.TaskRepository;
-import ru.stepanenko.tm.repository.UserRepository;
 import ru.stepanenko.tm.service.*;
-import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.util.ConnectionDB;
-
 import javax.sql.DataSource;
 import javax.xml.ws.Endpoint;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.sql.Connection;
 
 public class Bootstrap {
-    @NotNull final IPropertyService propertyService = new PropertyService();
+    @NotNull
+    final IPropertyService propertyService = new PropertyService();
+
     public void init(Class[] endpoints) {
         @NotNull final SqlSessionFactory sqlSessionFactory = getSqlSessionFactory();
         @NotNull final IProjectService projectService = new ProjectService(sqlSessionFactory);
@@ -41,7 +33,7 @@ public class Bootstrap {
         @NotNull final ISessionService sessionService = new SessionService(sqlSessionFactory, propertyService);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
         if (userService.findAll() == null || userService.findAll().isEmpty()) generateTestUsers(serviceLocator);
-        generateTestData(serviceLocator);
+        //generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
     }
 

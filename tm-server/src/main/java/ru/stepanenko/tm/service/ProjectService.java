@@ -19,7 +19,8 @@ import java.util.Date;
 @AllArgsConstructor
 public final class ProjectService implements IProjectService {
 
-    @NotNull final SqlSessionFactory sessionFactory;
+    @NotNull
+    final SqlSessionFactory sessionFactory;
 
     @Override
     public Project create(@NotNull final String name, @NotNull final String description, @NotNull final String userId) {
@@ -71,7 +72,7 @@ public final class ProjectService implements IProjectService {
     @Override
     public Project findOne(@NotNull String id, @NotNull String userId) {
         if (!StringValidator.validate(id, userId)) return null;
-        try (SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findOneByUserId(id, userId);
         }
     }
@@ -112,7 +113,7 @@ public final class ProjectService implements IProjectService {
     @Override
     public Project findOne(@NotNull String id) {
         if (!StringValidator.validate(id)) return null;
-        try (SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findOne(id);
         }
     }
@@ -138,7 +139,7 @@ public final class ProjectService implements IProjectService {
 
     @Override
     public Collection<Project> findAll() {
-        try (SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findAll();
         }
     }
@@ -146,7 +147,7 @@ public final class ProjectService implements IProjectService {
     @Override
     public Collection<Project> findAllByUserId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
-        try (SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findAllByUserId(id);
         }
     }
@@ -171,7 +172,7 @@ public final class ProjectService implements IProjectService {
         if (!StringValidator.validate(id, parameter)) return null;
         if (!ParameterValidator.validate(parameter)) return null;
         if ("order".equals(parameter)) return findAllByUserId(id);
-        try (SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).sortAllByUserId(id, parameter);
         }
     }
@@ -179,7 +180,7 @@ public final class ProjectService implements IProjectService {
     @Override
     public Collection<Project> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
         if (!StringValidator.validate(name, description, userId)) return null;
-        try (SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findAllByPartOfNameOrDescription(name, description, userId);
         }
     }

@@ -5,7 +5,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateAdapter extends XmlAdapter<String, Date>{
+public class DateAdapter extends XmlAdapter<String, Date> {
 
     private static final ThreadLocal<DateFormat> dateFormat
             = new ThreadLocal<DateFormat>() {

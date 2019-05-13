@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.entity.User;
-import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.FieldConst;
 
 import java.sql.Connection;
@@ -120,7 +119,7 @@ public final class UserRepository implements IUserRepository {
     @SneakyThrows
     public User findByLogin(@NotNull final String login) {
         @NotNull final String query = "SELECT * FROM app_user WHERE login = ?";
-        @NotNull final PreparedStatement statement =  connection.prepareStatement(query);
+        @NotNull final PreparedStatement statement = connection.prepareStatement(query);
         statement.setString(1, login);
         @NotNull final ResultSet resultSet = statement.executeQuery();
         if (!resultSet.next()) return null;

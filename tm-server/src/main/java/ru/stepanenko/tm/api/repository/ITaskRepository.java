@@ -3,6 +3,7 @@ package ru.stepanenko.tm.api.repository;
 import org.apache.ibatis.annotations.*;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Task;
+
 import java.sql.Connection;
 import java.util.Collection;
 
@@ -35,7 +36,7 @@ public interface ITaskRepository {
     @NotNull
     String SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC = "SELECT * FROM app_task WHERE user_id = #{id} ORDER BY #{parameter} DESC";
     @NotNull
-    String SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION = "SELECT * FROM app_task WHERE user_id = #{userId} and (name LIKE #{name} OR description LIKE #{description})";
+    String SELECT_ALL_BY_USER_ID_LIKE_NAME_OR_DESCRIPTION = "SELECT * FROM app_task WHERE user_id = #{userId} and (name LIKE CONCAT(CONCAT('%',#{name}),'%') OR description LIKE CONCAT(CONCAT('%',#{description}),'%'))";
 
     @Select(SELECT_BY_ID)
     @Results(value = {

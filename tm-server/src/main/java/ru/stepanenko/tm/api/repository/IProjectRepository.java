@@ -2,25 +2,39 @@ package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.entity.Project;
+
 import java.sql.Connection;
 import java.util.Collection;
+
 import org.apache.ibatis.annotations.*;
 import ru.stepanenko.tm.enumerate.Status;
 
 public interface IProjectRepository {
 
-    @NotNull String SELECT_BY_ID = "SELECT * FROM app_project WHERE id = #{id}";
-    @NotNull String SELECT_ALL = "SELECT * FROM app_project";
-    @NotNull String DELETE_ALL = "DELETE FROM app_project";
-    @NotNull String DELETE_BY_ID = "DELETE FROM app_project where id = #{id}";
-    @NotNull String INSERT = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) VALUES (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId})";
-    @NotNull String UPDATE = "UPDATE app_project SET name = #{name}, description = #{description}, dateBegin = #{dateBegin}, dateEnd = #{dateEnd}, status = #{status} where id = #{id}";
-    @NotNull String SELECT_BY_USER_ID = "SELECT * FROM app_project WHERE user_id = #{id}";
-    @NotNull String SELECT_BY_ID_AND_USER_ID = "SELECT * FROM app_project WHERE id = #{id} AND user_id = #{userId}";
-    @NotNull String DELETE_BY_ID_AND_USER_ID = "DELETE FROM app_project WHERE id = #{id} AND user_id = #{userId}";
-    @NotNull String DELETE_ALL_BY_USER_ID = "DELETE FROM app_project WHERE user_id = #{id}";
-    @NotNull String SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC = "SELECT * FROM app_project WHERE user_id = #{id} ORDER BY #{parameter} DESC";
-    @NotNull String SELECT_ALL_BY_USER_ID_LIKE_NAME_AND_DESCRIPTION = "SELECT * FROM app_project WHERE user_id = #{userId} and (name LIKE #{name} OR description LIKE #{description})";
+    @NotNull
+    String SELECT_BY_ID = "SELECT * FROM app_project WHERE id = #{id}";
+    @NotNull
+    String SELECT_ALL = "SELECT * FROM app_project";
+    @NotNull
+    String DELETE_ALL = "DELETE FROM app_project";
+    @NotNull
+    String DELETE_BY_ID = "DELETE FROM app_project where id = #{id}";
+    @NotNull
+    String INSERT = "INSERT into app_project(id, name, description, dateBegin, dateEnd, status, user_id) VALUES (#{id}, #{name}, #{description}, #{dateBegin}, #{dateEnd}, #{status}, #{userId})";
+    @NotNull
+    String UPDATE = "UPDATE app_project SET name = #{name}, description = #{description}, dateBegin = #{dateBegin}, dateEnd = #{dateEnd}, status = #{status} where id = #{id}";
+    @NotNull
+    String SELECT_BY_USER_ID = "SELECT * FROM app_project WHERE user_id = #{id}";
+    @NotNull
+    String SELECT_BY_ID_AND_USER_ID = "SELECT * FROM app_project WHERE id = #{id} AND user_id = #{userId}";
+    @NotNull
+    String DELETE_BY_ID_AND_USER_ID = "DELETE FROM app_project WHERE id = #{id} AND user_id = #{userId}";
+    @NotNull
+    String DELETE_ALL_BY_USER_ID = "DELETE FROM app_project WHERE user_id = #{id}";
+    @NotNull
+    String SELECT_ALL_BY_USER_ID_AND_ORDER_BY_PARAMETER_DESC = "SELECT * FROM app_project WHERE user_id = #{id} ORDER BY #{parameter} DESC";
+    @NotNull
+    String SELECT_ALL_BY_USER_ID_LIKE_NAME_AND_DESCRIPTION = "SELECT * FROM app_project WHERE user_id = #{userId} and (name LIKE CONCAT(CONCAT('%',#{name}),'%') OR description LIKE CONCAT(CONCAT('%',#{description}),'%'))";
 
     @Select(SELECT_BY_ID)
     @Results(value = {
@@ -85,8 +99,9 @@ public interface IProjectRepository {
     Project findOneByUserId(@Param("id") @NotNull final String id,
                             @Param("userId") @NotNull final String userId);
 
-    @Delete(DELETE_BY_ID_AND_USER_ID) Integer removeOneByUserId(@Param("id") @NotNull final String id,
-                                                                @Param("userId") @NotNull final String userId);
+    @Delete(DELETE_BY_ID_AND_USER_ID)
+    Integer removeOneByUserId(@Param("id") @NotNull final String id,
+                              @Param("userId") @NotNull final String userId);
 
     @Delete(DELETE_ALL_BY_USER_ID)
     Integer removeAllByUserID(@NotNull final String id);

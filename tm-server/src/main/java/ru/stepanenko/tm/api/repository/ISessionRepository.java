@@ -11,13 +11,20 @@ import java.util.Collection;
 
 public interface ISessionRepository {
 
-    @NotNull String SELECT_BY_ID = "SELECT * FROM app_session WHERE id = #{id}";
-    @NotNull String SELECT_ALL = "SELECT * FROM app_session";
-    @NotNull String DELETE_ALL = "DELETE FROM app_session";
-    @NotNull String DELETE_BY_ID = "DELETE FROM app_session WHERE id = #{id}";
-    @NotNull String UPDATE = "UPDATE app_session SET signature = #{signature}, timestamp = #{timestamp} WHERE id = #{id}";
-    @NotNull String INSERT = "INSERT INTO app_session(id, signature, timestamp, user_id) VALUES (#{id}, #{signature}, #{timestamp,}, #{userId})";
-    @NotNull String SELECT_ALL_BY_USER_ID = "SELECT * FROM app_session WHERE user_id = #{id}";
+    @NotNull
+    String SELECT_BY_ID = "SELECT * FROM app_session WHERE id = #{id}";
+    @NotNull
+    String SELECT_ALL = "SELECT * FROM app_session";
+    @NotNull
+    String DELETE_ALL = "DELETE FROM app_session";
+    @NotNull
+    String DELETE_BY_ID = "DELETE FROM app_session WHERE id = #{id}";
+    @NotNull
+    String UPDATE = "UPDATE app_session SET signature = #{signature}, timestamp = #{timestamp} WHERE id = #{id}";
+    @NotNull
+    String INSERT = "INSERT INTO app_session(id, signature, timestamp, user_id) VALUES (#{id}, #{signature}, #{timestamp,}, #{userId})";
+    @NotNull
+    String SELECT_ALL_BY_USER_ID = "SELECT * FROM app_session WHERE user_id = #{id}";
 
     @Select(SELECT_BY_ID)
     @Results(value = {

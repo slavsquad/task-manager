@@ -202,7 +202,7 @@ public final class TaskService implements ITaskService {
     @Override
     public Collection<Task> findAllByUserId(@NotNull final String id) {
         if (!StringValidator.validate(id)) return null;
-        try(SqlSession session = sessionFactory.openSession()){
+        try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).findAllByUserId(id);
         }
     }
