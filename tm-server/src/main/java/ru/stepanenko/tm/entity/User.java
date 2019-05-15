@@ -33,6 +33,9 @@ public class User extends AbstractEntity implements Serializable {
     @Nullable
     private Collection<Project> projects;
 
+    @Nullable
+    private Collection<Task> tasks;
+
     public User(
             @Nullable final String login,
             @Nullable final String password,
