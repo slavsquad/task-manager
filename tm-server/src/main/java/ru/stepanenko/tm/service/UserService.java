@@ -64,10 +64,12 @@ public final class UserService implements IUserService {
             throws InputDataValidateException {
         InputDataValidator.validateString(login, password, role);
         InputDataValidator.validateRole(role);
-        @NotNull final User user = new User(login, HashUtil.md5(password), role);
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
+            @NotNull final User findUser = session.getMapper(IUserRepository.class).findByLogin(login);
+            if (findUser!=null) throw new InputDataValidateException("User name already exist!");
+            @NotNull final User user = new User(login, HashUtil.md5(password), role);
             session.getMapper(IUserRepository.class).persist(user);
             session.commit();
             return user;
@@ -87,11 +89,13 @@ public final class UserService implements IUserService {
             throws InputDataValidateException {
         InputDataValidator.validateString(id, login, password, role);
         InputDataValidator.validateRole(role);
-        @NotNull final User user = new User(login, HashUtil.md5(password), role);
-        user.setId(id);
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
+            @NotNull final User findUser = session.getMapper(IUserRepository.class).findByLogin(login);
+            if (findUser!=null) throw new InputDataValidateException("User name already exist!");
+            @NotNull final User user = new User(login, HashUtil.md5(password), role);
+            user.setId(id);
             session.getMapper(IUserRepository.class).persist(user);
             session.commit();
             return user;
@@ -113,7 +117,6 @@ public final class UserService implements IUserService {
         InputDataValidator.validateString(id, login, password, role);
         InputDataValidator.validateRole(role);
         @NotNull User user = findOne(id);
-        if (user == null) return null;
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
         user.setRole(role);
@@ -238,8 +241,8 @@ public final class UserService implements IUserService {
             throws AuthenticationSecurityException, InputDataValidateException {
         InputDataValidator.validateString(login, password);
         @Nullable final User user = findByLogin(login);
-        if (user == null || !HashUtil.md5(password).equals(user.getPassword()))
-            throw new AuthenticationSecurityException("Wrong login or password!");
+        if (!HashUtil.md5(password).equals(user.getPassword()))
+            throw new AuthenticationSecurityException("Wrong password!");
         return user;
     }
 

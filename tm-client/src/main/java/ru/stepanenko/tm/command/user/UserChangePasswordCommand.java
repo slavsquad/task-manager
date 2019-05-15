@@ -32,7 +32,7 @@ public final class UserChangePasswordCommand extends AbstractCommand {
         System.out.println("Please input password:");
         @NotNull
         String password = terminalService.nextLine();
-        userEndpoint.changeUserPassword(currentSession, user.getId(), user.getLogin(), password, user.getRole().toString());
+        userEndpoint.changeUserPassword(currentSession, user.getId(), user.getLogin(), password);
         System.out.println("User " + login + " password changed!");
     }
 }

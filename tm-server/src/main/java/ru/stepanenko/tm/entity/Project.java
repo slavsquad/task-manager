@@ -16,6 +16,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Date;
 
 @Getter
@@ -35,21 +36,21 @@ public class Project extends AbstractEntity implements Serializable {
     @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateEnd = null;
 
-    @NotNull
-    private String userId = "";
-
     @Getter
     @NotNull
     private Status status = Status.PLANNED;
 
+    @Nullable
+    private Collection<Task> tasks;
+
     public Project(
             @NotNull final String name,
             @NotNull final String description,
-            @NotNull final String userId) {
+            @NotNull final Collection<Task> tasks) {
         this.name = name;
         this.description = description;
         this.dateBegin = new Date();
-        this.userId = userId;
+        this.tasks = tasks;
     }
 
     public void setStatus(
@@ -60,18 +61,5 @@ public class Project extends AbstractEntity implements Serializable {
     @NotNull
     public String getStatus() {
         return status.toString();
-    }
-
-    @Override
-    public String toString() {
-        return "Project{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", description='" + description + '\'' +
-                ", dateBegin=" + DateFormatter.format(dateBegin) +
-                ", dateEnd=" + DateFormatter.format(dateEnd) +
-                ", status=" + status +
-                ", userId='" + userId + '\'' +
-                '}';
     }
 }

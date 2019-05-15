@@ -27,8 +27,7 @@ public interface IUserEndpoint {
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id,
             @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password,
-            @WebParam(name = "role") @NotNull final String role)
+            @WebParam(name = "password") @NotNull final String password)
             throws AuthenticationSecurityException, InputDataValidateException;
 
     @WebMethod

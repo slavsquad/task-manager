@@ -31,17 +31,13 @@ public final class UserRegisterCommand extends AbstractCommand {
         System.out.println("Please input user name:");
         @NotNull
         String login = terminalService.nextLine();
-        if (userEndpoint.findUserByLogin(currentSession, login) == null) {
-            System.out.println("Please input password:");
-            @NotNull
-            String password = terminalService.nextLine();
-            System.out.println("Please input user role(admin or user):");
-            @NotNull
-            String role = terminalService.nextLine();
-            userEndpoint.createUser(currentSession, login, password, role);
-            System.out.println("User " + login + " created!");
-        } else {
-            System.out.println("User name already exist!");
-        }
+        System.out.println("Please input password:");
+        @NotNull
+        String password = terminalService.nextLine();
+        System.out.println("Please input user role(admin or user):");
+        @NotNull
+        String role = terminalService.nextLine();
+        userEndpoint.createUser(currentSession, login, password, role);
+        System.out.println("User " + login + " created!");
     }
 }

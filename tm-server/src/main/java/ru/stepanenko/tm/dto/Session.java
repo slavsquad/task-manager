@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.entity;
+package ru.stepanenko.tm.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,11 +14,12 @@ import java.util.Date;
 public class Session extends AbstractEntity {
 
     @Nullable
-    private String signature;
+    private String userId=null;
 
     @Nullable
-    private Date timestamp;
+    private String signature=null;
 
     @Nullable
-    private User user;
+    private Date timestamp=null;
+
 }

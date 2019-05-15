@@ -1,41 +1,32 @@
-package ru.stepanenko.tm.entity;
+package ru.stepanenko.tm.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
-import ru.stepanenko.tm.util.DateAdapter;
 import ru.stepanenko.tm.util.EnumUtil;
-
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@XmlRootElement(name = "task")
-@XmlAccessorType(XmlAccessType.FIELD)
 public class Task extends AbstractEntity implements Serializable {
 
+    @NotNull
+    private String projectId = "";
+
     @Nullable
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateBegin = null;
 
     @Nullable
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    @XmlJavaTypeAdapter(DateAdapter.class)
     private Date dateEnd = null;
 
     @NotNull
     private String userId = "";
+
 
     @Getter
     @NotNull
@@ -49,6 +40,7 @@ public class Task extends AbstractEntity implements Serializable {
         this.name = name;
         this.description = description;
         this.dateBegin = new Date();
+        this.projectId = projectId;
         this.userId = userId;
     }
 
