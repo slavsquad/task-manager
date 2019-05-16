@@ -2,11 +2,10 @@ package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.entity.Session;
+import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 
-import java.io.IOException;
 import java.util.Collection;
 
 public interface ISessionService {

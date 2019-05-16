@@ -6,7 +6,7 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IUserRepository;
-import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.FieldConst;
 
 import java.sql.Connection;

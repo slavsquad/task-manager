@@ -1,8 +1,8 @@
 package ru.stepanenko.tm.api.endpoint;
 
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.entity.Session;
-import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.model.entity.Session;
+import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 

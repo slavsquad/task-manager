@@ -1,7 +1,7 @@
 package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 
 import java.util.Collection;

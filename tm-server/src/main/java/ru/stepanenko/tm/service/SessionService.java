@@ -9,8 +9,8 @@ import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IPropertyService;
 import ru.stepanenko.tm.api.service.ISessionService;
-import ru.stepanenko.tm.entity.Session;
-import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.model.entity.Session;
+import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.InputDataValidateException;
@@ -117,17 +117,17 @@ public class SessionService implements ISessionService {
             @Nullable final Session session)
             throws AuthenticationSecurityException, InputDataValidateException {
         if (session == null)
-            throw new AuthenticationSecurityException("Session is invalid: \nSession must not be null! Please re-login!");
+            throw new AuthenticationSecurityException("SessionDTO is invalid: \nSessionDTO must not be null! Please re-login!");
         if (session.getSignature() == null)
-            throw new AuthenticationSecurityException("Session is invalid: \nSignature must not be null! Please re-login!");
+            throw new AuthenticationSecurityException("SessionDTO is invalid: \nSignature must not be null! Please re-login!");
         if (session.getUserId() == null)
-            throw new AuthenticationSecurityException("Session is invalid: \nUser must not be null! Please re-login!");
+            throw new AuthenticationSecurityException("SessionDTO is invalid: \nUserDTO must not be null! Please re-login!");
         if (session.getTimestamp() == null)
-            throw new AuthenticationSecurityException("Session is invalid: \nTime must not be null! Please re-login!");
+            throw new AuthenticationSecurityException("SessionDTO is invalid: \nTime must not be null! Please re-login!");
         if (findOne(session.getId()) == null)
-            throw new AuthenticationSecurityException("Session is invalid: \nSession not found! Please re-login!");
+            throw new AuthenticationSecurityException("SessionDTO is invalid: \nSessionDTO not found! Please re-login!");
         if (!session.getSignature().equals(findOne(session.getId()).getSignature()))
-            throw new AuthenticationSecurityException("Session is invalid: \nSession signature is wrong! Please re-login!");
+            throw new AuthenticationSecurityException("SessionDTO is invalid: \nSessionDTO signature is wrong! Please re-login!");
     }
 
     @Override
@@ -141,7 +141,7 @@ public class SessionService implements ISessionService {
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
         }
-        if (user == null) throw new AuthenticationSecurityException("User does not found!");
+        if (user == null) throw new AuthenticationSecurityException("UserDTO does not found!");
         if (!user.getRole().equals(Role.ADMINISTRATOR.toString()))
             throw new AuthenticationSecurityException("Forbidden action for your role!");
     }

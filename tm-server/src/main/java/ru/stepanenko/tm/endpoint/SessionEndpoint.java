@@ -7,15 +7,14 @@ import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
-import ru.stepanenko.tm.entity.Session;
-import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.model.entity.Session;
+import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
-import java.io.IOException;
 
 @WebService
 @NoArgsConstructor

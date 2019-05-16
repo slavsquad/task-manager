@@ -5,9 +5,8 @@ import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
-import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.util.DateFormatter;
-import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.FieldConst;
 
 import java.sql.Connection;

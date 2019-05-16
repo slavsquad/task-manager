@@ -18,9 +18,9 @@ import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
-import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.entity.Task;
-import ru.stepanenko.tm.entity.User;
+import ru.stepanenko.tm.model.entity.Project;
+import ru.stepanenko.tm.model.entity.Task;
+import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 import ru.stepanenko.tm.util.Domain;
@@ -68,7 +68,7 @@ public final class UserService implements IUserService {
         try {
             session = sessionFactory.openSession();
             @NotNull final User findUser = session.getMapper(IUserRepository.class).findByLogin(login);
-            if (findUser!=null) throw new InputDataValidateException("User name already exist!");
+            if (findUser!=null) throw new InputDataValidateException("UserDTO name already exist!");
             @NotNull final User user = new User(login, HashUtil.md5(password), role);
             session.getMapper(IUserRepository.class).persist(user);
             session.commit();
@@ -93,7 +93,7 @@ public final class UserService implements IUserService {
         try {
             session = sessionFactory.openSession();
             @NotNull final User findUser = session.getMapper(IUserRepository.class).findByLogin(login);
-            if (findUser!=null) throw new InputDataValidateException("User name already exist!");
+            if (findUser!=null) throw new InputDataValidateException("UserDTO name already exist!");
             @NotNull final User user = new User(login, HashUtil.md5(password), role);
             user.setId(id);
             session.getMapper(IUserRepository.class).persist(user);
@@ -166,7 +166,7 @@ public final class UserService implements IUserService {
         InputDataValidator.validateString(login);
         try (SqlSession session = sessionFactory.openSession()) {
             @Nullable final User user = session.getMapper(IUserRepository.class).findByLogin(login);
-            if (user==null) throw new InputDataValidateException("User does not found!");
+            if (user==null) throw new InputDataValidateException("UserDTO does not found!");
             return user;
         }catch (Exception e){
             throw new InputDataValidateException(e.getMessage());
@@ -196,7 +196,7 @@ public final class UserService implements IUserService {
         InputDataValidator.validateString(id);
         try (SqlSession session = sessionFactory.openSession()) {
             @Nullable final User user = session.getMapper(IUserRepository.class).findOne(id);
-            if (user==null) throw new InputDataValidateException("User does not found!");
+            if (user==null) throw new InputDataValidateException("UserDTO does not found!");
             return user;
         }catch (Exception e){
             throw new InputDataValidateException(e.getMessage());

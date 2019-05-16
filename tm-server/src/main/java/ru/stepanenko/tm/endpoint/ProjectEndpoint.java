@@ -6,8 +6,8 @@ import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
-import ru.stepanenko.tm.entity.Project;
-import ru.stepanenko.tm.entity.Session;
+import ru.stepanenko.tm.model.entity.Project;
+import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 

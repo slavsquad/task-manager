@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.dto;
+package ru.stepanenko.tm.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,15 +11,15 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 
-public class Session extends AbstractEntity {
+public class SessionDTO extends AbstractEntityDTO {
 
     @Nullable
-    private String userId=null;
+    private String userId = null;
 
     @Nullable
-    private String signature=null;
+    private String signature = null;
 
     @Nullable
-    private Date timestamp=null;
+    private Date timestamp = null;
 
 }

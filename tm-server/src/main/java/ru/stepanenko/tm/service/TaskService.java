@@ -7,7 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
-import ru.stepanenko.tm.entity.Task;
+import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.InputDataValidateException;
 import ru.stepanenko.tm.util.ParameterValidator;
@@ -85,7 +85,7 @@ public final class TaskService implements ITaskService {
         InputDataValidator.validateString(id, userId);
         try (SqlSession session = sessionFactory.openSession()) {
             @Nullable final Task task = session.getMapper(ITaskRepository.class).findOneByUserId(id, userId);
-            if (task == null) throw new InputDataValidateException("Task does not found!");
+            if (task == null) throw new InputDataValidateException("TaskDTO does not found!");
             return task;
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());

@@ -2,18 +2,17 @@ package ru.stepanenko.tm.service;
 
 import lombok.AllArgsConstructor;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.service.IProjectService;
-import ru.stepanenko.tm.entity.Project;
+import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.InputDataValidateException;
-import ru.stepanenko.tm.util.ParameterValidator;
 import ru.stepanenko.tm.util.EnumUtil;
 import ru.stepanenko.tm.util.InputDataValidator;
 
+import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 import java.util.Date;
 
@@ -21,7 +20,7 @@ import java.util.Date;
 public final class ProjectService implements IProjectService {
 
     @NotNull
-    final SqlSessionFactory sessionFactory;
+    final EntityManagerFactory entityManagerFactory;
 
     @Override
     public Project create(
@@ -33,7 +32,7 @@ public final class ProjectService implements IProjectService {
         @NotNull Project project = new Project(name, description, userId);
         @Nullable SqlSession session = null;
         try {
-            session = sessionFactory.openSession();
+            session = entityManagerFactory.o
             session.getMapper(IProjectRepository.class).persist(project);
             session.commit();
             return project;
@@ -66,7 +65,7 @@ public final class ProjectService implements IProjectService {
         }
         @Nullable SqlSession session = null;
         try {
-            session = sessionFactory.openSession();
+            session = entityManagerFactory.openSession();
             session.getMapper(IProjectRepository.class).merge(project);
             session.commit();
             return project;
@@ -84,9 +83,9 @@ public final class ProjectService implements IProjectService {
             @NotNull final String userId)
             throws InputDataValidateException {
         InputDataValidator.validateString(id, userId);
-        try (SqlSession session = sessionFactory.openSession()) {
+        try (SqlSession session = entityManagerFactory.openSession()) {
             @Nullable final Project project = session.getMapper(IProjectRepository.class).findOneByUserId(id, userId);
-            if (project == null) throw new InputDataValidateException("Project does not found!");
+            if (project == null) throw new InputDataValidateException("ProjectDTO does not found!");
             return project;
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
@@ -102,7 +101,7 @@ public final class ProjectService implements IProjectService {
         @Nullable final Project project = findOne(id, userId);
         @Nullable SqlSession session = null;
         try {
-            session = sessionFactory.openSession();
+            session = entityManagerFactory.openSession();
             session.getMapper(IProjectRepository.class).removeOneByUserId(id, userId);
             session.commit();
             return project;
@@ -119,7 +118,7 @@ public final class ProjectService implements IProjectService {
             throws InputDataValidateException {
         @Nullable SqlSession session = null;
         try {
-            session = sessionFactory.openSession();
+            session = entityManagerFactory.openSession();
             session.getMapper(IProjectRepository.class).removeAll();
             session.commit();
         } catch (Exception e) {
@@ -135,7 +134,7 @@ public final class ProjectService implements IProjectService {
             @NotNull final String id)
             throws InputDataValidateException {
         InputDataValidator.validateString(id);
-        try (SqlSession session = sessionFactory.openSession()) {
+        try (SqlSession session = entityManagerFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findOne(id);
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
@@ -150,7 +149,7 @@ public final class ProjectService implements IProjectService {
         @Nullable final Project project = findOne(id);
         @Nullable SqlSession session = null;
         try {
-            session = sessionFactory.openSession();
+            session = entityManagerFactory.openSession();
             session.getMapper(IProjectRepository.class).remove(id);
             session.commit();
             return project;
@@ -165,7 +164,7 @@ public final class ProjectService implements IProjectService {
     @Override
     public Collection<Project> findAll()
             throws InputDataValidateException {
-        try (SqlSession session = sessionFactory.openSession()) {
+        try (SqlSession session = entityManagerFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findAll();
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
@@ -177,7 +176,7 @@ public final class ProjectService implements IProjectService {
             @NotNull final String id)
             throws InputDataValidateException {
         InputDataValidator.validateString(id);
-        try (SqlSession session = sessionFactory.openSession()) {
+        try (SqlSession session = entityManagerFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findAllByUserId(id);
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
@@ -191,7 +190,7 @@ public final class ProjectService implements IProjectService {
         InputDataValidator.validateString(id);
         @Nullable SqlSession session = null;
         try {
-            session = sessionFactory.openSession();
+            session = entityManagerFactory.openSession();
             session.getMapper(IProjectRepository.class).removeAllByUserID(id);
             session.commit();
         } catch (Exception e) {
@@ -210,7 +209,7 @@ public final class ProjectService implements IProjectService {
         InputDataValidator.validateString(id, parameter);
         InputDataValidator.validateParameter(parameter);
         if ("order".equals(parameter)) return findAllByUserId(id);
-        try (SqlSession session = sessionFactory.openSession()) {
+        try (SqlSession session = entityManagerFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).sortAllByUserId(id, parameter);
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
@@ -224,7 +223,7 @@ public final class ProjectService implements IProjectService {
             @NotNull final String userId)
             throws InputDataValidateException {
         InputDataValidator.validateString(name, description, userId);
-        try (SqlSession session = sessionFactory.openSession()) {
+        try (SqlSession session = entityManagerFactory.openSession()) {
             return session.getMapper(IProjectRepository.class).findAllByPartOfNameOrDescription(name, description, userId);
         } catch (Exception e) {
             throw new InputDataValidateException(e.getMessage());
