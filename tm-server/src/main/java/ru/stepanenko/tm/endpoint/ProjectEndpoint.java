@@ -2,14 +2,16 @@ package ru.stepanenko.tm.endpoint;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
+import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -33,14 +35,23 @@ public class ProjectEndpoint implements IProjectEndpoint {
     }
 
     @Override
-    @WebMethod
+
     public Project createProject(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "name") @NotNull final String name,
             @WebParam(name = "description") @NotNull final String description)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
+
+    }
+
+    @Override
+    @WebMethod
+    public ProjectDTO createProject(
+            @WebParam(name = "session") @Nullable Session session,
+            @WebParam(name = "project") @NotNull ProjectDTO projectDTO)
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
-        return projectService.create(name, description, session.getUserId());
+        return projectService.create(projectDTO);
     }
 
     @Override
@@ -51,9 +62,16 @@ public class ProjectEndpoint implements IProjectEndpoint {
             @WebParam(name = "name") @NotNull final String name,
             @WebParam(name = "description") @NotNull final String description,
             @WebParam(name = "status") @NotNull final String status)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return projectService.edit(id, name, description, status, session.getUserId());
+    }
+
+
+
+    @Override
+    public ProjectDTO editProject(@Nullable Session session, @NotNull ProjectDTO projectDTO) throws AuthenticationSecurityException, DataValidateException {
+        return null;
     }
 
     @Override
@@ -61,7 +79,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     public Project findOneProject(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return projectService.findOne(id, session.getUserId());
     }
@@ -71,7 +89,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     public Project removeProject(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return projectService.remove(id, session.getUserId());
     }
@@ -80,7 +98,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public Collection<Project> findAllProjectByUserId(
             @WebParam(name = "session") @NotNull final Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return projectService.findAllByUserId(session.getUserId());
     }
@@ -89,7 +107,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public void removeAllProjectByUserId(
             @WebParam(name = "session") @NotNull final Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         projectService.removeAllByUserId(session.getUserId());
     }
@@ -99,7 +117,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
     public Collection<Project> sortAllProjectByUserId(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "comparator") @NotNull final String comparator)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return projectService.sortAllByUserId(session.getUserId(), comparator);
     }
@@ -110,7 +128,7 @@ public class ProjectEndpoint implements IProjectEndpoint {
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "name") @NotNull final String name,
             @WebParam(name = "description") @NotNull final String description)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return projectService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
     }

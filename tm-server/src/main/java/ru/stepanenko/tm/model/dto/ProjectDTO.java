@@ -9,6 +9,6 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-public class ProjectDTO extends AbstractEntityDTO implements Serializable {
+public class ProjectDTO extends BaseEntityDTO implements Serializable {
 
 }

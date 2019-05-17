@@ -2,7 +2,7 @@ package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.model.entity.Session;
-import java.sql.Connection;
+import ru.stepanenko.tm.model.entity.User;
 import java.util.Collection;
 
 public interface ISessionRepository {
@@ -12,19 +12,17 @@ public interface ISessionRepository {
 
     Collection<Session> findAll();
 
-    Integer removeAll();
+    void removeAll();
 
-    Integer remove(
-            @NotNull final String id);
-
-    Integer persist(
+    void remove(
             @NotNull final Session session);
 
-    Integer merge(
+    void persist(
             @NotNull final Session session);
 
-    Connection getConnection();
+    Session merge(
+            @NotNull final Session session);
 
     Collection<Session> findAllByUserId(
-            @NotNull final String id);
+            @NotNull final User user);
 }

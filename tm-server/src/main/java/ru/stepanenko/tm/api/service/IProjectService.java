@@ -1,67 +1,67 @@
 package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
+import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.persistence.EntityManager;
 import java.util.Collection;
 
 public interface IProjectService {
 
-    Project create(
-            @NotNull final String name,
-            @NotNull final String description,
-            @NotNull final String userID)
-            throws InputDataValidateException;
+    void create(
+            @NotNull final ProjectDTO projectDTO)
+            throws DataValidateException;
 
-    Project edit(
-            @NotNull final String id,
-            @NotNull final String name,
-            @NotNull final String description,
-            @NotNull final String status,
-            @NotNull String userId)
-            throws InputDataValidateException;
+    void edit(
+            @NotNull final ProjectDTO projectDTO)
+            throws DataValidateException;
 
-    Project findOne(
+    ProjectDTO findOne(
             @NotNull final String id,
             @NotNull final String userId)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
-    Project remove(
+    void remove(
             @NotNull final String id,
             @NotNull final String userId)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void clear()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
-    Project findOne(
+    ProjectDTO findOne(
             @NotNull final String id)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
-    Project remove(
+    void remove(
             @NotNull final String id)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
-    Collection<Project> findAll()
-            throws InputDataValidateException;
+    Collection<ProjectDTO> findAll()
+            throws DataValidateException;
 
-    Collection<Project> findAllByUserId(
+    Collection<ProjectDTO> findAllByUserId(
             @NotNull final String id)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void removeAllByUserId(
             @NotNull final String id)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     Collection<Project> sortAllByUserId(
             @NotNull final String id,
-            @NotNull final String comparator)
-            throws InputDataValidateException;
+            @NotNull final String parameter)
+            throws DataValidateException;
 
     Collection<Project> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
             @NotNull final String userId)
-            throws InputDataValidateException;
+            throws DataValidateException;
+
+    Project convertDTOtoProject(
+            @NotNull final ProjectDTO projectDTO,
+            @NotNull final EntityManager entityManager) throws DataValidateException;
 }

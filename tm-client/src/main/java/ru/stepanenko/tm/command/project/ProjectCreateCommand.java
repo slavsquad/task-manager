@@ -36,4 +36,8 @@ public final class ProjectCreateCommand extends AbstractCommand {
         projectEndpoint.createProject(currentSession, name, description);
         System.out.println("Project " + name + " is createProject!");
     }
+
+/*    private ProjectDTO getProjectDTO(){
+        ProjectDTO
+    }*/
 }

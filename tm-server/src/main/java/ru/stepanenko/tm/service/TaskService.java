@@ -9,10 +9,10 @@ import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.enumerate.Status;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.ParameterValidator;
 import ru.stepanenko.tm.util.EnumUtil;
-import ru.stepanenko.tm.util.InputDataValidator;
+import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.*;
 
@@ -28,8 +28,8 @@ public final class TaskService implements ITaskService {
             @NotNull final String description,
             @NotNull final String projectID,
             @NotNull final String userID)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(name, description, projectID, userID);
+            throws DataValidateException {
+        DataValidator.validateString(name, description, projectID, userID);
         @NotNull final Task task = new Task(name, description, projectID, userID);
         @Nullable SqlSession session = null;
         try {
@@ -39,7 +39,7 @@ public final class TaskService implements ITaskService {
             return task;
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -51,9 +51,9 @@ public final class TaskService implements ITaskService {
             @NotNull final String name,
             @NotNull final String description,
             @NotNull final String status)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id, name, description, status);
-        InputDataValidator.validateStatus(status);
+            throws DataValidateException {
+        DataValidator.validateString(id, name, description, status);
+        DataValidator.validateStatus(status);
         @NotNull final Task task = findOne(id);
         task.setName(name);
         task.setDescription(description);
@@ -71,7 +71,7 @@ public final class TaskService implements ITaskService {
             return task;
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -81,14 +81,14 @@ public final class TaskService implements ITaskService {
     public Task findOne(
             @NotNull final String id,
             @NotNull final String userId)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id, userId);
+            throws DataValidateException {
+        DataValidator.validateString(id, userId);
         try (SqlSession session = sessionFactory.openSession()) {
             @Nullable final Task task = session.getMapper(ITaskRepository.class).findOneByUserId(id, userId);
-            if (task == null) throw new InputDataValidateException("TaskDTO does not found!");
+            if (task == null) throw new DataValidateException("TaskDTO does not found!");
             return task;
         } catch (Exception e) {
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 
@@ -96,8 +96,8 @@ public final class TaskService implements ITaskService {
     public Task remove(
             @NotNull final String id,
             @NotNull final String userId)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id, userId);
+            throws DataValidateException {
+        DataValidator.validateString(id, userId);
         @Nullable final Task task = findOne(id, userId);
         @Nullable SqlSession session = null;
         try {
@@ -107,7 +107,7 @@ public final class TaskService implements ITaskService {
             return task;
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -115,7 +115,7 @@ public final class TaskService implements ITaskService {
 
     @Override
     public void clear()
-            throws InputDataValidateException {
+            throws DataValidateException {
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
@@ -123,7 +123,7 @@ public final class TaskService implements ITaskService {
             session.commit();
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -132,20 +132,20 @@ public final class TaskService implements ITaskService {
     @Override
     public Task findOne(
             @NotNull final String id)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id);
+            throws DataValidateException {
+        DataValidator.validateString(id);
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).findOne(id);
         }catch (Exception e) {
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 
     @Override
     public Task remove(
             @NotNull final String id)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id);
+            throws DataValidateException {
+        DataValidator.validateString(id);
         @Nullable final Task task = findOne(id);
         @Nullable SqlSession session = null;
         try {
@@ -155,7 +155,7 @@ public final class TaskService implements ITaskService {
             return task;
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -163,11 +163,11 @@ public final class TaskService implements ITaskService {
 
     @Override
     public Collection<Task> findAll()
-            throws InputDataValidateException {
+            throws DataValidateException {
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).findAll();
         } catch (Exception e) {
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 
@@ -175,8 +175,8 @@ public final class TaskService implements ITaskService {
     public void removeAllByProjectId(
             @NotNull final String id,
             @NotNull final String userId)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id, userId);
+            throws DataValidateException {
+        DataValidator.validateString(id, userId);
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
@@ -184,7 +184,7 @@ public final class TaskService implements ITaskService {
             session.commit();
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -193,8 +193,8 @@ public final class TaskService implements ITaskService {
     @Override
     public void removeAllByUserId(
             @NotNull final String id)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id);
+            throws DataValidateException {
+        DataValidator.validateString(id);
         @Nullable SqlSession session = null;
         try {
             session = sessionFactory.openSession();
@@ -202,7 +202,7 @@ public final class TaskService implements ITaskService {
             session.commit();
         } catch (Exception e) {
             if (session != null) session.rollback();
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         } finally {
             if (session != null) session.close();
         }
@@ -212,14 +212,14 @@ public final class TaskService implements ITaskService {
     public Collection<Task> sortAllByUserId(
             @NotNull final String id,
             @NotNull final String parameter)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id, parameter);
-        if (!ParameterValidator.validate(parameter)) throw new InputDataValidateException("Incorrect input parameter for task's sorting!");
+            throws DataValidateException {
+        DataValidator.validateString(id, parameter);
+        if (!ParameterValidator.validate(parameter)) throw new DataValidateException("Incorrect input parameter for task's sorting!");
         if ("order".equals(parameter)) return findAllByUserId(id);
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).sortAllByUserId(id, parameter);
         }catch (Exception e){
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 
@@ -228,12 +228,12 @@ public final class TaskService implements ITaskService {
             @NotNull final String name,
             @NotNull final String description,
             @NotNull final String userId)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(name, description, userId);
+            throws DataValidateException {
+        DataValidator.validateString(name, description, userId);
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).findAllByPartOfNameOrDescription(name, description, userId);
         }catch (Exception e) {
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 
@@ -241,24 +241,24 @@ public final class TaskService implements ITaskService {
     public Collection<Task> findAllByProjectId(
             @NotNull final String id,
             @NotNull final String userId)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id, userId);
+            throws DataValidateException {
+        DataValidator.validateString(id, userId);
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).findAllByProjectAndUserId(id, userId);
         }catch (Exception e) {
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 
     @Override
     public Collection<Task> findAllByUserId(
             @NotNull final String id)
-            throws InputDataValidateException {
-        InputDataValidator.validateString(id);
+            throws DataValidateException {
+        DataValidator.validateString(id);
         try (SqlSession session = sessionFactory.openSession()) {
             return session.getMapper(ITaskRepository.class).findAllByUserId(id);
         }catch (Exception e) {
-            throw new InputDataValidateException(e.getMessage());
+            throw new DataValidateException(e.getMessage());
         }
     }
 }

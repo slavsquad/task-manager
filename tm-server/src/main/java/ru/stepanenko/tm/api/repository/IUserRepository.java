@@ -2,7 +2,6 @@ package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.model.entity.User;
-import java.sql.Connection;
 import java.util.Collection;
 
 public interface IUserRepository {
@@ -12,18 +11,16 @@ public interface IUserRepository {
 
     Collection<User> findAll();
 
-    Integer removeAll();
+    void removeAll();
 
-    Integer remove(
-            @NotNull final String id);
-
-    Integer persist(
+    void remove(
             @NotNull final User user);
 
-    Integer merge(
+    void persist(
             @NotNull final User user);
 
-    Connection getConnection();
+    User merge(
+            @NotNull final User user);
 
     User findByLogin(
             @NotNull final String login);

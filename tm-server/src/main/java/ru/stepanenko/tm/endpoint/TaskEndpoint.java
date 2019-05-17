@@ -9,7 +9,7 @@ import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -39,7 +39,7 @@ public class TaskEndpoint implements ITaskEndpoint {
             @WebParam(name = "name") @NotNull final String name,
             @WebParam(name = "description") @NotNull final String description,
             @WebParam(name = "projectId") @NotNull final String projectId)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.create(name, description, projectId, session.getUserId());
     }
@@ -52,7 +52,7 @@ public class TaskEndpoint implements ITaskEndpoint {
             @WebParam(name = "name") @NotNull final String name,
             @WebParam(name = "description") @NotNull final String description,
             @WebParam(name = "status") @NotNull final String status)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.edit(id, name, description, status);
     }
@@ -62,7 +62,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     public Task findOneTask(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.findOne(id, session.getUserId());
     }
@@ -72,7 +72,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     public Task removeTask(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.remove(id, session.getUserId());
     }
@@ -82,7 +82,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     public Collection<Task> findAllTaskByProjectId(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.findAllByProjectId(id, session.getUserId());
     }
@@ -91,7 +91,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     @WebMethod
     public Collection<Task> findAllTaskByUserId(
             @WebParam(name = "session") @NotNull final Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.findAllByUserId(session.getUserId());
     }
@@ -101,7 +101,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     public void removeAllTaskByProjectId(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "id") @NotNull final String id)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         taskService.removeAllByProjectId(id, session.getUserId());
     }
@@ -110,7 +110,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     @WebMethod
     public void removeAllTaskByUserId(
             @WebParam(name = "session") @NotNull final Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         taskService.removeAllByUserId(session.getUserId());
 
@@ -121,7 +121,7 @@ public class TaskEndpoint implements ITaskEndpoint {
     public Collection<Task> sortAllTaskByUserId(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "comparator") @NotNull final String comparator)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.sortAllByUserId(session.getUserId(), comparator);
     }
@@ -132,7 +132,7 @@ public class TaskEndpoint implements ITaskEndpoint {
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "name") @NotNull final String name,
             @WebParam(name = "description") @NotNull final String description)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return taskService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
     }

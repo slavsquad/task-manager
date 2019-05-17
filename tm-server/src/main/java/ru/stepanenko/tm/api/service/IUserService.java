@@ -3,7 +3,7 @@ package ru.stepanenko.tm.api.service;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.Domain;
 
 import java.util.Collection;
@@ -15,85 +15,85 @@ public interface IUserService {
             @NotNull final String login,
             @NotNull final String password,
             @NotNull final String role)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User create(
             @NotNull final String id,
             @NotNull final String login,
             @NotNull final String password,
             @NotNull final String role)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User edit(
             @NotNull final String id,
             @NotNull final String login,
             @NotNull final String password,
             @NotNull final String role)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User edit(
             @NotNull final String id,
             @NotNull final String login,
             @NotNull final String password)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User findByLogin(
             @NotNull final String login)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void clear()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User findOne(
             @NotNull final String id)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User remove(
             @NotNull final String id)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     Collection<User> findAll()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     User authenticationUser(
             @NotNull final String login,
             @NotNull final String password)
-            throws AuthenticationSecurityException, InputDataValidateException;
+            throws AuthenticationSecurityException, DataValidateException;
 
     void loadData()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void saveData()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void loadDataJaxbXml()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void saveDataJaxbXml()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void loadDataFasterXml()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void saveDataFasterXml()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void loadDataJaxbJSON()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void saveDataJaxbJSON()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void loadDataFasterJSON()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void saveDataFasterJSON()
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     void loadAllDataFromDomain(
             @NotNull final Domain domain)
-            throws InputDataValidateException;
+            throws DataValidateException;
 
     Domain saveAllDataToDomain()
-            throws InputDataValidateException;
+            throws DataValidateException;
 }

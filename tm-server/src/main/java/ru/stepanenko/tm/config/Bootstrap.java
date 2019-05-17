@@ -10,7 +10,7 @@ import ru.stepanenko.tm.api.service.*;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.service.*;
 import ru.stepanenko.tm.model.entity.Project;
 
@@ -73,7 +73,7 @@ public class Bootstrap {
                 userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", "user");
                 userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", "user");
             }
-        } catch (InputDataValidateException e) {
+        } catch (DataValidateException e) {
             e.printStackTrace();
         }
 
@@ -127,7 +127,7 @@ public class Bootstrap {
                 taskService.create("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId());
                 taskService.create("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId());
             }
-        } catch (InputDataValidateException e) {
+        } catch (DataValidateException e) {
             e.printStackTrace();
         }
     }

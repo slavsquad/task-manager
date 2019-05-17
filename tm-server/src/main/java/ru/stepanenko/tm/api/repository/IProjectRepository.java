@@ -35,11 +35,11 @@ public interface IProjectRepository {
             @NotNull final User user);
 
     Collection<Project> sortAllByUserId(
-            @NotNull final String id,
+            @NotNull final User user,
             @NotNull final String parameter);
 
     Collection<Project> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
-            @NotNull final String userId);
+            @NotNull final User user);
 }

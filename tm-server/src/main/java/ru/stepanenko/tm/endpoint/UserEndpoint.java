@@ -9,7 +9,7 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.InputDataValidateException;
+import ru.stepanenko.tm.exception.DataValidateException;
 
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -39,7 +39,7 @@ public class UserEndpoint implements IUserEndpoint {
             @WebParam(name = "login") @NotNull final String login,
             @WebParam(name = "password") @NotNull final String password,
             @WebParam(name = "role") @NotNull final String role)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         return userService.create(login, password, role);
     }
@@ -51,7 +51,7 @@ public class UserEndpoint implements IUserEndpoint {
             @WebParam(name = "id") @NotNull final String id,
             @WebParam(name = "login") @NotNull final String login,
             @WebParam(name = "password") @NotNull final String password)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         return userService.edit(id, login, password);
     }
@@ -62,7 +62,7 @@ public class UserEndpoint implements IUserEndpoint {
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "login") @NotNull final String login,
             @WebParam(name = "password") @NotNull final String password)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return userService.edit(session.getUserId(), login, password);
     }
@@ -72,7 +72,7 @@ public class UserEndpoint implements IUserEndpoint {
     public User findUserByLogin(
             @WebParam(name = "session") @NotNull final Session session,
             @WebParam(name = "login") @NotNull final String login)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         return userService.findByLogin(login);
     }
@@ -81,7 +81,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public User getUserBySession(
             @WebParam(name = "session") @NotNull final Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(session);
         return userService.findOne(session.getUserId());
     }
@@ -90,7 +90,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public Collection<User> findAllUser(
             @WebParam(name = "session") @NotNull final Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         return userService.findAll();
     }
@@ -99,7 +99,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void loadUserData(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.loadData();
     }
@@ -108,7 +108,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void saveUserData(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.saveData();
     }
@@ -117,7 +117,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void loadUserDataJaxbXml(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.loadDataJaxbXml();
     }
@@ -126,7 +126,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void saveUserDataJaxbXml(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.saveDataJaxbXml();
     }
@@ -135,7 +135,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void loadUserDataFasterXml(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.loadDataFasterXml();
     }
@@ -144,7 +144,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void saveUserDataFasterXml(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.saveDataFasterXml();
     }
@@ -153,7 +153,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void loadUserDataJaxbJSON(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.loadDataJaxbJSON();
     }
@@ -162,7 +162,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void saveUserDataJaxbJSON(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.saveDataJaxbJSON();
     }
@@ -171,7 +171,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void loadUserDataFasterJSON(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.loadDataFasterJSON();
     }
@@ -180,7 +180,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public void saveUserDataFasterJSON(
             @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, InputDataValidateException {
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(session);
         userService.saveDataFasterJSON();
     }
