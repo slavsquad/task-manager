@@ -2,6 +2,8 @@ package ru.stepanenko.tm.api.endpoint;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.model.dto.SessionDTO;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -16,41 +18,36 @@ import java.util.Collection;
 public interface IUserEndpoint {
 
     @WebMethod
-    User createUser(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password,
-            @WebParam(name = "role") @NotNull final String role)
+    void createUser(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "user") @Nullable final UserDTO userDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    User changeUserPassword(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "id") @NotNull final String id,
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password)
+    void changeUserPassword(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "user") @Nullable final UserDTO userDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    User editUserProfile(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password)
+    void editUserProfile(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "user") @Nullable final UserDTO userDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    User findUserByLogin(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "login") @NotNull final String login)
+    UserDTO findUserByLogin(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "login") @Nullable final String login)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    User getUserBySession(
-            @WebParam(name = "session") @Nullable final Session session)
+    UserDTO getUserBySession(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Collection<User> findAllUser(
-            @WebParam(name = "session") @Nullable final Session session)
+    Collection<UserDTO> findAllUser(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 }

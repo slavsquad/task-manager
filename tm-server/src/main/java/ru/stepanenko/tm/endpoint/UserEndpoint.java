@@ -2,10 +2,13 @@ package ru.stepanenko.tm.endpoint;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.model.dto.SessionDTO;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -34,154 +37,59 @@ public class UserEndpoint implements IUserEndpoint {
 
     @Override
     @WebMethod
-    public User createUser(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password,
-            @WebParam(name = "role") @NotNull final String role)
+    public void createUser(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "user") @Nullable final UserDTO userDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        return userService.create(login, password, role);
+        sessionService.validateAdmin(sessionDTO);
+        userService.create(userDTO);
     }
 
     @Override
     @WebMethod
-    public User changeUserPassword(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "id") @NotNull final String id,
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password)
+    public void changeUserPassword(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "user") @Nullable final UserDTO userDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        return userService.edit(id, login, password);
+        sessionService.validateAdmin(sessionDTO);
+        userService.edit(userDTO);
     }
 
     @Override
     @WebMethod
-    public User editUserProfile(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password)
+    public void editUserProfile(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "user") @Nullable final UserDTO userDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return userService.edit(session.getUserId(), login, password);
+        sessionService.validate(sessionDTO);
+        userService.edit(userDTO);
     }
 
     @Override
     @WebMethod
-    public User findUserByLogin(
-            @WebParam(name = "session") @NotNull final Session session,
+    public UserDTO findUserByLogin(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
             @WebParam(name = "login") @NotNull final String login)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
+        sessionService.validateAdmin(sessionDTO);
         return userService.findByLogin(login);
     }
 
     @Override
     @WebMethod
-    public User getUserBySession(
-            @WebParam(name = "session") @NotNull final Session session)
+    public UserDTO getUserBySession(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return userService.findOne(session.getUserId());
+        sessionService.validate(sessionDTO);
+        return userService.findOne(sessionDTO.getUserId());
     }
 
     @Override
     @WebMethod
-    public Collection<User> findAllUser(
-            @WebParam(name = "session") @NotNull final Session session)
+    public Collection<UserDTO> findAllUser(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
+        sessionService.validateAdmin(sessionDTO);
         return userService.findAll();
-    }
-
-    @Override
-    @WebMethod
-    public void loadUserData(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.loadData();
-    }
-
-    @Override
-    @WebMethod
-    public void saveUserData(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.saveData();
-    }
-
-    @Override
-    @WebMethod
-    public void loadUserDataJaxbXml(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.loadDataJaxbXml();
-    }
-
-    @Override
-    @WebMethod
-    public void saveUserDataJaxbXml(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.saveDataJaxbXml();
-    }
-
-    @Override
-    @WebMethod
-    public void loadUserDataFasterXml(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.loadDataFasterXml();
-    }
-
-    @Override
-    @WebMethod
-    public void saveUserDataFasterXml(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.saveDataFasterXml();
-    }
-
-    @Override
-    @WebMethod
-    public void loadUserDataJaxbJSON(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.loadDataJaxbJSON();
-    }
-
-    @Override
-    @WebMethod
-    public void saveUserDataJaxbJSON(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.saveDataJaxbJSON();
-    }
-
-    @Override
-    @WebMethod
-    public void loadUserDataFasterJSON(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.loadDataFasterJSON();
-    }
-
-    @Override
-    @WebMethod
-    public void saveUserDataFasterJSON(
-            @WebParam(name = "session") @NotNull Session session)
-            throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
-        userService.saveDataFasterJSON();
     }
 }

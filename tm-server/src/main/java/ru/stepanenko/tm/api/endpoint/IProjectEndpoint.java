@@ -1,10 +1,8 @@
 package ru.stepanenko.tm.api.endpoint;
 
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
-import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.model.entity.Session;
+import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
@@ -17,49 +15,49 @@ import java.util.Collection;
 public interface IProjectEndpoint {
 
     @WebMethod
-    ProjectDTO createProject(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "project") @NotNull final ProjectDTO projectDTO)
+    void createProject(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "project") @Nullable final ProjectDTO projectDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    ProjectDTO editProject(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "project") @NotNull final ProjectDTO projectDTO)
+    void editProject(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "project") @Nullable final ProjectDTO projectDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Project findOneProject(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "id") @NotNull final String id)
+    ProjectDTO findOneProject(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Project removeProject(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "id") @NotNull final String id)
+    void removeProject(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Collection<Project> findAllProjectByUserId(
-            @WebParam(name = "session") @Nullable final Session session)
+    Collection<ProjectDTO> findAllProjectByUserId(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
     void removeAllProjectByUserId(
-            @WebParam(name = "session") @Nullable final Session session)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Collection<Project> sortAllProjectByUserId(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "parameter") @NotNull final String parameter)
+    Collection<ProjectDTO> sortAllProjectByUserId(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "parameter") @Nullable final String parameter)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Collection<Project> findAllProjectByPartOfNameOrDescription(
-            @WebParam(name = "session") @Nullable final Session session,
-            @WebParam(name = "name") @NotNull final String name,
-            @WebParam(name = "description") @NotNull final String description)
+    Collection<ProjectDTO> findAllProjectByPartOfNameOrDescription(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "name") @Nullable final String name,
+            @WebParam(name = "description") @Nullable final String description)
             throws AuthenticationSecurityException, DataValidateException;
 }

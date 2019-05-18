@@ -2,6 +2,7 @@ package ru.stepanenko.tm.api.endpoint;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
@@ -14,23 +15,23 @@ import javax.jws.WebService;
 public interface ISessionEndpoint {
 
     @WebMethod
-    Session openSession(
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password)
+    SessionDTO openSession(
+            @WebParam(name = "login") @Nullable final String login,
+            @WebParam(name = "password") @Nullable final String password)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
     void validateSession(
-            @WebParam(name = "session") @Nullable final Session session)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
     void validateAdminSession(
-            @WebParam(name = "session") @Nullable final Session session)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
-    Session closeSession(
-            @WebParam(name = "session") @NotNull final Session session)
+    void closeSession(
+            @WebParam(name = "session") @NotNull final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 }

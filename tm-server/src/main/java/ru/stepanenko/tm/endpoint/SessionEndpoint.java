@@ -7,6 +7,8 @@ import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.model.dto.SessionDTO;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -34,38 +36,36 @@ public class SessionEndpoint implements ISessionEndpoint {
 
     @Override
     @WebMethod
-    public Session openSession(
-            @WebParam(name = "login") @NotNull final String login,
-            @WebParam(name = "password") @NotNull final String password)
+    public SessionDTO openSession(
+            @WebParam(name = "login") @Nullable final String login,
+            @WebParam(name = "password") @Nullable final String password)
             throws AuthenticationSecurityException, DataValidateException {
-        @NotNull
-        User loggedUser = userService.authenticationUser(login, password);
-        return sessionService.create(loggedUser.getId());
+        @NotNull UserDTO loggedUser = userService.authenticationUser(login, password);
+        return sessionService.create(loggedUser);
     }
 
     @Override
     @WebMethod
     public void validateSession(
-            @WebParam(name = "session") @Nullable final Session session)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
+        sessionService.validate(sessionDTO);
     }
 
     @Override
     @WebMethod
     public void validateAdminSession(
-            @WebParam(name = "session") @Nullable final Session session)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validateAdmin(session);
+        sessionService.validateAdmin(sessionDTO);
     }
 
     @Override
     @WebMethod
-    public Session closeSession(
-            @WebParam(name = "session") @NotNull final Session session)
+    public void closeSession(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return sessionService.remove(session.getId());
+        sessionService.validate(sessionDTO);
+        sessionService.remove(sessionDTO.getId());
     }
-
 }

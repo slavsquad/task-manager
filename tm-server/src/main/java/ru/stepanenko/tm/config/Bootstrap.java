@@ -7,6 +7,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.*;
+import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
@@ -68,10 +70,20 @@ public class Bootstrap {
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
 
         try {
+            UserDTO admin = new UserDTO();
+            admin.setLogin("admin");
+            admin.setPassword("admin");
+            admin.setRole(Role.ADMINISTRATOR);
+
+            UserDTO user = new UserDTO();
+            user.setLogin("user");
+            user.setPassword("user");
+            user.setRole(Role.USER);
+
+
             if (userService.findAll() == null || userService.findAll().isEmpty()){
-                userService.create("ecc9066a-8d60-4988-b00f-5dac3e95a250", "admin", "admin", "admin");
-                userService.create("71242a19-1b98-4953-b3b6-fa4e2182c3a3", "user", "user", "user");
-                userService.create("218ef653-2c56-4f88-866b-f98b4d3e5441", "root", "root", "user");
+                userService.create(admin);
+                userService.create(user);
             }
         } catch (DataValidateException e) {
             e.printStackTrace();
@@ -102,7 +114,8 @@ public class Bootstrap {
         final Metadata metadata = sources.getMetadataBuilder().build();
         return metadata.getSessionFactoryBuilder().build();
     }
-    private void generateTestData(IServiceLocator serviceLocator) {
+
+    /*private void generateTestData(IServiceLocator serviceLocator) {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final ITaskService taskService = serviceLocator.getTaskService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
@@ -130,5 +143,5 @@ public class Bootstrap {
         } catch (DataValidateException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }

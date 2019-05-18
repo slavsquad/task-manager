@@ -2,10 +2,13 @@ package ru.stepanenko.tm.endpoint;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
 import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
+import ru.stepanenko.tm.model.dto.SessionDTO;
+import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -34,106 +37,101 @@ public class TaskEndpoint implements ITaskEndpoint {
 
     @Override
     @WebMethod
-    public Task createTask(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "name") @NotNull final String name,
-            @WebParam(name = "description") @NotNull final String description,
-            @WebParam(name = "projectId") @NotNull final String projectId)
+    public void createTask(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "task") @Nullable final TaskDTO taskDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.create(name, description, projectId, session.getUserId());
+        sessionService.validate(sessionDTO);
+        taskService.create(taskDTO);
     }
 
     @Override
     @WebMethod
-    public Task editTask(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "id") @NotNull final String id,
-            @WebParam(name = "name") @NotNull final String name,
-            @WebParam(name = "description") @NotNull final String description,
-            @WebParam(name = "status") @NotNull final String status)
+    public void editTask(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "task") @Nullable final TaskDTO taskDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.edit(id, name, description, status);
+        sessionService.validate(sessionDTO);
+        taskService.edit(taskDTO);
     }
 
     @Override
     @WebMethod
-    public Task findOneTask(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "id") @NotNull final String id)
+    public TaskDTO findOneTask(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.findOne(id, session.getUserId());
+        sessionService.validate(sessionDTO);
+        return taskService.findOne(id, sessionDTO.getUserId());
     }
 
     @Override
     @WebMethod
-    public Task removeTask(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "id") @NotNull final String id)
+    public void removeTask(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.remove(id, session.getUserId());
+        sessionService.validate(sessionDTO);
+        taskService.remove(id, sessionDTO.getUserId());
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByProjectId(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "id") @NotNull final String id)
+    public Collection<TaskDTO> findAllTaskByProjectId(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.findAllByProjectId(id, session.getUserId());
+        sessionService.validate(sessionDTO);
+        return taskService.findAllByProjectId(id, sessionDTO.getUserId());
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByUserId(
-            @WebParam(name = "session") @NotNull final Session session)
+    public Collection<TaskDTO> findAllTaskByUserId(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.findAllByUserId(session.getUserId());
+        sessionService.validate(sessionDTO);
+        return taskService.findAllByUserId(sessionDTO.getUserId());
     }
 
     @Override
     @WebMethod
     public void removeAllTaskByProjectId(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "id") @NotNull final String id)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        taskService.removeAllByProjectId(id, session.getUserId());
+        sessionService.validate(sessionDTO);
+        taskService.removeAllByProjectId(id, sessionDTO.getUserId());
     }
 
     @Override
     @WebMethod
     public void removeAllTaskByUserId(
-            @WebParam(name = "session") @NotNull final Session session)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        taskService.removeAllByUserId(session.getUserId());
+        sessionService.validate(sessionDTO);
+        taskService.removeAllByUserId(sessionDTO.getUserId());
 
     }
 
     @Override
     @WebMethod
-    public Collection<Task> sortAllTaskByUserId(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "comparator") @NotNull final String comparator)
+    public Collection<TaskDTO> sortAllTaskByUserId(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "comparator") @Nullable final String comparator)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.sortAllByUserId(session.getUserId(), comparator);
+        sessionService.validate(sessionDTO);
+        return taskService.sortAllByUserId(sessionDTO.getUserId(), comparator);
     }
 
     @Override
     @WebMethod
-    public Collection<Task> findAllTaskByPartOfNameOrDescription(
-            @WebParam(name = "session") @NotNull final Session session,
-            @WebParam(name = "name") @NotNull final String name,
-            @WebParam(name = "description") @NotNull final String description)
+    public Collection<TaskDTO> findAllTaskByPartOfNameOrDescription(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "name") @Nullable final String name,
+            @WebParam(name = "description") @Nullable final String description)
             throws AuthenticationSecurityException, DataValidateException {
-        sessionService.validate(session);
-        return taskService.findAllByPartOfNameOrDescription(name, description, session.getUserId());
+        sessionService.validate(sessionDTO);
+        return taskService.findAllByPartOfNameOrDescription(name, description, sessionDTO.getUserId());
     }
 }
