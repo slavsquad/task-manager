@@ -1,173 +1,200 @@
 package ru.stepanenko.tm.service;
 
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.repository.IProjectRepository;
+import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
+import ru.stepanenko.tm.model.dto.TaskDTO;
+import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Task;
-import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
-import ru.stepanenko.tm.util.ParameterValidator;
-import ru.stepanenko.tm.util.EnumUtil;
+import ru.stepanenko.tm.model.entity.User;
+import ru.stepanenko.tm.repository.ProjectRepository;
+import ru.stepanenko.tm.repository.TaskRepository;
+import ru.stepanenko.tm.repository.UserRepository;
 import ru.stepanenko.tm.util.DataValidator;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public final class TaskService implements ITaskService {
 
     @NotNull
-    final SqlSessionFactory sessionFactory;
+    final EntityManagerFactory entityManagerFactory;
 
     @Override
-    public Task create(
-            @NotNull final String name,
-            @NotNull final String description,
-            @NotNull final String projectID,
-            @NotNull final String userID)
+    public void create(
+            @NotNull final TaskDTO taskDTO)
             throws DataValidateException {
-        DataValidator.validateString(name, description, projectID, userID);
-        @NotNull final Task task = new Task(name, description, projectID, userID);
-        @Nullable SqlSession session = null;
+        DataValidator.validateTaskDTO(taskDTO);
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).persist(task);
-            session.commit();
-            return task;
+            entityManager.getTransaction().begin();
+            @NotNull final Task task = convertDTOtoTask(taskDTO, entityManager);
+            taskRepository.persist(task);
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
     @Override
-    public Task edit(
-            @NotNull final String id,
-            @NotNull final String name,
-            @NotNull final String description,
-            @NotNull final String status)
+    public void edit(
+            @NotNull final TaskDTO taskDTO)
             throws DataValidateException {
-        DataValidator.validateString(id, name, description, status);
-        DataValidator.validateStatus(status);
-        @NotNull final Task task = findOne(id);
-        task.setName(name);
-        task.setDescription(description);
-        task.setStatus(status);
-        if (Status.DONE == EnumUtil.stringToStatus(status)) {
-            task.setDateEnd(new Date());
-        } else {
-            task.setDateEnd(null);
-        }
-        @Nullable SqlSession session = null;
+        DataValidator.validateTaskDTO(taskDTO);
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).merge(task);
-            session.commit();
-            return task;
+            entityManager.getTransaction().begin();
+            @NotNull final Task task = convertDTOtoTask(taskDTO, entityManager);
+            taskRepository.merge(task);
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
     @Override
-    public Task findOne(
+    public TaskDTO findOne(
             @NotNull final String id,
             @NotNull final String userId)
             throws DataValidateException {
         DataValidator.validateString(id, userId);
-        try (SqlSession session = sessionFactory.openSession()) {
-            @Nullable final Task task = session.getMapper(ITaskRepository.class).findOneByUserId(id, userId);
-            if (task == null) throw new DataValidateException("TaskDTO does not found!");
-            return task;
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Task task = taskRepository
+                    .findOneByUserId(id, getUser(userId, entityManager));
+            entityManager.getTransaction().commit();
+            if (task==null) throw new DataValidateException("Task not found");
+            return task.getDTO();
         } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public Task remove(
+    public void remove(
             @NotNull final String id,
             @NotNull final String userId)
             throws DataValidateException {
         DataValidator.validateString(id, userId);
-        @Nullable final Task task = findOne(id, userId);
-        @Nullable SqlSession session = null;
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).removeOneByUserId(id, userId);
-            session.commit();
-            return task;
+            entityManager.getTransaction().begin();
+            @NotNull final Task task = taskRepository
+                    .findOneByUserId(id, getUser(userId, entityManager));
+            if (task==null) throw new DataValidateException("Task not found");
+            taskRepository.remove(task);
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
     @Override
     public void clear()
             throws DataValidateException {
-        @Nullable SqlSession session = null;
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).removeAll();
-            session.commit();
+            entityManager.getTransaction().begin();
+            taskRepository.removeAll();
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
     @Override
-    public Task findOne(
+    public TaskDTO findOne(
             @NotNull final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ITaskRepository.class).findOne(id);
-        }catch (Exception e) {
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Task task = taskRepository
+                    .findOne(id);
+            entityManager.getTransaction().commit();
+            if (task==null) throw new DataValidateException("Task not found");
+            return task.getDTO();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public Task remove(
+    public void remove(
             @NotNull final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
-        @Nullable final Task task = findOne(id);
-        @Nullable SqlSession session = null;
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).remove(id);
-            session.commit();
-            return task;
+            entityManager.getTransaction().begin();
+            @NotNull final Task task = taskRepository
+                    .findOne(id);
+            if (task==null) throw new DataValidateException("Task not found");
+            taskRepository.remove(task);
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
     @Override
-    public Collection<Task> findAll()
+    public Collection<TaskDTO> findAll()
             throws DataValidateException {
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ITaskRepository.class).findAll();
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Collection<Task> tasks = taskRepository
+                    .findAll();
+            entityManager.getTransaction().commit();
+            if (tasks==null) throw new DataValidateException("Tasks not found");
+            return tasks
+                    .stream()
+                    .map(Task::getDTO)
+                    .collect(Collectors.toList());
         } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
@@ -177,16 +204,18 @@ public final class TaskService implements ITaskService {
             @NotNull final String userId)
             throws DataValidateException {
         DataValidator.validateString(id, userId);
-        @Nullable SqlSession session = null;
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).removeAllByProjectAndUserId(id, userId);
-            session.commit();
+            entityManager.getTransaction().begin();
+            taskRepository
+                    .removeAllByProjectAndUserId(getProject(id,entityManager),getUser(userId, entityManager));
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
@@ -195,70 +224,158 @@ public final class TaskService implements ITaskService {
             @NotNull final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
-        @Nullable SqlSession session = null;
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
-            session = sessionFactory.openSession();
-            session.getMapper(ITaskRepository.class).removeAllByUserId(id);
-            session.commit();
+            entityManager.getTransaction().begin();
+            taskRepository
+                    .removeAllByUserId(getUser(id, entityManager));
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
-            if (session != null) session.rollback();
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
         } finally {
-            if (session != null) session.close();
+            entityManager.close();
         }
     }
 
     @Override
-    public Collection<Task> sortAllByUserId(
+    public Collection<TaskDTO> sortAllByUserId(
             @NotNull final String id,
             @NotNull final String parameter)
             throws DataValidateException {
         DataValidator.validateString(id, parameter);
-        if (!ParameterValidator.validate(parameter)) throw new DataValidateException("Incorrect input parameter for task's sorting!");
-        if ("order".equals(parameter)) return findAllByUserId(id);
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ITaskRepository.class).sortAllByUserId(id, parameter);
-        }catch (Exception e){
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Collection<Task> tasks = taskRepository
+                    .sortAllByUserId(getUser(id,entityManager),parameter);
+            entityManager.getTransaction().commit();
+            if (tasks==null) throw new DataValidateException("Tasks not found");
+            return tasks
+                    .stream()
+                    .map(Task::getDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public Collection<Task> findAllByPartOfNameOrDescription(
+    public Collection<TaskDTO> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
             @NotNull final String userId)
             throws DataValidateException {
         DataValidator.validateString(name, description, userId);
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ITaskRepository.class).findAllByPartOfNameOrDescription(name, description, userId);
-        }catch (Exception e) {
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Collection<Task> tasks = taskRepository
+                    .findAllByPartOfNameOrDescription(name, description,getUser(userId,entityManager));
+            entityManager.getTransaction().commit();
+            if (tasks==null) throw new DataValidateException("Tasks not found");
+            return tasks
+                    .stream()
+                    .map(Task::getDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public Collection<Task> findAllByProjectId(
+    public Collection<TaskDTO> findAllByProjectId(
             @NotNull final String id,
             @NotNull final String userId)
             throws DataValidateException {
         DataValidator.validateString(id, userId);
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ITaskRepository.class).findAllByProjectAndUserId(id, userId);
-        }catch (Exception e) {
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Collection<Task> tasks = taskRepository
+                    .findAllByProjectAndUserId(getProject(id, entityManager), getUser(userId, entityManager));
+            entityManager.getTransaction().commit();
+            if (tasks==null) throw new DataValidateException("Tasks not found");
+            return tasks
+                    .stream()
+                    .map(Task::getDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
     }
 
     @Override
-    public Collection<Task> findAllByUserId(
+    public Collection<TaskDTO> findAllByUserId(
             @NotNull final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
-        try (SqlSession session = sessionFactory.openSession()) {
-            return session.getMapper(ITaskRepository.class).findAllByUserId(id);
-        }catch (Exception e) {
+        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
+        @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
+        try {
+            entityManager.getTransaction().begin();
+            @NotNull final Collection<Task> tasks = taskRepository
+                    .findAllByUserId(getUser(id,entityManager));
+            entityManager.getTransaction().commit();
+            if (tasks==null) throw new DataValidateException("Tasks not found");
+            return tasks
+                    .stream()
+                    .map(Task::getDTO)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
+        } finally {
+            entityManager.close();
         }
+    }
+
+    private Task convertDTOtoTask(
+            @NotNull final TaskDTO taskDTO,
+            @NotNull final EntityManager entityManager)
+            throws DataValidateException {
+        @NotNull final Task task = new Task();
+        task.setId(taskDTO.getId());
+        task.setName(taskDTO.getName());
+        task.setDescription(taskDTO.getDescription());
+        task.setDateBegin(taskDTO.getDateBegin());
+        task.setDateEnd(taskDTO.getDateEnd());
+        task.setUser(getUser(taskDTO.getUserId(), entityManager));
+        task.setProject(getProject(taskDTO.getProjectId(),entityManager));
+        task.setStatus(taskDTO.getStatus());
+        return task;
+    }
+
+    private User getUser(
+            @NotNull final String id,
+            @NotNull final EntityManager em)
+            throws DataValidateException {
+        @NotNull final IUserRepository userRepository = new UserRepository(em);
+        @Nullable final User user = userRepository.findOne(id);
+        if (user == null) throw new DataValidateException("User not found!");
+        return user;
+    }
+
+    private Project getProject(
+            @NotNull final String id,
+            @NotNull final EntityManager em)
+            throws DataValidateException{
+        @NotNull final IProjectRepository projectRepository = new ProjectRepository(em);
+        @Nullable final Project project = projectRepository.findOne(id);
+        if (project == null) throw new DataValidateException("Project not found!");
+        return project;
     }
 }

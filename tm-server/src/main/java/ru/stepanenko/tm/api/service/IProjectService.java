@@ -50,18 +50,14 @@ public interface IProjectService {
             @NotNull final String id)
             throws DataValidateException;
 
-    Collection<Project> sortAllByUserId(
+    Collection<ProjectDTO> sortAllByUserId(
             @NotNull final String id,
             @NotNull final String parameter)
             throws DataValidateException;
 
-    Collection<Project> findAllByPartOfNameOrDescription(
+    Collection<ProjectDTO> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
             @NotNull final String userId)
             throws DataValidateException;
-
-    Project convertDTOtoProject(
-            @NotNull final ProjectDTO projectDTO,
-            @NotNull final EntityManager entityManager) throws DataValidateException;
 }

@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.util;
 
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.*;
@@ -79,7 +80,8 @@ public class DataValidator {
     }
 
     public static void validateUserDTO(
-            @Nullable final UserDTO userDTO)
+            @Nullable final UserDTO userDTO,
+            @NotNull final boolean validatePassword)
             throws DataValidateException {
         if (userDTO==null)
             throw new DataValidateException("Incorrect user dto!");
@@ -87,8 +89,9 @@ public class DataValidator {
             throw new DataValidateException("Id user not must be empty!");
         if (userDTO.getLogin()==null||userDTO.getLogin().isEmpty())
             throw new DataValidateException("User login not must be empty!");
-        if (userDTO.getPassword()==null||userDTO.getPassword().isEmpty())
-            throw new DataValidateException("User password not must be empty!");
+        if (validatePassword)
+            if (userDTO.getPassword()==null||userDTO.getPassword().isEmpty())
+                throw new DataValidateException("User password not must be empty!");
         validateRole(userDTO.getRole().toString());
     }
 

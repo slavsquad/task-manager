@@ -1,33 +1,29 @@
 package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
+import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.persistence.EntityManager;
 import java.util.Collection;
 
 public interface ITaskService {
 
-    Task create(
-            @NotNull final String name,
-            @NotNull final String description,
-            @NotNull final String projectID,
-            @NotNull final String userID)
+    void create(
+            @NotNull final TaskDTO taskDTO)
             throws DataValidateException;
 
-    Task edit(
-            @NotNull final String id,
-            @NotNull final String name,
-            @NotNull final String description,
-            @NotNull final String status)
+    void edit(
+            @NotNull final TaskDTO taskDTO)
             throws DataValidateException;
 
-    Task findOne(
+    TaskDTO findOne(
             @NotNull final String id,
             @NotNull final String userId)
             throws DataValidateException;
 
-    Task remove(
+    void remove(
             @NotNull final String id,
             @NotNull final String userId)
             throws DataValidateException;
@@ -35,23 +31,23 @@ public interface ITaskService {
     void clear()
             throws DataValidateException;
 
-    Task findOne(
+    TaskDTO findOne(
             @NotNull final String id)
             throws DataValidateException;
 
-    Task remove(
+    void remove(
             @NotNull final String id)
             throws DataValidateException;
 
-    Collection<Task> findAll()
+    Collection<TaskDTO> findAll()
             throws DataValidateException;
 
-    Collection<Task> findAllByProjectId(
+    Collection<TaskDTO> findAllByProjectId(
             @NotNull final String id,
             @NotNull final String userId)
             throws DataValidateException;
 
-    Collection<Task> findAllByUserId(
+    Collection<TaskDTO> findAllByUserId(
             @NotNull final String id)
             throws DataValidateException;
 
@@ -64,12 +60,12 @@ public interface ITaskService {
             @NotNull final String id)
             throws DataValidateException;
 
-    Collection<Task> sortAllByUserId(
+    Collection<TaskDTO> sortAllByUserId(
             @NotNull final String id,
             @NotNull final String comparator)
             throws DataValidateException;
 
-    Collection<Task> findAllByPartOfNameOrDescription(
+    Collection<TaskDTO> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
             @NotNull final String userId)

@@ -2,9 +2,10 @@ package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.model.entity.Session;
+import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
+import ru.stepanenko.tm.model.dto.UserDTO;
 
 import java.util.Collection;
 
@@ -13,26 +14,26 @@ public interface ISessionService {
     void clear()
             throws DataValidateException;
 
-    Session findOne(
+    SessionDTO findOne(
             @NotNull final String id)
             throws DataValidateException;
 
-    Session remove(
+    void remove(
             @NotNull final String id)
             throws DataValidateException;
 
-    Collection<Session> findAll()
+    Collection<SessionDTO> findAll()
             throws DataValidateException;
 
-    Session create(
-            @NotNull final String userId)
+    SessionDTO create(
+            @NotNull final UserDTO userDTO)
             throws DataValidateException;
 
     void validate(
-            @Nullable final Session session)
+            @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 
     void validateAdmin(
-            @Nullable final Session session)
+            @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 }
