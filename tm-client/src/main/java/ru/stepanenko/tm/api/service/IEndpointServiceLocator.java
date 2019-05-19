@@ -10,6 +10,6 @@ public interface IEndpointServiceLocator {
     UserEndpoint getUserEndpoint();
     SessionEndpoint getSessionEndpoint();
     ITerminalService getTerminalService();
-    Session getSession();
-    void setSession(@NotNull final Session session);
+    SessionDTO getSessionDTO();
+    void setSessionDTO(@NotNull final SessionDTO sessionDTO);
 }

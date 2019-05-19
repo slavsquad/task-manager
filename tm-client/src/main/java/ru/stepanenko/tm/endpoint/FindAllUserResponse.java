@@ -19,7 +19,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="return" type="{http://endpoint.tm.stepanenko.ru/}user" maxOccurs="unbounded" minOccurs="0"/&gt;
+ *         &lt;element name="return" type="{http://endpoint.tm.stepanenko.ru/}userDTO" maxOccurs="unbounded" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlType;
 public class FindAllUserResponse {
 
     @XmlElement(name = "return")
-    protected List<User> _return;
+    protected List<UserDTO> _return;
 
     /**
      * Gets the value of the return property.
@@ -55,13 +55,13 @@ public class FindAllUserResponse {
      * 
      * <p>
      * Objects of the following type(s) are allowed in the list
-     * {@link User }
+     * {@link UserDTO }
      * 
      * 
      */
-    public List<User> getReturn() {
+    public List<UserDTO> getReturn() {
         if (_return == null) {
-            _return = new ArrayList<User>();
+            _return = new ArrayList<UserDTO>();
         }
         return this._return;
     }

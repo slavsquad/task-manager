@@ -2,12 +2,11 @@ package ru.stepanenko.tm.command.user;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
-import ru.stepanenko.tm.endpoint.InputDataValidateException_Exception;
-import ru.stepanenko.tm.endpoint.Session;
-import ru.stepanenko.tm.endpoint.UserEndpoint;
+import ru.stepanenko.tm.endpoint.*;
+import ru.stepanenko.tm.util.HashUtil;
 
 @NoArgsConstructor
 public final class UserRegisterCommand extends AbstractCommand {
@@ -23,21 +22,26 @@ public final class UserRegisterCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
         System.out.println("Please input user name:");
-        @NotNull
-        String login = terminalService.nextLine();
+        @Nullable final String login = terminalService.nextLine();
         System.out.println("Please input password:");
-        @NotNull
-        String password = terminalService.nextLine();
+        @Nullable final String password = terminalService.nextLine();
         System.out.println("Please input user role(admin or user):");
-        @NotNull
-        String role = terminalService.nextLine();
-        userEndpoint.createUser(currentSession, login, password, role);
-        System.out.println("User " + login + " created!");
+        @Nullable final  String role = terminalService.nextLine();
+        @Nullable final UserDTO user = new UserDTO();
+        user.setLogin(login);
+        user.setPassword(HashUtil.md5(password));
+        try{
+            user.setRole(Role.valueOf(role.toUpperCase()));
+            userEndpoint.createUser(currentSession, user);
+            System.out.println("User " + login + " created!");
+        }catch (Exception e){
+            throw new DataValidateException_Exception(e.getMessage());
+        }
     }
 }

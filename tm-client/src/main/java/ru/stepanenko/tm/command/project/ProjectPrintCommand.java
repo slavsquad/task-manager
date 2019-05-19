@@ -21,14 +21,14 @@ public class ProjectPrintCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input project ID for print: ");
-        @NotNull final String id = terminalService.nextLine();
-        @Nullable final Project findProject = projectEndpoint.findOneProject(currentSession, id);
+        @Nullable final String id = terminalService.nextLine();
+        @Nullable final ProjectDTO findProject = projectEndpoint.findOneProject(currentSession, id);
         System.out.println("id: " + findProject.getId() +
                 "\nname: " + findProject.getName() +
                 "\ndescription: " + findProject.getDescription() +

@@ -5,8 +5,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.eclipse.persistence.jaxb.JAXBContextFactory;
 import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.jetbrains.annotations.NotNull;
@@ -44,14 +42,14 @@ public final class UserService implements IUserService {
 
     @Override
     public void create(
-            @NotNull final UserDTO userDTO)
+            @Nullable final UserDTO userDTO)
             throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull User user = convertDTOtoUser(userDTO);
+            @NotNull final User user = convertDTOtoUser(userDTO);
             userRepository
                     .persist(user);
             entityManager.getTransaction().commit();
@@ -65,14 +63,20 @@ public final class UserService implements IUserService {
 
     @Override
     public void edit(
-            @NotNull final UserDTO userDTO)
+            @Nullable final UserDTO userDTO)
             throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull User user = convertDTOtoUser(userDTO);
+            @Nullable final User user = userRepository.findOne(userDTO.getId());
+            if (user == null) throw new DataValidateException("User not found");
+            user.setName(userDTO.getName());
+            user.setDescription(userDTO.getDescription());
+            user.setLogin(userDTO.getLogin());
+            user.setPassword(userDTO.getPassword());
+            user.setRole(userDTO.getRole());
             userRepository
                     .merge(user);
             entityManager.getTransaction().commit();
@@ -86,17 +90,17 @@ public final class UserService implements IUserService {
 
     @Override
     public UserDTO findByLogin(
-            @NotNull final String login)
+            @Nullable final String login)
             throws DataValidateException {
         DataValidator.validateString(login);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @Nullable User user = userRepository
+            @Nullable final User user = userRepository
                     .findByLogin(login);
-            entityManager.getTransaction().commit();
             if (user == null) throw new DataValidateException("User not found");
+            entityManager.getTransaction().commit();
             return user.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -126,17 +130,17 @@ public final class UserService implements IUserService {
 
     @Override
     public UserDTO findOne(
-            @NotNull final String id)
+            @Nullable final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @Nullable User user = userRepository
+            @Nullable final User user = userRepository
                     .findOne(id);
-            entityManager.getTransaction().commit();
             if (user == null) throw new DataValidateException("User not found!");
+            entityManager.getTransaction().commit();
             return user.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -178,8 +182,8 @@ public final class UserService implements IUserService {
             entityManager.getTransaction().begin();
             @Nullable Collection<User> users = userRepository
                     .findAll();
-            entityManager.getTransaction().commit();
             if (users == null) throw new DataValidateException("Users not found!");
+            entityManager.getTransaction().commit();
             return users
                     .stream()
                     .map(User::getDTO)
@@ -194,32 +198,31 @@ public final class UserService implements IUserService {
 
     @Override
     public UserDTO authenticationUser(
-            @NotNull final String login,
-            @NotNull final String password)
+            @Nullable final String login,
+            @Nullable final String password)
             throws AuthenticationSecurityException, DataValidateException {
         DataValidator.validateString(login, password);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @Nullable User user = userRepository
+            @Nullable final User user = userRepository
                     .findByLogin(login);
-            entityManager.getTransaction().commit();
-            if (user == null) throw new DataValidateException("User not found!");
+            if (user == null) throw new AuthenticationSecurityException("Wrong user name!");
             if (!user.getPassword().equals(password)) throw new AuthenticationSecurityException("Wrong password!");
+            entityManager.getTransaction().commit();
             return user.getDTO();
-        } catch (AuthenticationSecurityException e) {
-            throw new AuthenticationSecurityException(e.getMessage());
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
+            System.out.println("Transaction rollback!");
+            throw new AuthenticationSecurityException(e.getMessage());
         } finally {
             entityManager.close();
         }
     }
 
     private User convertDTOtoUser(
-            @NotNull final UserDTO userDTO){
+            @Nullable final UserDTO userDTO){
         @NotNull final User user = new User();
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());

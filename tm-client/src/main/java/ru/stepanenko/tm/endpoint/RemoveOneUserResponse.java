@@ -7,12 +7,12 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for saveUserDataFasterXmlResponse complex type.
+ * <p>Java class for removeOneUserResponse complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="saveUserDataFasterXmlResponse"&gt;
+ * &lt;complexType name="removeOneUserResponse"&gt;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
@@ -25,8 +25,8 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "saveUserDataFasterXmlResponse")
-public class SaveUserDataFasterXmlResponse {
+@XmlType(name = "removeOneUserResponse")
+public class RemoveOneUserResponse {
 
 
 }

@@ -9,14 +9,14 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 
 /**
- * <p>Java class for session complex type.
+ * <p>Java class for sessionDTO complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="session"&gt;
+ * &lt;complexType name="sessionDTO"&gt;
  *   &lt;complexContent&gt;
- *     &lt;extension base="{http://endpoint.tm.stepanenko.ru/}abstractEntity"&gt;
+ *     &lt;extension base="{http://endpoint.tm.stepanenko.ru/}abstractEntityDTO"&gt;
  *       &lt;sequence&gt;
  *         &lt;element name="signature" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
  *         &lt;element name="timestamp" type="{http://www.w3.org/2001/XMLSchema}dateTime" minOccurs="0"/&gt;
@@ -30,13 +30,13 @@ import javax.xml.datatype.XMLGregorianCalendar;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "session", propOrder = {
+@XmlType(name = "sessionDTO", propOrder = {
     "signature",
     "timestamp",
     "userId"
 })
-public class Session
-    extends AbstractEntity
+public class SessionDTO
+    extends AbstractEntityDTO
 {
 
     protected String signature;

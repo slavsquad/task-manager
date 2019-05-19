@@ -7,17 +7,17 @@ import javax.xml.bind.annotation.XmlType;
 
 
 /**
- * <p>Java class for saveUserDataResponse complex type.
+ * <p>Java class for projectDTO complex type.
  * 
  * <p>The following schema fragment specifies the expected content contained within this class.
  * 
  * <pre>
- * &lt;complexType name="saveUserDataResponse"&gt;
+ * &lt;complexType name="projectDTO"&gt;
  *   &lt;complexContent&gt;
- *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
+ *     &lt;extension base="{http://endpoint.tm.stepanenko.ru/}baseEntityDTO"&gt;
  *       &lt;sequence&gt;
  *       &lt;/sequence&gt;
- *     &lt;/restriction&gt;
+ *     &lt;/extension&gt;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
@@ -25,8 +25,10 @@ import javax.xml.bind.annotation.XmlType;
  * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "saveUserDataResponse")
-public class SaveUserDataResponse {
+@XmlType(name = "projectDTO")
+public class ProjectDTO
+    extends BaseEntityDTO
+{
 
 
 }

@@ -20,6 +20,6 @@ public class UserDTO extends AbstractEntityDTO implements Serializable {
     @Nullable
     private String password = "";
 
-    @NotNull
+    @Nullable
     private Role role = Role.USER;
 }

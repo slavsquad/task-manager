@@ -2,6 +2,7 @@ package ru.stepanenko.tm.command.project;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
@@ -22,24 +23,20 @@ public class ProjectListSortCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input how to sort list project(order, dateBegin, dateEnd, status)");
-        @NotNull final String parameter = terminalService.nextLine();
-        Collection<Project> sortedProjects = projectEndpoint.sortAllProjectByUserId(currentSession, parameter);
-        if (sortedProjects.isEmpty()) {
-            System.out.println("Project list sorted by " + parameter + " :");
-            sortedProjects.forEach(e -> System.out.println("id: " + e.getId() +
+        @Nullable final String parameter = terminalService.nextLine();
+        System.out.println("Project list sorted by " + parameter + " :");
+        projectEndpoint.sortAllProjectByUserId(currentSession, parameter)
+                .forEach(e -> System.out.println("id: " + e.getId() +
                     " name: " + e.getName() +
                     " description: " + e.getDescription() +
                     " data start: " + e.getDateBegin() +
                     " data end: " + e.getDateEnd() +
                     " status: " + e.getStatus()));
-        } else {
-            System.out.println("Empty list of projects!");
-        }
     }
 }

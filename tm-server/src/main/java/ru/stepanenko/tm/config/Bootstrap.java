@@ -8,6 +8,8 @@ import org.hibernate.cfg.Environment;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.*;
 import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.model.dto.ProjectDTO;
+import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.Task;
@@ -15,6 +17,7 @@ import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.service.*;
 import ru.stepanenko.tm.model.entity.Project;
+import ru.stepanenko.tm.util.HashUtil;
 
 import javax.persistence.EntityManagerFactory;
 import javax.xml.ws.Endpoint;
@@ -35,7 +38,7 @@ public class Bootstrap {
         @NotNull final ISessionService sessionService = new SessionService(entityManagerFactory, propertyService);
         @NotNull final IServiceLocator serviceLocator = new ServiceLocator(projectService, taskService, userService, sessionService);
         generateTestUsers(serviceLocator);
-        //generateTestData(serviceLocator);
+        generateTestData(serviceLocator);
         registryEndpoint(endpoints, serviceLocator);
     }
 
@@ -72,12 +75,12 @@ public class Bootstrap {
         try {
             UserDTO admin = new UserDTO();
             admin.setLogin("admin");
-            admin.setPassword("admin");
-            admin.setRole(Role.ADMINISTRATOR);
+            admin.setPassword(HashUtil.md5("admin"));
+            admin.setRole(Role.ADMIN);
 
             UserDTO user = new UserDTO();
             user.setLogin("user");
-            user.setPassword("user");
+            user.setPassword(HashUtil.md5("user"));
             user.setRole(Role.USER);
 
 
@@ -115,33 +118,33 @@ public class Bootstrap {
         return metadata.getSessionFactoryBuilder().build();
     }
 
-    /*private void generateTestData(IServiceLocator serviceLocator) {
+    private void generateTestData(IServiceLocator serviceLocator) {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final ITaskService taskService = serviceLocator.getTaskService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
         @NotNull final ISessionService sessionService = serviceLocator.getSessionService();
         //----------------------------------------- test data-------------------------------------------
         try {
-            projectService.create("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId());
-            projectService.create("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId());
-            projectService.create("My_project_3", "Description for my project 3", userService.findByLogin("user").getId());
-            projectService.create("My_project_4", "Description for my project 4", userService.findByLogin("user").getId());
+            projectService.create(new ProjectDTO("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId()));
+            projectService.create(new ProjectDTO("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId()));
+            projectService.create(new ProjectDTO("My_project_3", "Description for my project 3", userService.findByLogin("user").getId()));
+            projectService.create(new ProjectDTO("My_project_4", "Description for my project 4", userService.findByLogin("user").getId()));
 
-            for (Project project : projectService.findAllByUserId(userService.findByLogin("admin").getId())) {
-                taskService.create("task_100", "Description for task 100", project.getId(), userService.findByLogin("admin").getId());
-                taskService.create("task_200", "Description for task 200", project.getId(), userService.findByLogin("admin").getId());
-                taskService.create("task_300", "Description for task 300", project.getId(), userService.findByLogin("admin").getId());
-                taskService.create("task_400", "Description for task 400", project.getId(), userService.findByLogin("admin").getId());
+            for (ProjectDTO project : projectService.findAllByUserId(userService.findByLogin("admin").getId())) {
+                taskService.create(new TaskDTO("task_100", "Description for task 100", project.getId(), userService.findByLogin("admin").getId()));
+                taskService.create(new TaskDTO("task_200", "Description for task 200", project.getId(), userService.findByLogin("admin").getId()));
+                taskService.create(new TaskDTO("task_300", "Description for task 300", project.getId(), userService.findByLogin("admin").getId()));
+                taskService.create(new TaskDTO("task_400", "Description for task 400", project.getId(), userService.findByLogin("admin").getId()));
             }
 
-            for (Project project : projectService.findAllByUserId(userService.findByLogin("user").getId())) {
-                taskService.create("task_1", "Description for task 1", project.getId(), userService.findByLogin("user").getId());
-                taskService.create("task_2", "Description for task 2", project.getId(), userService.findByLogin("user").getId());
-                taskService.create("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId());
-                taskService.create("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId());
+            for (ProjectDTO project : projectService.findAllByUserId(userService.findByLogin("user").getId())) {
+                taskService.create(new TaskDTO("task_1", "Description for task 1", project.getId(), userService.findByLogin("user").getId()));
+                taskService.create(new TaskDTO("task_2", "Description for task 2", project.getId(), userService.findByLogin("user").getId()));
+                taskService.create(new TaskDTO("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId()));
+                taskService.create(new TaskDTO("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId()));
             }
         } catch (DataValidateException e) {
             e.printStackTrace();
         }
-    }*/
+    }
 }

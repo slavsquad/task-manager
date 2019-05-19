@@ -26,5 +26,5 @@ public class EndpointServiceLocator implements IEndpointServiceLocator {
 
     @Setter
     @Nullable
-    private Session session;
+    private SessionDTO sessionDTO;
 }

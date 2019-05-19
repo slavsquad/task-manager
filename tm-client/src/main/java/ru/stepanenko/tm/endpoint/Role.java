@@ -14,7 +14,7 @@ import javax.xml.bind.annotation.XmlType;
  * &lt;simpleType name="role"&gt;
  *   &lt;restriction base="{http://www.w3.org/2001/XMLSchema}string"&gt;
  *     &lt;enumeration value="USER"/&gt;
- *     &lt;enumeration value="ADMINISTRATOR"/&gt;
+ *     &lt;enumeration value="ADMIN"/&gt;
  *   &lt;/restriction&gt;
  * &lt;/simpleType&gt;
  * </pre>
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 public enum Role {
 
     USER,
-    ADMINISTRATOR;
+    ADMIN;
 
     public String value() {
         return name();

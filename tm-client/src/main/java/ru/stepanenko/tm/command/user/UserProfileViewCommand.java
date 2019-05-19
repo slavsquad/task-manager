@@ -20,12 +20,13 @@ public final class UserProfileViewCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception  {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception  {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @NotNull final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        @Nullable final User currentUser = userEndpoint.getUserBySession(currentSession);
-        System.out.println("Welcome to user: " + userEndpoint.getUserBySession(currentSession) + " profile ");
-        System.out.println(currentUser);
+        @Nullable final UserDTO currentUser = userEndpoint.getUserBySession(currentSession);
+        System.out.println("Welcome to user: " + currentUser.getLogin()+ " profile ");
+        System.out.println("Login: " +currentUser.getLogin());
+        System.out.println("Role: " +currentUser.getRole());
     }
 }

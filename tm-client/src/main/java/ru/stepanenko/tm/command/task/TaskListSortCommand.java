@@ -2,6 +2,7 @@ package ru.stepanenko.tm.command.task;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
@@ -22,21 +23,15 @@ public class TaskListSortCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input how to sort list task(order, dateBegin, dateEnd, status)");
-        @NotNull final String parameter = terminalService.nextLine();
-        Collection<Task> sortedTasks = taskEndpoint.sortAllTaskByUserId(currentSession, parameter);
-        if (sortedTasks == null || sortedTasks.isEmpty()) {
-            System.out.println("Task list is empty!");
-            return;
-        }
-
+        @Nullable final String parameter = terminalService.nextLine();
         System.out.println("List task's sorted by " + parameter + " :");
-        sortedTasks.forEach(e -> System.out.println("id: " + e.getId() +
+        taskEndpoint.sortAllTaskByUserId(currentSession, parameter).forEach(e -> System.out.println("id: " + e.getId() +
                 " name: " + e.getName() +
                 " description: " + e.getDescription() +
                 " data start: " + e.getDateBegin() +

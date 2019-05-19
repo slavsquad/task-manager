@@ -16,10 +16,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="session" type="{http://endpoint.tm.stepanenko.ru/}session" minOccurs="0"/&gt;
- *         &lt;element name="login" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="password" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="role" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="session" type="{http://endpoint.tm.stepanenko.ru/}sessionDTO" minOccurs="0"/&gt;
+ *         &lt;element name="user" type="{http://endpoint.tm.stepanenko.ru/}userDTO" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -31,26 +29,22 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "createUser", propOrder = {
     "session",
-    "login",
-    "password",
-    "role"
+    "user"
 })
 public class CreateUser {
 
-    protected Session session;
-    protected String login;
-    protected String password;
-    protected String role;
+    protected SessionDTO session;
+    protected UserDTO user;
 
     /**
      * Gets the value of the session property.
      * 
      * @return
      *     possible object is
-     *     {@link Session }
+     *     {@link SessionDTO }
      *     
      */
-    public Session getSession() {
+    public SessionDTO getSession() {
         return session;
     }
 
@@ -59,83 +53,35 @@ public class CreateUser {
      * 
      * @param value
      *     allowed object is
-     *     {@link Session }
+     *     {@link SessionDTO }
      *     
      */
-    public void setSession(Session value) {
+    public void setSession(SessionDTO value) {
         this.session = value;
     }
 
     /**
-     * Gets the value of the login property.
+     * Gets the value of the user property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link UserDTO }
      *     
      */
-    public String getLogin() {
-        return login;
+    public UserDTO getUser() {
+        return user;
     }
 
     /**
-     * Sets the value of the login property.
+     * Sets the value of the user property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link UserDTO }
      *     
      */
-    public void setLogin(String value) {
-        this.login = value;
-    }
-
-    /**
-     * Gets the value of the password property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the value of the password property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setPassword(String value) {
-        this.password = value;
-    }
-
-    /**
-     * Gets the value of the role property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getRole() {
-        return role;
-    }
-
-    /**
-     * Sets the value of the role property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setRole(String value) {
-        this.role = value;
+    public void setUser(UserDTO value) {
+        this.user = value;
     }
 
 }

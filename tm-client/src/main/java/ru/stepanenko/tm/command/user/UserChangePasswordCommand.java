@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
+import ru.stepanenko.tm.util.HashUtil;
 
 @NoArgsConstructor
 public final class UserChangePasswordCommand extends AbstractCommand {
@@ -21,18 +22,19 @@ public final class UserChangePasswordCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception  {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception  {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
         System.out.println("Please input user name:");
-        @NotNull final String login = terminalService.nextLine();
-        @Nullable final User user = userEndpoint.findUserByLogin(currentSession, login);
+        @Nullable final String login = terminalService.nextLine();
+        @Nullable final UserDTO user = userEndpoint.findUserByLogin(currentSession, login);
         System.out.println("Please input password:");
-        @NotNull
+        @Nullable
         String password = terminalService.nextLine();
-        userEndpoint.changeUserPassword(currentSession, user.getId(), user.getLogin(), password);
+        user.setPassword(HashUtil.md5(password));
+        userEndpoint.changeUserPassword(currentSession, user);
         System.out.println("User " + login + " password changed!");
     }
 }

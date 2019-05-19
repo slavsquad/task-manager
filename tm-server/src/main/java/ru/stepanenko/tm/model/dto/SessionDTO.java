@@ -10,16 +10,15 @@ import java.util.Date;
 @Getter
 @Setter
 @NoArgsConstructor
-
 public class SessionDTO extends AbstractEntityDTO {
 
     @Nullable
-    private String userId = null;
+    private Date timestamp = null;
 
     @Nullable
     private String signature = null;
 
     @Nullable
-    private Date timestamp = null;
+    private String userId = null;
 
 }

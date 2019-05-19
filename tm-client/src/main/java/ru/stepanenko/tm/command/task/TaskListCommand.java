@@ -23,15 +23,15 @@ public final class TaskListCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input project id or press ENTER for print all tasks: ");
-        @Nullable final Collection<Task> findTasks;
-        @NotNull final String id = terminalService.nextLine();
+        @Nullable final Collection<TaskDTO> findTasks;
+        @Nullable final String id = terminalService.nextLine();
         if ("".equals(id)) {
             findTasks = taskEndpoint.findAllTaskByUserId(currentSession);
             if (findTasks == null || findTasks.isEmpty()) {
@@ -42,7 +42,7 @@ public final class TaskListCommand extends AbstractCommand {
             return;
         }
 
-        @Nullable final Project project = projectEndpoint.findOneProject(currentSession, id);
+        @Nullable final ProjectDTO project = projectEndpoint.findOneProject(currentSession, id);
         findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
         if (findTasks == null || findTasks.isEmpty()) {
             System.out.println("List task for project id:" + id + " is empty!");

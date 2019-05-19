@@ -20,14 +20,14 @@ public class TaskPrintCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Input task id for print: ");
-        @NotNull final String id = terminalService.nextLine();
-        @Nullable Task task = taskEndpoint.findOneTask(currentSession, id);
+        @Nullable final String id = terminalService.nextLine();
+        @Nullable TaskDTO task = taskEndpoint.findOneTask(currentSession, id);
         System.out.println("id: " + task.getId() +
                 "\nname: " + task.getName() +
                 "\ndescription: " + task.getDescription() +

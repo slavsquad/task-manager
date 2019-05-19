@@ -57,7 +57,15 @@ public final class TaskService implements ITaskService {
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull final Task task = convertDTOtoTask(taskDTO, entityManager);
+            @Nullable final Task task = taskRepository.findOne(taskDTO.getId());
+            if (task==null) throw new DataValidateException("Task not found");
+            task.setName(taskDTO.getName());
+            task.setDescription(taskDTO.getDescription());
+            task.setStatus(taskDTO.getStatus());
+            task.setDateBegin(taskDTO.getDateBegin());
+            task.setDateEnd(taskDTO.getDateEnd());
+            taskRepository
+                    .merge(task);
             taskRepository.merge(task);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
@@ -80,8 +88,8 @@ public final class TaskService implements ITaskService {
             entityManager.getTransaction().begin();
             @NotNull final Task task = taskRepository
                     .findOneByUserId(id, getUser(userId, entityManager));
-            entityManager.getTransaction().commit();
             if (task==null) throw new DataValidateException("Task not found");
+            entityManager.getTransaction().commit();
             return task.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -142,8 +150,8 @@ public final class TaskService implements ITaskService {
             entityManager.getTransaction().begin();
             @NotNull final Task task = taskRepository
                     .findOne(id);
-            entityManager.getTransaction().commit();
             if (task==null) throw new DataValidateException("Task not found");
+            entityManager.getTransaction().commit();
             return task.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -184,8 +192,8 @@ public final class TaskService implements ITaskService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Task> tasks = taskRepository
                     .findAll();
-            entityManager.getTransaction().commit();
             if (tasks==null) throw new DataValidateException("Tasks not found");
+            entityManager.getTransaction().commit();
             return tasks
                     .stream()
                     .map(Task::getDTO)
@@ -245,14 +253,15 @@ public final class TaskService implements ITaskService {
             @NotNull final String parameter)
             throws DataValidateException {
         DataValidator.validateString(id, parameter);
+        if ("order".equals(parameter)) return findAllByUserId(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Task> tasks = taskRepository
                     .sortAllByUserId(getUser(id,entityManager),parameter);
-            entityManager.getTransaction().commit();
             if (tasks==null) throw new DataValidateException("Tasks not found");
+            entityManager.getTransaction().commit();
             return tasks
                     .stream()
                     .map(Task::getDTO)
@@ -278,8 +287,8 @@ public final class TaskService implements ITaskService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Task> tasks = taskRepository
                     .findAllByPartOfNameOrDescription(name, description,getUser(userId,entityManager));
-            entityManager.getTransaction().commit();
             if (tasks==null) throw new DataValidateException("Tasks not found");
+            entityManager.getTransaction().commit();
             return tasks
                     .stream()
                     .map(Task::getDTO)
@@ -304,8 +313,8 @@ public final class TaskService implements ITaskService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Task> tasks = taskRepository
                     .findAllByProjectAndUserId(getProject(id, entityManager), getUser(userId, entityManager));
-            entityManager.getTransaction().commit();
             if (tasks==null) throw new DataValidateException("Tasks not found");
+            entityManager.getTransaction().commit();
             return tasks
                     .stream()
                     .map(Task::getDTO)
@@ -329,8 +338,8 @@ public final class TaskService implements ITaskService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Task> tasks = taskRepository
                     .findAllByUserId(getUser(id,entityManager));
-            entityManager.getTransaction().commit();
             if (tasks==null) throw new DataValidateException("Tasks not found");
+            entityManager.getTransaction().commit();
             return tasks
                     .stream()
                     .map(Task::getDTO)

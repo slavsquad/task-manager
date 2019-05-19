@@ -3,10 +3,7 @@ package ru.stepanenko.tm.command.project;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
-import ru.stepanenko.tm.endpoint.InputDataValidateException_Exception;
-import ru.stepanenko.tm.endpoint.ProjectEndpoint;
-import ru.stepanenko.tm.endpoint.Session;
+import ru.stepanenko.tm.endpoint.*;
 
 @NoArgsConstructor
 public final class ProjectClearCommand extends AbstractCommand {
@@ -22,9 +19,9 @@ public final class ProjectClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @NotNull final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
 
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         projectEndpoint.removeAllProjectByUserId(currentSession);

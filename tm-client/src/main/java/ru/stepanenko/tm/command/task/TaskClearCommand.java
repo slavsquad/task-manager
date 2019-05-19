@@ -23,21 +23,21 @@ public final class TaskClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input project id or press ENTER for remove all tasks: ");
-        @NotNull final String id = terminalService.nextLine();
+        @Nullable final String id = terminalService.nextLine();
         if ("".equals(id)) {
             taskEndpoint.removeAllTaskByUserId(currentSession);
             System.out.println("All task has removed!");
             return;
         }
-        @Nullable final Project project = projectEndpoint.findOneProject(currentSession, id);
-        @Nullable final Collection<Task> findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
+        @Nullable final ProjectDTO project = projectEndpoint.findOneProject(currentSession, id);
+        @Nullable final Collection<TaskDTO> findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
         if (findTasks == null || findTasks.isEmpty()) {
             System.out.println("List task for project id:" + id + " is empty!");
             return;

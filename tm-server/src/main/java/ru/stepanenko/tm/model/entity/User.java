@@ -28,18 +28,24 @@ public class User extends AbstractEntity implements Serializable {
     @Column(unique = true)
     private String password = "";
 
-    @NotNull
+    @Nullable
     @Column
     @Enumerated(value = EnumType.STRING)
     private Role role = Role.USER;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Nullable
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @Nullable
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
-    public UserDTO getDTO(){
+    @Nullable
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Session> session;
+
+    public UserDTO getDTO() {
         @NotNull final UserDTO dto = new UserDTO();
         dto.setId(id);
         dto.setLogin(login);

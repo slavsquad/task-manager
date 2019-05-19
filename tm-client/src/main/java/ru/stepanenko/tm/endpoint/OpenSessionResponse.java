@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="return" type="{http://endpoint.tm.stepanenko.ru/}session" minOccurs="0"/&gt;
+ *         &lt;element name="return" type="{http://endpoint.tm.stepanenko.ru/}sessionDTO" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -33,17 +33,17 @@ import javax.xml.bind.annotation.XmlType;
 public class OpenSessionResponse {
 
     @XmlElement(name = "return")
-    protected Session _return;
+    protected SessionDTO _return;
 
     /**
      * Gets the value of the return property.
      * 
      * @return
      *     possible object is
-     *     {@link Session }
+     *     {@link SessionDTO }
      *     
      */
-    public Session getReturn() {
+    public SessionDTO getReturn() {
         return _return;
     }
 
@@ -52,10 +52,10 @@ public class OpenSessionResponse {
      * 
      * @param value
      *     allowed object is
-     *     {@link Session }
+     *     {@link SessionDTO }
      *     
      */
-    public void setReturn(Session value) {
+    public void setReturn(SessionDTO value) {
         this._return = value;
     }
 

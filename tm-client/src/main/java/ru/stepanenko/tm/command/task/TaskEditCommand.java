@@ -2,9 +2,14 @@ package ru.stepanenko.tm.command.task;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
+
+import javax.xml.datatype.DatatypeFactory;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @NoArgsConstructor
 public final class TaskEditCommand extends AbstractCommand {
@@ -20,22 +25,36 @@ public final class TaskEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Input task id for edit: ");
-        @NotNull final String id = terminalService.nextLine();
-        taskEndpoint.findOneTask(currentSession, id);
+        @Nullable final String id = terminalService.nextLine();
+        @Nullable final TaskDTO task = taskEndpoint.findOneTask(currentSession, id);
         System.out.println("Input new task's name: ");
-        @NotNull final String name = terminalService.nextLine();
+        @Nullable final String name = terminalService.nextLine();
         System.out.println("Input new task's description: ");
-        @NotNull final String description = terminalService.nextLine();
-        System.out.println("Input task's status(planned, in process, done: ");
-        @NotNull final String status = terminalService.nextLine();
-        taskEndpoint.editTask(currentSession, id, name, description, status);
-        System.out.println("Task id: " + id + " edit is complete!");
+        @Nullable final String description = terminalService.nextLine();
+        System.out.println("Input task's status(planned, inprocess, done: ");
+        @Nullable final String status = terminalService.nextLine();
+        task.setName(name);
+        task.setDescription(description);
+        try {
+            task.setStatus(Status.valueOf(status.toUpperCase()));
+            task.setDateEnd(null);
+            if (task.getStatus().equals(Status.DONE))
+            {
+                GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                gregorianCalendar.setTime(new Date());
+                task.setDateEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
+            }
+            taskEndpoint.editTask(currentSession, task);
+            System.out.println("Task id: " + id + " edit is update!");
+        } catch (Exception e){
+            throw new DataValidateException_Exception(e.getMessage());
+        }
     }
 }

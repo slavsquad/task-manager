@@ -2,6 +2,8 @@ package ru.stepanenko.tm.util;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.enumerate.Role;
+import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.*;
 
@@ -19,15 +21,15 @@ public class DataValidator {
     }
 
     public static void validateRole(
-            @Nullable final String role)
+            @Nullable final Role role)
             throws DataValidateException {
-        if (EnumUtil.stringToRole(role) == null) throw new DataValidateException("Incorrect input role!");
+        if (role == null) throw new DataValidateException("Incorrect input role!");
     }
 
     public static void validateStatus(
-            @Nullable final String status)
+            @Nullable final Status status)
             throws DataValidateException {
-        if (EnumUtil.stringToStatus(status) == null) throw new DataValidateException("Incorrect input status!");
+        if (status == null) throw new DataValidateException("Incorrect input status!");
     }
 
     public static void validateParameter(
@@ -56,7 +58,7 @@ public class DataValidator {
             throw new DataValidateException("Project description not must be empty!");
         if (projectDTO.getDateBegin() == null)
             throw new DataValidateException("Project date begin not must be empty!");
-        validateStatus(projectDTO.getStatus().toString());
+        validateStatus(projectDTO.getStatus());
     }
 
     public static void validateTaskDTO(
@@ -76,37 +78,37 @@ public class DataValidator {
             throw new DataValidateException("Task description not must be empty!");
         if (taskDTO.getDateBegin() == null)
             throw new DataValidateException("Task date begin not must be empty!");
-        validateStatus(taskDTO.getStatus().toString());
+        validateStatus(taskDTO.getStatus());
     }
 
     public static void validateUserDTO(
             @Nullable final UserDTO userDTO,
             @NotNull final boolean validatePassword)
             throws DataValidateException {
-        if (userDTO==null)
+        if (userDTO == null)
             throw new DataValidateException("Incorrect user dto!");
-        if (userDTO.getId()==null||userDTO.getId().isEmpty())
+        if (userDTO.getId() == null || userDTO.getId().isEmpty())
             throw new DataValidateException("Id user not must be empty!");
-        if (userDTO.getLogin()==null||userDTO.getLogin().isEmpty())
+        if (userDTO.getLogin() == null || userDTO.getLogin().isEmpty())
             throw new DataValidateException("User login not must be empty!");
         if (validatePassword)
-            if (userDTO.getPassword()==null||userDTO.getPassword().isEmpty())
+            if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty())
                 throw new DataValidateException("User password not must be empty!");
-        validateRole(userDTO.getRole().toString());
+        validateRole(userDTO.getRole());
     }
 
     public static void validateSesstionDTO(
             @Nullable final SessionDTO sessionDTO)
             throws DataValidateException {
-        if (sessionDTO==null)
+        if (sessionDTO == null)
             throw new DataValidateException("Incorrect session dto!");
-        if (sessionDTO.getId()==null || sessionDTO.getId().isEmpty())
+        if (sessionDTO.getId() == null || sessionDTO.getId().isEmpty())
             throw new DataValidateException("Session id not must be empty!");
-        if (sessionDTO.getSignature()==null || sessionDTO.getSignature().isEmpty())
+        if (sessionDTO.getSignature() == null || sessionDTO.getSignature().isEmpty())
             throw new DataValidateException("Session signature not must be empty!");
-        if (sessionDTO.getUserId()==null || sessionDTO.getUserId().isEmpty())
+        if (sessionDTO.getUserId() == null || sessionDTO.getUserId().isEmpty())
             throw new DataValidateException("User id not must be empty!");
-        if (sessionDTO.getTimestamp()==null)
+        if (sessionDTO.getTimestamp() == null)
             throw new DataValidateException("Time stamp not must be empty!");
     }
 }

@@ -55,13 +55,20 @@ public final class ProjectService implements IProjectService {
         @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull final Project project = convertDTOtoProject(projectDTO, entityManager);
+            @Nullable final Project project = projectRepository.findOne(projectDTO.getId());
+            if (project == null) throw new DataValidateException("Project not found!");
+            project.setName(projectDTO.getName());
+            project.setDescription(projectDTO.getDescription());
+            project.setStatus(projectDTO.getStatus());
+            project.setDateBegin(projectDTO.getDateBegin());
+            project.setDateEnd(projectDTO.getDateEnd());
             projectRepository
                     .merge(project);
             entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
+            e.printStackTrace();
+            //throw new DataValidateException(e.getMessage());
         } finally {
             entityManager.close();
         }
@@ -79,8 +86,8 @@ public final class ProjectService implements IProjectService {
             entityManager.getTransaction().begin();
             @Nullable final Project project = projectRepository
                     .findOneByUserId(id, getUser(userId, entityManager));
-            entityManager.getTransaction().commit();
             if (project == null) throw new DataValidateException("Project not found!");
+            entityManager.getTransaction().commit();
             return project.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -142,8 +149,8 @@ public final class ProjectService implements IProjectService {
             entityManager.getTransaction().begin();
             @Nullable final Project project = projectRepository
                     .findOne(id);
-            entityManager.getTransaction().commit();
             if (project == null) throw new DataValidateException("Project not found!");
+            entityManager.getTransaction().commit();
             return project.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -185,8 +192,8 @@ public final class ProjectService implements IProjectService {
             entityManager.getTransaction().begin();
             @Nullable final Collection<Project> projects = projectRepository
                     .findAll();
-            entityManager.getTransaction().commit();
             if (projects == null) throw new DataValidateException("Projects not found!");
+            entityManager.getTransaction().commit();
             return projects
                     .stream()
                     .map(Project::getDTO)
@@ -210,8 +217,8 @@ public final class ProjectService implements IProjectService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Project> projects = projectRepository
                     .findAllByUserId(getUser(id, entityManager));
-            entityManager.getTransaction().commit();
             if (projects == null) throw new DataValidateException("Projects not found!");
+            entityManager.getTransaction().commit();
             return projects
                     .stream()
                     .map(Project::getDTO)
@@ -258,8 +265,8 @@ public final class ProjectService implements IProjectService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Project> projects = projectRepository
                     .sortAllByUserId(getUser(id, entityManager), parameter);
-            entityManager.getTransaction().commit();
             if (projects == null) throw new DataValidateException("Projects not found!");
+            entityManager.getTransaction().commit();
             return projects
                     .stream()
                     .map(Project::getDTO)
@@ -285,8 +292,8 @@ public final class ProjectService implements IProjectService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Project> projects = projectRepository
                     .findAllByPartOfNameOrDescription(name,description,getUser(userId,entityManager));
-            entityManager.getTransaction().commit();
             if (projects == null) throw new DataValidateException("Projects not found!");
+            entityManager.getTransaction().commit();
             return projects
                     .stream()
                     .map(Project::getDTO)

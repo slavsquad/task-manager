@@ -14,12 +14,12 @@ import java.util.Date;
 public class BaseEntityDTO extends AbstractEntityDTO implements Serializable {
 
     @Nullable
-    protected Date dateBegin = null;
+    protected Date dateBegin = new Date();
 
     @Nullable
     protected Date dateEnd = null;
 
-    @NotNull
+    @Nullable
     protected String userId = "";
 
     @Getter

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 
@@ -12,6 +13,17 @@ import java.io.Serializable;
 @NoArgsConstructor
 public class TaskDTO extends BaseEntityDTO implements Serializable {
 
-    @NotNull
+    @Nullable
     private String projectId;
+
+    public TaskDTO(
+            @Nullable final String name,
+            @Nullable final String description,
+            @Nullable final String projectId,
+            @Nullable final String userId) {
+        this.name = name;
+        this.description = description;
+        this.projectId = projectId;
+        this.userId = userId;
+    }
 }

@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @Getter
 @Setter
@@ -14,7 +15,7 @@ import java.io.Serializable;
 public abstract class AbstractEntityDTO implements Serializable {
 
     @NotNull
-    protected String id = null;
+    protected String id =  UUID.randomUUID().toString();
 
     @Nullable
     protected String name = null;

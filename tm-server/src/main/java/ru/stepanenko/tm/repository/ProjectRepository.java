@@ -103,7 +103,7 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final Root<Project> projectRoot = criteriaQuery.from(Project.class);
         @NotNull final Predicate condition = criteriaBuilder.equal(projectRoot.get("user"),user);
         criteriaQuery.select(projectRoot).where(condition);
-        criteriaQuery.orderBy(criteriaBuilder.desc(projectRoot.get("parameter")));
+        criteriaQuery.orderBy(criteriaBuilder.desc(projectRoot.get(parameter)));
         @NotNull final TypedQuery<Project> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }

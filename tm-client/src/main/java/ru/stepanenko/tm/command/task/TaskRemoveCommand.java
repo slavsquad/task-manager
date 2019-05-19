@@ -21,13 +21,13 @@ public final class TaskRemoveCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Input task id for remove: ");
-        @NotNull final String id = terminalService.nextLine();
+        @Nullable final String id = terminalService.nextLine();
         taskEndpoint.removeTask(currentSession, id);
         System.out.println("Task id: " + id + " has removed!");
     }

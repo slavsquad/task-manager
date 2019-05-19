@@ -16,11 +16,8 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;complexContent&gt;
  *     &lt;restriction base="{http://www.w3.org/2001/XMLSchema}anyType"&gt;
  *       &lt;sequence&gt;
- *         &lt;element name="session" type="{http://endpoint.tm.stepanenko.ru/}session" minOccurs="0"/&gt;
- *         &lt;element name="id" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="name" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="description" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
- *         &lt;element name="status" type="{http://www.w3.org/2001/XMLSchema}string" minOccurs="0"/&gt;
+ *         &lt;element name="session" type="{http://endpoint.tm.stepanenko.ru/}sessionDTO" minOccurs="0"/&gt;
+ *         &lt;element name="project" type="{http://endpoint.tm.stepanenko.ru/}projectDTO" minOccurs="0"/&gt;
  *       &lt;/sequence&gt;
  *     &lt;/restriction&gt;
  *   &lt;/complexContent&gt;
@@ -32,28 +29,22 @@ import javax.xml.bind.annotation.XmlType;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "editProject", propOrder = {
     "session",
-    "id",
-    "name",
-    "description",
-    "status"
+    "project"
 })
 public class EditProject {
 
-    protected Session session;
-    protected String id;
-    protected String name;
-    protected String description;
-    protected String status;
+    protected SessionDTO session;
+    protected ProjectDTO project;
 
     /**
      * Gets the value of the session property.
      * 
      * @return
      *     possible object is
-     *     {@link Session }
+     *     {@link SessionDTO }
      *     
      */
-    public Session getSession() {
+    public SessionDTO getSession() {
         return session;
     }
 
@@ -62,107 +53,35 @@ public class EditProject {
      * 
      * @param value
      *     allowed object is
-     *     {@link Session }
+     *     {@link SessionDTO }
      *     
      */
-    public void setSession(Session value) {
+    public void setSession(SessionDTO value) {
         this.session = value;
     }
 
     /**
-     * Gets the value of the id property.
+     * Gets the value of the project property.
      * 
      * @return
      *     possible object is
-     *     {@link String }
+     *     {@link ProjectDTO }
      *     
      */
-    public String getId() {
-        return id;
+    public ProjectDTO getProject() {
+        return project;
     }
 
     /**
-     * Sets the value of the id property.
+     * Sets the value of the project property.
      * 
      * @param value
      *     allowed object is
-     *     {@link String }
+     *     {@link ProjectDTO }
      *     
      */
-    public void setId(String value) {
-        this.id = value;
-    }
-
-    /**
-     * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getName() {
-        return name;
-    }
-
-    /**
-     * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setName(String value) {
-        this.name = value;
-    }
-
-    /**
-     * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getDescription() {
-        return description;
-    }
-
-    /**
-     * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setDescription(String value) {
-        this.description = value;
-    }
-
-    /**
-     * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
-     */
-    public void setStatus(String value) {
-        this.status = value;
+    public void setProject(ProjectDTO value) {
+        this.project = value;
     }
 
 }

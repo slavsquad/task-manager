@@ -2,6 +2,7 @@ package ru.stepanenko.tm.command.project;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
@@ -22,16 +23,16 @@ public class ProjectFindCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input part of project's name for search:");
-        @NotNull final String name = terminalService.nextLine();
+        @Nullable final String name = terminalService.nextLine();
         System.out.println("Please input part of project's description for search:");
-        @NotNull String description = terminalService.nextLine();
-        @NotNull final Collection<Project> findProjects = projectEndpoint.findAllProjectByPartOfNameOrDescription(currentSession, name, description);
+        @Nullable String description = terminalService.nextLine();
+        @Nullable final Collection<ProjectDTO> findProjects = projectEndpoint.findAllProjectByPartOfNameOrDescription(currentSession, name, description);
         if (findProjects != null && !findProjects.isEmpty()) {
             System.out.println("Find projects by part of name '" + name + "' or part of description '" + description + "' :");
             findProjects.forEach(e -> System.out.println("id: " + e.getId() +

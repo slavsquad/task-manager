@@ -27,7 +27,6 @@ public abstract class AbstractEntity implements Serializable {
     @Nullable
     protected String name = null;
 
-    @NotNull
     @Nullable
     protected String description = null;
 }

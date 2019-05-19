@@ -10,14 +10,14 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
 
+@Entity
 @Getter
 @Setter
-@Entity
 @NoArgsConstructor
 @Table(name = "app_project")
 public class Project extends BaseEntity implements Serializable {
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
     public ProjectDTO getDTO(){

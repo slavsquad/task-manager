@@ -24,13 +24,13 @@ public class BaseEntity extends AbstractEntity implements Serializable {
     @Column
     protected Date dateEnd = null;
 
-    @NotNull
+    @Nullable
     @Column
     @Enumerated(EnumType.STRING)
     protected Status status = Status.PLANNED;
 
     @Nullable
     @JoinColumn(name = "user_id")
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     protected User user;
 }

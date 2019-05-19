@@ -8,17 +8,14 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "app_user")
+@Table(name = "app_session")
 public class Session extends AbstractEntity {
 
     @Nullable
@@ -28,7 +25,7 @@ public class Session extends AbstractEntity {
     private Date timestamp;
 
     @Nullable
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
 

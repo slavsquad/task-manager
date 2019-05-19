@@ -2,12 +2,14 @@ package ru.stepanenko.tm.command.project;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
-import ru.stepanenko.tm.endpoint.InputDataValidateException_Exception;
-import ru.stepanenko.tm.endpoint.ProjectEndpoint;
-import ru.stepanenko.tm.endpoint.Session;
+import ru.stepanenko.tm.endpoint.*;
+
+import javax.xml.datatype.DatatypeFactory;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @NoArgsConstructor
 public final class ProjectEditCommand extends AbstractCommand {
@@ -23,21 +25,36 @@ public final class ProjectEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input project ID for edit: ");
-        @NotNull final String id = terminalService.nextLine();
-        projectEndpoint.findOneProject(currentSession, id);
+        @Nullable final String id = terminalService.nextLine();
+        @Nullable final ProjectDTO project = projectEndpoint.findOneProject(currentSession, id);
         System.out.println("Input new project's name: ");
-        @NotNull final String name = terminalService.nextLine();
+        @Nullable final String name = terminalService.nextLine();
         System.out.println("Input new project's description: ");
-        @NotNull final String description = terminalService.nextLine();
-        System.out.println("Input project's status(planned, in process, done): ");
-        @NotNull final String status = terminalService.nextLine();
-        projectEndpoint.editProject(currentSession, id, name, description, status);
-        System.out.println("Project " + name + " is update!");
+        @Nullable final String description = terminalService.nextLine();
+        System.out.println("Input project's status(planned, inprocess, done): ");
+        @Nullable final String status = terminalService.nextLine();
+        project.setName(name);
+        project.setDescription(description);
+        try {
+            project.setStatus(Status.valueOf(status.toUpperCase()));
+            project.setDateEnd(null);
+            if (project.getStatus().equals(Status.DONE))
+            {
+                GregorianCalendar gregorianCalendar = new GregorianCalendar();
+                gregorianCalendar.setTime(new Date());
+                project.setDateEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
+            }
+            projectEndpoint.editProject(currentSession, project);
+            System.out.println("Project " + id + " is update!");
+        } catch (Exception e){
+            throw new DataValidateException_Exception(e.getMessage());
+        }
+
     }
 }

@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
+import ru.stepanenko.tm.util.HashUtil;
 
 @NoArgsConstructor
 public final class UserProfileEditCommand extends AbstractCommand {
@@ -21,25 +22,20 @@ public final class UserProfileEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, InputDataValidateException_Exception {
+    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @NotNull final Session currentSession = endpointServiceLocator.getSession();
+        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
-        System.out.println("Welcome to editor user: " + userEndpoint.getUserBySession(currentSession) + "profile: ");
+        @Nullable final UserDTO currentUser = userEndpoint.getUserBySession(currentSession);
+        System.out.println("Welcome to editor user: " + currentUser.getLogin() + "profile: ");
         System.out.println("Please input login: ");
-        @NotNull
-        String login = terminalService.nextLine();
-        @Nullable
-        User user = userEndpoint.findUserByLogin(currentSession, login);
-        if (user == null) {
-            System.out.println("Please input password:");
-            @NotNull
-            String password = terminalService.nextLine();
-            userEndpoint.editUserProfile(currentSession, login, password);
-            System.out.println("User profile had been changed!");
-        } else {
-            System.out.println("Login already exist!");
-        }
+        @Nullable final String login = terminalService.nextLine();
+        System.out.println("Please input password:");
+        @Nullable final String password = terminalService.nextLine();
+        currentUser.setLogin(login);
+        currentUser.setPassword(HashUtil.md5(password));
+        userEndpoint.editUserProfile(currentSession, currentUser);
+        System.out.println("User profile had been changed!");
     }
 }

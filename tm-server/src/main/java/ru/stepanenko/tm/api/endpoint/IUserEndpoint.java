@@ -50,4 +50,10 @@ public interface IUserEndpoint {
     Collection<UserDTO> findAllUser(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
+
+    @WebMethod
+    void removeOneUser(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
+            throws AuthenticationSecurityException, DataValidateException;
 }

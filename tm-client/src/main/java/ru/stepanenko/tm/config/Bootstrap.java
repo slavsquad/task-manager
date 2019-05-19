@@ -54,7 +54,7 @@ public class Bootstrap {
             if (command != null) {
                 try {
                     command.execute();
-                } catch (AuthenticationSecurityException_Exception | InputDataValidateException_Exception e) {
+                } catch (AuthenticationSecurityException_Exception | DataValidateException_Exception e) {
                     System.out.println(e);
                 }
             } else {

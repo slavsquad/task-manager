@@ -92,4 +92,15 @@ public class UserEndpoint implements IUserEndpoint {
         sessionService.validateAdmin(sessionDTO);
         return userService.findAll();
     }
+
+    @Override
+    @WebMethod
+    public void removeOneUser(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id)
+            throws AuthenticationSecurityException, DataValidateException{
+        sessionService.validateAdmin(sessionDTO);
+        userService.remove(id);
+    }
+
 }

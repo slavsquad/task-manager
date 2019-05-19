@@ -121,10 +121,10 @@ public final class TaskRepository implements ITaskRepository {
             @NotNull final String parameter) {
         @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         @NotNull final CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
-        @NotNull final Root<Task> projectRoot = criteriaQuery.from(Task.class);
-        @NotNull final Predicate condition = criteriaBuilder.equal(projectRoot.get("user"),user);
-        criteriaQuery.select(projectRoot).where(condition);
-        criteriaQuery.orderBy(criteriaBuilder.desc(projectRoot.get("parameter")));
+        @NotNull final Root<Task> taskRoot = criteriaQuery.from(Task.class);
+        @NotNull final Predicate condition = criteriaBuilder.equal(taskRoot.get("user"),user);
+        criteriaQuery.select(taskRoot).where(condition);
+        criteriaQuery.orderBy(criteriaBuilder.desc(taskRoot.get(parameter)));
         @NotNull final TypedQuery<Task> query = entityManager.createQuery(criteriaQuery);
         return query.getResultList();
     }

@@ -3,6 +3,8 @@ package ru.stepanenko.tm.util;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -20,7 +22,7 @@ public class HashUtil {
                         .substring(1, 3));
             }
             return sb.toString();
-        } catch (NoSuchAlgorithmException e) {
+        } catch (java.security.NoSuchAlgorithmException e) {
             e.printStackTrace();
         }
         return null;

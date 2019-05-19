@@ -1,11 +1,8 @@
 package ru.stepanenko.tm.service;
 
 import lombok.AllArgsConstructor;
-import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IPropertyService;
@@ -66,8 +63,8 @@ public class SessionService implements ISessionService {
             entityManager.getTransaction().begin();
             @NotNull final Session session = sessionRepository
                     .findOne(id);
-            entityManager.getTransaction().commit();
             if (session == null) throw new DataValidateException("Session not found!");
+            entityManager.getTransaction().commit();
             return session.getDTO();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
@@ -109,8 +106,8 @@ public class SessionService implements ISessionService {
             entityManager.getTransaction().begin();
             @NotNull final Collection<Session> sessions = sessionRepository
                     .findAll();
-            entityManager.getTransaction().commit();
             if (sessions == null) throw new DataValidateException("Sessions not found!");
+            entityManager.getTransaction().commit();
             return sessions
                     .stream()
                     .map(Session::getDTO)
@@ -137,7 +134,7 @@ public class SessionService implements ISessionService {
             @NotNull final Session session = new Session();
             session.setTimestamp(new Date());
             session.setUser(getUser(userDTO.getId(), entityManager));
-            session.setSignature(SignatureUtil.sign(session, salt, Integer.parseInt(cycle)));
+            session.setSignature(SignatureUtil.sign(userDTO, salt, Integer.parseInt(cycle)));
             sessionRepository
                     .persist(session);
             entityManager.getTransaction().commit();
@@ -169,9 +166,9 @@ public class SessionService implements ISessionService {
         try {
             entityManager.getTransaction().begin();
             @NotNull User user = getUser(sessionDTO.getUserId(), entityManager);
-            entityManager.getTransaction().commit();
-            if (!user.getRole().equals(Role.ADMINISTRATOR))
+            if (!user.getRole().equals(Role.ADMIN))
                 throw new AuthenticationSecurityException("Forbidden action for your role!");
+            entityManager.getTransaction().commit();
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
