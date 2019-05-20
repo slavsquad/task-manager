@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.api.endpoint;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;

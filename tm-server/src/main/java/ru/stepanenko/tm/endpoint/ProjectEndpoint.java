@@ -5,34 +5,29 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
 import ru.stepanenko.tm.api.service.IProjectService;
-import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.SessionDTO;
-import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Collection;
 
 @WebService
+@NoArgsConstructor
 public class ProjectEndpoint implements IProjectEndpoint {
 
+    @Inject
     @NotNull
     private IProjectService projectService;
 
+    @Inject
     @NotNull
     private ISessionService sessionService;
-
-    public ProjectEndpoint(
-            @NotNull final IServiceLocator serviceLocator) {
-        this.projectService = serviceLocator.getProjectService();
-        this.sessionService = serviceLocator.getSessionService();
-    }
 
     @Override
     @WebMethod

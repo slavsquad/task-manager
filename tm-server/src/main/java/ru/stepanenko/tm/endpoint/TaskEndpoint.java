@@ -1,17 +1,13 @@
 package ru.stepanenko.tm.endpoint;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
-import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.TaskDTO;
-import ru.stepanenko.tm.model.entity.Session;
-import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
@@ -22,18 +18,16 @@ import javax.jws.WebService;
 import java.util.Collection;
 
 @WebService
+@NoArgsConstructor
 public class TaskEndpoint implements ITaskEndpoint {
 
+    @Inject
     @NotNull
     private ISessionService sessionService;
 
+    @Inject
     @NotNull
     private ITaskService taskService;
-
-    public TaskEndpoint(@NotNull final IServiceLocator serviceLocator) {
-        this.sessionService = serviceLocator.getSessionService();
-        this.taskService = serviceLocator.getTaskService();
-    }
 
     @Override
     @WebMethod

@@ -4,35 +4,30 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
-import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.Session;
-import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Collection;
 
 @WebService
+@NoArgsConstructor
 public class UserEndpoint implements IUserEndpoint {
 
+    @Inject
     @NotNull
     private IUserService userService;
 
+    @Inject
     @NotNull
     private ISessionService sessionService;
-
-    public UserEndpoint(
-            @NotNull final IServiceLocator serviceLocator) {
-        this.userService = serviceLocator.getUserService();
-        this.sessionService = serviceLocator.getSessionService();
-    }
 
     @Override
     @WebMethod

@@ -1,38 +1,32 @@
 package ru.stepanenko.tm.endpoint;
 
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
-import ru.stepanenko.tm.api.service.IServiceLocator;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.Session;
-import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService
+@NoArgsConstructor
 public class SessionEndpoint implements ISessionEndpoint {
 
+    @Inject
     @NotNull
     private ISessionService sessionService;
 
+    @Inject
     @NotNull
     private IUserService userService;
-
-    public SessionEndpoint(
-            @NotNull final IServiceLocator serviceLocator) {
-        this.sessionService = serviceLocator.getSessionService();
-        this.userService = serviceLocator.getUserService();
-    }
 
     @Override
     @WebMethod
