@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.endpoint;
 
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,7 +20,6 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 
 @WebService
-@NoArgsConstructor
 public class SessionEndpoint implements ISessionEndpoint {
 
     @NotNull

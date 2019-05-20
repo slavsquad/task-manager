@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.config;
 
+import lombok.NoArgsConstructor;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -26,6 +27,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.Map;
 
+@NoArgsConstructor
 public class Bootstrap {
     @NotNull
     final IPropertyService propertyService = new PropertyService();

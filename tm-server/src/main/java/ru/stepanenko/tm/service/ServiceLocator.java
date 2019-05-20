@@ -1,9 +1,10 @@
 package ru.stepanenko.tm.service;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.*;
-
+@AllArgsConstructor
 public final class ServiceLocator implements IServiceLocator {
 
     @Getter
@@ -21,15 +22,4 @@ public final class ServiceLocator implements IServiceLocator {
     @Getter
     @NotNull
     final private ISessionService sessionService;
-
-    public ServiceLocator(
-            @NotNull final IProjectService projectService,
-            @NotNull final ITaskService taskService,
-            @NotNull final IUserService userService,
-            @NotNull final ISessionService sessionService) {
-        this.projectService = projectService;
-        this.taskService = taskService;
-        this.userService = userService;
-        this.sessionService = sessionService;
-    }
 }

@@ -20,7 +20,6 @@ import javax.jws.WebService;
 import java.util.Collection;
 
 @WebService
-@NoArgsConstructor
 public class UserEndpoint implements IUserEndpoint {
 
     @NotNull
