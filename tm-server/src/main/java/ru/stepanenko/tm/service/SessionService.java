@@ -35,8 +35,8 @@ public class SessionService implements ISessionService {
     final IPropertyService propertyService;
 
     @Override
-    public void clear()
-            throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
         try {
@@ -54,8 +54,8 @@ public class SessionService implements ISessionService {
 
     @Override
     public SessionDTO findOne(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
@@ -76,8 +76,8 @@ public class SessionService implements ISessionService {
 
     @Override
     public void remove(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
@@ -98,8 +98,8 @@ public class SessionService implements ISessionService {
     }
 
     @Override
-    public Collection<SessionDTO> findAll()
-            throws DataValidateException {
+    public Collection<SessionDTO> findAll(
+    ) throws DataValidateException {
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
         try {
@@ -122,8 +122,8 @@ public class SessionService implements ISessionService {
 
     @Override
     public SessionDTO create(
-            @Nullable final UserDTO userDTO)
-            throws DataValidateException {
+            @Nullable final UserDTO userDTO
+    ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, false);
         @NotNull final String cycle = propertyService.getCycle();
         @NotNull final String salt = propertyService.getSalt();
@@ -149,8 +149,8 @@ public class SessionService implements ISessionService {
 
     @Override
     public void validate(
-            @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         DataValidator.validateSessionDTO(sessionDTO);
         if (!sessionDTO.getSignature().equals(findOne(sessionDTO.getId()).getSignature()))
             throw new AuthenticationSecurityException("SessionDTO is invalid: \nSessionDTO signature is wrong! Please re-login!");
@@ -158,8 +158,8 @@ public class SessionService implements ISessionService {
 
     @Override
     public void validateAdmin(
-            @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         validate(sessionDTO);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
@@ -176,7 +176,10 @@ public class SessionService implements ISessionService {
         }
     }
 
-    private User getUser(@NotNull final String userId, @NotNull final EntityManager em) throws DataValidateException {
+    private User getUser(
+            @NotNull final String userId,
+            @NotNull final EntityManager em
+    ) throws DataValidateException {
         @NotNull final IUserRepository userRepository = new UserRepository(em);
         @Nullable final User user = userRepository.findOne(userId);
         if (user == null) throw new DataValidateException("User not found!");

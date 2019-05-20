@@ -12,9 +12,11 @@ public abstract class AbstractCommand {
 
     public abstract String getDescription();
 
-    public abstract void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception;
+    public abstract void execute(
+    ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception;
 
-    public void setEndpointServiceLocator(@NotNull final IEndpointServiceLocator endpointServiceLocator) {
+    public void setEndpointServiceLocator(
+            @NotNull final IEndpointServiceLocator endpointServiceLocator) {
         this.endpointServiceLocator = endpointServiceLocator;
     }
 }

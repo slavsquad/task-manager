@@ -42,8 +42,9 @@ public class Bootstrap {
         registryEndpoint(endpoints, serviceLocator);
     }
 
-    private void registryEndpoint(Class[] endpoints, IServiceLocator serviceLocator) {
-
+    private void registryEndpoint(
+            @NotNull final Class[] endpoints,
+            @NotNull final IServiceLocator serviceLocator) {
         for (Class endpoint : endpoints) {
             if (endpoint == null) continue;
             Constructor endpointConstructor = null;
@@ -66,7 +67,8 @@ public class Bootstrap {
         }
     }
 
-    private void generateTestUsers(IServiceLocator serviceLocator) {
+    private void generateTestUsers(
+            @NotNull final IServiceLocator serviceLocator) {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final ITaskService taskService = serviceLocator.getTaskService();
         @NotNull final IUserService userService = serviceLocator.getUserService();
@@ -118,7 +120,8 @@ public class Bootstrap {
         return metadata.getSessionFactoryBuilder().build();
     }
 
-    private void generateTestData(IServiceLocator serviceLocator) {
+    private void generateTestData(
+            @NotNull final IServiceLocator serviceLocator) {
         @NotNull final IProjectService projectService = serviceLocator.getProjectService();
         @NotNull final ITaskService taskService = serviceLocator.getTaskService();
         @NotNull final IUserService userService = serviceLocator.getUserService();

@@ -9,35 +9,34 @@ import java.util.Collection;
 
 public interface IUserService {
 
-
     void create(
-            @Nullable final UserDTO userDTO)
-            throws DataValidateException;
+            @Nullable final UserDTO userDTO
+    ) throws DataValidateException;
 
     void edit(
-            @Nullable final UserDTO userDTO)
-            throws DataValidateException;
+            @Nullable final UserDTO userDTO
+    ) throws DataValidateException;
 
     UserDTO findByLogin(
-            @Nullable final String login)
-            throws DataValidateException;
+            @Nullable final String login
+    ) throws DataValidateException;
 
-    void clear()
-            throws DataValidateException;
+    void clear(
+    ) throws DataValidateException;
 
     UserDTO findOne(
-            @Nullable final String id)
-            throws DataValidateException;
+            @Nullable final String id
+    ) throws DataValidateException;
 
     void remove(
-            @Nullable final String id)
-            throws DataValidateException;
+            @Nullable final String id
+    ) throws DataValidateException;
 
-    Collection<UserDTO> findAll()
-            throws DataValidateException;
+    Collection<UserDTO> findAll(
+    ) throws DataValidateException;
 
     UserDTO authenticationUser(
             @Nullable final String login,
-            @Nullable final String password)
-            throws AuthenticationSecurityException, DataValidateException;
+            @Nullable final String password
+    ) throws AuthenticationSecurityException, DataValidateException;
 }

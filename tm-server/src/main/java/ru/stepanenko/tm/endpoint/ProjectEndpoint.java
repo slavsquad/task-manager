@@ -39,8 +39,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public void createProject(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
-            @WebParam(name = "project") @Nullable final ProjectDTO projectDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "project") @Nullable final ProjectDTO projectDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         projectService.create(projectDTO);
     }
@@ -49,8 +49,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public void editProject(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
-            @WebParam(name = "project") @Nullable final ProjectDTO projectDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "project") @Nullable final ProjectDTO projectDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         projectService.edit(projectDTO);
     }
@@ -59,8 +59,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public ProjectDTO findOneProject(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
-            @WebParam(name = "id") @Nullable final String id)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "id") @Nullable final String id
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         return projectService.findOne(id, sessionDTO.getUserId());
     }
@@ -69,8 +69,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public void removeProject(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
-            @WebParam(name = "id") @Nullable final String id)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "id") @Nullable final String id
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         projectService.remove(id, sessionDTO.getUserId());
     }
@@ -78,8 +78,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @Override
     @WebMethod
     public Collection<ProjectDTO> findAllProjectByUserId(
-            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         return projectService.findAllByUserId(sessionDTO.getUserId());
     }
@@ -87,8 +87,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @Override
     @WebMethod
     public void removeAllProjectByUserId(
-            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         projectService.removeAllByUserId(sessionDTO.getUserId());
     }
@@ -97,8 +97,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     @WebMethod
     public Collection<ProjectDTO> sortAllProjectByUserId(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
-            @WebParam(name = "parameter") @Nullable final String parameter)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "parameter") @Nullable final String parameter
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         return projectService.sortAllByUserId(sessionDTO.getUserId(), parameter);
     }
@@ -108,8 +108,8 @@ public class ProjectEndpoint implements IProjectEndpoint {
     public Collection<ProjectDTO> findAllProjectByPartOfNameOrDescription(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
             @WebParam(name = "name") @Nullable final String name,
-            @WebParam(name = "description") @Nullable final String description)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "description") @Nullable final String description
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         return projectService.findAllByPartOfNameOrDescription(name, description, sessionDTO.getUserId());
     }

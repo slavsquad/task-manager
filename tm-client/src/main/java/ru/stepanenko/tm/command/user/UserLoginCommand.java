@@ -22,7 +22,8 @@ public final class UserLoginCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
+    public void execute(
+    ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @NotNull final SessionEndpoint sessionEndpoint = endpointServiceLocator.getSessionEndpoint();
         System.out.println("Please input user name:");

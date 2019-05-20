@@ -37,11 +37,14 @@ public class Bootstrap {
         return mapCommand;
     }
 
-    private void registryCommand(@NotNull final AbstractCommand abstractCommand, @NotNull final Map<String, AbstractCommand> command) {
+    private void registryCommand(
+            @NotNull final AbstractCommand abstractCommand,
+            @NotNull final Map<String, AbstractCommand> command) {
         command.put(abstractCommand.getName(), abstractCommand);
     }
 
-    private void menu(@NotNull final Map<String, AbstractCommand> commands) {
+    private void menu(
+            @NotNull final Map<String, AbstractCommand> commands) {
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
 

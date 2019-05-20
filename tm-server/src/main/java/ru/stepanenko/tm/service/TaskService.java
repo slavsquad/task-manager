@@ -30,8 +30,8 @@ public final class TaskService implements ITaskService {
 
     @Override
     public void create(
-            @Nullable final TaskDTO taskDTO)
-            throws DataValidateException {
+            @Nullable final TaskDTO taskDTO
+    ) throws DataValidateException {
         DataValidator.validateTaskDTO(taskDTO);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -50,8 +50,8 @@ public final class TaskService implements ITaskService {
 
     @Override
     public void edit(
-            @Nullable final TaskDTO taskDTO)
-            throws DataValidateException {
+            @Nullable final TaskDTO taskDTO
+    ) throws DataValidateException {
         DataValidator.validateTaskDTO(taskDTO);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -79,8 +79,8 @@ public final class TaskService implements ITaskService {
     @Override
     public TaskDTO findOne(
             @Nullable final String id,
-            @Nullable final String userId)
-            throws DataValidateException {
+            @Nullable final String userId
+    ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -102,8 +102,8 @@ public final class TaskService implements ITaskService {
     @Override
     public void remove(
             @Nullable final String id,
-            @Nullable final String userId)
-            throws DataValidateException {
+            @Nullable final String userId
+    ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -123,8 +123,8 @@ public final class TaskService implements ITaskService {
     }
 
     @Override
-    public void clear()
-            throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
@@ -141,8 +141,8 @@ public final class TaskService implements ITaskService {
 
     @Override
     public TaskDTO findOne(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -163,8 +163,8 @@ public final class TaskService implements ITaskService {
 
     @Override
     public void remove(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -184,8 +184,8 @@ public final class TaskService implements ITaskService {
     }
 
     @Override
-    public Collection<TaskDTO> findAll()
-            throws DataValidateException {
+    public Collection<TaskDTO> findAll(
+    ) throws DataValidateException {
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
         try {
@@ -209,8 +209,8 @@ public final class TaskService implements ITaskService {
     @Override
     public void removeAllByProjectId(
             @Nullable final String id,
-            @Nullable final String userId)
-            throws DataValidateException {
+            @Nullable final String userId
+    ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -229,8 +229,8 @@ public final class TaskService implements ITaskService {
 
     @Override
     public void removeAllByUserId(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -250,8 +250,8 @@ public final class TaskService implements ITaskService {
     @Override
     public Collection<TaskDTO> sortAllByUserId(
             @Nullable final String id,
-            @Nullable final String parameter)
-            throws DataValidateException {
+            @Nullable final String parameter
+    ) throws DataValidateException {
         DataValidator.validateString(id, parameter);
         if ("order".equals(parameter)) return findAllByUserId(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -278,8 +278,8 @@ public final class TaskService implements ITaskService {
     public Collection<TaskDTO> findAllByPartOfNameOrDescription(
             @Nullable final String name,
             @Nullable final String description,
-            @Nullable final String userId)
-            throws DataValidateException {
+            @Nullable final String userId
+    ) throws DataValidateException {
         DataValidator.validateString(name, description, userId);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -304,8 +304,8 @@ public final class TaskService implements ITaskService {
     @Override
     public Collection<TaskDTO> findAllByProjectId(
             @Nullable final String id,
-            @Nullable final String userId)
-            throws DataValidateException {
+            @Nullable final String userId
+    ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -329,8 +329,8 @@ public final class TaskService implements ITaskService {
 
     @Override
     public Collection<TaskDTO> findAllByUserId(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ITaskRepository taskRepository = new TaskRepository(entityManager);
@@ -354,8 +354,8 @@ public final class TaskService implements ITaskService {
 
     private Task convertDTOtoTask(
             @NotNull final TaskDTO taskDTO,
-            @NotNull final EntityManager entityManager)
-            throws DataValidateException {
+            @NotNull final EntityManager entityManager
+    ) throws DataValidateException {
         @NotNull final Task task = new Task();
         task.setId(taskDTO.getId());
         task.setName(taskDTO.getName());
@@ -370,8 +370,8 @@ public final class TaskService implements ITaskService {
 
     private User getUser(
             @NotNull final String id,
-            @NotNull final EntityManager em)
-            throws DataValidateException {
+            @NotNull final EntityManager em
+    ) throws DataValidateException {
         @NotNull final IUserRepository userRepository = new UserRepository(em);
         @Nullable final User user = userRepository.findOne(id);
         if (user == null) throw new DataValidateException("User not found!");
@@ -380,8 +380,8 @@ public final class TaskService implements ITaskService {
 
     private Project getProject(
             @NotNull final String id,
-            @NotNull final EntityManager em)
-            throws DataValidateException {
+            @NotNull final EntityManager em
+    ) throws DataValidateException {
         @NotNull final IProjectRepository projectRepository = new ProjectRepository(em);
         @Nullable final Project project = projectRepository.findOne(id);
         if (project == null) throw new DataValidateException("Project not found!");

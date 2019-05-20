@@ -25,8 +25,8 @@ public final class UserService implements IUserService {
 
     @Override
     public void create(
-            @Nullable final UserDTO userDTO)
-            throws DataValidateException {
+            @Nullable final UserDTO userDTO
+    ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
@@ -46,8 +46,8 @@ public final class UserService implements IUserService {
 
     @Override
     public void edit(
-            @Nullable final UserDTO userDTO)
-            throws DataValidateException {
+            @Nullable final UserDTO userDTO
+    ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
@@ -73,8 +73,8 @@ public final class UserService implements IUserService {
 
     @Override
     public UserDTO findByLogin(
-            @Nullable final String login)
-            throws DataValidateException {
+            @Nullable final String login
+    ) throws DataValidateException {
         DataValidator.validateString(login);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
@@ -94,8 +94,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public void clear()
-            throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
@@ -113,8 +113,8 @@ public final class UserService implements IUserService {
 
     @Override
     public UserDTO findOne(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
@@ -135,8 +135,8 @@ public final class UserService implements IUserService {
 
     @Override
     public void remove(
-            @Nullable final String id)
-            throws DataValidateException {
+            @Nullable final String id
+    ) throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
@@ -157,8 +157,8 @@ public final class UserService implements IUserService {
     }
 
     @Override
-    public Collection<UserDTO> findAll()
-            throws DataValidateException {
+    public Collection<UserDTO> findAll(
+    ) throws DataValidateException {
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
@@ -182,8 +182,8 @@ public final class UserService implements IUserService {
     @Override
     public UserDTO authenticationUser(
             @Nullable final String login,
-            @Nullable final String password)
-            throws AuthenticationSecurityException, DataValidateException {
+            @Nullable final String password
+    ) throws AuthenticationSecurityException, DataValidateException {
         DataValidator.validateString(login, password);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);

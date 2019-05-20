@@ -19,7 +19,8 @@ public final class ProjectClearCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
+    public void execute(
+    ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
 

@@ -25,7 +25,8 @@ public final class ProjectEditCommand extends AbstractCommand {
     }
 
     @Override
-    public void execute() throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
+    public void execute(
+    ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
         @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
         @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();

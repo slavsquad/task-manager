@@ -22,7 +22,6 @@ public final class ProjectRepository implements IProjectRepository {
     @NotNull
     private final EntityManager entityManager;
 
-
     @Override
     public Project findOne(
             @NotNull final String id) {

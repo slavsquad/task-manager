@@ -38,8 +38,8 @@ public class SessionEndpoint implements ISessionEndpoint {
     @WebMethod
     public SessionDTO openSession(
             @WebParam(name = "login") @Nullable final String login,
-            @WebParam(name = "password") @Nullable final String password)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "password") @Nullable final String password
+    ) throws AuthenticationSecurityException, DataValidateException {
         @NotNull UserDTO loggedUser = userService.authenticationUser(login, password);
         return sessionService.create(loggedUser);
     }
@@ -47,24 +47,24 @@ public class SessionEndpoint implements ISessionEndpoint {
     @Override
     @WebMethod
     public void validateSession(
-            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
     }
 
     @Override
     @WebMethod
     public void validateAdminSession(
-            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(sessionDTO);
     }
 
     @Override
     @WebMethod
     public void closeSession(
-            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
-            throws AuthenticationSecurityException, DataValidateException {
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validate(sessionDTO);
         sessionService.remove(sessionDTO.getId());
     }
