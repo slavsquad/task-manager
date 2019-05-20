@@ -15,7 +15,7 @@ import java.util.UUID;
 public abstract class AbstractEntityDTO implements Serializable {
 
     @NotNull
-    protected String id =  UUID.randomUUID().toString();
+    protected String id = UUID.randomUUID().toString();
 
     @Nullable
     protected String name = null;

@@ -3,6 +3,7 @@ package ru.stepanenko.tm.repository;
 import lombok.AllArgsConstructor;
 import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.User;
@@ -29,7 +30,7 @@ public final class SessionRepository implements ISessionRepository {
 
     @Override
     public void removeAll() {
-        @NotNull final Collection<Session> sessions = findAll();
+        @Nullable final Collection<Session> sessions = findAll();
         if (sessions == null) return;
         sessions.forEach(entityManager::remove);
     }
@@ -56,7 +57,7 @@ public final class SessionRepository implements ISessionRepository {
     @Override
     public Collection<Session> findAllByUserId(
             @NotNull User user) {
-        @NotNull final Collection<Session> sessions = entityManager
+        @Nullable final Collection<Session> sessions = entityManager
                 .createQuery("SELECT e FROM Session e WHERE e.user = :user", Session.class)
                 .setParameter("user", user)
                 .getResultList();

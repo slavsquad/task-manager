@@ -32,15 +32,15 @@ public final class UserRegisterCommand extends AbstractCommand {
         System.out.println("Please input password:");
         @Nullable final String password = terminalService.nextLine();
         System.out.println("Please input user role(admin or user):");
-        @Nullable final  String role = terminalService.nextLine();
+        @Nullable final String role = terminalService.nextLine();
         @Nullable final UserDTO user = new UserDTO();
         user.setLogin(login);
         user.setPassword(HashUtil.md5(password));
-        try{
+        try {
             user.setRole(Role.valueOf(role.toUpperCase()));
             userEndpoint.createUser(currentSession, user);
             System.out.println("User " + login + " created!");
-        }catch (Exception e){
+        } catch (Exception e) {
             throw new DataValidateException_Exception(e.getMessage());
         }
     }

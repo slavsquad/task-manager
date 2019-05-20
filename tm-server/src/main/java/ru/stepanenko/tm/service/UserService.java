@@ -1,32 +1,15 @@
 package ru.stepanenko.tm.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import lombok.AllArgsConstructor;
-import lombok.Data;
-import org.eclipse.persistence.jaxb.JAXBContextFactory;
-import org.eclipse.persistence.jaxb.MarshallerProperties;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import ru.stepanenko.tm.api.repository.IProjectRepository;
-import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
-import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
-import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.repository.UserRepository;
-import ru.stepanenko.tm.util.HashUtil;
 import ru.stepanenko.tm.util.DataValidator;
 
 import javax.persistence.EntityManager;
@@ -152,7 +135,7 @@ public final class UserService implements IUserService {
 
     @Override
     public void remove(
-            @NotNull final String id)
+            @Nullable final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
@@ -180,7 +163,7 @@ public final class UserService implements IUserService {
         @NotNull final IUserRepository userRepository = new UserRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @Nullable Collection<User> users = userRepository
+            @Nullable final Collection<User> users = userRepository
                     .findAll();
             if (users == null) throw new DataValidateException("Users not found!");
             entityManager.getTransaction().commit();
@@ -222,7 +205,7 @@ public final class UserService implements IUserService {
     }
 
     private User convertDTOtoUser(
-            @Nullable final UserDTO userDTO){
+            @Nullable final UserDTO userDTO) {
         @NotNull final User user = new User();
         user.setId(userDTO.getId());
         user.setName(userDTO.getName());

@@ -16,21 +16,22 @@ import java.util.Date;
 @MappedSuperclass
 @NoArgsConstructor
 public class BaseEntity extends AbstractEntity implements Serializable {
-    @Nullable
+
     @Column
+    @Nullable
     protected Date dateBegin = null;
 
-    @Nullable
     @Column
+    @Nullable
     protected Date dateEnd = null;
 
-    @Nullable
     @Column
+    @Nullable
     @Enumerated(EnumType.STRING)
     protected Status status = Status.PLANNED;
 
     @Nullable
-    @JoinColumn(name = "user_id")
     @ManyToOne
+    @JoinColumn(name = "user_id")
     protected User user;
 }

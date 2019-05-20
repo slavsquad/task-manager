@@ -30,24 +30,19 @@ public final class TaskListCommand extends AbstractCommand {
         @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input project id or press ENTER for print all tasks: ");
-        @Nullable final Collection<TaskDTO> findTasks;
         @Nullable final String id = terminalService.nextLine();
         if ("".equals(id)) {
-            findTasks = taskEndpoint.findAllTaskByUserId(currentSession);
-            if (findTasks == null || findTasks.isEmpty()) {
-                System.out.println("List task is empty!");
-                return;
-            }
-            findTasks.forEach(e -> System.out.println("id:" + e.getId() + " name:" + e.getName() + " project_id:" + e.getProjectId()));
+            System.out.println("List of tasks:");
+            taskEndpoint.findAllTaskByUserId(currentSession)
+                    .forEach(e -> System.out.println(
+                            "id:" + e.getId() +
+                            " name:" + e.getName() +
+                            " project_id:" + e.getProjectId()));
             return;
         }
-
-        @Nullable final ProjectDTO project = projectEndpoint.findOneProject(currentSession, id);
-        findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
-        if (findTasks == null || findTasks.isEmpty()) {
-            System.out.println("List task for project id:" + id + " is empty!");
-            return;
-        }
-        findTasks.forEach(e -> System.out.println("id:" + e.getId() + " name:" + e.getName()));
+        projectEndpoint.findOneProject(currentSession, id);
+        System.out.println("List task for project id:" + id + " is empty!");
+        taskEndpoint.findAllTaskByProjectId(currentSession, id)
+                .forEach(e -> System.out.println("id:" + e.getId() + " name:" + e.getName()));
     }
 }

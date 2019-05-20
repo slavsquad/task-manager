@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 
 import javax.persistence.*;
@@ -17,10 +18,11 @@ import java.util.List;
 @Table(name = "app_project")
 public class Project extends BaseEntity implements Serializable {
 
+    @Nullable
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Task> tasks;
 
-    public ProjectDTO getDTO(){
+    public ProjectDTO getDTO() {
         @NotNull final ProjectDTO dto = new ProjectDTO();
         dto.setId(id);
         dto.setName(name);

@@ -69,7 +69,7 @@ public class UserEndpoint implements IUserEndpoint {
     @WebMethod
     public UserDTO findUserByLogin(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
-            @WebParam(name = "login") @NotNull final String login)
+            @WebParam(name = "login") @Nullable final String login)
             throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(sessionDTO);
         return userService.findByLogin(login);
@@ -98,7 +98,7 @@ public class UserEndpoint implements IUserEndpoint {
     public void removeOneUser(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
             @WebParam(name = "id") @Nullable final String id)
-            throws AuthenticationSecurityException, DataValidateException{
+            throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(sessionDTO);
         userService.remove(id);
     }

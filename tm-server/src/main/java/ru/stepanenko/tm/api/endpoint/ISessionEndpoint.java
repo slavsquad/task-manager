@@ -32,6 +32,6 @@ public interface ISessionEndpoint {
 
     @WebMethod
     void closeSession(
-            @WebParam(name = "session") @NotNull final SessionDTO sessionDTO)
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException;
 }

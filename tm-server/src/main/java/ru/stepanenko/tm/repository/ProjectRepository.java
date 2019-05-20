@@ -24,22 +24,19 @@ public final class ProjectRepository implements IProjectRepository {
 
 
     @Override
-    @Nullable
     public Project findOne(
             @NotNull final String id) {
         return entityManager.find(Project.class, id);
     }
 
     @Override
-    @Nullable
     public Collection<Project> findAll() {
         return entityManager.createQuery("SELECT e FROM Project e", Project.class).getResultList();
     }
 
     @Override
-    @Nullable
     public void removeAll() {
-        Collection<Project> projects = findAll();
+        @Nullable final Collection<Project> projects = findAll();
         if (projects == null) return;
         projects.forEach(entityManager::remove);
     }
@@ -65,7 +62,7 @@ public final class ProjectRepository implements IProjectRepository {
     @Override
     public Collection<Project> findAllByUserId(
             @NotNull final User user) {
-        @NotNull final Collection<Project> projects = entityManager
+        @Nullable final Collection<Project> projects = entityManager
                 .createQuery("SELECT e FROM Project e WHERE e.user = :user", Project.class)
                 .setParameter("user", user)
                 .getResultList();
@@ -101,7 +98,7 @@ public final class ProjectRepository implements IProjectRepository {
         @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         @NotNull final CriteriaQuery<Project> criteriaQuery = criteriaBuilder.createQuery(Project.class);
         @NotNull final Root<Project> projectRoot = criteriaQuery.from(Project.class);
-        @NotNull final Predicate condition = criteriaBuilder.equal(projectRoot.get("user"),user);
+        @NotNull final Predicate condition = criteriaBuilder.equal(projectRoot.get("user"), user);
         criteriaQuery.select(projectRoot).where(condition);
         criteriaQuery.orderBy(criteriaBuilder.desc(projectRoot.get(parameter)));
         @NotNull final TypedQuery<Project> query = entityManager.createQuery(criteriaQuery);
@@ -114,7 +111,7 @@ public final class ProjectRepository implements IProjectRepository {
             @NotNull final String description,
             @NotNull final User user) {
         @NotNull final String query = "SELECT e FROM Project e WHERE e.user = :user and (e.name like :name OR e.description LIKE :description)";
-        @NotNull final List<Project> projects = entityManager.createQuery(query, Project.class)
+        @Nullable final List<Project> projects = entityManager.createQuery(query, Project.class)
                 .setParameter("user", user)
                 .setParameter("name", "%" + name + "%")
                 .setParameter("description", "%" + description + "%")

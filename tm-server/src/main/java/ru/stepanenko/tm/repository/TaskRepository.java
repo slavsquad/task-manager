@@ -25,7 +25,7 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     public Task findOne(
-            @NotNull final String id){
+            @NotNull final String id) {
         return entityManager.find(Task.class, id);
     }
 
@@ -36,8 +36,8 @@ public final class TaskRepository implements ITaskRepository {
 
     @Override
     public void removeAll() {
-        @NotNull final Collection<Task> tasks = findAll();
-        if (tasks==null) return;
+        @Nullable final Collection<Task> tasks = findAll();
+        if (tasks == null) return;
         tasks.forEach(entityManager::remove);
     }
 
@@ -64,7 +64,7 @@ public final class TaskRepository implements ITaskRepository {
     public Collection<Task> findAllByUserId(
             @NotNull final User user) {
         @NotNull final String query = "SELECT e FROM Task e WHERE e.user = :user";
-        @NotNull final List<Task> tasks = entityManager.createQuery(query, Task.class)
+        @Nullable final List<Task> tasks = entityManager.createQuery(query, Task.class)
                 .setParameter("user", user)
                 .getResultList();
         return tasks;
@@ -75,7 +75,7 @@ public final class TaskRepository implements ITaskRepository {
             @NotNull final Project project,
             @NotNull final User user) {
         @NotNull final String query = "SELECT e FROM Task e WHERE e.project = :project AND e.user = :user";
-        @NotNull final List<Task> tasks = entityManager.createQuery(query, Task.class)
+        @Nullable final List<Task> tasks = entityManager.createQuery(query, Task.class)
                 .setParameter("project", project)
                 .setParameter("user", user)
                 .getResultList();
@@ -102,7 +102,7 @@ public final class TaskRepository implements ITaskRepository {
     public void removeAllByUserId(
             @NotNull final User user) {
         @NotNull final Collection<Task> tasks = findAllByUserId(user);
-        if (tasks==null) return;
+        if (tasks == null) return;
         tasks.forEach(entityManager::remove);
     }
 
@@ -110,8 +110,8 @@ public final class TaskRepository implements ITaskRepository {
     public void removeAllByProjectAndUserId(
             @NotNull final Project project,
             @NotNull final User user) {
-        @NotNull final Collection<Task> tasks = findAllByProjectAndUserId(project, user);
-        if (tasks==null) return;
+        @Nullable final Collection<Task> tasks = findAllByProjectAndUserId(project, user);
+        if (tasks == null) return;
         tasks.forEach(entityManager::remove);
     }
 
@@ -122,7 +122,7 @@ public final class TaskRepository implements ITaskRepository {
         @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         @NotNull final CriteriaQuery<Task> criteriaQuery = criteriaBuilder.createQuery(Task.class);
         @NotNull final Root<Task> taskRoot = criteriaQuery.from(Task.class);
-        @NotNull final Predicate condition = criteriaBuilder.equal(taskRoot.get("user"),user);
+        @NotNull final Predicate condition = criteriaBuilder.equal(taskRoot.get("user"), user);
         criteriaQuery.select(taskRoot).where(condition);
         criteriaQuery.orderBy(criteriaBuilder.desc(taskRoot.get(parameter)));
         @NotNull final TypedQuery<Task> query = entityManager.createQuery(criteriaQuery);
@@ -135,7 +135,7 @@ public final class TaskRepository implements ITaskRepository {
             @NotNull final String description,
             @NotNull final User user) {
         @NotNull final String query = "SELECT e FROM Task e WHERE e.user = :user and (e.name like :name OR e.description LIKE :description)";
-        @NotNull final List<Task> tasks = entityManager.createQuery(query, Task.class)
+        @Nullable final List<Task> tasks = entityManager.createQuery(query, Task.class)
                 .setParameter("user", user)
                 .setParameter("name", "%" + name + "%")
                 .setParameter("description", "%" + description + "%")

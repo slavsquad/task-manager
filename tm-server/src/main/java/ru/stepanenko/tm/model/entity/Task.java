@@ -27,7 +27,7 @@ public class Task extends BaseEntity implements Serializable {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public TaskDTO getDTO(){
+    public TaskDTO getDTO() {
         @NotNull final TaskDTO dto = new TaskDTO();
         dto.setId(id);
         dto.setName(name);

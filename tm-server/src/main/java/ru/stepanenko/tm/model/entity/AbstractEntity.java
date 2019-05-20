@@ -20,8 +20,8 @@ import java.util.UUID;
 public abstract class AbstractEntity implements Serializable {
 
     @Id
-    @Column(name = "id")
     @NotNull
+    @Column(name = "id")
     protected String id = UUID.randomUUID().toString();
 
     @Nullable

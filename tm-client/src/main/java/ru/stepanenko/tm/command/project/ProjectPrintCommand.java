@@ -28,7 +28,7 @@ public class ProjectPrintCommand extends AbstractCommand {
         endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
         System.out.println("Please input project ID for print: ");
         @Nullable final String id = terminalService.nextLine();
-        @Nullable final ProjectDTO findProject = projectEndpoint.findOneProject(currentSession, id);
+        @NotNull final ProjectDTO findProject = projectEndpoint.findOneProject(currentSession, id);
         System.out.println("id: " + findProject.getId() +
                 "\nname: " + findProject.getName() +
                 "\ndescription: " + findProject.getDescription() +

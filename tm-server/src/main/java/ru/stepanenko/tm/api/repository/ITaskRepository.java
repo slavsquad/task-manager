@@ -25,7 +25,6 @@ public interface ITaskRepository {
             @NotNull final Task task);
 
 
-
     Collection<Task> findAllByUserId(
             @NotNull final User user);
 

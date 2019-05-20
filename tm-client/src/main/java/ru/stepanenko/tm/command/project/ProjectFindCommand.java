@@ -33,16 +33,12 @@ public class ProjectFindCommand extends AbstractCommand {
         System.out.println("Please input part of project's description for search:");
         @Nullable String description = terminalService.nextLine();
         @Nullable final Collection<ProjectDTO> findProjects = projectEndpoint.findAllProjectByPartOfNameOrDescription(currentSession, name, description);
-        if (findProjects != null && !findProjects.isEmpty()) {
-            System.out.println("Find projects by part of name '" + name + "' or part of description '" + description + "' :");
-            findProjects.forEach(e -> System.out.println("id: " + e.getId() +
-                    " name: " + e.getName() +
-                    " description: " + e.getDescription() +
-                    " data start: " + e.getDateBegin() +
-                    " data end: " + e.getDateEnd() +
-                    " status: " + e.getStatus()));
-        } else {
-            System.out.println("Projects does not found!");
-        }
+        System.out.println("Find projects by part of name '" + name + "' or part of description '" + description + "' :");
+        findProjects.forEach(e -> System.out.println("id: " + e.getId() +
+                " name: " + e.getName() +
+                " description: " + e.getDescription() +
+                " data start: " + e.getDateBegin() +
+                " data end: " + e.getDateEnd() +
+                " status: " + e.getStatus()));
     }
 }

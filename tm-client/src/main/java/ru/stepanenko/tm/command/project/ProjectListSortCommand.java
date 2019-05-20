@@ -33,10 +33,10 @@ public class ProjectListSortCommand extends AbstractCommand {
         System.out.println("Project list sorted by " + parameter + " :");
         projectEndpoint.sortAllProjectByUserId(currentSession, parameter)
                 .forEach(e -> System.out.println("id: " + e.getId() +
-                    " name: " + e.getName() +
-                    " description: " + e.getDescription() +
-                    " data start: " + e.getDateBegin() +
-                    " data end: " + e.getDateEnd() +
-                    " status: " + e.getStatus()));
+                        " name: " + e.getName() +
+                        " description: " + e.getDescription() +
+                        " data start: " + e.getDateBegin() +
+                        " data end: " + e.getDateEnd() +
+                        " status: " + e.getStatus()));
     }
 }

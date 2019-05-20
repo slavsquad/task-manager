@@ -33,15 +33,9 @@ public class TaskFindCommand extends AbstractCommand {
         @Nullable final String name = terminalService.nextLine();
         System.out.println("Please input part of task's description for search:");
         @Nullable final String description = terminalService.nextLine();
-
-        @Nullable final Collection<TaskDTO> findTasks = taskEndpoint.findAllTaskByPartOfNameOrDescription(currentSession, name, description);
-        if (findTasks == null || findTasks.isEmpty()) {
-            System.out.println("Tasks does not found!");
-            return;
-        }
-
         System.out.println("Find tasks by part of name '" + name + "' or part of description '" + description + "' :");
-        findTasks.forEach(e -> System.out.println("id: " + e.getId() +
+        taskEndpoint.findAllTaskByPartOfNameOrDescription(currentSession, name, description)
+                .forEach(e -> System.out.println("id: " + e.getId() +
                 " name: " + e.getName() +
                 " description: " + e.getDescription() +
                 " data start: " + e.getDateBegin() +

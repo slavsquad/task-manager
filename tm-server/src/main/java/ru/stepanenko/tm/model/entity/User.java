@@ -20,16 +20,16 @@ import java.util.List;
 @Table(name = "app_user")
 public class User extends AbstractEntity implements Serializable {
 
-    @Nullable
     @Column
+    @Nullable
     private String login = "";
 
     @Nullable
     @Column(unique = true)
     private String password = "";
 
-    @Nullable
     @Column
+    @Nullable
     @Enumerated(value = EnumType.STRING)
     private Role role = Role.USER;
 

@@ -29,7 +29,7 @@ public class Session extends AbstractEntity {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public SessionDTO getDTO(){
+    public SessionDTO getDTO() {
         @NotNull final SessionDTO dto = new SessionDTO();
         dto.setId(id);
         dto.setName(name);

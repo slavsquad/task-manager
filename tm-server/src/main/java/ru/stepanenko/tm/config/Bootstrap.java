@@ -84,7 +84,7 @@ public class Bootstrap {
             user.setRole(Role.USER);
 
 
-            if (userService.findAll() == null || userService.findAll().isEmpty()){
+            if (userService.findAll() == null || userService.findAll().isEmpty()) {
                 userService.create(admin);
                 userService.create(user);
             }

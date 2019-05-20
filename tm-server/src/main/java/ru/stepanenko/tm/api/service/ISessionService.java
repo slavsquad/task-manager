@@ -15,18 +15,18 @@ public interface ISessionService {
             throws DataValidateException;
 
     SessionDTO findOne(
-            @NotNull final String id)
+            @Nullable final String id)
             throws DataValidateException;
 
     void remove(
-            @NotNull final String id)
+            @Nullable final String id)
             throws DataValidateException;
 
     Collection<SessionDTO> findAll()
             throws DataValidateException;
 
     SessionDTO create(
-            @NotNull final UserDTO userDTO)
+            @Nullable final UserDTO userDTO)
             throws DataValidateException;
 
     void validate(

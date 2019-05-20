@@ -45,15 +45,14 @@ public final class TaskEditCommand extends AbstractCommand {
         try {
             task.setStatus(Status.valueOf(status.toUpperCase()));
             task.setDateEnd(null);
-            if (task.getStatus().equals(Status.DONE))
-            {
+            if (task.getStatus().equals(Status.DONE)) {
                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
                 gregorianCalendar.setTime(new Date());
                 task.setDateEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
             }
             taskEndpoint.editTask(currentSession, task);
             System.out.println("Task id: " + id + " edit is update!");
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new DataValidateException_Exception(e.getMessage());
         }
     }

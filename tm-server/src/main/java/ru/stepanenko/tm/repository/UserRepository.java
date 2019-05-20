@@ -32,7 +32,7 @@ public final class UserRepository implements IUserRepository {
     @Override
     @SneakyThrows
     public void removeAll() {
-        @NotNull Collection<User> users = findAll();
+        @Nullable final Collection<User> users = findAll();
         if (users == null) return;
         users.forEach(entityManager::remove);
     }

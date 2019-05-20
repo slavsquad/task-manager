@@ -36,12 +36,6 @@ public final class TaskClearCommand extends AbstractCommand {
             System.out.println("All task has removed!");
             return;
         }
-        @Nullable final ProjectDTO project = projectEndpoint.findOneProject(currentSession, id);
-        @Nullable final Collection<TaskDTO> findTasks = taskEndpoint.findAllTaskByProjectId(currentSession, id);
-        if (findTasks == null || findTasks.isEmpty()) {
-            System.out.println("List task for project id:" + id + " is empty!");
-            return;
-        }
         taskEndpoint.removeAllTaskByProjectId(currentSession, id);
         System.out.println("All tasks for project id:" + id + " remove.");
     }

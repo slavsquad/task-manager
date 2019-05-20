@@ -44,15 +44,14 @@ public final class ProjectEditCommand extends AbstractCommand {
         try {
             project.setStatus(Status.valueOf(status.toUpperCase()));
             project.setDateEnd(null);
-            if (project.getStatus().equals(Status.DONE))
-            {
+            if (project.getStatus().equals(Status.DONE)) {
                 GregorianCalendar gregorianCalendar = new GregorianCalendar();
                 gregorianCalendar.setTime(new Date());
                 project.setDateEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
             }
             projectEndpoint.editProject(currentSession, project);
             System.out.println("Project " + id + " is update!");
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new DataValidateException_Exception(e.getMessage());
         }
 

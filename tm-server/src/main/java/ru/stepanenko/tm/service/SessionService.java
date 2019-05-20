@@ -54,14 +54,14 @@ public class SessionService implements ISessionService {
 
     @Override
     public SessionDTO findOne(
-            @NotNull final String id)
+            @Nullable final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull final Session session = sessionRepository
+            @Nullable final Session session = sessionRepository
                     .findOne(id);
             if (session == null) throw new DataValidateException("Session not found!");
             entityManager.getTransaction().commit();
@@ -76,14 +76,14 @@ public class SessionService implements ISessionService {
 
     @Override
     public void remove(
-            @NotNull final String id)
+            @Nullable final String id)
             throws DataValidateException {
         DataValidator.validateString(id);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull final Session session = sessionRepository
+            @Nullable final Session session = sessionRepository
                     .findOne(id);
             if (session == null) throw new DataValidateException("Session not found!");
             sessionRepository
@@ -104,7 +104,7 @@ public class SessionService implements ISessionService {
         @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
-            @NotNull final Collection<Session> sessions = sessionRepository
+            @Nullable final Collection<Session> sessions = sessionRepository
                     .findAll();
             if (sessions == null) throw new DataValidateException("Sessions not found!");
             entityManager.getTransaction().commit();
@@ -122,7 +122,7 @@ public class SessionService implements ISessionService {
 
     @Override
     public SessionDTO create(
-            @NotNull final UserDTO userDTO)
+            @Nullable final UserDTO userDTO)
             throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, false);
         @NotNull final String cycle = propertyService.getCycle();
@@ -151,7 +151,7 @@ public class SessionService implements ISessionService {
     public void validate(
             @Nullable final SessionDTO sessionDTO)
             throws AuthenticationSecurityException, DataValidateException {
-        DataValidator.validateSesstionDTO(sessionDTO);
+        DataValidator.validateSessionDTO(sessionDTO);
         if (!sessionDTO.getSignature().equals(findOne(sessionDTO.getId()).getSignature()))
             throw new AuthenticationSecurityException("SessionDTO is invalid: \nSessionDTO signature is wrong! Please re-login!");
     }
@@ -162,7 +162,6 @@ public class SessionService implements ISessionService {
             throws AuthenticationSecurityException, DataValidateException {
         validate(sessionDTO);
         @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
         try {
             entityManager.getTransaction().begin();
             @NotNull User user = getUser(sessionDTO.getUserId(), entityManager);

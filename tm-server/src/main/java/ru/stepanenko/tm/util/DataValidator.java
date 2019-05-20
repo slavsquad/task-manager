@@ -51,7 +51,7 @@ public class DataValidator {
         if (projectDTO.getId() == null || projectDTO.getId().isEmpty())
             throw new DataValidateException("Id project not must be empty!");
         if (projectDTO.getUserId() == null || projectDTO.getUserId().isEmpty())
-            throw new DataValidateException("User id not mustbe empty!");
+            throw new DataValidateException("User id not must be empty!");
         if (projectDTO.getName() == null || projectDTO.getName().isEmpty())
             throw new DataValidateException("Project name not must be empty!");
         if (projectDTO.getDescription() == null || projectDTO.getDescription().isEmpty())
@@ -97,18 +97,18 @@ public class DataValidator {
         validateRole(userDTO.getRole());
     }
 
-    public static void validateSesstionDTO(
+    public static void validateSessionDTO(
             @Nullable final SessionDTO sessionDTO)
             throws DataValidateException {
         if (sessionDTO == null)
-            throw new DataValidateException("Incorrect session dto!");
+            throw new DataValidateException("Session is invalid, please re-login!");
         if (sessionDTO.getId() == null || sessionDTO.getId().isEmpty())
-            throw new DataValidateException("Session id not must be empty!");
+            throw new DataValidateException("Session id is empty, please re-login!");
         if (sessionDTO.getSignature() == null || sessionDTO.getSignature().isEmpty())
-            throw new DataValidateException("Session signature not must be empty!");
+            throw new DataValidateException("Session signature is empty, please re-login!");
         if (sessionDTO.getUserId() == null || sessionDTO.getUserId().isEmpty())
-            throw new DataValidateException("User id not must be empty!");
+            throw new DataValidateException("User id is empty, please re-login!");
         if (sessionDTO.getTimestamp() == null)
-            throw new DataValidateException("Time stamp not must be empty!");
+            throw new DataValidateException("Time stamp is empty, please re-login!");
     }
 }
