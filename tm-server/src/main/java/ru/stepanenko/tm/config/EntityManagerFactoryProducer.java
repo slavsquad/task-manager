@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.config;
 
-import lombok.NoArgsConstructor;
 import org.hibernate.boot.Metadata;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -39,12 +38,12 @@ public class EntityManagerFactoryProducer {
         settings.put(Environment.URL, propertyService.getJdbcURL());
         settings.put(Environment.USER, propertyService.getJdbcUser());
         settings.put(Environment.PASS, propertyService.getJdbcPassword());
-        settings.put(Environment.DIALECT,
-                "org.hibernate.dialect.MySQL5InnoDBDialect");
-        settings.put(Environment.HBM2DDL_AUTO, "update");
-        settings.put(Environment.SHOW_SQL, "true");
+        settings.put(Environment.DIALECT, propertyService.getDialect());
+        settings.put(Environment.HBM2DDL_AUTO, propertyService.getHBM2DDL_AUTO());
+        settings.put(Environment.SHOW_SQL, propertyService.getShowSQL());
         final StandardServiceRegistryBuilder registryBuilder
                 = new StandardServiceRegistryBuilder();
+        System.out.println(settings);
         registryBuilder.applySettings(settings);
         final StandardServiceRegistry registry = registryBuilder.build();
         final MetadataSources sources = new MetadataSources(registry);

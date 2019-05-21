@@ -13,6 +13,13 @@ public interface IPropertyService {
 
     String getJdbcDriver();
 
+    String getDialect();
+
+    String getShowSQL();
+
+    String getHBM2DDL_AUTO();
+
+
     String getSalt();
 
     String getCycle();

@@ -55,6 +55,21 @@ public class PropertyService implements IPropertyService {
     }
 
     @Override
+    public String getDialect() {
+        return properties.getProperty("dialect");
+    }
+
+    @Override
+    public String getShowSQL() {
+        return properties.getProperty("showSQL");
+    }
+
+    @Override
+    public String getHBM2DDL_AUTO() {
+        return properties.getProperty("HBM2DDL_AUTO");
+    }
+
+    @Override
     public String getSalt() {
         return properties.getProperty("salt");
     }

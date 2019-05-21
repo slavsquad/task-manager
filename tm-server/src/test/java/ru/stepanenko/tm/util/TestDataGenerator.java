@@ -58,9 +58,15 @@ public class TestDataGenerator {
             user.setPassword(HashUtil.md5("user"));
             user.setRole(Role.USER);
 
-            userService.clear();
+            UserDTO test = new UserDTO();
+            test.setId("test");
+            test.setLogin("test");
+            test.setPassword(HashUtil.md5("test"));
+            test.setRole(Role.USER);
+
             userService.create(admin);
             userService.create(user);
+            userService.create(test);
         } catch (DataValidateException e) {
             e.printStackTrace();
         }
@@ -137,15 +143,6 @@ public class TestDataGenerator {
             TaskDTO taskDTO500 = new TaskDTO("task_500", "Description for task 500", projectDTO4.getId(), userService.findByLogin("user").getId());
             taskDTO500.setId("500");
             taskService.create(taskDTO500);
-        } catch (DataValidateException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void cleanUp() {
-        try {
-            userService.remove("1");
-            userService.remove("2");
         } catch (DataValidateException e) {
             e.printStackTrace();
         }
