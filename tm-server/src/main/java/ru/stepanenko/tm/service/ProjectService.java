@@ -14,18 +14,23 @@ import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.repository.UserRepository;
 import ru.stepanenko.tm.util.DataValidator;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
+@ApplicationScoped
 public class ProjectService implements IProjectService {
 
-    @Inject
     @NotNull
-    EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
+
+    @Inject
+    public ProjectService(@NotNull final EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public void create(

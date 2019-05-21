@@ -3,14 +3,26 @@ package ru.stepanenko.tm.command.project;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.api.service.ISessionService;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
 
-import java.util.Collection;
+import javax.inject.Inject;
 
 @NoArgsConstructor
-public final class ProjectListCommand extends AbstractCommand {
+public final class ProjectListCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    ProjectEndpoint projectEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
 
     @Override
     public String getName() {
@@ -25,9 +37,9 @@ public final class ProjectListCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
-        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        System.out.println(currentSession.getSignature());
+        sessionEndpoint.validateSession(currentSession);
         System.out.println("List of projects:");
         projectEndpoint.findAllProjectByUserId(currentSession)
                 .forEach(e -> System.out.println("id: " + e.getId() + " name: " + e.getName()));

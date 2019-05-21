@@ -4,8 +4,10 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.service.ITerminalService;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Scanner;
 
+@ApplicationScoped
 @NoArgsConstructor
 public class TerminalService implements ITerminalService {
 

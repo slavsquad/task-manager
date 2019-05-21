@@ -1,7 +1,5 @@
 package ru.stepanenko.tm.service;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
@@ -18,18 +16,24 @@ import ru.stepanenko.tm.repository.TaskRepository;
 import ru.stepanenko.tm.repository.UserRepository;
 import ru.stepanenko.tm.util.DataValidator;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@NoArgsConstructor
+@ApplicationScoped
 public final class TaskService implements ITaskService {
 
-    @Inject
     @NotNull
-    EntityManagerFactory entityManagerFactory;
+    private final EntityManagerFactory entityManagerFactory;
+
+    @Inject
+    public TaskService(
+            @NotNull final EntityManagerFactory entityManagerFactory) {
+        this.entityManagerFactory = entityManagerFactory;
+    }
 
     @Override
     public void create(

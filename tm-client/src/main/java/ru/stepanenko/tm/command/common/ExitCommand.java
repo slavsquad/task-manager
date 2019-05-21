@@ -1,8 +1,10 @@
 package ru.stepanenko.tm.command.common;
 
-import ru.stepanenko.tm.command.AbstractCommand;
+import lombok.NoArgsConstructor;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 
-public final class ExitCommand extends AbstractCommand {
+@NoArgsConstructor
+public final class ExitCommand implements AbstractCommand {
 
     @Override
     public String getName() {

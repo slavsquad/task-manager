@@ -2,11 +2,27 @@ package ru.stepanenko.tm.command.project;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.command.AbstractCommand;
+import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.service.ISessionService;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
 
+import javax.inject.Inject;
+
 @NoArgsConstructor
-public final class ProjectClearCommand extends AbstractCommand {
+public final class ProjectClearCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    ProjectEndpoint projectEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
 
     @Override
     public String getName() {
@@ -21,10 +37,8 @@ public final class ProjectClearCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
-        @NotNull final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        sessionEndpoint.validateSession(currentSession);
         projectEndpoint.removeAllProjectByUserId(currentSession);
         System.out.println("All project had removed!");
     }

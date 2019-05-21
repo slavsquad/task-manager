@@ -1,59 +1,42 @@
 package ru.stepanenko.tm.config;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.api.service.IEndpointServiceLocator;
-import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.api.service.ITerminalService;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
-import ru.stepanenko.tm.service.EndpointServiceLocator;
 
-import java.util.HashMap;
+import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Inject;
 import java.util.Map;
 
+@ApplicationScoped
+@NoArgsConstructor
 public class Bootstrap {
+
+    @Inject
     @NotNull
-    final IEndpointServiceLocator endpointServiceLocator = new EndpointServiceLocator();
+    Map<String, AbstractCommand> commandsMap;
 
-    public void init(Class[] arrayCommands) {
-        menu(initializeCommands(endpointServiceLocator, arrayCommands));
+    @Inject
+    @NotNull
+    ITerminalService terminalService;
+
+    public void init() {
+        menu();
     }
 
-    private Map<String, AbstractCommand> initializeCommands(@NotNull final IEndpointServiceLocator endpointServiceLocator, @NotNull final Class[] arrayCommands) {
-        @NotNull final Map<String, AbstractCommand> mapCommand = new HashMap<>();
-
-        for (Class command : arrayCommands) {
-            if (command.getSuperclass().equals(AbstractCommand.class)) {
-                try {
-                    AbstractCommand abstractCommand = (AbstractCommand) command.newInstance();
-                    abstractCommand.setEndpointServiceLocator(endpointServiceLocator);
-                    registryCommand(abstractCommand, mapCommand);
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return mapCommand;
-    }
-
-    private void registryCommand(
-            @NotNull final AbstractCommand abstractCommand,
-            @NotNull final Map<String, AbstractCommand> command) {
-        command.put(abstractCommand.getName(), abstractCommand);
-    }
-
-    private void menu(
-            @NotNull final Map<String, AbstractCommand> commands) {
+    private void menu() {
         System.out.println("==Welcome to Task manager!==\n" +
                 "Input help for more information");
 
         while (true) {
             System.out.println("Please input your command:");
             @NotNull
-            String commandName = endpointServiceLocator.getTerminalService().nextLine();
+            String commandName = terminalService.nextLine();
             @Nullable
-            AbstractCommand command = commands.get(commandName);
+            AbstractCommand command = commandsMap.get(commandName);
             if (command != null) {
                 try {
                     command.execute();

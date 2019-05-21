@@ -1,19 +1,33 @@
 package ru.stepanenko.tm.service;
-
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.AppServer;
 import ru.stepanenko.tm.api.service.IPropertyService;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
+@ApplicationScoped
+
 public class PropertyService implements IPropertyService {
+
     @NotNull
     private final Properties properties = new Properties();
 
     public PropertyService() {
         try (InputStream resourceStream = AppServer.class.getClassLoader().getResourceAsStream("application.properties")) {
+            properties.load(resourceStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public PropertyService(
+            @NotNull final Class clazz,
+            @NotNull final String filename) {
+        try (InputStream resourceStream = clazz.getClassLoader().getResourceAsStream(filename)) {
             properties.load(resourceStream);
         } catch (IOException e) {
             e.printStackTrace();

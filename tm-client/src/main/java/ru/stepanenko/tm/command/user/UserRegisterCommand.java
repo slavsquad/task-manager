@@ -3,14 +3,32 @@ package ru.stepanenko.tm.command.user;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
 import ru.stepanenko.tm.util.HashUtil;
 
-@NoArgsConstructor
-public final class UserRegisterCommand extends AbstractCommand {
+import javax.inject.Inject;
 
+@NoArgsConstructor
+public final class UserRegisterCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    UserEndpoint userEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
+
+    @Inject
+    @NotNull
+    ITerminalService terminalService;
     @Override
     public String getName() {
         return "user-register";
@@ -24,10 +42,8 @@ public final class UserRegisterCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
-        @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-        endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        sessionEndpoint.validateAdminSession(currentSession);
         System.out.println("Please input user name:");
         @Nullable final String login = terminalService.nextLine();
         System.out.println("Please input password:");

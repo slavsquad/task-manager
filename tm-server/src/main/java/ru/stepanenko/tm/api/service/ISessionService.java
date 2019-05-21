@@ -6,8 +6,10 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.UserDTO;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 
+@ApplicationScoped
 public interface ISessionService {
 
     void clear(

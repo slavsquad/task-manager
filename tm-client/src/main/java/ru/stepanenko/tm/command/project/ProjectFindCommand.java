@@ -3,14 +3,32 @@ package ru.stepanenko.tm.command.project;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
 
+import javax.inject.Inject;
 import java.util.Collection;
 
 @NoArgsConstructor
-public class ProjectFindCommand extends AbstractCommand {
+public class ProjectFindCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    ProjectEndpoint projectEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
+
+    @Inject
+    @NotNull
+    ITerminalService terminalService;
 
     @Override
     public String getName() {
@@ -25,10 +43,8 @@ public class ProjectFindCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
-        @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        sessionEndpoint.validateSession(currentSession);
         System.out.println("Please input part of project's name for search:");
         @Nullable final String name = terminalService.nextLine();
         System.out.println("Please input part of project's description for search:");

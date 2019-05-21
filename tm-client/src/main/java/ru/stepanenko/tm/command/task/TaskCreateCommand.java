@@ -3,12 +3,35 @@ package ru.stepanenko.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
 
+import javax.inject.Inject;
+
 @NoArgsConstructor
-public final class TaskCreateCommand extends AbstractCommand {
+public final class TaskCreateCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    ProjectEndpoint projectEndpoint;
+
+    @Inject
+    @NotNull
+    TaskEndpoint taskEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
+
+    @Inject
+    @NotNull
+    ITerminalService terminalService;
 
     @Override
     public String getName() {
@@ -23,11 +46,8 @@ public final class TaskCreateCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
-        @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
-        @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        sessionEndpoint.validateSession(currentSession);
         System.out.println("Please input project id: ");
         @Nullable final String id = terminalService.nextLine();
         projectEndpoint.findOneProject(currentSession, id);

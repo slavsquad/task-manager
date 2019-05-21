@@ -1,11 +1,14 @@
 package ru.stepanenko.tm.api.service;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 
+@ApplicationScoped
 public interface IProjectService {
 
     void create(

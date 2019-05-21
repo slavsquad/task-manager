@@ -8,31 +8,33 @@ import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
 import ru.stepanenko.tm.util.DataGenerator;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 
+@ApplicationScoped
 @NoArgsConstructor
 public class Bootstrap {
 
     @Inject
     @NotNull
-    IProjectEndpoint projectEndpoint;
+    private IProjectEndpoint projectEndpoint;
 
     @Inject
     @NotNull
-    ITaskEndpoint taskEndpoint;
+    private ITaskEndpoint taskEndpoint;
 
     @Inject
     @NotNull
-    IUserEndpoint userEndpoint;
+    private IUserEndpoint userEndpoint;
 
     @Inject
     @NotNull
-    ISessionEndpoint sessionEndpoint;
+    private ISessionEndpoint sessionEndpoint;
 
     @Inject
     @NotNull
-    DataGenerator dataGenerator;
+    private DataGenerator dataGenerator;
 
 
     public void init() {

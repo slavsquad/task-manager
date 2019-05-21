@@ -3,16 +3,34 @@ package ru.stepanenko.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.AbstractCommand;
+import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
 
+import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
 @NoArgsConstructor
-public final class TaskEditCommand extends AbstractCommand {
+public final class TaskEditCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    TaskEndpoint taskEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
+
+    @Inject
+    @NotNull
+    ITerminalService terminalService;
 
     @Override
     public String getName() {
@@ -27,11 +45,8 @@ public final class TaskEditCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final ProjectEndpoint projectEndpoint = endpointServiceLocator.getProjectEndpoint();
-        @NotNull final TaskEndpoint taskEndpoint = endpointServiceLocator.getTaskEndpoint();
-        @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-        endpointServiceLocator.getSessionEndpoint().validateSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        sessionEndpoint.validateSession(currentSession);
         System.out.println("Input task id for edit: ");
         @Nullable final String id = terminalService.nextLine();
         @Nullable final TaskDTO task = taskEndpoint.findOneTask(currentSession, id);

@@ -15,21 +15,29 @@ import javax.inject.Inject;
 
 public class DataGenerator {
 
-    @Inject
     @NotNull
-    private IProjectService projectService;
+    private final IProjectService projectService;
+
+    @NotNull
+    private final ITaskService taskService;
+
+    @NotNull
+    private final IUserService userService;
+
+    @NotNull
+    private final ISessionService sessionService;
 
     @Inject
-    @NotNull
-    private ITaskService taskService;
-
-    @Inject
-    @NotNull
-    private IUserService userService;
-
-    @Inject
-    @NotNull
-    private ISessionService sessionService;
+    public DataGenerator(
+            @NotNull final IProjectService projectService,
+            @NotNull final ITaskService taskService,
+            @NotNull final IUserService userService,
+            @NotNull final ISessionService sessionService) {
+        this.projectService = projectService;
+        this.taskService = taskService;
+        this.userService = userService;
+        this.sessionService = sessionService;
+    }
 
     public void generateUsers() {
         try {
@@ -43,11 +51,9 @@ public class DataGenerator {
             user.setPassword(HashUtil.md5("user"));
             user.setRole(Role.USER);
 
-
-            if (userService.findAll() == null || userService.findAll().isEmpty()) {
-                userService.create(admin);
-                userService.create(user);
-            }
+            userService.clear();
+            userService.create(admin);
+            userService.create(user);
         } catch (DataValidateException e) {
             e.printStackTrace();
         }

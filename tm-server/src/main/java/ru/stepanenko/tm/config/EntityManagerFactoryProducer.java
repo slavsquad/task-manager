@@ -13,18 +13,24 @@ import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.persistence.EntityManagerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
-@NoArgsConstructor
+@ApplicationScoped
 public class EntityManagerFactoryProducer {
 
-    @Inject
     @NotNull
-    IPropertyService propertyService;
+    private final IPropertyService propertyService;
+
+    @Inject
+    public EntityManagerFactoryProducer(
+            @NotNull final IPropertyService propertyService) {
+        this.propertyService = propertyService;
+    }
 
     @Produces
     public EntityManagerFactory getFactory() {

@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.endpoint;
 
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
@@ -18,16 +17,21 @@ import javax.jws.WebService;
 import java.util.Collection;
 
 @WebService
-@NoArgsConstructor
 public class TaskEndpoint implements ITaskEndpoint {
 
-    @Inject
     @NotNull
-    private ISessionService sessionService;
+    private final ITaskService taskService;
+
+    @NotNull
+    private final ISessionService sessionService;
 
     @Inject
-    @NotNull
-    private ITaskService taskService;
+    public TaskEndpoint(
+            @NotNull final ITaskService taskService,
+            @NotNull final ISessionService sessionService) {
+        this.taskService = taskService;
+        this.sessionService = sessionService;
+    }
 
     @Override
     @WebMethod

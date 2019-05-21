@@ -5,8 +5,10 @@ import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 
+@ApplicationScoped
 public interface IUserService {
 
     void create(

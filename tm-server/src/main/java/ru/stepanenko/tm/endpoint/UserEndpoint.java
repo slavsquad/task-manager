@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.endpoint;
 
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
@@ -18,16 +17,21 @@ import javax.jws.WebService;
 import java.util.Collection;
 
 @WebService
-@NoArgsConstructor
 public class UserEndpoint implements IUserEndpoint {
 
-    @Inject
     @NotNull
-    private IUserService userService;
+    private final IUserService userService;
+
+    @NotNull
+    private final ISessionService sessionService;
 
     @Inject
-    @NotNull
-    private ISessionService sessionService;
+    public UserEndpoint(
+            @NotNull final IUserService userService,
+            @NotNull final ISessionService sessionService) {
+        this.userService = userService;
+        this.sessionService = sessionService;
+    }
 
     @Override
     @WebMethod

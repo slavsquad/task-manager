@@ -6,9 +6,11 @@ import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.DataValidateException;
 
+import javax.enterprise.context.ApplicationScoped;
 import javax.persistence.EntityManager;
 import java.util.Collection;
 
+@ApplicationScoped
 public interface ITaskService {
 
     void create(

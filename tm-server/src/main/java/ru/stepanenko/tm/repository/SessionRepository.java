@@ -15,7 +15,7 @@ import java.util.Collection;
 public final class SessionRepository implements ISessionRepository {
 
     @NotNull
-    final EntityManager entityManager;
+    private final EntityManager entityManager;
 
     @Override
     public Session findOne(

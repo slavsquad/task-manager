@@ -1,15 +1,33 @@
 package ru.stepanenko.tm.command.user;
 
+import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.AbstractCommand;
-import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
-import ru.stepanenko.tm.endpoint.DataValidateException_Exception;
-import ru.stepanenko.tm.endpoint.SessionDTO;
-import ru.stepanenko.tm.endpoint.UserEndpoint;
+import ru.stepanenko.tm.api.command.AbstractCommand;
+import ru.stepanenko.tm.endpoint.*;
 
-public class UserRemoveCommand extends AbstractCommand {
+import javax.inject.Inject;
+
+@NoArgsConstructor
+public class UserRemoveCommand implements AbstractCommand {
+
+    @Inject
+    @NotNull
+    UserEndpoint userEndpoint;
+
+    @Inject
+    @NotNull
+    SessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    ISessionService sessionService;
+
+    @Inject
+    @NotNull
+    ITerminalService terminalService;
     @Override
     public String getName() {
         return "user-remove";
@@ -23,10 +41,8 @@ public class UserRemoveCommand extends AbstractCommand {
     @Override
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
-        @NotNull final UserEndpoint userEndpoint = endpointServiceLocator.getUserEndpoint();
-        @NotNull final ITerminalService terminalService = endpointServiceLocator.getTerminalService();
-        @Nullable final SessionDTO currentSession = endpointServiceLocator.getSessionDTO();
-        endpointServiceLocator.getSessionEndpoint().validateAdminSession(currentSession);
+        @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
+        sessionEndpoint.validateAdminSession(currentSession);
         System.out.println("Please input user ID for remove: ");
         @Nullable final String id = terminalService.nextLine();
         userEndpoint.removeOneUser(currentSession, id);
