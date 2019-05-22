@@ -140,7 +140,7 @@ public class UserRepositoryTest {
     }
 
     private User getEntity() {
-        @NotNull final List<User> users = new ArrayList<>(userRepository.findAll());
+        @Nullable final List<User> users = new ArrayList<>(userRepository.findAll());
         if (users.isEmpty()) return null;
         return users.get(0);
     }

@@ -262,19 +262,16 @@ public class TaskRepositoryTest {
         taskRepository.persist(task3);
 
         @NotNull final List<Task> sortStatus = new ArrayList<>(taskRepository.sortAllByUserId(user, "status"));
-        sortStatus.forEach(e -> System.out.println(e.getStatus()));
         assertEquals(task3, sortStatus.get(0));
         assertEquals(task2, sortStatus.get(1));
         assertEquals(task1, sortStatus.get(2));
 
         @NotNull final List<Task> sortDateBegin = new ArrayList<>(taskRepository.sortAllByUserId(user, "dateBegin"));
-        sortDateBegin.forEach(e -> System.out.println(e.getDateBegin()));
         assertEquals(task2, sortDateBegin.get(0));
         assertEquals(task1, sortDateBegin.get(1));
         assertEquals(task3, sortDateBegin.get(2));
 
         @NotNull final List<Task> sortDateEnd = new ArrayList<>(taskRepository.sortAllByUserId(user, "dateEnd"));
-        sortDateEnd.forEach(e -> System.out.println(e.getDateEnd()));
         assertEquals(task2, sortDateEnd.get(0));
         assertEquals(task1, sortDateEnd.get(1));
         assertEquals(task3, sortDateEnd.get(2));
@@ -315,7 +312,7 @@ public class TaskRepositoryTest {
     }
 
     private Task getEntity() {
-        @NotNull final List<Task> tasks = new ArrayList<>(taskRepository.findAll());
+        @Nullable final List<Task> tasks = new ArrayList<>(taskRepository.findAll());
         if (tasks.isEmpty()) return null;
         return tasks.get(0);
     }

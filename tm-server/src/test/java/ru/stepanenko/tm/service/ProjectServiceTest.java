@@ -4,20 +4,13 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.*;
 import ru.stepanenko.tm.AppServerTest;
-import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.service.IProjectService;
-import ru.stepanenko.tm.api.service.IPropertyService;
 import ru.stepanenko.tm.config.EntityManagerFactoryProducer;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
-import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.model.entity.User;
-import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.util.DataGenerator;
 
-import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 
 import java.util.ArrayList;
@@ -132,10 +125,12 @@ public class ProjectServiceTest {
 
     @Test
     public void removeOneByUserId() throws DataValidateException {
-        @NotNull final int size = projectService.findAll().size();
+        @Nullable final ProjectDTO entity = getEntity();
+        assertNotNull(entity);
+        @NotNull final int size = projectService.findAllByUserId(entity.getUserId()).size();
         assertTrue(size>0);
-        projectService.remove(getEntity().getId(), getEntity().getUserId());
-        assertEquals(size-1, projectService.findAll().size());
+        projectService.remove(entity.getId(), entity.getUserId());
+        assertEquals(size-1, projectService.findAllByUserId(entity.getUserId()).size());
     }
 
     @Test
@@ -199,19 +194,16 @@ public class ProjectServiceTest {
         projectService.create(project3);
 
         @NotNull final List<ProjectDTO> sortStatus = new ArrayList<>(projectService.sortAllByUserId(userId, "status"));
-        sortStatus.forEach(e -> System.out.println(e.getStatus()));
         assertEquals(project3.getId(), sortStatus.get(0).getId());
         assertEquals(project2.getId(), sortStatus.get(1).getId());
         assertEquals(project1.getId(), sortStatus.get(2).getId());
 
         @NotNull final List<ProjectDTO> sortDateBegin = new ArrayList<>(projectService.sortAllByUserId(userId, "dateBegin"));
-        sortDateBegin.forEach(e -> System.out.println(e.getDateBegin()));
         assertEquals(project2.getId(), sortDateBegin.get(0).getId());
         assertEquals(project1.getId(), sortDateBegin.get(1).getId());
         assertEquals(project3.getId(), sortDateBegin.get(2).getId());
 
         @NotNull final List<ProjectDTO> sortDateEnd = new ArrayList<>(projectService.sortAllByUserId(userId, "dateEnd"));
-        sortDateEnd.forEach(e -> System.out.println(e.getDateEnd()));
         assertEquals(project2.getId(), sortDateEnd.get(0).getId());
         assertEquals(project1.getId(), sortDateEnd.get(1).getId());
         assertEquals(project3.getId(), sortDateEnd.get(2).getId());
@@ -244,7 +236,7 @@ public class ProjectServiceTest {
     }
 
     private ProjectDTO getEntity() throws DataValidateException {
-        @NotNull final List<ProjectDTO> projects = new ArrayList<>(projectService.findAll());
+        @Nullable final List<ProjectDTO> projects = new ArrayList<>(projectService.findAll());
         if (projects.isEmpty()) return null;
         return projects.get(0);
     }

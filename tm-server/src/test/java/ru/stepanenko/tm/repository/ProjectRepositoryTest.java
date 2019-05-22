@@ -198,19 +198,16 @@ public class ProjectRepositoryTest {
         projectRepository.persist(project3);
 
         @NotNull final List<Project> sortStatus = new ArrayList<>(projectRepository.sortAllByUserId(user, "status"));
-        sortStatus.forEach(e -> System.out.println(e.getStatus()));
         assertEquals(project3, sortStatus.get(0));
         assertEquals(project2, sortStatus.get(1));
         assertEquals(project1, sortStatus.get(2));
 
         @NotNull final List<Project> sortDateBegin = new ArrayList<>(projectRepository.sortAllByUserId(user, "dateBegin"));
-        sortDateBegin.forEach(e -> System.out.println(e.getDateBegin()));
         assertEquals(project2, sortDateBegin.get(0));
         assertEquals(project1, sortDateBegin.get(1));
         assertEquals(project3, sortDateBegin.get(2));
 
         @NotNull final List<Project> sortDateEnd = new ArrayList<>(projectRepository.sortAllByUserId(user, "dateEnd"));
-        sortDateEnd.forEach(e -> System.out.println(e.getDateEnd()));
         assertEquals(project2, sortDateEnd.get(0));
         assertEquals(project1, sortDateEnd.get(1));
         assertEquals(project3, sortDateEnd.get(2));
@@ -246,7 +243,7 @@ public class ProjectRepositoryTest {
     }
 
     private Project getEntity() {
-        @NotNull final List<Project> projects = new ArrayList<>(projectRepository.findAll());
+        @Nullable final List<Project> projects = new ArrayList<>(projectRepository.findAll());
         if (projects.isEmpty()) return null;
         return projects.get(0);
     }

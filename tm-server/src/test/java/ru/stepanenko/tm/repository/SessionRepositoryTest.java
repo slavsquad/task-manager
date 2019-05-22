@@ -146,7 +146,7 @@ public class SessionRepositoryTest {
     }
 
     private Session getEntity() {
-        @NotNull final List<Session> sessions = new ArrayList<>(sessionRepository.findAll());
+        @Nullable final List<Session> sessions = new ArrayList<>(sessionRepository.findAll());
         if (sessions.isEmpty()) return null;
         return sessions.get(0);
     }
