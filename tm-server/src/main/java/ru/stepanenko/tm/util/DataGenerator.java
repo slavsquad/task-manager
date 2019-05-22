@@ -39,6 +39,10 @@ public class DataGenerator {
         this.sessionService = sessionService;
     }
 
+    public void generate(){
+        generateUsers();
+        generateData();
+    }
     public void generateUsers() {
         try {
             UserDTO admin = new UserDTO();
@@ -79,6 +83,13 @@ public class DataGenerator {
                 taskService.create(new TaskDTO("task_3", "Description for task 3", project.getId(), userService.findByLogin("user").getId()));
                 taskService.create(new TaskDTO("task_4", "Description for task 4", project.getId(), userService.findByLogin("user").getId()));
             }
+
+            sessionService.create(userService.findByLogin("admin"));
+            sessionService.create(userService.findByLogin("admin"));
+            sessionService.create(userService.findByLogin("admin"));
+            sessionService.create(userService.findByLogin("user"));
+            sessionService.create(userService.findByLogin("user"));
+            sessionService.create(userService.findByLogin("user"));
         } catch (DataValidateException e) {
             e.printStackTrace();
         }

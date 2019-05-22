@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.api.service;
 
-import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.exception.DataValidateException;

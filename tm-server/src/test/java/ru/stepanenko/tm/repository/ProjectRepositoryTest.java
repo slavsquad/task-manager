@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.junit.*;
 import ru.stepanenko.tm.AppServerTest;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
@@ -8,8 +9,8 @@ import ru.stepanenko.tm.config.EntityManagerFactoryProducer;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.User;
-import ru.stepanenko.tm.service.PropertyService;
-import ru.stepanenko.tm.util.TestDataGenerator;
+import ru.stepanenko.tm.service.*;
+import ru.stepanenko.tm.util.DataGenerator;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -17,13 +18,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.junit.Assert.*;
+
 public class ProjectRepositoryTest {
 
     @NotNull
     private static EntityManagerFactory entityManagerFactory;
 
     @NotNull
-    private static TestDataGenerator testDataGenerator;
+    private static DataGenerator testDataGenerator;
 
     @NotNull
     private IProjectRepository projectRepository;
@@ -35,14 +38,17 @@ public class ProjectRepositoryTest {
     public static void setUpClass() {
         entityManagerFactory =
                 new EntityManagerFactoryProducer(new PropertyService(AppServerTest.class, "application.properties")).getFactory();
-        testDataGenerator = new TestDataGenerator(entityManagerFactory);
+        testDataGenerator = new DataGenerator(
+                new ProjectService(entityManagerFactory),
+                new TaskService(entityManagerFactory),
+                new UserService(entityManagerFactory),
+                new SessionService(entityManagerFactory, new PropertyService(AppServerTest.class, "application.properties")));
     }
 
     @AfterClass
     public static void tearDownClass() {
         entityManagerFactory.close();
         entityManagerFactory = null;
-
     }
 
     @Before
@@ -62,26 +68,30 @@ public class ProjectRepositoryTest {
     @Test
     public void findOne() {
         entityManager.getTransaction().begin();
-        Assert.assertNotNull(projectRepository.findOne("1"));
-        Assert.assertNull(projectRepository.findOne("1000"));
+        @Nullable final User user = getEntity().getUser();
+        assertNotNull(user);
+        @NotNull final Project project = new Project();
+        project.setUser(user);
+        projectRepository.persist(project);
+        assertEquals(project, projectRepository.findOne(project.getId()));
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void findAll() {
         entityManager.getTransaction().begin();
-        Assert.assertFalse(projectRepository.findAll().isEmpty());
+        assertTrue(projectRepository.findAll().size() > 0);
         projectRepository.removeAll();
-        Assert.assertTrue(projectRepository.findAll().isEmpty());
+        assertTrue(projectRepository.findAll().isEmpty());
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void removeAll() {
         entityManager.getTransaction().begin();
-        Assert.assertNotEquals(0, projectRepository.findAll().size());
+        assertTrue(projectRepository.findAll().size() > 0);
         projectRepository.removeAll();
-        Assert.assertEquals(0, projectRepository.findAll().size());
+        assertTrue(projectRepository.findAll().isEmpty());
         entityManager.getTransaction().commit();
     }
 
@@ -89,87 +99,78 @@ public class ProjectRepositoryTest {
     public void remove() {
         entityManager.getTransaction().begin();
         @NotNull final int size = projectRepository.findAll().size();
-        projectRepository.remove(projectRepository.findOne("1"));
-        Assert.assertEquals(size - 1, projectRepository.findAll().size());
-        Assert.assertNull(projectRepository.findOne("1"));
+        projectRepository.remove(projectRepository.findOne(getEntity().getId()));
+        assertEquals(size - 1, projectRepository.findAll().size());
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void persist() {
-        @NotNull final User user = new User();
-        user.setId("1");
-        @NotNull final Project project = new Project();
-        project.setUser(user);
-
         entityManager.getTransaction().begin();
+        @NotNull final Project project = new Project();
+        project.setUser(getEntity().getUser());
         @NotNull final int size = projectRepository.findAll().size();
         entityManager.persist(project);
-        Assert.assertEquals(size + 1, projectRepository.findAll().size());
+        assertEquals(size + 1, projectRepository.findAll().size());
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void merge() {
         entityManager.getTransaction().begin();
-        @NotNull final Project project1 = projectRepository.findOne("1");
-        project1.setName("update_name");
-        project1.setDescription("update_description");
-        projectRepository.merge(project1);
-        Assert.assertEquals("update_name", projectRepository.findOne("1").getName());
-        Assert.assertEquals("update_description", projectRepository.findOne("1").getDescription());
+        @Nullable final Project project = getEntity();
+        assertNotNull(project);
+        @NotNull final String uuid = project.getId();
+        project.setName("update_name");
+        project.setDescription("update_description");
+        projectRepository.merge(project);
+        assertEquals("update_name", projectRepository.findOne(uuid).getName());
+        assertEquals("update_description", projectRepository.findOne(uuid).getDescription());
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void findAllByUserId() {
-        @NotNull final User user = new User();
-        user.setId("1");
+        entityManager.getTransaction().begin();
+        @Nullable final User user = getEntity().getUser();
+        assertNotNull(user);
         @NotNull final Project project = new Project();
         project.setUser(user);
-        @NotNull final String uuid = project.getId();
-
-        entityManager.getTransaction().begin();
         @NotNull final int size = projectRepository.findAllByUserId(user).size();
         projectRepository.persist(project);
-        Assert.assertEquals(size + 1, projectRepository.findAllByUserId(user).size());
+        assertEquals(size + 1, projectRepository.findAllByUserId(user).size());
         entityManager.getTransaction().commit();
-
     }
 
     @Test
     public void findOneByUserId() {
-        @NotNull final User user = new User();
-        user.setId("1");
-        @NotNull final Project project = new Project();
-        project.setUser(user);
-        @NotNull final String uuid = project.getId();
-
         entityManager.getTransaction().begin();
+        @Nullable final User user = getEntity().getUser();
+        assertNotNull(user);
+        @NotNull final Project project = new Project();
+        @NotNull final String uuid = project.getId();
+        project.setUser(user);
         projectRepository.persist(project);
-        Assert.assertEquals(uuid, projectRepository.findOneByUserId(uuid, user).getId());
+        assertEquals(project, projectRepository.findOneByUserId(uuid, user));
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void removeAllByUserID() {
-        @NotNull final User user = new User();
-        user.setId("1");
-
         entityManager.getTransaction().begin();
-        @NotNull final int size = projectRepository.findAll().size();
-        Assert.assertTrue(size > 0);
-        @NotNull final int removeSize = projectRepository.findAllByUserId(user).size();
-        Assert.assertTrue(removeSize > 0);
+        @Nullable final User user = getEntity().getUser();
+        assertNotNull(user);
+        @NotNull final int size = projectRepository.findAllByUserId(user).size();
+        assertTrue(size>0);
         projectRepository.removeAllByUserID(user);
-        Assert.assertEquals(size - removeSize, projectRepository.findAll().size());
+        assertEquals(0, projectRepository.findAllByUserId(user).size());
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void sortAllByUserId() {
-        @NotNull final User user = new User();
-        user.setId("test");
+        entityManager.getTransaction().begin();
+        @Nullable final User user = getEntity().getUser();
 
         @NotNull final Project project1 = new Project();
         project1.setUser(user);
@@ -189,37 +190,38 @@ public class ProjectRepositoryTest {
         project3.setDateBegin(new Date(0));
         project3.setDateEnd(new Date(0));
 
+        projectRepository.removeAllByUserID(user);
+        assertTrue(projectRepository.findAllByUserId(user).size()==0);
 
-        entityManager.getTransaction().begin();
-        projectRepository.removeAll();
         projectRepository.persist(project1);
         projectRepository.persist(project2);
         projectRepository.persist(project3);
 
-        @NotNull final List<Project> sortStatus = new ArrayList<>(projectRepository.sortAllByUserId(user,"status"));
-        sortStatus.forEach(e->System.out.println(e.getStatus()));
-        Assert.assertEquals(project3, sortStatus.get(0));
-        Assert.assertEquals(project2, sortStatus.get(1));
-        Assert.assertEquals(project1, sortStatus.get(2));
+        @NotNull final List<Project> sortStatus = new ArrayList<>(projectRepository.sortAllByUserId(user, "status"));
+        sortStatus.forEach(e -> System.out.println(e.getStatus()));
+        assertEquals(project3, sortStatus.get(0));
+        assertEquals(project2, sortStatus.get(1));
+        assertEquals(project1, sortStatus.get(2));
 
-        @NotNull final List<Project> sortDateBegin = new ArrayList<>(projectRepository.sortAllByUserId(user,"dateBegin"));
-        sortDateBegin.forEach(e->System.out.println(e.getDateBegin()));
-        Assert.assertEquals(project2, sortDateBegin.get(0));
-        Assert.assertEquals(project1, sortDateBegin.get(1));
-        Assert.assertEquals(project3, sortDateBegin.get(2));
+        @NotNull final List<Project> sortDateBegin = new ArrayList<>(projectRepository.sortAllByUserId(user, "dateBegin"));
+        sortDateBegin.forEach(e -> System.out.println(e.getDateBegin()));
+        assertEquals(project2, sortDateBegin.get(0));
+        assertEquals(project1, sortDateBegin.get(1));
+        assertEquals(project3, sortDateBegin.get(2));
 
-        @NotNull final List<Project> sortDateEnd = new ArrayList<>(projectRepository.sortAllByUserId(user,"dateEnd"));
-        sortDateEnd.forEach(e->System.out.println(e.getDateEnd()));
-        Assert.assertEquals(project2, sortDateEnd.get(0));
-        Assert.assertEquals(project1, sortDateEnd.get(1));
-        Assert.assertEquals(project3, sortDateEnd.get(2));
+        @NotNull final List<Project> sortDateEnd = new ArrayList<>(projectRepository.sortAllByUserId(user, "dateEnd"));
+        sortDateEnd.forEach(e -> System.out.println(e.getDateEnd()));
+        assertEquals(project2, sortDateEnd.get(0));
+        assertEquals(project1, sortDateEnd.get(1));
+        assertEquals(project3, sortDateEnd.get(2));
         entityManager.getTransaction().commit();
     }
 
     @Test
     public void findAllByPartOfNameOrDescription() {
-        @NotNull final User user = new User();
-        user.setId("test");
+        entityManager.getTransaction().begin();
+        @Nullable final User user = getEntity().getUser();
+        assertNotNull(user);
 
         @NotNull final Project project1 = new Project();
         project1.setUser(user);
@@ -231,13 +233,21 @@ public class ProjectRepositoryTest {
         project2.setName("Cooking");
         project2.setDescription("Make apple pie!");
 
-        entityManager.getTransaction().begin();
+        projectRepository.removeAllByUserID(user);
+        assertTrue(projectRepository.findAllByUserId(user).size()==0);
+
         projectRepository.persist(project1);
         projectRepository.persist(project2);
         @NotNull final List<Project> findProjects = new ArrayList<Project>(projectRepository.
                 findAllByPartOfNameOrDescription("Home", "apple", user));
-        Assert.assertEquals(findProjects.get(0).getId(), project1.getId());
-        Assert.assertEquals(findProjects.get(1).getId(), project2.getId());
+        assertEquals(findProjects.get(0).getId(), project1.getId());
+        assertEquals(findProjects.get(1).getId(), project2.getId());
         entityManager.getTransaction().commit();
+    }
+
+    private Project getEntity() {
+        @NotNull final List<Project> projects = new ArrayList<>(projectRepository.findAll());
+        if (projects.isEmpty()) return null;
+        return projects.get(0);
     }
 }

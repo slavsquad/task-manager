@@ -38,7 +38,6 @@ public final class ProjectListCommand implements AbstractCommand {
     public void execute(
     ) throws AuthenticationSecurityException_Exception, DataValidateException_Exception {
         @Nullable final SessionDTO currentSession = sessionService.getCurrentSession();
-        System.out.println(currentSession.getSignature());
         sessionEndpoint.validateSession(currentSession);
         System.out.println("List of projects:");
         projectEndpoint.findAllProjectByUserId(currentSession)
