@@ -7,6 +7,7 @@ import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
+import ru.stepanenko.tm.util.DateFormatter;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
@@ -62,9 +63,7 @@ public final class TaskEditCommand implements AbstractCommand {
             task.setStatus(Status.valueOf(status.toUpperCase()));
             task.setDateEnd(null);
             if (task.getStatus().equals(Status.DONE)) {
-                GregorianCalendar gregorianCalendar = new GregorianCalendar();
-                gregorianCalendar.setTime(new Date());
-                task.setDateEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
+                task.setDateEnd(DateFormatter.dateToXMLGregorianCalendar(new Date()));
             }
             taskEndpoint.editTask(currentSession, task);
             System.out.println("Task id: " + id + " edit is update!");

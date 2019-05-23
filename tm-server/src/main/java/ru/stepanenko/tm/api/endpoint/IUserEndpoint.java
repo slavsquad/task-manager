@@ -40,6 +40,12 @@ public interface IUserEndpoint {
     ) throws AuthenticationSecurityException, DataValidateException;
 
     @WebMethod
+    UserDTO findUserById(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id
+    ) throws AuthenticationSecurityException, DataValidateException;
+
+    @WebMethod
     UserDTO getUserBySession(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO
     ) throws AuthenticationSecurityException, DataValidateException;

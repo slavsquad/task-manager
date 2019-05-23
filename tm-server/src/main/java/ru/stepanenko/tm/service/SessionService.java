@@ -1,4 +1,5 @@
 package ru.stepanenko.tm.service;
+
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -177,6 +178,9 @@ public class SessionService implements ISessionService {
             if (!user.getRole().equals(Role.ADMIN))
                 throw new AuthenticationSecurityException("Forbidden action for your role!");
             entityManager.getTransaction().commit();
+        } catch (AuthenticationSecurityException e) {
+            entityManager.getTransaction().rollback();
+            throw new AuthenticationSecurityException(e.getMessage());
         } catch (Exception e) {
             entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());

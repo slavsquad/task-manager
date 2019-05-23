@@ -7,6 +7,7 @@ import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
 import ru.stepanenko.tm.api.command.AbstractCommand;
 import ru.stepanenko.tm.endpoint.*;
+import ru.stepanenko.tm.util.DateFormatter;
 
 import javax.inject.Inject;
 import javax.xml.datatype.DatatypeFactory;
@@ -62,9 +63,7 @@ public final class ProjectEditCommand implements AbstractCommand {
             project.setStatus(Status.valueOf(status.toUpperCase()));
             project.setDateEnd(null);
             if (project.getStatus().equals(Status.DONE)) {
-                GregorianCalendar gregorianCalendar = new GregorianCalendar();
-                gregorianCalendar.setTime(new Date());
-                project.setDateEnd(DatatypeFactory.newInstance().newXMLGregorianCalendar(gregorianCalendar));
+                project.setDateEnd(DateFormatter.dateToXMLGregorianCalendar(new Date()));
             }
             projectEndpoint.editProject(currentSession, project);
             System.out.println("Project " + id + " is update!");

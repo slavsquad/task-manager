@@ -16,6 +16,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -229,10 +230,13 @@ public class ProjectServiceTest {
 
         projectService.create(project1);
         projectService.create(project2);
-        @NotNull final List<ProjectDTO> findProjects = new ArrayList<ProjectDTO>(projectService.
-                findAllByPartOfNameOrDescription("Home", "apple", userId));
-        assertEquals(findProjects.get(0).getId(), project1.getId());
-        assertEquals(findProjects.get(1).getId(), project2.getId());
+        @NotNull final List<String> findProjectsId = projectService
+                .findAllByPartOfNameOrDescription("Home", "apple", userId)
+                .stream()
+                .map(ProjectDTO::getId)
+                .collect(Collectors.toList());
+        assertTrue(findProjectsId.contains(project1.getId()));
+        assertTrue(findProjectsId.contains(project2.getId()));
     }
 
     private ProjectDTO getEntity() throws DataValidateException {

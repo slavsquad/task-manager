@@ -137,7 +137,7 @@ public class SessionServiceTest {
         sessionService.validateAdmin(session);
     }
 
-    @Test(expected = DataValidateException.class)
+    @Test(expected = AuthenticationSecurityException.class)
     public void validateAdminNegative() throws DataValidateException, AuthenticationSecurityException {
         @Nullable final UserDTO user = new UserService(entityManagerFactory).findByLogin("user");
         assertNotNull(user);

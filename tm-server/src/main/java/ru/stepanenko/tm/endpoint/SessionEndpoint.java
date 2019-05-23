@@ -66,4 +66,13 @@ public class SessionEndpoint implements ISessionEndpoint {
         sessionService.validate(sessionDTO);
         sessionService.remove(sessionDTO.getId());
     }
+
+    @WebMethod
+    public SessionDTO findOneSession(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id
+    ) throws AuthenticationSecurityException, DataValidateException{
+        sessionService.validateAdmin(sessionDTO);
+        return sessionService.findOne(id);
+    }
 }

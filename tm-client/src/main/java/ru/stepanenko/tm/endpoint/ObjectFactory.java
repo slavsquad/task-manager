@@ -34,6 +34,8 @@ public class ObjectFactory {
     private final static QName _EditUserProfileResponse_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "editUserProfileResponse");
     private final static QName _FindAllUser_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "findAllUser");
     private final static QName _FindAllUserResponse_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "findAllUserResponse");
+    private final static QName _FindUserById_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "findUserById");
+    private final static QName _FindUserByIdResponse_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "findUserByIdResponse");
     private final static QName _FindUserByLogin_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "findUserByLogin");
     private final static QName _FindUserByLoginResponse_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "findUserByLoginResponse");
     private final static QName _GetUserBySession_QNAME = new QName("http://endpoint.tm.stepanenko.ru/", "getUserBySession");
@@ -126,6 +128,22 @@ public class ObjectFactory {
      */
     public FindAllUserResponse createFindAllUserResponse() {
         return new FindAllUserResponse();
+    }
+
+    /**
+     * Create an instance of {@link FindUserById }
+     * 
+     */
+    public FindUserById createFindUserById() {
+        return new FindUserById();
+    }
+
+    /**
+     * Create an instance of {@link FindUserByIdResponse }
+     * 
+     */
+    public FindUserByIdResponse createFindUserByIdResponse() {
+        return new FindUserByIdResponse();
     }
 
     /**
@@ -280,6 +298,24 @@ public class ObjectFactory {
     @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "findAllUserResponse")
     public JAXBElement<FindAllUserResponse> createFindAllUserResponse(FindAllUserResponse value) {
         return new JAXBElement<FindAllUserResponse>(_FindAllUserResponse_QNAME, FindAllUserResponse.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FindUserById }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "findUserById")
+    public JAXBElement<FindUserById> createFindUserById(FindUserById value) {
+        return new JAXBElement<FindUserById>(_FindUserById_QNAME, FindUserById.class, null, value);
+    }
+
+    /**
+     * Create an instance of {@link JAXBElement }{@code <}{@link FindUserByIdResponse }{@code >}}
+     * 
+     */
+    @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "findUserByIdResponse")
+    public JAXBElement<FindUserByIdResponse> createFindUserByIdResponse(FindUserByIdResponse value) {
+        return new JAXBElement<FindUserByIdResponse>(_FindUserByIdResponse_QNAME, FindUserByIdResponse.class, null, value);
     }
 
     /**

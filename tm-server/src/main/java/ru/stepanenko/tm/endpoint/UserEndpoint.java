@@ -73,6 +73,15 @@ public class UserEndpoint implements IUserEndpoint {
         return userService.findByLogin(login);
     }
 
+    @WebMethod
+    public UserDTO findUserById(
+            @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
+            @WebParam(name = "id") @Nullable final String id
+    ) throws AuthenticationSecurityException, DataValidateException{
+        sessionService.validateAdmin(sessionDTO);
+        return userService.findOne(id);
+    }
+
     @Override
     @WebMethod
     public UserDTO getUserBySession(
@@ -100,5 +109,4 @@ public class UserEndpoint implements IUserEndpoint {
         sessionService.validateAdmin(sessionDTO);
         userService.remove(id);
     }
-
 }

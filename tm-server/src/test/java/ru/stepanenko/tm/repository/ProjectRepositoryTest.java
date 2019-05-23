@@ -7,6 +7,7 @@ import ru.stepanenko.tm.AppServerTest;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.config.EntityManagerFactoryProducer;
 import ru.stepanenko.tm.enumerate.Status;
+import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.service.*;
@@ -17,6 +18,8 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -161,7 +164,7 @@ public class ProjectRepositoryTest {
         @Nullable final User user = getEntity().getUser();
         assertNotNull(user);
         @NotNull final int size = projectRepository.findAllByUserId(user).size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         projectRepository.removeAllByUserID(user);
         assertEquals(0, projectRepository.findAllByUserId(user).size());
         entityManager.getTransaction().commit();
@@ -191,7 +194,7 @@ public class ProjectRepositoryTest {
         project3.setDateEnd(new Date(0));
 
         projectRepository.removeAllByUserID(user);
-        assertTrue(projectRepository.findAllByUserId(user).size()==0);
+        assertTrue(projectRepository.findAllByUserId(user).size() == 0);
 
         projectRepository.persist(project1);
         projectRepository.persist(project2);
@@ -231,14 +234,17 @@ public class ProjectRepositoryTest {
         project2.setDescription("Make apple pie!");
 
         projectRepository.removeAllByUserID(user);
-        assertTrue(projectRepository.findAllByUserId(user).size()==0);
+        assertTrue(projectRepository.findAllByUserId(user).size() == 0);
 
         projectRepository.persist(project1);
         projectRepository.persist(project2);
-        @NotNull final List<Project> findProjects = new ArrayList<Project>(projectRepository.
-                findAllByPartOfNameOrDescription("Home", "apple", user));
-        assertEquals(findProjects.get(0).getId(), project1.getId());
-        assertEquals(findProjects.get(1).getId(), project2.getId());
+        @NotNull final List<String> findProjectsId = new ArrayList<>(projectRepository
+                .findAllByPartOfNameOrDescription("Home", "apple", user))
+                .stream()
+                .map(Project::getId)
+                .collect(Collectors.toList());
+        assertTrue(findProjectsId.contains(project1.getId()));
+        assertTrue(findProjectsId.contains(project2.getId()));
         entityManager.getTransaction().commit();
     }
 
