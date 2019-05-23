@@ -38,6 +38,7 @@ public class ProjectEndpointTest {
 
     @After
     public void tearDown() throws Exception {
+        sessionEndpoint.closeSession(currentSession);
         projectEndpoint = null;
         sessionEndpoint = null;
         currentSession = null;
@@ -80,8 +81,6 @@ public class ProjectEndpointTest {
     @Test
     public void sortProject(
     ) throws DatatypeConfigurationException, DataValidateException_Exception, AuthenticationSecurityException_Exception {
-        assertNotNull(currentSession);
-        @Nullable final SessionDTO currentSession = sessionEndpoint.openSession("testUser", HashUtil.md5("testUser"));
         assertNotNull(currentSession);
         @NotNull final ProjectDTO project1 = new ProjectDTO();
         project1.setUserId(currentSession.getUserId());

@@ -9,12 +9,14 @@ import ru.stepanenko.tm.config.EntityManagerFactoryProducer;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.TaskDTO;
+import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.util.DataGenerator;
 
 import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -270,10 +272,13 @@ public class TaskServiceTest {
 
         taskService.create(task1);
         taskService.create(task2);
-        @NotNull final List<TaskDTO> findTasks = new ArrayList<TaskDTO>(taskService.
-                findAllByPartOfNameOrDescription("Home", "apple", entity.getUserId()));
-        assertEquals(findTasks.get(0).getId(), task1.getId());
-        assertEquals(findTasks.get(1).getId(), task2.getId());
+        @NotNull final List<String> findTasksId = taskService
+                .findAllByPartOfNameOrDescription( "Home", "apple", entity.getUserId())
+                .stream()
+                .map(TaskDTO::getId)
+                .collect(Collectors.toList());
+        assertTrue(findTasksId.contains(task1.getId()));
+        assertTrue(findTasksId.contains(task2.getId()));
     }
 
     private TaskDTO getEntity() throws DataValidateException {

@@ -238,8 +238,8 @@ public class ProjectRepositoryTest {
 
         projectRepository.persist(project1);
         projectRepository.persist(project2);
-        @NotNull final List<String> findProjectsId = new ArrayList<>(projectRepository
-                .findAllByPartOfNameOrDescription("Home", "apple", user))
+        @NotNull final List<String> findProjectsId = projectRepository
+                .findAllByPartOfNameOrDescription("Home", "apple", user)
                 .stream()
                 .map(Project::getId)
                 .collect(Collectors.toList());

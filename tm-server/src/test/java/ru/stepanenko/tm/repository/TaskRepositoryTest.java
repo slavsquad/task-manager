@@ -7,6 +7,7 @@ import ru.stepanenko.tm.AppServerTest;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.config.EntityManagerFactoryProducer;
 import ru.stepanenko.tm.enumerate.Status;
+import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
@@ -19,6 +20,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
@@ -304,10 +306,13 @@ public class TaskRepositoryTest {
 
         taskRepository.persist(task1);
         taskRepository.persist(task2);
-        @NotNull final List<Task> findTasks = new ArrayList<Task>(taskRepository.
-                findAllByPartOfNameOrDescription("Home", "apple", user));
-        assertEquals(findTasks.get(0).getId(), task1.getId());
-        assertEquals(findTasks.get(1).getId(), task2.getId());
+        @NotNull final List<String> findTasksId = taskRepository
+                .findAllByPartOfNameOrDescription( "Home", "apple", user)
+                .stream()
+                .map(Task::getId)
+                .collect(Collectors.toList());
+        assertTrue(findTasksId.contains(task1.getId()));
+        assertTrue(findTasksId.contains(task2.getId()));
         entityManager.getTransaction().commit();
     }
 
