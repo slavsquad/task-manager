@@ -55,7 +55,8 @@ public class SessionEndpointTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull IUserService userService = new UserService(entityManagerFactory);
         @NotNull ISessionService sessionService = new SessionService(entityManagerFactory, new PropertyService(AppServerTest.class, "application.properties"));
         sessionEndpoint = new SessionEndpoint(userService, sessionService);
@@ -71,25 +72,27 @@ public class SessionEndpointTest {
         addedUser.setPassword("test");
         addedUser.setRole(Role.USER);
         userService.create(addedUser);
-
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         sessionEndpoint = null;
         addedAdmin = null;
         addedUser = null;
     }
 
     @Test
-    public void openSession() throws DataValidateException, AuthenticationSecurityException {
+    public void openSession(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final SessionDTO session = sessionEndpoint.openSession(addedAdmin.getLogin(), addedAdmin.getPassword());
         assertNotNull(session);
         assertEquals(addedAdmin.getId(), session.getUserId());
     }
 
     @Test(expected = AuthenticationSecurityException.class)
-    public void validateSession() throws DataValidateException, AuthenticationSecurityException {
+    public void validateSession(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final SessionDTO session = sessionEndpoint.openSession(addedAdmin.getLogin(), addedAdmin.getPassword());
         assertNotNull(session);
         session.setSignature("wrong signature");
@@ -97,14 +100,16 @@ public class SessionEndpointTest {
     }
 
     @Test(expected = AuthenticationSecurityException.class)
-    public void validateAdminSession() throws DataValidateException, AuthenticationSecurityException {
+    public void validateAdminSession(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final SessionDTO session = sessionEndpoint.openSession(addedUser.getLogin(), addedUser.getPassword());
         assertNotNull(session);
         sessionEndpoint.validateAdminSession(session);
     }
 
     @Test(expected = DataValidateException.class)
-    public void closeSession() throws DataValidateException, AuthenticationSecurityException {
+    public void closeSession(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final SessionDTO session = sessionEndpoint.openSession(addedAdmin.getLogin(), addedAdmin.getPassword());
         assertNotNull(session);
         assertEquals(session.getId(), sessionEndpoint.findOneSession(session, session.getId()).getId());
@@ -114,7 +119,8 @@ public class SessionEndpointTest {
     }
 
     @Test
-    public void findOneSession() throws DataValidateException, AuthenticationSecurityException {
+    public void findOneSession(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final SessionDTO session = sessionEndpoint.openSession(addedAdmin.getLogin(), addedAdmin.getPassword());
         assertNotNull(session);
         assertEquals(session.getId(), sessionEndpoint.findOneSession(session, session.getId()).getId());

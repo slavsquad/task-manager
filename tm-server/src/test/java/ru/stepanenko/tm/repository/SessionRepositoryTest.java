@@ -55,14 +55,16 @@ public class SessionRepositoryTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
         sessionRepository = new SessionRepository(entityManager);
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         sessionRepository = null;
         entityManager.close();
         entityManager = null;

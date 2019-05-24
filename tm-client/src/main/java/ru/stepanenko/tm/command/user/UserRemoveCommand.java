@@ -28,6 +28,7 @@ public class UserRemoveCommand implements AbstractCommand {
     @Inject
     @NotNull
     ITerminalService terminalService;
+
     @Override
     public String getName() {
         return "user-remove";

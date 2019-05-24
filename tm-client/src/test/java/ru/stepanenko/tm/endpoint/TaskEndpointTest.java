@@ -37,7 +37,8 @@ public class TaskEndpointTest {
 
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         taskEndpoint = endpointService.getTaskEndpoint();
         projectEndpoint = endpointService.getProjectEndpoint();
@@ -46,7 +47,8 @@ public class TaskEndpointTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         sessionEndpoint.closeSession(currentSession);
         taskEndpoint = null;
         sessionEndpoint = null;
@@ -168,7 +170,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void findProject() throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
+    public void findProject(
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         assertNotNull(currentSession);
         @NotNull final ProjectDTO project = new ProjectDTO();
         project.setId(UUID.randomUUID().toString());

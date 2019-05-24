@@ -48,18 +48,21 @@ public class TaskServiceTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         taskService = new TaskService(entityManagerFactory);
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         taskService = null;
     }
 
     @Test
-    public void create() throws DataValidateException {
+    public void create(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @Nullable final String userId = entity.getUserId();
@@ -78,7 +81,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void edit() throws DataValidateException {
+    public void edit(
+    ) throws DataValidateException {
         @Nullable final TaskDTO task = getEntity();
         assertNotNull(task);
         task.setName("update_name");
@@ -89,7 +93,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void findOne() throws DataValidateException {
+    public void findOne(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @Nullable final String userId = entity.getUserId();
@@ -106,7 +111,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void remove() throws DataValidateException {
+    public void remove(
+    ) throws DataValidateException {
         @NotNull final int size = taskService.findAll().size();
         assertTrue(size > 0);
         taskService.remove(getEntity().getId());
@@ -114,7 +120,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void clear() throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final int size = taskService.findAll().size();
         assertTrue(size > 0);
         taskService.clear();
@@ -122,7 +129,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void findOneByUserId() throws DataValidateException {
+    public void findOneByUserId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @Nullable final String userId = entity.getUserId();
@@ -139,7 +147,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void removeOneByUserId() throws DataValidateException {
+    public void removeOneByUserId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskService.findAllByUserId(entity.getUserId()).size();
@@ -149,7 +158,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void findAll() throws DataValidateException {
+    public void findAll(
+    ) throws DataValidateException {
         @NotNull final int size = taskService.findAll().size();
         assertTrue(size > 0);
         taskService.clear();
@@ -157,7 +167,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void removeAllByProjectId() throws DataValidateException {
+    public void removeAllByProjectId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskService.findAllByProjectId(entity.getProjectId(), entity.getUserId()).size();
@@ -167,7 +178,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void removeAllByUserId() throws DataValidateException {
+    public void removeAllByUserId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskService.findAllByUserId(entity.getUserId()).size();
@@ -175,8 +187,10 @@ public class TaskServiceTest {
         taskService.removeAllByUserId(entity.getUserId());
         assertEquals(0, taskService.findAllByUserId(entity.getUserId()).size());
     }
+
     @Test
-    public void findAllByProjectId() throws DataValidateException {
+    public void findAllByProjectId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskService.findAllByProjectId(entity.getProjectId(), entity.getUserId()).size();
@@ -186,7 +200,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void findAllByUserId() throws DataValidateException {
+    public void findAllByUserId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskService.findAllByUserId(entity.getUserId()).size();
@@ -196,7 +211,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void sortAllByUserId() throws DataValidateException {
+    public void sortAllByUserId(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final TaskDTO task1 = new TaskDTO();
@@ -227,7 +243,7 @@ public class TaskServiceTest {
         task3.setDateEnd(new Date(0));
 
         taskService.removeAllByUserId(entity.getUserId());
-        assertTrue(taskService.findAllByUserId(entity.getUserId()).size()==0);
+        assertTrue(taskService.findAllByUserId(entity.getUserId()).size() == 0);
 
         taskService.create(task1);
         taskService.create(task2);
@@ -251,7 +267,8 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void findAllByPartOfNameOrDescription() throws DataValidateException {
+    public void findAllByPartOfNameOrDescription(
+    ) throws DataValidateException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
 
@@ -268,12 +285,12 @@ public class TaskServiceTest {
         task2.setDescription("Make apple pie!");
 
         taskService.removeAllByUserId(entity.getUserId());
-        assertTrue(taskService.findAllByUserId(entity.getUserId()).size()==0);
+        assertTrue(taskService.findAllByUserId(entity.getUserId()).size() == 0);
 
         taskService.create(task1);
         taskService.create(task2);
         @NotNull final List<String> findTasksId = taskService
-                .findAllByPartOfNameOrDescription( "Home", "apple", entity.getUserId())
+                .findAllByPartOfNameOrDescription("Home", "apple", entity.getUserId())
                 .stream()
                 .map(TaskDTO::getId)
                 .collect(Collectors.toList());
@@ -281,7 +298,8 @@ public class TaskServiceTest {
         assertTrue(findTasksId.contains(task2.getId()));
     }
 
-    private TaskDTO getEntity() throws DataValidateException {
+    private TaskDTO getEntity(
+    ) throws DataValidateException {
         @Nullable final List<TaskDTO> tasks = new ArrayList<>(taskService.findAll());
         if (tasks.isEmpty()) return null;
         return tasks.get(0);

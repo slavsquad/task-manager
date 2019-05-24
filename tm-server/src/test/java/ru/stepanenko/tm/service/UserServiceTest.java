@@ -47,18 +47,21 @@ public class UserServiceTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         userService = new UserService(entityManagerFactory);
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         userService = null;
     }
 
     @Test
-    public void create() throws DataValidateException {
+    public void create(
+    ) throws DataValidateException {
         @NotNull final UserDTO user = new UserDTO();
         user.setLogin("root");
         user.setPassword("root");
@@ -69,7 +72,8 @@ public class UserServiceTest {
     }
 
     @Test
-    public void edit() throws DataValidateException {
+    public void edit(
+    ) throws DataValidateException {
         @Nullable final UserDTO user = getEntity();
         assertNotNull(user);
         assertNotEquals("root", user.getLogin());
@@ -93,15 +97,17 @@ public class UserServiceTest {
     }
 
     @Test
-    public void clear() throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final int size = userService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         userService.clear();
         assertEquals(0, userService.findAll().size());
     }
 
     @Test
-    public void findOne() throws DataValidateException {
+    public void findOne(
+    ) throws DataValidateException {
         @NotNull final UserDTO user = new UserDTO();
         user.setLogin("root");
         user.setPassword("root");
@@ -110,17 +116,19 @@ public class UserServiceTest {
     }
 
     @Test
-    public void remove() throws DataValidateException {
+    public void remove(
+    ) throws DataValidateException {
         @NotNull final int size = userService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         userService.remove(getEntity().getId());
-        assertEquals(size-1, userService.findAll().size());
+        assertEquals(size - 1, userService.findAll().size());
     }
 
     @Test
-    public void findAll() throws DataValidateException {
+    public void findAll(
+    ) throws DataValidateException {
         @NotNull final int size = userService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         userService.clear();
         assertEquals(0, userService.findAll().size());
     }
@@ -138,7 +146,7 @@ public class UserServiceTest {
 
     }
 
-    @Test(expected=AuthenticationSecurityException.class)
+    @Test(expected = AuthenticationSecurityException.class)
     public void authenticationUserNegative(
     ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final String login = "root";
@@ -151,7 +159,8 @@ public class UserServiceTest {
 
     }
 
-    private UserDTO getEntity() throws DataValidateException {
+    private UserDTO getEntity(
+    ) throws DataValidateException {
         @Nullable final List<UserDTO> users = new ArrayList<>(userService.findAll());
         if (users.isEmpty()) return null;
         return users.get(0);

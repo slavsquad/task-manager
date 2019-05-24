@@ -51,11 +51,11 @@ public class TaskFindCommand implements AbstractCommand {
         System.out.println("Find tasks by part of name '" + name + "' or part of description '" + description + "' :");
         taskEndpoint.findAllTaskByPartOfNameOrDescription(currentSession, name, description)
                 .forEach(e -> System.out.println("id: " + e.getId() +
-                " name: " + e.getName() +
-                " description: " + e.getDescription() +
-                " data start: " + e.getDateBegin() +
-                " data end: " + e.getDateEnd() +
-                " status: " + e.getStatus()));
+                        " name: " + e.getName() +
+                        " description: " + e.getDescription() +
+                        " data start: " + e.getDateBegin() +
+                        " data end: " + e.getDateEnd() +
+                        " status: " + e.getStatus()));
     }
 }
 

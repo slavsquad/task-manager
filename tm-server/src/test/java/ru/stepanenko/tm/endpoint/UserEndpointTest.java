@@ -56,7 +56,8 @@ public class UserEndpointTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull IUserService userService = new UserService(entityManagerFactory);
         @NotNull ISessionService sessionService = new SessionService(entityManagerFactory, new PropertyService(AppServerTest.class, "application.properties"));
         userEndpoint = new UserEndpoint(userService, sessionService);
@@ -66,14 +67,16 @@ public class UserEndpointTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         userEndpoint = null;
         currentSession = null;
         currentUser = null;
     }
 
     @Test
-    public void createUser() throws DataValidateException, AuthenticationSecurityException {
+    public void createUser(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final UserDTO user = new UserDTO();
         user.setLogin("root");
         user.setPassword("root");
@@ -84,7 +87,8 @@ public class UserEndpointTest {
     }
 
     @Test
-    public void changeUserPassword() throws DataValidateException, AuthenticationSecurityException {
+    public void changeUserPassword(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull ISessionService sessionService =
                 new SessionService(entityManagerFactory,
                         new PropertyService(AppServerTest.class, "application.properties"));
@@ -100,7 +104,8 @@ public class UserEndpointTest {
     }
 
     @Test
-    public void editUserProfile() throws DataValidateException, AuthenticationSecurityException {
+    public void editUserProfile(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final UserDTO user = currentUser;
         assertNotNull(user);
         assertNotEquals("root", user.getLogin());
@@ -113,7 +118,8 @@ public class UserEndpointTest {
     }
 
     @Test
-    public void findUserByLogin() throws DataValidateException, AuthenticationSecurityException {
+    public void findUserByLogin(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final UserDTO user = new UserDTO();
         user.setLogin("root");
         user.setPassword("root");
@@ -122,7 +128,8 @@ public class UserEndpointTest {
     }
 
     @Test
-    public void getUserBySession() throws DataValidateException, AuthenticationSecurityException {
+    public void getUserBySession(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull ISessionService sessionService =
                 new SessionService(entityManagerFactory,
                         new PropertyService(AppServerTest.class, "application.properties"));
@@ -137,7 +144,8 @@ public class UserEndpointTest {
     }
 
     @Test
-    public void findAllUser() throws DataValidateException, AuthenticationSecurityException {
+    public void findAllUser(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final int size = userEndpoint.findAllUser(currentSession).size();
         assertTrue(size > 0);
         @NotNull final UserDTO user = new UserDTO();
@@ -148,7 +156,8 @@ public class UserEndpointTest {
     }
 
     @Test
-    public void removeOneUser() throws DataValidateException, AuthenticationSecurityException {
+    public void removeOneUser(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final UserDTO user = new UserDTO();
         user.setLogin("root");
         user.setPassword("root");

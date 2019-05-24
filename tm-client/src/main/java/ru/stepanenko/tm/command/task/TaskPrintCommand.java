@@ -28,6 +28,7 @@ public class TaskPrintCommand implements AbstractCommand {
     @Inject
     @NotNull
     ITerminalService terminalService;
+
     @Override
     public String getName() {
         return "task-print";

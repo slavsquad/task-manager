@@ -9,5 +9,6 @@ import javax.inject.Singleton;
 @ApplicationScoped
 public interface ISessionService {
     SessionDTO getCurrentSession();
+
     void setCurrentSession(@Nullable final SessionDTO sessionDTO);
 }

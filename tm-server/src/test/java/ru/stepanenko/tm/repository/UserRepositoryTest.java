@@ -119,7 +119,7 @@ public class UserRepositoryTest {
         user.setLogin("update_login");
         user.setPassword("update_password");
         @NotNull final int size = userRepository.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         userRepository.merge(user);
         assertEquals("update_login", userRepository.findOne(uuid).getLogin());
         assertEquals("update_password", userRepository.findOne(uuid).getPassword());

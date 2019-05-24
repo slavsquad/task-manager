@@ -10,7 +10,10 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public interface IEndpointProducerService {
     ProjectEndpoint getProjectEndpoint();
+
     TaskEndpoint getTaskEndpoint();
+
     SessionEndpoint getSessionEndpoint();
+
     UserEndpoint getUserEndpoint();
 }

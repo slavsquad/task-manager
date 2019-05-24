@@ -62,7 +62,8 @@ public class ProjectEndpointTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull IProjectService projectService = new ProjectService(entityManagerFactory);
         @NotNull IUserService userService = new UserService(entityManagerFactory);
         @NotNull ISessionService sessionService = new SessionService(entityManagerFactory, new PropertyService(AppServerTest.class, "application.properties"));
@@ -73,14 +74,16 @@ public class ProjectEndpointTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         projectEndpoint = null;
         currentSession = null;
         currentUser = null;
     }
 
     @Test
-    public void createProject() throws DataValidateException, AuthenticationSecurityException {
+    public void createProject(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final ProjectDTO project = new ProjectDTO();
         project.setName("New_Project");
         project.setDescription("New_Description");
@@ -103,7 +106,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void findOneProject() throws DataValidateException, AuthenticationSecurityException {
+    public void findOneProject(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull ProjectDTO project = new ProjectDTO();
         project.setName("New_Project");
         project.setDescription("New_Description");
@@ -113,7 +117,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void removeProject() throws DataValidateException, AuthenticationSecurityException {
+    public void removeProject(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final int size = projectEndpoint.findAllProjectByUserId(currentSession).size();
         assertTrue(size > 0);
         projectEndpoint.removeProject(currentSession, getEntity().getId());
@@ -121,7 +126,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void findAllProjectByUserId() throws DataValidateException, AuthenticationSecurityException {
+    public void findAllProjectByUserId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final int size = projectEndpoint.findAllProjectByUserId(currentSession).size();
         assertTrue(size > 0);
         projectEndpoint.removeProject(currentSession, getEntity().getId());
@@ -129,7 +135,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void removeAllProjectByUserId() throws DataValidateException, AuthenticationSecurityException {
+    public void removeAllProjectByUserId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final int size = projectEndpoint.findAllProjectByUserId(currentSession).size();
         assertTrue(size > 0);
         projectEndpoint.removeAllProjectByUserId(currentSession);
@@ -137,7 +144,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void sortAllProjectByUserId() throws DataValidateException, AuthenticationSecurityException {
+    public void sortAllProjectByUserId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final ProjectDTO project1 = new ProjectDTO();
         project1.setUserId(currentUser.getId());
         project1.setName("project1");
@@ -186,7 +194,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void findAllProjectByPartOfNameOrDescription() throws DataValidateException, AuthenticationSecurityException {
+    public void findAllProjectByPartOfNameOrDescription(
+    ) throws DataValidateException, AuthenticationSecurityException {
 
         @NotNull final ProjectDTO project1 = new ProjectDTO();
         project1.setUserId(currentUser.getId());
@@ -212,7 +221,8 @@ public class ProjectEndpointTest {
         assertTrue(findProjectsId.contains(project2.getId()));
     }
 
-    private ProjectDTO getEntity() throws DataValidateException, AuthenticationSecurityException {
+    private ProjectDTO getEntity(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final List<ProjectDTO> projects = new ArrayList<>(projectEndpoint.findAllProjectByUserId(currentSession));
         if (projects.isEmpty()) return null;
         return projects.get(0);

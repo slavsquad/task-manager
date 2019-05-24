@@ -57,14 +57,16 @@ public class TaskRepositoryTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
         taskRepository = new TaskRepository(entityManager);
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         taskRepository = null;
         entityManager.close();
         entityManager = null;
@@ -219,7 +221,7 @@ public class TaskRepositoryTest {
         @Nullable final Project project = entity.getProject();
         assertNotNull(project);
         @Nullable final int size = taskRepository.findAllByProjectAndUserId(project, user).size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         taskRepository.removeAllByProjectAndUserId(project, user);
         assertEquals(0, taskRepository.findAllByProjectAndUserId(project, user).size());
         entityManager.getTransaction().commit();
@@ -257,7 +259,7 @@ public class TaskRepositoryTest {
         task3.setDateEnd(new Date(0));
 
         taskRepository.removeAllByUserId(user);
-        assertTrue(taskRepository.findAllByUserId(user).size()==0);
+        assertTrue(taskRepository.findAllByUserId(user).size() == 0);
 
         taskRepository.persist(task1);
         taskRepository.persist(task2);
@@ -302,12 +304,12 @@ public class TaskRepositoryTest {
         task2.setDescription("Make apple pie!");
 
         taskRepository.removeAllByUserId(user);
-        assertTrue(taskRepository.findAllByUserId(user).size()==0);
+        assertTrue(taskRepository.findAllByUserId(user).size() == 0);
 
         taskRepository.persist(task1);
         taskRepository.persist(task2);
         @NotNull final List<String> findTasksId = taskRepository
-                .findAllByPartOfNameOrDescription( "Home", "apple", user)
+                .findAllByPartOfNameOrDescription("Home", "apple", user)
                 .stream()
                 .map(Task::getId)
                 .collect(Collectors.toList());

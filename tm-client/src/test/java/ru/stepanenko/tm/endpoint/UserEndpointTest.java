@@ -15,6 +15,7 @@ import ru.stepanenko.tm.util.HashUtil;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
+
 @Category(IntegrationTest.class)
 public class UserEndpointTest {
     @NotNull
@@ -27,7 +28,8 @@ public class UserEndpointTest {
     private SessionDTO currentSession;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         userEndpoint = endpointService.getUserEndpoint();
         sessionEndpoint = endpointService.getSessionEndpoint();
@@ -35,7 +37,8 @@ public class UserEndpointTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         sessionEndpoint.closeSession(currentSession);
         userEndpoint = null;
         sessionEndpoint = null;
@@ -63,7 +66,6 @@ public class UserEndpointTest {
         assertEquals(user.getDescription(), userEndpoint.findUserById(currentSession, user.getId()).getDescription());
         userEndpoint.removeOneUser(currentSession, user.getId());//DELETE
         thrown.expect(DataValidateException_Exception.class);
-        userEndpoint.findUserByLogin(currentSession,"Update_login");
+        userEndpoint.findUserByLogin(currentSession, "Update_login");
     }
-
 }

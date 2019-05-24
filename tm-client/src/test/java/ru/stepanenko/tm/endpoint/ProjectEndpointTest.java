@@ -29,7 +29,8 @@ public class ProjectEndpointTest {
     private SessionDTO currentSession;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         projectEndpoint = endpointService.getProjectEndpoint();
         sessionEndpoint = endpointService.getSessionEndpoint();
@@ -37,7 +38,8 @@ public class ProjectEndpointTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         sessionEndpoint.closeSession(currentSession);
         projectEndpoint = null;
         sessionEndpoint = null;
@@ -134,7 +136,8 @@ public class ProjectEndpointTest {
     }
 
     @Test
-    public void findProject() throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
+    public void findProject(
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         assertNotNull(currentSession);
         @NotNull final ProjectDTO project1 = new ProjectDTO();
         project1.setUserId(currentSession.getUserId());

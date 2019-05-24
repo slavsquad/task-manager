@@ -62,7 +62,8 @@ public class TaskEndpointTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         @NotNull ITaskService taskService = new TaskService(entityManagerFactory);
         @NotNull IUserService userService = new UserService(entityManagerFactory);
         @NotNull ISessionService sessionService = new SessionService(entityManagerFactory, new PropertyService(AppServerTest.class, "application.properties"));
@@ -73,14 +74,16 @@ public class TaskEndpointTest {
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         taskEndpoint = null;
         currentSession = null;
         currentUser = null;
     }
 
     @Test
-    public void createTask() throws DataValidateException, AuthenticationSecurityException {
+    public void createTask(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @Nullable final String userId = entity.getUserId();
@@ -99,7 +102,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void editTask() throws DataValidateException, AuthenticationSecurityException {
+    public void editTask(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO task = getEntity();
         assertNotNull(task);
         task.setName("update_name");
@@ -110,7 +114,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void findOneTask() throws DataValidateException, AuthenticationSecurityException {
+    public void findOneTask(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @Nullable final String userId = entity.getUserId();
@@ -127,7 +132,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void removeTask() throws DataValidateException, AuthenticationSecurityException {
+    public void removeTask(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final int size = taskEndpoint.findAllTaskByUserId(currentSession).size();
         assertTrue(size > 0);
         taskEndpoint.removeTask(currentSession, getEntity().getId());
@@ -135,7 +141,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void findAllTaskByProjectId() throws DataValidateException, AuthenticationSecurityException {
+    public void findAllTaskByProjectId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskEndpoint.findAllTaskByProjectId(currentSession, entity.getProjectId()).size();
@@ -145,7 +152,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void findAllTaskByUserId() throws DataValidateException, AuthenticationSecurityException {
+    public void findAllTaskByUserId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskEndpoint.findAllTaskByUserId(currentSession).size();
@@ -155,7 +163,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void removeAllTaskByProjectId() throws DataValidateException, AuthenticationSecurityException {
+    public void removeAllTaskByProjectId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskEndpoint.findAllTaskByProjectId(currentSession, entity.getProjectId()).size();
@@ -165,7 +174,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void removeAllTaskByUserId() throws DataValidateException, AuthenticationSecurityException {
+    public void removeAllTaskByUserId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = taskEndpoint.findAllTaskByUserId(currentSession).size();
@@ -175,7 +185,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void sortAllTaskByUserId() throws DataValidateException, AuthenticationSecurityException {
+    public void sortAllTaskByUserId(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final TaskDTO task1 = new TaskDTO();
@@ -229,7 +240,8 @@ public class TaskEndpointTest {
     }
 
     @Test
-    public void findAllTaskByPartOfNameOrDescription() throws DataValidateException, AuthenticationSecurityException {
+    public void findAllTaskByPartOfNameOrDescription(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final TaskDTO entity = getEntity();
         assertNotNull(entity);
 
@@ -259,7 +271,8 @@ public class TaskEndpointTest {
         assertTrue(findTasksId.contains(task2.getId()));
     }
 
-    private TaskDTO getEntity() throws DataValidateException, AuthenticationSecurityException {
+    private TaskDTO getEntity(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final List<TaskDTO> tasks = new ArrayList<>(taskEndpoint.findAllTaskByUserId(currentSession));
         if (tasks.isEmpty()) return null;
         return tasks.get(0);

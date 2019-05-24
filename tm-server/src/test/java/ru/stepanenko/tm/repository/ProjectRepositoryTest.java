@@ -18,7 +18,6 @@ import javax.persistence.EntityManagerFactory;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
@@ -55,14 +54,16 @@ public class ProjectRepositoryTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         entityManager = entityManagerFactory.createEntityManager();
         projectRepository = new ProjectRepository(entityManager);
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         projectRepository = null;
         entityManager.close();
         entityManager = null;

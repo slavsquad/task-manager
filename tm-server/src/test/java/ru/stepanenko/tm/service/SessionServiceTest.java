@@ -48,18 +48,21 @@ public class SessionServiceTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         sessionService = new SessionService(entityManagerFactory, new PropertyService(AppServerTest.class, "application.properties"));
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         sessionService = null;
     }
 
     @Test
-    public void findOne() throws DataValidateException {
+    public void findOne(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
         @NotNull final UserDTO loggedUser = new UserDTO();
@@ -72,31 +75,35 @@ public class SessionServiceTest {
     }
 
     @Test
-    public void remove() throws DataValidateException {
+    public void remove(
+    ) throws DataValidateException {
         @NotNull final int size = sessionService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         sessionService.remove(getEntity().getId());
-        assertEquals(size-1, sessionService.findAll().size());
+        assertEquals(size - 1, sessionService.findAll().size());
     }
 
     @Test
-    public void clear() throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final int size = sessionService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         sessionService.clear();
         assertEquals(0, sessionService.findAll().size());
     }
 
     @Test
-    public void findAll() throws DataValidateException {
+    public void findAll(
+    ) throws DataValidateException {
         @NotNull final int size = sessionService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         sessionService.clear();
         assertEquals(0, sessionService.findAll().size());
     }
 
     @Test
-    public void create() throws DataValidateException {
+    public void create(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
         @NotNull final UserDTO loggedUser = new UserDTO();
@@ -104,14 +111,15 @@ public class SessionServiceTest {
         loggedUser.setLogin("dummy");
         loggedUser.setPassword("dummy");
         @NotNull final int size = sessionService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         sessionService.create(loggedUser);
-        assertEquals(size+1, sessionService.findAll().size());
+        assertEquals(size + 1, sessionService.findAll().size());
 
     }
 
     @Test
-    public void validatePositive() throws DataValidateException, AuthenticationSecurityException {
+    public void validatePositive(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
         @NotNull final UserDTO loggedUser = new UserDTO();
@@ -123,13 +131,15 @@ public class SessionServiceTest {
     }
 
     @Test(expected = DataValidateException.class)
-    public void validateNegative() throws DataValidateException, AuthenticationSecurityException {
+    public void validateNegative(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @NotNull final SessionDTO session = new SessionDTO();
         sessionService.validate(session);
     }
 
     @Test
-    public void validateAdminPositive() throws DataValidateException, AuthenticationSecurityException {
+    public void validateAdminPositive(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final UserDTO admin = new UserService(entityManagerFactory).findByLogin("admin");
         assertNotNull(admin);
         @Nullable final SessionDTO session = sessionService.create(admin);
@@ -138,7 +148,8 @@ public class SessionServiceTest {
     }
 
     @Test(expected = AuthenticationSecurityException.class)
-    public void validateAdminNegative() throws DataValidateException, AuthenticationSecurityException {
+    public void validateAdminNegative(
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable final UserDTO user = new UserService(entityManagerFactory).findByLogin("user");
         assertNotNull(user);
         @Nullable final SessionDTO session = sessionService.create(user);
@@ -146,7 +157,8 @@ public class SessionServiceTest {
         sessionService.validateAdmin(session);
     }
 
-    private SessionDTO getEntity() throws DataValidateException {
+    private SessionDTO getEntity(
+    ) throws DataValidateException {
         @Nullable final List<SessionDTO> sessions = new ArrayList<>(sessionService.findAll());
         if (sessions.isEmpty()) return null;
         return sessions.get(0);

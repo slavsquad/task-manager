@@ -49,18 +49,21 @@ public class ProjectServiceTest {
     }
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp(
+    ) throws Exception {
         projectService = new ProjectService(entityManagerFactory);
         testDataGenerator.generate();
     }
 
     @After
-    public void tearDown() throws Exception {
+    public void tearDown(
+    ) throws Exception {
         projectService = null;
     }
 
     @Test
-    public void create() throws DataValidateException {
+    public void create(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
         @NotNull final ProjectDTO project = new ProjectDTO();
@@ -74,7 +77,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void edit() throws DataValidateException {
+    public void edit(
+    ) throws DataValidateException {
         @Nullable final ProjectDTO project = getEntity();
         assertNotNull(project);
         project.setName("update_name");
@@ -85,7 +89,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void findOne() throws DataValidateException {
+    public void findOne(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
         @NotNull ProjectDTO project = new ProjectDTO();
@@ -97,23 +102,26 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void remove() throws DataValidateException {
+    public void remove(
+    ) throws DataValidateException {
         @NotNull final int size = projectService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         projectService.remove(getEntity().getId());
-        assertEquals(size-1, projectService.findAll().size());
+        assertEquals(size - 1, projectService.findAll().size());
     }
 
     @Test
-    public void clear() throws DataValidateException {
+    public void clear(
+    ) throws DataValidateException {
         @NotNull final int size = projectService.findAll().size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         projectService.clear();
         assertEquals(0, projectService.findAll().size());
     }
 
     @Test
-    public void findOneByUserId() throws DataValidateException {
+    public void findOneByUserId(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
         @NotNull ProjectDTO project = new ProjectDTO();
@@ -121,21 +129,23 @@ public class ProjectServiceTest {
         project.setDescription("New_Description");
         project.setUserId(userId);
         projectService.create(project);
-        assertEquals(project.getId(), projectService.findOne(project.getId(),userId).getId());
+        assertEquals(project.getId(), projectService.findOne(project.getId(), userId).getId());
     }
 
     @Test
-    public void removeOneByUserId() throws DataValidateException {
+    public void removeOneByUserId(
+    ) throws DataValidateException {
         @Nullable final ProjectDTO entity = getEntity();
         assertNotNull(entity);
         @NotNull final int size = projectService.findAllByUserId(entity.getUserId()).size();
-        assertTrue(size>0);
+        assertTrue(size > 0);
         projectService.remove(entity.getId(), entity.getUserId());
-        assertEquals(size-1, projectService.findAllByUserId(entity.getUserId()).size());
+        assertEquals(size - 1, projectService.findAllByUserId(entity.getUserId()).size());
     }
 
     @Test
-    public void findAll() throws DataValidateException {
+    public void findAll(
+    ) throws DataValidateException {
         @NotNull final int size = projectService.findAll().size();
         assertTrue(size > 0);
         projectService.clear();
@@ -143,7 +153,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void findAllByUserId() throws DataValidateException {
+    public void findAllByUserId(
+    ) throws DataValidateException {
         @NotNull final String userId = getEntity().getUserId();
         @NotNull final int size = projectService.findAllByUserId(userId).size();
         assertTrue(size > 0);
@@ -152,7 +163,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void removeAllByUserId() throws DataValidateException {
+    public void removeAllByUserId(
+    ) throws DataValidateException {
         @NotNull final String userId = getEntity().getUserId();
         @NotNull final int size = projectService.findAllByUserId(userId).size();
         assertTrue(size > 0);
@@ -161,7 +173,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void sortAllByUserId() throws DataValidateException {
+    public void sortAllByUserId(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         @NotNull final ProjectDTO project1 = new ProjectDTO();
         project1.setUserId(userId);
@@ -188,7 +201,7 @@ public class ProjectServiceTest {
         project3.setDateEnd(new Date(0));
 
         projectService.removeAllByUserId(userId);
-        assertTrue(projectService.findAllByUserId(userId).size()==0);
+        assertTrue(projectService.findAllByUserId(userId).size() == 0);
 
         projectService.create(project1);
         projectService.create(project2);
@@ -211,7 +224,8 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void findAllByPartOfNameOrDescription() throws DataValidateException {
+    public void findAllByPartOfNameOrDescription(
+    ) throws DataValidateException {
         @Nullable final String userId = getEntity().getUserId();
         assertNotNull(userId);
 
@@ -226,7 +240,7 @@ public class ProjectServiceTest {
         project2.setDescription("Make apple pie!");
 
         projectService.removeAllByUserId(userId);
-        assertTrue(projectService.findAllByUserId(userId).size()==0);
+        assertTrue(projectService.findAllByUserId(userId).size() == 0);
 
         projectService.create(project1);
         projectService.create(project2);
@@ -239,7 +253,8 @@ public class ProjectServiceTest {
         assertTrue(findProjectsId.contains(project2.getId()));
     }
 
-    private ProjectDTO getEntity() throws DataValidateException {
+    private ProjectDTO getEntity(
+    ) throws DataValidateException {
         @Nullable final List<ProjectDTO> projects = new ArrayList<>(projectService.findAll());
         if (projects.isEmpty()) return null;
         return projects.get(0);

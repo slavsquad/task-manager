@@ -55,8 +55,8 @@ public final class TaskListCommand implements AbstractCommand {
             taskEndpoint.findAllTaskByUserId(currentSession)
                     .forEach(e -> System.out.println(
                             "id:" + e.getId() +
-                            " name:" + e.getName() +
-                            " project_id:" + e.getProjectId()));
+                                    " name:" + e.getName() +
+                                    " project_id:" + e.getProjectId()));
             return;
         }
         projectEndpoint.findOneProject(currentSession, id);

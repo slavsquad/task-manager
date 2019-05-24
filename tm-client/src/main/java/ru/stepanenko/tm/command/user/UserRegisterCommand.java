@@ -29,6 +29,7 @@ public final class UserRegisterCommand implements AbstractCommand {
     @Inject
     @NotNull
     ITerminalService terminalService;
+
     @Override
     public String getName() {
         return "user-register";
