@@ -93,6 +93,15 @@ public class UserService implements IUserService {
                 .remove(user);
     }
 
+    @Transactional
+    public void clear(
+    ) throws DataValidateException{
+        @Nullable final Collection<User> users = userRepository
+                .findAll();
+        if (users == null) throw new DataValidateException("Users not found!");
+        users.forEach(userRepository::remove);
+    }
+
     @Override
     @Transactional(readOnly = true)
     public Collection<UserDTO> findAll(

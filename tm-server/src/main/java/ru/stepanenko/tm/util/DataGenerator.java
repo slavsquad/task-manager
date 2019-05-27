@@ -43,6 +43,7 @@ public class DataGenerator {
         generateUsers();
         generateData();
     }
+
     public void generateUsers() {
         try {
             UserDTO admin = new UserDTO();
@@ -74,7 +75,7 @@ public class DataGenerator {
         }
     }
 
-    public void generateData() {
+    public void generateData(){
         try {
             projectService.create(new ProjectDTO("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId()));
             projectService.create(new ProjectDTO("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId()));
@@ -104,5 +105,13 @@ public class DataGenerator {
         } catch (DataValidateException e) {
             e.printStackTrace();
         }
+    }
+
+    public void cleanUp(
+    ) throws DataValidateException {
+        taskService.clear();
+        projectService.clear();
+        sessionService.clear();
+        userService.clear();
     }
 }

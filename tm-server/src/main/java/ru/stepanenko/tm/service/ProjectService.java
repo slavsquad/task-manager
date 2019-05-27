@@ -17,7 +17,6 @@ import javax.inject.Inject;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@Transactional
 @ApplicationScoped
 public class ProjectService implements IProjectService {
 

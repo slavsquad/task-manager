@@ -37,6 +37,10 @@ public interface IUserService {
             @Nullable final String id
     ) throws DataValidateException;
 
+    @Transactional
+    void clear(
+    ) throws DataValidateException;
+
     @Transactional(readOnly = true)
     Collection<UserDTO> findAll(
     ) throws DataValidateException;
