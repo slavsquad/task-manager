@@ -1,10 +1,10 @@
 package ru.stepanenko.tm.command.common;
 
 import lombok.NoArgsConstructor;
-import ru.stepanenko.tm.api.command.AbstractCommand;
+import ru.stepanenko.tm.command.ICommand;
 
 @NoArgsConstructor
-public final class HelpCommand implements AbstractCommand {
+public final class HelpCommand implements ICommand {
 
     @Override
     public String getName() {

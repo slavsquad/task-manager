@@ -1,6 +1,6 @@
 package ru.stepanenko.tm.service;
 
-import lombok.NoArgsConstructor;
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
@@ -14,15 +14,11 @@ import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
-import ru.stepanenko.tm.repository.SessionRepository;
-import ru.stepanenko.tm.repository.UserRepository;
 import ru.stepanenko.tm.util.SignatureUtil;
 import ru.stepanenko.tm.util.DataValidator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
@@ -31,133 +27,91 @@ import java.util.stream.Collectors;
 public class SessionService implements ISessionService {
 
     @NotNull
-    private final EntityManagerFactory entityManagerFactory;
+    private final IPropertyService propertyService;
 
     @NotNull
-    private final IPropertyService propertyService;
+    final IUserRepository userRepository;
+
+    @NotNull
+    final ISessionRepository sessionRepository;
 
     @Inject
     public SessionService(
-            @NotNull final EntityManagerFactory entityManagerFactory,
-            @NotNull final IPropertyService propertyService) {
-        this.entityManagerFactory = entityManagerFactory;
+            @NotNull final IPropertyService propertyService,
+            @NotNull final ISessionRepository sessionRepository,
+            @NotNull final IUserRepository userRepository) {
         this.propertyService = propertyService;
+        this.userRepository = userRepository;
+        this.sessionRepository = sessionRepository;
     }
 
     @Override
+    @Transactional
     public void clear(
     ) throws DataValidateException {
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            sessionRepository
-                    .removeAll();
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Collection<Session> sessions = sessionRepository
+                .findAll();
+        if (sessions == null) throw new DataValidateException("Sessions not found!");
+        sessions.forEach(sessionRepository::remove);
     }
 
     @Override
+    @Transactional
     public SessionDTO findOne(
             @Nullable final String id
     ) throws DataValidateException {
         DataValidator.validateString(id);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Session session = sessionRepository
-                    .findOne(id);
-            if (session == null) throw new DataValidateException("Session not found!");
-            entityManager.getTransaction().commit();
-            return session.getDTO();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Session session = sessionRepository
+                .findBy(id);
+        if (session == null) throw new DataValidateException("Session not found!");
+        return session.getDTO();
     }
 
     @Override
+    @Transactional
     public void remove(
             @Nullable final String id
     ) throws DataValidateException {
         DataValidator.validateString(id);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Session session = sessionRepository
-                    .findOne(id);
-            if (session == null) throw new DataValidateException("Session not found!");
-            sessionRepository
-                    .remove(session);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Session session = sessionRepository
+                .findBy(id);
+        if (session == null) throw new DataValidateException("Session not found!");
+        sessionRepository
+                .remove(session);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<SessionDTO> findAll(
     ) throws DataValidateException {
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Collection<Session> sessions = sessionRepository
-                    .findAll();
-            if (sessions == null) throw new DataValidateException("Sessions not found!");
-            entityManager.getTransaction().commit();
-            return sessions
-                    .stream()
-                    .map(Session::getDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Collection<Session> sessions = sessionRepository
+                .findAll();
+        if (sessions == null) throw new DataValidateException("Sessions not found!");
+        return sessions
+                .stream()
+                .map(Session::getDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public SessionDTO create(
             @Nullable final UserDTO userDTO
     ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, false);
         @NotNull final String cycle = propertyService.getCycle();
         @NotNull final String salt = propertyService.getSalt();
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final ISessionRepository sessionRepository = new SessionRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @NotNull final Session session = new Session();
-            session.setTimestamp(new Date());
-            session.setUser(getUser(userDTO.getId(), entityManager));
-            session.setSignature(SignatureUtil.sign(userDTO, salt, Integer.parseInt(cycle)));
-            sessionRepository
-                    .persist(session);
-            entityManager.getTransaction().commit();
-            return session.getDTO();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @NotNull final Session session = new Session();
+        session.setTimestamp(new Date());
+        session.setUser(getUser(userDTO.getId()));
+        session.setSignature(SignatureUtil.sign(userDTO, salt, Integer.parseInt(cycle)));
+        sessionRepository
+                .save(session);
+        return session.getDTO();
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void validate(
             @Nullable final SessionDTO sessionDTO
     ) throws AuthenticationSecurityException, DataValidateException {
@@ -167,34 +121,21 @@ public class SessionService implements ISessionService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public void validateAdmin(
             @Nullable final SessionDTO sessionDTO
     ) throws AuthenticationSecurityException, DataValidateException {
         validate(sessionDTO);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        try {
-            entityManager.getTransaction().begin();
-            @NotNull User user = getUser(sessionDTO.getUserId(), entityManager);
-            if (!user.getRole().equals(Role.ADMIN))
-                throw new AuthenticationSecurityException("Forbidden action for your role!");
-            entityManager.getTransaction().commit();
-        } catch (AuthenticationSecurityException e) {
-            entityManager.getTransaction().rollback();
-            throw new AuthenticationSecurityException(e.getMessage());
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @NotNull User user = getUser(sessionDTO.getUserId());
+        if (!user.getRole().equals(Role.ADMIN))
+            throw new AuthenticationSecurityException("Forbidden action for your role!");
     }
 
+    @Transactional(readOnly = true)
     private User getUser(
-            @NotNull final String userId,
-            @NotNull final EntityManager em
+            @NotNull final String userId
     ) throws DataValidateException {
-        @NotNull final IUserRepository userRepository = new UserRepository(em);
-        @Nullable final User user = userRepository.findOne(userId);
+        @Nullable final User user = userRepository.findBy(userId);
         if (user == null) throw new DataValidateException("User not found!");
         return user;
     }

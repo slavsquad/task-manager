@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.service;
 
+import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
@@ -9,312 +10,217 @@ import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.User;
-import ru.stepanenko.tm.repository.ProjectRepository;
-import ru.stepanenko.tm.repository.UserRepository;
 import ru.stepanenko.tm.util.DataValidator;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+@Transactional
 @ApplicationScoped
 public class ProjectService implements IProjectService {
 
     @NotNull
-    private final EntityManagerFactory entityManagerFactory;
+    final IProjectRepository projectRepository;
+
+    @NotNull
+    final IUserRepository userRepository;
 
     @Inject
-    public ProjectService(@NotNull final EntityManagerFactory entityManagerFactory) {
-        this.entityManagerFactory = entityManagerFactory;
+    public ProjectService(
+            @NotNull final IProjectRepository projectRepository,
+            @NotNull final IUserRepository userRepository) {
+        this.projectRepository = projectRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
+    @Transactional
     public void create(
             @Nullable final ProjectDTO projectDTO
     ) throws DataValidateException {
         DataValidator.validateProjectDTO(projectDTO);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
         try {
-            entityManager.getTransaction().begin();
-            @NotNull final Project project = convertDTOtoProject(projectDTO, entityManager);
+            @NotNull final Project project = convertDTOtoProject(projectDTO);
             projectRepository
-                    .persist(project);
-            entityManager.getTransaction().commit();
+                    .save(project);
         } catch (Exception e) {
-            entityManager.getTransaction().rollback();
             throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
         }
     }
 
     @Override
+    @Transactional
     public void edit(
             @Nullable final ProjectDTO projectDTO
     ) throws DataValidateException {
         DataValidator.validateProjectDTO(projectDTO);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository.findOne(projectDTO.getId());
-            if (project == null) throw new DataValidateException("Project not found!");
-            project.setName(projectDTO.getName());
-            project.setDescription(projectDTO.getDescription());
-            project.setStatus(projectDTO.getStatus());
-            project.setDateBegin(projectDTO.getDateBegin());
-            project.setDateEnd(projectDTO.getDateEnd());
-            projectRepository
-                    .merge(project);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            e.printStackTrace();
-            //throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Project project = projectRepository.findBy(projectDTO.getId());
+        if (project == null) throw new DataValidateException("Project not found!");
+        project.setName(projectDTO.getName());
+        project.setDescription(projectDTO.getDescription());
+        project.setStatus(projectDTO.getStatus());
+        project.setDateBegin(projectDTO.getDateBegin());
+        project.setDateEnd(projectDTO.getDateEnd());
+        projectRepository
+                .save(project);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectDTO findOne(
             @Nullable final String id,
             @Nullable final String userId
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository
-                    .findOneByUserId(id, getUser(userId, entityManager));
-            if (project == null) throw new DataValidateException("Project not found!");
-            entityManager.getTransaction().commit();
-            return project.getDTO();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Project project = projectRepository
+                .findAnyByIdAndUser(id, getUser(userId));
+        if (project == null) throw new DataValidateException("Project not found!");
+        return project.getDTO();
     }
 
     @Override
+    @Transactional
     public void remove(
             @Nullable final String id,
             @Nullable final String userId
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository
-                    .findOneByUserId(id, getUser(userId, entityManager));
-            if (project == null) throw new DataValidateException("Project not found!");
-            projectRepository
-                    .remove(project);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Project project = projectRepository
+                .findAnyByIdAndUser(id, getUser(userId));
+        if (project == null) throw new DataValidateException("Project not found!");
+        projectRepository
+                .remove(project);
     }
 
     @Override
+    @Transactional
     public void clear(
     ) throws DataValidateException {
-        @Nullable final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @Nullable final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            projectRepository
-                    .removeAll();
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Collection<Project> projects = projectRepository.findAll();
+        if (projects == null) throw new DataValidateException("Projects not found!");
+        projects.forEach(projectRepository::remove);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ProjectDTO findOne(
             @Nullable final String id
     ) throws DataValidateException {
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository
-                    .findOne(id);
-            if (project == null) throw new DataValidateException("Project not found!");
-            entityManager.getTransaction().commit();
-            return project.getDTO();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Project project = projectRepository
+                .findBy(id);
+        if (project == null) throw new DataValidateException("Project not found!");
+        return project.getDTO();
     }
 
     @Override
+    @Transactional
     public void remove(
             @Nullable final String id
     ) throws DataValidateException {
         DataValidator.validateString(id);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Project project = projectRepository
-                    .findOne(id);
-            if (project == null) throw new DataValidateException("Project not found!");
-            projectRepository
-                    .remove(project);
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Project project = projectRepository
+                .findBy(id);
+        if (project == null) throw new DataValidateException("Project not found!");
+        projectRepository
+                .remove(project);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ProjectDTO> findAll(
     ) throws DataValidateException {
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Collection<Project> projects = projectRepository
-                    .findAll();
-            if (projects == null) throw new DataValidateException("Projects not found!");
-            entityManager.getTransaction().commit();
-            return projects
-                    .stream()
-                    .map(Project::getDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Collection<Project> projects = projectRepository
+                .findAll();
+        if (projects == null) throw new DataValidateException("Projects not found!");
+        return projects
+                .stream()
+                .map(Project::getDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ProjectDTO> findAllByUserId(
             @Nullable final String id
     ) throws DataValidateException {
         DataValidator.validateString(id);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Collection<Project> projects = projectRepository
-                    .findAllByUserId(getUser(id, entityManager));
-            if (projects == null) throw new DataValidateException("Projects not found!");
-            entityManager.getTransaction().commit();
-            return projects
-                    .stream()
-                    .map(Project::getDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Collection<Project> projects = projectRepository
+                .findByUser(getUser(id));
+        if (projects == null) throw new DataValidateException("Projects not found!");
+        return projects
+                .stream()
+                .map(Project::getDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional
     public void removeAllByUserId(
             @Nullable final String id
     ) throws DataValidateException {
         DataValidator.validateString(id);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            projectRepository
-                    .removeAllByUserID(getUser(id, entityManager));
-            entityManager.getTransaction().commit();
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @NotNull final User user = getUser(id);
+        @Nullable final Collection<Project> projects = projectRepository
+                .findByUser(user);
+        if (projects == null) throw new DataValidateException("Projects not found!");
+        projects.forEach(projectRepository::remove);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ProjectDTO> sortAllByUserId(
             @Nullable final String id,
             @Nullable final String parameter
     ) throws DataValidateException {
         DataValidator.validateString(id, parameter);
         DataValidator.validateParameter(parameter);
-        if ("order".equals(parameter)) return findAllByUserId(id);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Collection<Project> projects = projectRepository
-                    .sortAllByUserId(getUser(id, entityManager), parameter);
-            if (projects == null) throw new DataValidateException("Projects not found!");
-            entityManager.getTransaction().commit();
-            return projects
-                    .stream()
-                    .map(Project::getDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
+        @Nullable Collection<Project> projects = null;
+        switch (parameter) {
+            case "order":
+                projects = projectRepository
+                        .findByUser(getUser(id));
+                break;
+            case "status":
+                projects = projectRepository
+                        .sortByStatus(getUser(id));
+                break;
+            case "dateBegin":
+                projects = projectRepository
+                        .sortByDateBegin(getUser(id));
+                break;
+            case "dateEnd":
+                projects = projectRepository
+                        .sortByDateEnd(getUser(id));
+                break;
         }
+        if (projects == null) throw new DataValidateException("Projects not found!");
+        return projects
+                .stream()
+                .map(Project::getDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
+    @Transactional(readOnly = true)
     public Collection<ProjectDTO> findAllByPartOfNameOrDescription(
             @Nullable final String name,
             @Nullable final String description,
             @Nullable final String userId
     ) throws DataValidateException {
         DataValidator.validateString(name, description, userId);
-        @NotNull final EntityManager entityManager = entityManagerFactory.createEntityManager();
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository(entityManager);
-        try {
-            entityManager.getTransaction().begin();
-            @Nullable final Collection<Project> projects = projectRepository
-                    .findAllByPartOfNameOrDescription(name, description, getUser(userId, entityManager));
-            if (projects == null) throw new DataValidateException("Projects not found!");
-            entityManager.getTransaction().commit();
-            return projects
-                    .stream()
-                    .map(Project::getDTO)
-                    .collect(Collectors.toList());
-        } catch (Exception e) {
-            entityManager.getTransaction().rollback();
-            throw new DataValidateException(e.getMessage());
-        } finally {
-            entityManager.close();
-        }
+        @Nullable final Collection<Project> projects = projectRepository
+                .findAllByPartOfNameOrDescription(name, description, getUser(userId));
+        if (projects == null) throw new DataValidateException("Projects not found!");
+        return projects
+                .stream()
+                .map(Project::getDTO)
+                .collect(Collectors.toList());
     }
 
     private Project convertDTOtoProject(
-            @NotNull final ProjectDTO projectDTO,
-            @NotNull final EntityManager entityManager
+            @NotNull final ProjectDTO projectDTO
     ) throws DataValidateException {
         @NotNull final Project project = new Project();
         project.setId(projectDTO.getId());
@@ -322,17 +228,16 @@ public class ProjectService implements IProjectService {
         project.setDescription(projectDTO.getDescription());
         project.setDateBegin(projectDTO.getDateBegin());
         project.setDateEnd(projectDTO.getDateEnd());
-        project.setUser(getUser(projectDTO.getUserId(), entityManager));
+        project.setUser(getUser(projectDTO.getUserId()));
         project.setStatus(projectDTO.getStatus());
         return project;
     }
 
+    @Transactional(readOnly = true)
     private User getUser(
-            @NotNull final String userId,
-            @NotNull final EntityManager em
+            @NotNull final String userId
     ) throws DataValidateException {
-        @NotNull final IUserRepository userRepository = new UserRepository(em);
-        @Nullable final User user = userRepository.findOne(userId);
+        @Nullable final User user = userRepository.findBy(userId);
         if (user == null) throw new DataValidateException("User not found!");
         return user;
     }

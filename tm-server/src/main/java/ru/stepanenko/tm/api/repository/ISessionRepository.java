@@ -1,29 +1,17 @@
 package ru.stepanenko.tm.api.repository;
 
+import org.apache.deltaspike.data.api.EntityRepository;
+import org.apache.deltaspike.data.api.Query;
+import org.apache.deltaspike.data.api.Repository;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.model.entity.Session;
 import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
 
-public interface ISessionRepository {
+@Repository
+public interface ISessionRepository extends EntityRepository<Session, String> {
 
-    Session findOne(
-            @NotNull final String id);
-
-    Collection<Session> findAll();
-
-    void removeAll();
-
-    void remove(
-            @NotNull final Session session);
-
-    void persist(
-            @NotNull final Session session);
-
-    Session merge(
-            @NotNull final Session session);
-
-    Collection<Session> findAllByUserId(
+    Collection<Session> findByUser(
             @NotNull final User user);
 }

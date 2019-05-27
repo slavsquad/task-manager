@@ -4,13 +4,13 @@ import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ISessionService;
-import ru.stepanenko.tm.api.command.AbstractCommand;
+import ru.stepanenko.tm.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
 
 import javax.inject.Inject;
 
 @NoArgsConstructor
-public class UserListCommand implements AbstractCommand {
+public class UserListCommand implements ICommand {
 
     @Inject
     @NotNull

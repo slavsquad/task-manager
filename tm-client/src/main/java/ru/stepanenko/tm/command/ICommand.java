@@ -1,9 +1,9 @@
-package ru.stepanenko.tm.api.command;
+package ru.stepanenko.tm.command;
 
 import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
 import ru.stepanenko.tm.endpoint.DataValidateException_Exception;
 
-public interface AbstractCommand {
+public interface ICommand {
 
     public abstract String getName();
 

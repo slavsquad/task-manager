@@ -3,10 +3,10 @@ package ru.stepanenko.tm.command.common;
 import com.jcabi.manifests.Manifests;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.api.command.AbstractCommand;
+import ru.stepanenko.tm.command.ICommand;
 
 @NoArgsConstructor
-public class AboutCommand implements AbstractCommand {
+public class AboutCommand implements ICommand {
 
     @Override
     public String getName() {

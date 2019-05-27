@@ -5,14 +5,14 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.api.command.AbstractCommand;
+import ru.stepanenko.tm.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
 
 import javax.inject.Inject;
 
 
 @NoArgsConstructor
-public class ProjectPrintCommand implements AbstractCommand {
+public class ProjectPrintCommand implements ICommand {
     @Inject
     @NotNull
     ProjectEndpoint projectEndpoint;

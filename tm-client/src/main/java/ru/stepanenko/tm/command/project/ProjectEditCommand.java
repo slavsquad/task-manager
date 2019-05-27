@@ -5,17 +5,15 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.api.command.AbstractCommand;
+import ru.stepanenko.tm.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
 import ru.stepanenko.tm.util.DateFormatter;
 
 import javax.inject.Inject;
-import javax.xml.datatype.DatatypeFactory;
 import java.util.Date;
-import java.util.GregorianCalendar;
 
 @NoArgsConstructor
-public final class ProjectEditCommand implements AbstractCommand {
+public final class ProjectEditCommand implements ICommand {
 
     @Inject
     @NotNull

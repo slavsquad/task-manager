@@ -65,7 +65,6 @@ public class DataGenerator {
             testUser.setPassword(HashUtil.md5("testUser"));
             testUser.setRole(Role.USER);
 
-            userService.clear();
             userService.create(admin);
             userService.create(user);
             userService.create(testAdmin);
