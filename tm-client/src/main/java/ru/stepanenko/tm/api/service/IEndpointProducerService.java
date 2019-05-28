@@ -1,9 +1,6 @@
 package ru.stepanenko.tm.api.service;
 
-import ru.stepanenko.tm.endpoint.ProjectEndpoint;
-import ru.stepanenko.tm.endpoint.SessionEndpoint;
-import ru.stepanenko.tm.endpoint.TaskEndpoint;
-import ru.stepanenko.tm.endpoint.UserEndpoint;
+import ru.stepanenko.tm.endpoint.*;
 
 import javax.enterprise.context.ApplicationScoped;
 
@@ -17,4 +14,6 @@ public interface IEndpointProducerService {
     SessionEndpoint getSessionEndpoint();
 
     UserEndpoint getUserEndpoint();
+
+    ServerEndpoint getServerEndpoint();
 }

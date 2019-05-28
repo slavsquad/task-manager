@@ -4,10 +4,7 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
-import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
-import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
-import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
+import ru.stepanenko.tm.api.endpoint.*;
 import ru.stepanenko.tm.api.service.IPropertyService;
 import ru.stepanenko.tm.service.PropertyService;
 import ru.stepanenko.tm.util.DataGenerator;
@@ -35,6 +32,10 @@ public class Bootstrap {
     @Inject
     @NotNull
     private ISessionEndpoint sessionEndpoint;
+
+    @Inject
+    @NotNull
+    private IServerEndpoint serverEndpoint;
 
     @Inject
     @NotNull
@@ -72,6 +73,10 @@ public class Bootstrap {
 
         wsdl = URL + ":" + PORT +"/"+ sessionEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, sessionEndpoint);
+        System.out.println(wsdl);
+
+        wsdl = URL + ":" + PORT +"/"+ serverEndpoint.getClass().getSimpleName() + "?wsdl";
+        Endpoint.publish(wsdl, serverEndpoint);
         System.out.println(wsdl);
     }
 }
