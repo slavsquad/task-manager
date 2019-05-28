@@ -40,14 +40,14 @@ public class UserEndpointTest {
 
     @Before
     public void setUp(
-    ) throws Exception {
+    ) throws DataValidateException, AuthenticationSecurityException {
         dataGenerator.generate();
         currentSession = sessionEndpoint.openSession("admin", HashUtil.md5("admin"));
     }
 
     @After
     public void tearDown(
-    ) throws Exception {
+    ) throws DataValidateException, AuthenticationSecurityException {
         sessionEndpoint.closeSession(currentSession);
         dataGenerator.cleanUp();
         currentSession = null;

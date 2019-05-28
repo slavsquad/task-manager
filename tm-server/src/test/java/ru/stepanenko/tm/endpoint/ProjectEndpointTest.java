@@ -45,14 +45,14 @@ public class ProjectEndpointTest {
 
     @Before
     public void setUp(
-    ) throws Exception {
+    ) throws DataValidateException, AuthenticationSecurityException {
         dataGenerator.generate();
         currentSession = sessionEndpoint.openSession("admin", HashUtil.md5("admin"));
     }
 
     @After
     public void tearDown(
-    ) throws Exception {
+    ) throws DataValidateException, AuthenticationSecurityException {
         sessionEndpoint.closeSession(currentSession);
         dataGenerator.cleanUp();
         currentSession = null;
@@ -94,7 +94,7 @@ public class ProjectEndpointTest {
 
     @Test
     public void sortProject(
-    ) throws DataValidateException, AuthenticationSecurityException{
+    ) throws DataValidateException, AuthenticationSecurityException {
         assertNotNull(currentSession);
         @NotNull final ProjectDTO project1 = new ProjectDTO();
         project1.setUserId(currentSession.getUserId());

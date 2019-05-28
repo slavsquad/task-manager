@@ -13,7 +13,8 @@ import javax.persistence.EntityManagerFactory;
 @ApplicationScoped
 public class EntityManagerProducer {
 
-    @NotNull private EntityManagerFactory entityManagerFactory;
+    @NotNull
+    private EntityManagerFactory entityManagerFactory;
 
     @Inject
     public EntityManagerProducer(@NotNull EntityManagerFactory entityManagerFactory) {
@@ -22,7 +23,7 @@ public class EntityManagerProducer {
 
     @Produces
     @TransactionScoped
-    public EntityManager getEntityManager(){
+    public EntityManager getEntityManager() {
         return entityManagerFactory.createEntityManager();
     }
 

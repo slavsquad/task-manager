@@ -38,7 +38,7 @@ public class TaskEndpointTest {
 
     @Before
     public void setUp(
-    ) throws Exception {
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         taskEndpoint = endpointService.getTaskEndpoint();
         projectEndpoint = endpointService.getProjectEndpoint();
@@ -48,7 +48,7 @@ public class TaskEndpointTest {
 
     @After
     public void tearDown(
-    ) throws Exception {
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         sessionEndpoint.closeSession(currentSession);
         taskEndpoint = null;
         sessionEndpoint = null;

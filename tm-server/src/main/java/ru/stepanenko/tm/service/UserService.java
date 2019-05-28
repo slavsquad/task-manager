@@ -95,7 +95,7 @@ public class UserService implements IUserService {
 
     @Transactional
     public void clear(
-    ) throws DataValidateException{
+    ) throws DataValidateException {
         @Nullable final Collection<User> users = userRepository
                 .findAll();
         if (users == null) throw new DataValidateException("Users not found!");
@@ -122,11 +122,11 @@ public class UserService implements IUserService {
             @Nullable final String password
     ) throws AuthenticationSecurityException, DataValidateException {
         DataValidator.validateString(login, password);
-            @Nullable final User user = userRepository
-                    .findAnyByLogin(login);
-            if (user == null) throw new AuthenticationSecurityException("Wrong user name!");
-            if (!user.getPassword().equals(password)) throw new AuthenticationSecurityException("Wrong password!");
-            return user.getDTO();
+        @Nullable final User user = userRepository
+                .findAnyByLogin(login);
+        if (user == null) throw new AuthenticationSecurityException("Wrong user name!");
+        if (!user.getPassword().equals(password)) throw new AuthenticationSecurityException("Wrong password!");
+        return user.getDTO();
     }
 
     private User convertDTOtoUser(

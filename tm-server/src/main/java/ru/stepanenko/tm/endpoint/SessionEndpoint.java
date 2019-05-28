@@ -71,7 +71,7 @@ public class SessionEndpoint implements ISessionEndpoint {
     public SessionDTO findOneSession(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
             @WebParam(name = "id") @Nullable final String id
-    ) throws AuthenticationSecurityException, DataValidateException{
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(sessionDTO);
         return sessionService.findOne(id);
     }

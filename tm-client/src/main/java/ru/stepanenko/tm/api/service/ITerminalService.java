@@ -4,5 +4,6 @@ import javax.enterprise.context.ApplicationScoped;
 
 @ApplicationScoped
 public interface ITerminalService {
+
     String nextLine();
 }

@@ -31,7 +31,7 @@ public interface IProjectRepository extends EntityRepository<Project, String> {
     Collection<Project> sortByDateEnd(
             @NotNull final User user);
 
-    @Query("SELECT e FROM Project e WHERE e.user = ?3 AND (e.name LIKE (concat('%', ?1,'%')) OR e.description LIKE (concat('%', ?2,'%')))" )
+    @Query("SELECT e FROM Project e WHERE e.user = ?3 AND (e.name LIKE (concat('%', ?1,'%')) OR e.description LIKE (concat('%', ?2,'%')))")
     Collection<Project> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,

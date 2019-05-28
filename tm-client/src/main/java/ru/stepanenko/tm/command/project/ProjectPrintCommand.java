@@ -13,6 +13,7 @@ import javax.inject.Inject;
 
 @NoArgsConstructor
 public class ProjectPrintCommand implements ICommand {
+
     @Inject
     @NotNull
     ProjectEndpoint projectEndpoint;

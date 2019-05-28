@@ -18,16 +18,13 @@ public class SessionServiceTest {
     private ISessionService sessionService;
 
     @Before
-    public void setUp(
-    ) throws Exception {
+    public void setUp() {
         sessionService = new SessionService();
     }
 
     @After
-    public void tearDown(
-    ) throws Exception {
+    public void tearDown() {
         sessionService = null;
-
     }
 
     @Test

@@ -30,7 +30,7 @@ public class ProjectEndpointTest {
 
     @Before
     public void setUp(
-    ) throws Exception {
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         projectEndpoint = endpointService.getProjectEndpoint();
         sessionEndpoint = endpointService.getSessionEndpoint();
@@ -39,7 +39,7 @@ public class ProjectEndpointTest {
 
     @After
     public void tearDown(
-    ) throws Exception {
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         sessionEndpoint.closeSession(currentSession);
         projectEndpoint = null;
         sessionEndpoint = null;

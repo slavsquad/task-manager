@@ -33,7 +33,7 @@ public class ProjectServiceTest {
     DataGenerator dataGenerator;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         dataGenerator.generate();
     }
 

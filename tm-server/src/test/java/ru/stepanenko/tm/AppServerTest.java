@@ -5,6 +5,7 @@ import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import ru.stepanenko.tm.api.service.IPropertyService;
+
 import javax.inject.Inject;
 
 /**

@@ -29,7 +29,7 @@ public class UserEndpointTest {
 
     @Before
     public void setUp(
-    ) throws Exception {
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         userEndpoint = endpointService.getUserEndpoint();
         sessionEndpoint = endpointService.getSessionEndpoint();
@@ -38,7 +38,7 @@ public class UserEndpointTest {
 
     @After
     public void tearDown(
-    ) throws Exception {
+    ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
         sessionEndpoint.closeSession(currentSession);
         userEndpoint = null;
         sessionEndpoint = null;

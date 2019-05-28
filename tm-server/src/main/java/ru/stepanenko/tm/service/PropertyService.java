@@ -1,4 +1,5 @@
 package ru.stepanenko.tm.service;
+
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.AppServer;
 import ru.stepanenko.tm.api.service.IPropertyService;

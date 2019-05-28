@@ -37,7 +37,7 @@ public class SessionServiceTest {
     DataGenerator dataGenerator;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         dataGenerator.generate();
     }
 
@@ -51,7 +51,7 @@ public class SessionServiceTest {
 
     @Test
     public void sessionCRUD(
-    ) throws DataValidateException{
+    ) throws DataValidateException {
         @Nullable final UserDTO user = userService.findByLogin("admin");
         assertNotNull(user);
         @NotNull final SessionDTO session = sessionService.create(user);

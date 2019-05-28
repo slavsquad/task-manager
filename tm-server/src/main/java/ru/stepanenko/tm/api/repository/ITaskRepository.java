@@ -13,7 +13,6 @@ import java.util.Collection;
 @Repository
 public interface ITaskRepository extends EntityRepository<Task, String> {
 
-
     Collection<Task> findByUser(
             @NotNull final User user);
 
@@ -38,7 +37,7 @@ public interface ITaskRepository extends EntityRepository<Task, String> {
     Collection<Task> sortByDateEnd(
             @NotNull final User user);
 
-    @Query("SELECT e FROM Task e WHERE e.user = ?3 AND (e.name LIKE (concat('%', ?1,'%')) OR e.description LIKE (concat('%', ?2,'%')))" )
+    @Query("SELECT e FROM Task e WHERE e.user = ?3 AND (e.name LIKE (concat('%', ?1,'%')) OR e.description LIKE (concat('%', ?2,'%')))")
     Collection<Task> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,

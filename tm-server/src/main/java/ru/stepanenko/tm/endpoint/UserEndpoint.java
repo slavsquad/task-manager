@@ -77,7 +77,7 @@ public class UserEndpoint implements IUserEndpoint {
     public UserDTO findUserById(
             @WebParam(name = "session") @Nullable final SessionDTO sessionDTO,
             @WebParam(name = "id") @Nullable final String id
-    ) throws AuthenticationSecurityException, DataValidateException{
+    ) throws AuthenticationSecurityException, DataValidateException {
         sessionService.validateAdmin(sessionDTO);
         return userService.findOne(id);
     }

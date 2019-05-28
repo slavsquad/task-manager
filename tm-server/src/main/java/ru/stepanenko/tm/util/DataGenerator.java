@@ -39,7 +39,7 @@ public class DataGenerator {
         this.sessionService = sessionService;
     }
 
-    public void generate(){
+    public void generate() {
         generateUsers();
         generateData();
     }
@@ -75,7 +75,7 @@ public class DataGenerator {
         }
     }
 
-    public void generateData(){
+    public void generateData() {
         try {
             projectService.create(new ProjectDTO("My_project_1", "Description for my project 1", userService.findByLogin("admin").getId()));
             projectService.create(new ProjectDTO("My_project_2", "Description for my project 2", userService.findByLogin("admin").getId()));

@@ -30,14 +30,13 @@ public class SessionEndpointTest {
     private DataGenerator dataGenerator;
 
     @Before
-    public void setUp(
-    ) throws Exception {
+    public void setUp(){
         dataGenerator.generate();
     }
 
     @After
     public void tearDown(
-    ) throws Exception {
+    ) throws DataValidateException {
         dataGenerator.cleanUp();
     }
 
@@ -57,7 +56,7 @@ public class SessionEndpointTest {
 
     @Test
     public void validate(
-    ) throws DataValidateException, AuthenticationSecurityException{
+    ) throws DataValidateException, AuthenticationSecurityException {
         @Nullable SessionDTO currentSession = sessionEndpoint.openSession("user", HashUtil.md5("user"));//CREATE
         assertNotNull(currentSession);
         thrown.expect(DataValidateException.class);

@@ -22,15 +22,13 @@ public class SessionEndpointTest {
     private SessionEndpoint sessionEndpoint;
 
     @Before
-    public void setUp(
-    ) throws Exception {
+    public void setUp() {
         @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
         sessionEndpoint = endpointService.getSessionEndpoint();
     }
 
     @After
-    public void tearDown(
-    ) throws Exception {
+    public void tearDown() {
         sessionEndpoint = null;
     }
 
