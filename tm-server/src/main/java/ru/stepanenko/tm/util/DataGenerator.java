@@ -66,10 +66,17 @@ public class DataGenerator {
             testUser.setPassword(HashUtil.md5("testUser"));
             testUser.setRole(Role.USER);
 
+            UserDTO test = new UserDTO();
+            test.setId("1");
+            test.setLogin("test");
+            test.setPassword(HashUtil.md5("test"));
+            test.setRole(Role.USER);
+
             userService.create(admin);
             userService.create(user);
             userService.create(testAdmin);
             userService.create(testUser);
+            userService.create(test);
         } catch (DataValidateException e) {
             e.printStackTrace();
         }

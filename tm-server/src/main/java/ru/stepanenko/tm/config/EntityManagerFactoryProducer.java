@@ -41,6 +41,14 @@ public class EntityManagerFactoryProducer {
         settings.put(Environment.DIALECT, propertyService.getDialect());
         settings.put(Environment.HBM2DDL_AUTO, propertyService.getHBM2DDL_AUTO());
         settings.put(Environment.SHOW_SQL, propertyService.getShowSQL());
+        settings.put(Environment.USE_SECOND_LEVEL_CACHE, "true");
+        settings.put(Environment.USE_QUERY_CACHE, "true");
+        settings.put(Environment.USE_MINIMAL_PUTS, "true");
+        settings.put("hibernate.cache.hazelcast.use_lite_member", "true");
+        settings.put(Environment.CACHE_REGION_PREFIX, "task-manager");
+        settings.put(Environment.CACHE_PROVIDER_CONFIG, "hazelcast.xml");
+        settings.put(Environment.CACHE_REGION_FACTORY, "com.hazelcast.hibernate.HazelcastLocalCacheRegionFactory");
+
         final StandardServiceRegistryBuilder registryBuilder
                 = new StandardServiceRegistryBuilder();
         System.out.println(settings);

@@ -1,11 +1,15 @@
 package ru.stepanenko.tm.config;
 
+import com.hazelcast.core.Hazelcast;
+import com.hazelcast.core.HazelcastInstance;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
+import ru.stepanenko.tm.api.service.IPropertyService;
+import ru.stepanenko.tm.service.PropertyService;
 import ru.stepanenko.tm.util.DataGenerator;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -36,28 +40,37 @@ public class Bootstrap {
     @NotNull
     private DataGenerator dataGenerator;
 
+    @Inject
+    @NotNull
+    private IPropertyService propertyService;
+
 
     public void init() {
         dataGenerator.generateUsers();
         dataGenerator.generateData();
         registryEndpoint();
+        //HazelcastInstance hz = Hazelcast.newHazelcastInstance();
     }
 
     private void registryEndpoint() {
 
-        String wsdl = "http://localhost:8080/" + projectEndpoint.getClass().getSimpleName() + "?wsdl";
+        @NotNull final String URL = propertyService.getServerHost();
+        @NotNull final String PORT = propertyService.getServerPort();
+        System.out.println(System.getProperty("port")+"asdffffffffffffffffffffffffffffffffffffffffffffff");
+
+        String wsdl = URL + ":" + PORT +"/"+ projectEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, projectEndpoint);
         System.out.println(wsdl);
 
-        wsdl = "http://localhost:8080/" + taskEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT +"/"+ taskEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, taskEndpoint);
         System.out.println(wsdl);
 
-        wsdl = "http://localhost:8080/" + userEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT +"/"+ userEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, userEndpoint);
         System.out.println(wsdl);
 
-        wsdl = "http://localhost:8080/" + sessionEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT +"/"+ sessionEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, sessionEndpoint);
         System.out.println(wsdl);
     }

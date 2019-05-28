@@ -5,6 +5,8 @@ import javax.enterprise.context.ApplicationScoped;
 @ApplicationScoped
 public interface IPropertyService {
 
+    void init();
+
     String getJdbcPassword();
 
     String getJdbcUser();
@@ -19,6 +21,9 @@ public interface IPropertyService {
 
     String getHBM2DDL_AUTO();
 
+    String getServerHost();
+
+    String getServerPort();
 
     String getSalt();
 
