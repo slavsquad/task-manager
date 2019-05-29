@@ -1,18 +1,14 @@
 package ru.stepanenko.tm.api.service;
 
-import org.apache.deltaspike.data.api.Repository;
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.model.dto.TaskDTO;
-import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.exception.DataValidateException;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.persistence.EntityManager;
 import java.util.Collection;
 
-@ApplicationScoped
+@Service
 public interface ITaskService {
 
     @Transactional

@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.endpoint;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
@@ -8,6 +7,8 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
 import ru.stepanenko.tm.enumerate.Role;
@@ -18,21 +19,20 @@ import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.util.DataGenerator;
 import ru.stepanenko.tm.util.HashUtil;
 
-import javax.inject.Inject;
 import java.util.UUID;
 
 import static org.junit.Assert.*;
 
-@RunWith(CdiTestRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class UserEndpointTest {
 
-    @Inject
+    @Autowired
     private IUserEndpoint userEndpoint;
 
-    @Inject
+    @Autowired
     private ISessionEndpoint sessionEndpoint;
 
-    @Inject
+    @Autowired
     private DataGenerator dataGenerator;
 
     @NotNull

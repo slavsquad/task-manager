@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.api.endpoint;
 
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Controller;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
@@ -9,6 +10,7 @@ import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 
+@Controller
 @WebService
 public interface ISessionEndpoint {
 

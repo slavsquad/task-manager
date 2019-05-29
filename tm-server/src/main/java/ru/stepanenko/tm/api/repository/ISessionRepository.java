@@ -10,7 +10,7 @@ import ru.stepanenko.tm.model.entity.User;
 import java.util.Collection;
 
 @Repository
-public interface ISessionRepository extends JpaRepository<Project, String> {
+public interface ISessionRepository extends JpaRepository<Session, String> {
 
     Collection<Session> findByUser(
             @NotNull final User user);

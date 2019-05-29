@@ -2,6 +2,8 @@ package ru.stepanenko.tm.endpoint;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -10,12 +12,12 @@ import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
-import javax.inject.Inject;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Collection;
 
+@Controller
 @WebService
 public class UserEndpoint implements IUserEndpoint {
 
@@ -25,7 +27,7 @@ public class UserEndpoint implements IUserEndpoint {
     @NotNull
     private final ISessionService sessionService;
 
-    @Inject
+    @Autowired
     public UserEndpoint(
             @NotNull final IUserService userService,
             @NotNull final ISessionService sessionService) {

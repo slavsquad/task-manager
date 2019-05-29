@@ -2,16 +2,15 @@ package ru.stepanenko.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.AppServer;
 import ru.stepanenko.tm.api.service.IPropertyService;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Named;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-@ApplicationScoped
+@Service
 public class PropertyService implements IPropertyService {
 
     @NotNull

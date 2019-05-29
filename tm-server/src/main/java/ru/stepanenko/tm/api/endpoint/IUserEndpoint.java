@@ -2,6 +2,8 @@ package ru.stepanenko.tm.api.endpoint;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -12,6 +14,8 @@ import javax.jws.WebParam;
 import javax.jws.WebService;
 import java.util.Collection;
 
+@Controller
+@Component
 @WebService
 public interface IUserEndpoint {
 

@@ -1,8 +1,9 @@
 package ru.stepanenko.tm.api.service;
 
-import javax.enterprise.context.ApplicationScoped;
 
-@ApplicationScoped
+import org.springframework.stereotype.Service;
+
+@Service
 public interface IPropertyService {
 
     void init();

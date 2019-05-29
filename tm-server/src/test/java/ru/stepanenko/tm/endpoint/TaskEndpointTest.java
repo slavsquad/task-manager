@@ -1,11 +1,12 @@
 package ru.stepanenko.tm.endpoint;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.jetbrains.annotations.NotNull;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.endpoint.IProjectEndpoint;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.endpoint.ITaskEndpoint;
@@ -16,11 +17,8 @@ import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.util.DataGenerator;
-import ru.stepanenko.tm.util.DateFormatter;
 import ru.stepanenko.tm.util.HashUtil;
 
-import javax.inject.Inject;
-import javax.xml.datatype.DatatypeConfigurationException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,19 +27,19 @@ import java.util.stream.Collectors;
 
 import static org.junit.Assert.*;
 
-@RunWith(CdiTestRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class TaskEndpointTest {
 
-    @Inject
+    @Autowired
     private IProjectEndpoint projectEndpoint;
 
-    @Inject
+    @Autowired
     private ITaskEndpoint taskEndpoint;
 
-    @Inject
+    @Autowired
     private ISessionEndpoint sessionEndpoint;
 
-    @Inject
+    @Autowired
     private DataGenerator dataGenerator;
 
     @NotNull

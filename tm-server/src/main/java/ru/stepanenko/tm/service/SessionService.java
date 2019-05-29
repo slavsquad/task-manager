@@ -1,8 +1,10 @@
 package ru.stepanenko.tm.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.api.repository.ISessionRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IPropertyService;
@@ -17,13 +19,11 @@ import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.SignatureUtil;
 import ru.stepanenko.tm.util.DataValidator;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.Date;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Service
 public class SessionService implements ISessionService {
 
     @NotNull
@@ -35,7 +35,7 @@ public class SessionService implements ISessionService {
     @NotNull
     final ISessionRepository sessionRepository;
 
-    @Inject
+    @Autowired
     public SessionService(
             @NotNull final IPropertyService propertyService,
             @NotNull final ISessionRepository sessionRepository,
@@ -52,7 +52,7 @@ public class SessionService implements ISessionService {
         @Nullable final Collection<Session> sessions = sessionRepository
                 .findAll();
         if (sessions == null) throw new DataValidateException("Sessions not found!");
-        sessions.forEach(sessionRepository::remove);
+        sessions.forEach(sessionRepository::delete);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SessionService implements ISessionService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Session session = sessionRepository
-                .findBy(id);
+                .findById(id).get();
         if (session == null) throw new DataValidateException("Session not found!");
         return session.getDTO();
     }
@@ -74,10 +74,10 @@ public class SessionService implements ISessionService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Session session = sessionRepository
-                .findBy(id);
+                .findById(id).get();
         if (session == null) throw new DataValidateException("Session not found!");
         sessionRepository
-                .remove(session);
+                .delete(session);
     }
 
     @Override
@@ -135,7 +135,7 @@ public class SessionService implements ISessionService {
     private User getUser(
             @NotNull final String userId
     ) throws DataValidateException {
-        @Nullable final User user = userRepository.findBy(userId);
+        @Nullable final User user = userRepository.findById(userId).get();
         if (user == null) throw new DataValidateException("User not found!");
         return user;
     }

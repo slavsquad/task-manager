@@ -1,6 +1,8 @@
 package ru.stepanenko.tm.util;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
@@ -11,8 +13,7 @@ import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 
-import javax.inject.Inject;
-
+@Component
 public class DataGenerator {
 
     @NotNull
@@ -27,7 +28,7 @@ public class DataGenerator {
     @NotNull
     private final ISessionService sessionService;
 
-    @Inject
+    @Autowired
     public DataGenerator(
             @NotNull final IProjectService projectService,
             @NotNull final ITaskService taskService,

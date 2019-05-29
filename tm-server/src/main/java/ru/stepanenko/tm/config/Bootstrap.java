@@ -1,47 +1,44 @@
 package ru.stepanenko.tm.config;
 
-import com.hazelcast.core.Hazelcast;
-import com.hazelcast.core.HazelcastInstance;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Component;
 import ru.stepanenko.tm.api.endpoint.*;
 import ru.stepanenko.tm.api.service.IPropertyService;
-import ru.stepanenko.tm.service.PropertyService;
 import ru.stepanenko.tm.util.DataGenerator;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import javax.xml.ws.Endpoint;
 
-@ApplicationScoped
+@Component
 @NoArgsConstructor
 public class Bootstrap {
 
-    @Inject
+    @Autowired
     @NotNull
     private IProjectEndpoint projectEndpoint;
 
-    @Inject
+    @Autowired
     @NotNull
     private ITaskEndpoint taskEndpoint;
 
-    @Inject
+    @Autowired
     @NotNull
     private IUserEndpoint userEndpoint;
 
-    @Inject
+    @Autowired
     @NotNull
     private ISessionEndpoint sessionEndpoint;
 
-    @Inject
+    @Autowired
     @NotNull
     private IServerEndpoint serverEndpoint;
 
-    @Inject
+    @Autowired
     @NotNull
     private DataGenerator dataGenerator;
 
-    @Inject
+    @Autowired
     @NotNull
     private IPropertyService propertyService;
 

@@ -54,7 +54,8 @@ public class ProjectService implements IProjectService {
             @Nullable final ProjectDTO projectDTO
     ) throws DataValidateException {
         DataValidator.validateProjectDTO(projectDTO);
-        @Nullable final Project project = projectRepository.fin(projectDTO.getId());
+        @Nullable final Project project = projectRepository
+                .findById(projectDTO.getId()).get();
         if (project == null) throw new DataValidateException("Project not found!");
         project.setName(projectDTO.getName());
         project.setDescription(projectDTO.getDescription());
@@ -73,7 +74,7 @@ public class ProjectService implements IProjectService {
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @Nullable final Project project = projectRepository
-                .findAnyByIdAndUser(id, getUser(userId));
+                .findByIdAndUser(id, getUser(userId));
         if (project == null) throw new DataValidateException("Project not found!");
         return project.getDTO();
     }
@@ -86,10 +87,10 @@ public class ProjectService implements IProjectService {
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @Nullable final Project project = projectRepository
-                .findAnyByIdAndUser(id, getUser(userId));
+                .findByIdAndUser(id, getUser(userId));
         if (project == null) throw new DataValidateException("Project not found!");
         projectRepository
-                .remove(project);
+                .delete(project);
     }
 
     @Override
@@ -98,7 +99,7 @@ public class ProjectService implements IProjectService {
     ) throws DataValidateException {
         @Nullable final Collection<Project> projects = projectRepository.findAll();
         if (projects == null) throw new DataValidateException("Projects not found!");
-        projects.forEach(projectRepository::remove);
+        projects.forEach(projectRepository::delete);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class ProjectService implements IProjectService {
             @Nullable final String id
     ) throws DataValidateException {
         @Nullable final Project project = projectRepository
-                .findBy(id);
+                .findById(id).get();
         if (project == null) throw new DataValidateException("Project not found!");
         return project.getDTO();
     }
@@ -119,10 +120,10 @@ public class ProjectService implements IProjectService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Project project = projectRepository
-                .findBy(id);
+                .findById(id).get();
         if (project == null) throw new DataValidateException("Project not found!");
         projectRepository
-                .remove(project);
+                .delete(project);
     }
 
     @Override
@@ -145,7 +146,7 @@ public class ProjectService implements IProjectService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Collection<Project> projects = projectRepository
-                .findByUser(getUser(id));
+                .findAllByUser(getUser(id));
         if (projects == null) throw new DataValidateException("Projects not found!");
         return projects
                 .stream()
@@ -161,9 +162,9 @@ public class ProjectService implements IProjectService {
         DataValidator.validateString(id);
         @NotNull final User user = getUser(id);
         @Nullable final Collection<Project> projects = projectRepository
-                .findByUser(user);
+                .findAllByUser(user);
         if (projects == null) throw new DataValidateException("Projects not found!");
-        projects.forEach(projectRepository::remove);
+        projects.forEach(projectRepository::delete);
     }
 
     @Override
@@ -178,7 +179,7 @@ public class ProjectService implements IProjectService {
         switch (parameter) {
             case "order":
                 projects = projectRepository
-                        .findByUser(getUser(id));
+                        .findAllByUser(getUser(id));
                 break;
             case "status":
                 projects = projectRepository
@@ -235,7 +236,7 @@ public class ProjectService implements IProjectService {
     private User getUser(
             @NotNull final String userId
     ) throws DataValidateException {
-        @Nullable final User user = userRepository.findBy(userId);
+        @Nullable final User user = userRepository.findById(userId).get();
         if (user == null) throw new DataValidateException("User not found!");
         return user;
     }

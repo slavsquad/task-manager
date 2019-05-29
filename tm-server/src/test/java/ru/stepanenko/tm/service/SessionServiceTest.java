@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.service;
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.junit.After;
@@ -9,31 +8,28 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
-import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.SessionDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.util.DataGenerator;
 
-import javax.inject.Inject;
-
-import java.util.ArrayList;
-
 import static org.junit.Assert.*;
 
-@RunWith(CdiTestRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class SessionServiceTest {
 
-    @Inject
+    @Autowired
     ISessionService sessionService;
 
-    @Inject
+    @Autowired
     IUserService userService;
 
-    @Inject
+    @Autowired
     DataGenerator dataGenerator;
 
     @Before

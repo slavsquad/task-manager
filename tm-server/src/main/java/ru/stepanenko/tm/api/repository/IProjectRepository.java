@@ -15,7 +15,7 @@ public interface IProjectRepository extends JpaRepository<Project, String> {
     Collection<Project> findAllByUser(
             @NotNull final User user);
 
-    Project findAnyByIdAndUser(
+    Project findByIdAndUser(
             @NotNull final String id,
             @NotNull final User user);
 

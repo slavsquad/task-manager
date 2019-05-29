@@ -1,15 +1,15 @@
 package ru.stepanenko.tm.api.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.Collection;
 
-@ApplicationScoped
+@Service
 public interface IUserService {
 
     @Transactional

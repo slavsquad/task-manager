@@ -13,7 +13,7 @@ import java.util.Collection;
 @Repository
 public interface ITaskRepository extends JpaRepository<Task, String> {
 
-    Collection<Task> findByUser(
+    Collection<Task> findAllByUser(
             @NotNull final User user);
 
     Collection<Task> findByProjectAndUser(
@@ -21,7 +21,7 @@ public interface ITaskRepository extends JpaRepository<Task, String> {
             @NotNull final User user);
 
 
-    Task findAnyByIdAndUser(
+    Task findByIdAndUser(
             @NotNull final String id,
             @NotNull final User user);
 

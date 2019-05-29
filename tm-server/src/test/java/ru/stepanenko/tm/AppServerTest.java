@@ -1,32 +1,33 @@
 package ru.stepanenko.tm;
 
 
-import org.apache.deltaspike.testcontrol.api.junit.CdiTestRunner;
+
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.DataGenerator;
 
-import javax.inject.Inject;
 
 /**
  * Unit test for simple AppServer.
  */
 
-@RunWith(CdiTestRunner.class)
+@RunWith(SpringJUnit4ClassRunner.class)
 public class AppServerTest {
     /**
      * Rigorous Test :-)
      */
 
-    @Inject
+    @Autowired
     private IUserService userService;
 
-    @Inject
+    @Autowired
     private DataGenerator dataGenerator;
 
     @Before

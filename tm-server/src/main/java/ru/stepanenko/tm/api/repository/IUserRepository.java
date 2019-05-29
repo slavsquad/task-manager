@@ -8,6 +8,6 @@ import ru.stepanenko.tm.model.entity.User;
 @Repository
 public interface IUserRepository extends JpaRepository<User, String> {
 
-    User findAnyByLogin(
+    User findByLogin(
             @NotNull final String login);
 }

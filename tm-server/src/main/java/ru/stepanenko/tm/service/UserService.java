@@ -1,8 +1,10 @@
 package ru.stepanenko.tm.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.model.dto.UserDTO;
@@ -11,18 +13,16 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.DataValidator;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Service
 public class UserService implements IUserService {
 
     @NotNull
     private final IUserRepository userRepository;
 
-    @Inject
+    @Autowired
     public UserService(
             @NotNull final IUserRepository userRepository) {
         this.userRepository = userRepository;
@@ -46,7 +46,7 @@ public class UserService implements IUserService {
     ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
         @Nullable final User user = userRepository
-                .findBy(userDTO.getId());
+                .findById(userDTO.getId()).get();
         if (user == null) throw new DataValidateException("User not found");
         user.setName(userDTO.getName());
         user.setDescription(userDTO.getDescription());
@@ -64,7 +64,7 @@ public class UserService implements IUserService {
     ) throws DataValidateException {
         DataValidator.validateString(login);
         @Nullable final User user = userRepository
-                .findAnyByLogin(login);
+                .findByLogin(login);
         if (user == null) throw new DataValidateException("User not found");
         return user.getDTO();
     }
@@ -75,7 +75,8 @@ public class UserService implements IUserService {
             @Nullable final String id
     ) throws DataValidateException {
         DataValidator.validateString(id);
-        @Nullable final User user = userRepository.findBy(id);
+        @Nullable final User user = userRepository
+                .findById(id).get();
         if (user == null) throw new DataValidateException("User not found!");
         return user.getDTO();
     }
@@ -87,10 +88,10 @@ public class UserService implements IUserService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable User user = userRepository
-                .findBy(id);
+                .findById(id).get();
         if (user == null) throw new DataValidateException("User not found!");
         userRepository
-                .remove(user);
+                .delete(user);
     }
 
     @Transactional
@@ -99,7 +100,7 @@ public class UserService implements IUserService {
         @Nullable final Collection<User> users = userRepository
                 .findAll();
         if (users == null) throw new DataValidateException("Users not found!");
-        users.forEach(userRepository::remove);
+        users.forEach(userRepository::delete);
     }
 
     @Override
@@ -123,7 +124,7 @@ public class UserService implements IUserService {
     ) throws AuthenticationSecurityException, DataValidateException {
         DataValidator.validateString(login, password);
         @Nullable final User user = userRepository
-                .findAnyByLogin(login);
+                .findByLogin(login);
         if (user == null) throw new AuthenticationSecurityException("Wrong user name!");
         if (!user.getPassword().equals(password)) throw new AuthenticationSecurityException("Wrong password!");
         return user.getDTO();
