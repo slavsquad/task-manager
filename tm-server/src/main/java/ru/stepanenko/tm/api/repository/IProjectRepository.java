@@ -1,25 +1,25 @@
 package ru.stepanenko.tm.api.repository;
 
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Query;
-import org.apache.deltaspike.data.api.Repository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
 
 @Repository
-public interface IProjectRepository extends EntityRepository<Project, String> {
+public interface IProjectRepository extends JpaRepository<Project, String> {
 
-    Collection<Project> findByUser(
+    Collection<Project> findAllByUser(
             @NotNull final User user);
 
     Project findAnyByIdAndUser(
             @NotNull final String id,
             @NotNull final User user);
 
-    @Query(value = "SELECT e FROM Project e WHERE e.user = ?1 ORDER BY e.status DESC")
+    @Query("SELECT e FROM Project e WHERE e.user = ?1 ORDER BY e.status DESC")
     Collection<Project> sortByStatus(
             @NotNull final User user);
 

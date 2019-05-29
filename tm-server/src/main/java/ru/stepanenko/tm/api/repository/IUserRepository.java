@@ -1,14 +1,12 @@
 package ru.stepanenko.tm.api.repository;
 
-import org.apache.deltaspike.data.api.EntityRepository;
-import org.apache.deltaspike.data.api.Repository;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.User;
 
-import java.util.Collection;
-
 @Repository
-public interface IUserRepository extends EntityRepository<User, String> {
+public interface IUserRepository extends JpaRepository<User, String> {
 
     User findAnyByLogin(
             @NotNull final String login);

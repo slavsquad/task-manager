@@ -1,8 +1,10 @@
 package ru.stepanenko.tm.service;
 
-import org.apache.deltaspike.jpa.api.transaction.Transactional;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IProjectService;
@@ -11,13 +13,10 @@ import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.DataValidator;
-
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Inject;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
-@ApplicationScoped
+@Service
 public class ProjectService implements IProjectService {
 
     @NotNull
@@ -26,7 +25,7 @@ public class ProjectService implements IProjectService {
     @NotNull
     final IUserRepository userRepository;
 
-    @Inject
+    @Autowired
     public ProjectService(
             @NotNull final IProjectRepository projectRepository,
             @NotNull final IUserRepository userRepository) {
@@ -55,7 +54,7 @@ public class ProjectService implements IProjectService {
             @Nullable final ProjectDTO projectDTO
     ) throws DataValidateException {
         DataValidator.validateProjectDTO(projectDTO);
-        @Nullable final Project project = projectRepository.findBy(projectDTO.getId());
+        @Nullable final Project project = projectRepository.fin(projectDTO.getId());
         if (project == null) throw new DataValidateException("Project not found!");
         project.setName(projectDTO.getName());
         project.setDescription(projectDTO.getDescription());
