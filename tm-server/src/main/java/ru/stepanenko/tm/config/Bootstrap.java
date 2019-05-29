@@ -45,7 +45,6 @@ public class Bootstrap {
     @NotNull
     private IPropertyService propertyService;
 
-
     public void init() {
         dataGenerator.generateUsers();
         dataGenerator.generateData();
@@ -57,7 +56,6 @@ public class Bootstrap {
 
         @NotNull final String URL = propertyService.getServerHost();
         @NotNull final String PORT = propertyService.getServerPort();
-        System.out.println(System.getProperty("port")+"asdffffffffffffffffffffffffffffffffffffffffffffff");
 
         String wsdl = URL + ":" + PORT +"/"+ projectEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, projectEndpoint);

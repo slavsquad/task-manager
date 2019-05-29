@@ -129,27 +129,27 @@
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8080/ProjectEndpoint?wsdl
+                                        http://127.0.0.1:80/ProjectEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8080/SessionEndpoint?wsdl
+                                        http://127.0.0.1:80/SessionEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8080/TaskEndpoint?wsdl
+                                        http://127.0.0.1:80/TaskEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8080/UserEndpoint?wsdl
+                                        http://127.0.0.1:80/UserEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                                 <wsdlOption>
                                     <wsdl>
-                                        http://localhost:8080/ServerEndpoint?wsdl
+                                        http://127.0.0.1:80/ServerEndpoint?wsdl
                                     </wsdl>
                                 </wsdlOption>
                             </wsdlOptions>
