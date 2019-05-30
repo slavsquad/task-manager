@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for userDTO complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="userDTO"&gt;
  *   &lt;complexContent&gt;
@@ -25,18 +25,15 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "userDTO", propOrder = {
-    "login",
-    "password",
-    "role"
+        "login",
+        "password",
+        "role"
 })
 public class UserDTO
-    extends AbstractEntityDTO
-{
+        extends AbstractEntityDTO {
 
     protected String login;
     protected String password;
@@ -45,11 +42,9 @@ public class UserDTO
 
     /**
      * Gets the value of the login property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLogin() {
         return login;
@@ -57,11 +52,9 @@ public class UserDTO
 
     /**
      * Sets the value of the login property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLogin(String value) {
         this.login = value;
@@ -69,11 +62,9 @@ public class UserDTO
 
     /**
      * Gets the value of the password property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getPassword() {
         return password;
@@ -81,11 +72,9 @@ public class UserDTO
 
     /**
      * Sets the value of the password property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setPassword(String value) {
         this.password = value;
@@ -93,11 +82,9 @@ public class UserDTO
 
     /**
      * Gets the value of the role property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Role }
-     *     
+     *
+     * @return possible object is
+     * {@link Role }
      */
     public Role getRole() {
         return role;
@@ -105,11 +92,9 @@ public class UserDTO
 
     /**
      * Sets the value of the role property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Role }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Role }
      */
     public void setRole(Role value) {
         this.role = value;

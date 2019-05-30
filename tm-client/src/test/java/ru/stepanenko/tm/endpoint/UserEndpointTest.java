@@ -7,9 +7,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.IntegrationTest;
-import ru.stepanenko.tm.api.service.IEndpointProducerService;
-import ru.stepanenko.tm.service.EndpointProducerService;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.util.HashUtil;
 
 import java.util.UUID;
@@ -17,11 +20,16 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @Category(IntegrationTest.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class UserEndpointTest {
+
     @NotNull
+    @Autowired
     private UserEndpoint userEndpoint;
 
     @NotNull
+    @Autowired
     private SessionEndpoint sessionEndpoint;
 
     @NotNull
@@ -30,9 +38,6 @@ public class UserEndpointTest {
     @Before
     public void setUp(
     ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
-        @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
-        userEndpoint = endpointService.getUserEndpoint();
-        sessionEndpoint = endpointService.getSessionEndpoint();
         currentSession = sessionEndpoint.openSession("testAdmin", HashUtil.md5("testAdmin"));
     }
 

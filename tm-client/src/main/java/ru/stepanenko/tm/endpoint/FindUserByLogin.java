@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for findUserByLogin complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="findUserByLogin"&gt;
  *   &lt;complexContent&gt;
@@ -23,13 +23,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "findUserByLogin", propOrder = {
-    "session",
-    "login"
+        "session",
+        "login"
 })
 public class FindUserByLogin {
 
@@ -38,11 +36,9 @@ public class FindUserByLogin {
 
     /**
      * Gets the value of the session property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SessionDTO }
-     *     
+     *
+     * @return possible object is
+     * {@link SessionDTO }
      */
     public SessionDTO getSession() {
         return session;
@@ -50,11 +46,9 @@ public class FindUserByLogin {
 
     /**
      * Sets the value of the session property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SessionDTO }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link SessionDTO }
      */
     public void setSession(SessionDTO value) {
         this.session = value;
@@ -62,11 +56,9 @@ public class FindUserByLogin {
 
     /**
      * Gets the value of the login property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getLogin() {
         return login;
@@ -74,11 +66,9 @@ public class FindUserByLogin {
 
     /**
      * Sets the value of the login property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setLogin(String value) {
         this.login = value;

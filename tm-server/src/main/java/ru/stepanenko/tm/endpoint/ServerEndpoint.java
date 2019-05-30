@@ -13,7 +13,8 @@ import javax.jws.WebService;
 @WebService
 public class ServerEndpoint implements IServerEndpoint {
 
-    @NotNull private final IPropertyService propertyService;
+    @NotNull
+    private final IPropertyService propertyService;
 
     @Autowired
     public ServerEndpoint(@NotNull final IPropertyService propertyService) {

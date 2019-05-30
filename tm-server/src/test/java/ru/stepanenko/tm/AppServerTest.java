@@ -1,15 +1,16 @@
 package ru.stepanenko.tm;
 
 
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.DataGenerator;
 
@@ -19,6 +20,7 @@ import ru.stepanenko.tm.util.DataGenerator;
  */
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class AppServerTest {
     /**
      * Rigorous Test :-)

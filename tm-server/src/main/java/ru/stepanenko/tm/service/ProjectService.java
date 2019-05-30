@@ -13,6 +13,7 @@ import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.DataValidator;
+
 import java.util.Collection;
 import java.util.stream.Collectors;
 

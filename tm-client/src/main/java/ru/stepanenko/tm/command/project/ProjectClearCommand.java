@@ -3,25 +3,26 @@ package ru.stepanenko.tm.command.project;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.stepanenko.tm.api.service.ISessionService;
-import ru.stepanenko.tm.command.ICommand;
+import ru.stepanenko.tm.api.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
 
-import javax.inject.Inject;
-
+@Component
 @NoArgsConstructor
 public final class ProjectClearCommand implements ICommand {
 
-    @Inject
     @NotNull
+    @Autowired
     ProjectEndpoint projectEndpoint;
 
-    @Inject
     @NotNull
+    @Autowired
     SessionEndpoint sessionEndpoint;
 
-    @Inject
     @NotNull
+    @Autowired
     ISessionService sessionService;
 
     @Override

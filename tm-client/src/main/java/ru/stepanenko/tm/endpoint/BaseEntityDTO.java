@@ -11,9 +11,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for baseEntityDTO complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="baseEntityDTO"&gt;
  *   &lt;complexContent&gt;
@@ -28,22 +28,19 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "baseEntityDTO", propOrder = {
-    "dateBegin",
-    "dateEnd",
-    "status",
-    "userId"
+        "dateBegin",
+        "dateEnd",
+        "status",
+        "userId"
 })
 @XmlSeeAlso({
-    TaskDTO.class
+        TaskDTO.class
 })
 public class BaseEntityDTO
-    extends AbstractEntityDTO
-{
+        extends AbstractEntityDTO {
 
     @XmlSchemaType(name = "dateTime")
     protected XMLGregorianCalendar dateBegin;
@@ -55,11 +52,9 @@ public class BaseEntityDTO
 
     /**
      * Gets the value of the dateBegin property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getDateBegin() {
         return dateBegin;
@@ -67,11 +62,9 @@ public class BaseEntityDTO
 
     /**
      * Sets the value of the dateBegin property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setDateBegin(XMLGregorianCalendar value) {
         this.dateBegin = value;
@@ -79,11 +72,9 @@ public class BaseEntityDTO
 
     /**
      * Gets the value of the dateEnd property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getDateEnd() {
         return dateEnd;
@@ -91,11 +82,9 @@ public class BaseEntityDTO
 
     /**
      * Sets the value of the dateEnd property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setDateEnd(XMLGregorianCalendar value) {
         this.dateEnd = value;
@@ -103,11 +92,9 @@ public class BaseEntityDTO
 
     /**
      * Gets the value of the status property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link Status }
-     *     
+     *
+     * @return possible object is
+     * {@link Status }
      */
     public Status getStatus() {
         return status;
@@ -115,11 +102,9 @@ public class BaseEntityDTO
 
     /**
      * Sets the value of the status property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link Status }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link Status }
      */
     public void setStatus(Status value) {
         this.status = value;
@@ -127,11 +112,9 @@ public class BaseEntityDTO
 
     /**
      * Gets the value of the userId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getUserId() {
         return userId;
@@ -139,11 +122,9 @@ public class BaseEntityDTO
 
     /**
      * Sets the value of the userId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setUserId(String value) {
         this.userId = value;

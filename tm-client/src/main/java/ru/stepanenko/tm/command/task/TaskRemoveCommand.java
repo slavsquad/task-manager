@@ -3,30 +3,29 @@ package ru.stepanenko.tm.command.task;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.ICommand;
+import ru.stepanenko.tm.api.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
-
-import javax.inject.Inject;
 
 @NoArgsConstructor
 public final class TaskRemoveCommand implements ICommand {
 
-    @Inject
     @NotNull
+    @Autowired
     TaskEndpoint taskEndpoint;
 
-    @Inject
     @NotNull
+    @Autowired
     SessionEndpoint sessionEndpoint;
 
-    @Inject
     @NotNull
+    @Autowired
     ISessionService sessionService;
 
-    @Inject
     @NotNull
+    @Autowired
     ITerminalService terminalService;
 
     @Override

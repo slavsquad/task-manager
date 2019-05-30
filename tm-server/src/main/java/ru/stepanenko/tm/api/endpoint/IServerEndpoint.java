@@ -11,6 +11,7 @@ public interface IServerEndpoint {
 
     @WebMethod
     String getInfoHost();
+
     @WebMethod
     String getInfoPort();
 }

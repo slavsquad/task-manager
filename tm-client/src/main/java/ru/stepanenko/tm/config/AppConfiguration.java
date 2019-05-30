@@ -1,44 +1,39 @@
-package ru.stepanenko.tm.service;
+package ru.stepanenko.tm.config;
+
 
 import lombok.NoArgsConstructor;
-import ru.stepanenko.tm.api.service.IEndpointProducerService;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import ru.stepanenko.tm.endpoint.*;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-
-@ApplicationScoped
+@Configuration
 @NoArgsConstructor
-public class EndpointProducerService implements IEndpointProducerService {
+@ComponentScan("ru.stepanenko.tm")
+public class AppConfiguration {
 
-    @Override
-    @Produces
+    @Bean
     public ProjectEndpoint getProjectEndpoint() {
         return new ProjectEndpointService().getProjectEndpointPort();
     }
 
-    @Override
-    @Produces
+    @Bean
     public TaskEndpoint getTaskEndpoint() {
         return new TaskEndpointService().getTaskEndpointPort();
     }
 
-    @Override
-    @Produces
+    @Bean
     public SessionEndpoint getSessionEndpoint() {
         return new SessionEndpointService().getSessionEndpointPort();
     }
 
-    @Override
-    @Produces
+    @Bean
     public UserEndpoint getUserEndpoint() {
         return new UserEndpointService().getUserEndpointPort();
     }
 
-    @Override
-    @Produces
+    @Bean
     public ServerEndpoint getServerEndpoint() {
         return new ServerEndpointService().getServerEndpointPort();
     }
-
 }

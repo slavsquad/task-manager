@@ -8,8 +8,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.SessionDTO;
@@ -19,6 +21,7 @@ import ru.stepanenko.tm.util.HashUtil;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class SessionEndpointTest {
 
     @Autowired
@@ -28,7 +31,7 @@ public class SessionEndpointTest {
     private DataGenerator dataGenerator;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         dataGenerator.generate();
     }
 

@@ -2,18 +2,16 @@ package ru.stepanenko.tm.service;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.endpoint.*;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Singleton;
-
-@ApplicationScoped
+@Service
 @NoArgsConstructor
 public class SessionService implements ISessionService {
+
     @Nullable
     private SessionDTO sessionDTO;
-
 
     @Override
     public SessionDTO getCurrentSession() {

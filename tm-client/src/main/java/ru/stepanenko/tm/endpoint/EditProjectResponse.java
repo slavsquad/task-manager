@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for editProjectResponse complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="editProjectResponse"&gt;
  *   &lt;complexContent&gt;
@@ -21,8 +21,6 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "editProjectResponse")

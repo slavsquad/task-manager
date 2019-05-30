@@ -8,9 +8,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.endpoint.ISessionEndpoint;
 import ru.stepanenko.tm.api.endpoint.IUserEndpoint;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
@@ -24,6 +26,7 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class UserEndpointTest {
 
     @Autowired

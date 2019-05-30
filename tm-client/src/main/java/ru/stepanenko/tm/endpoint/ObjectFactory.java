@@ -8,18 +8,17 @@ import javax.xml.namespace.QName;
 
 
 /**
- * This object contains factory methods for each 
- * Java content interface and Java element interface 
- * generated in the ru.stepanenko.tm.endpoint package. 
- * <p>An ObjectFactory allows you to programatically 
- * construct new instances of the Java representation 
- * for XML content. The Java representation of XML 
- * content can consist of schema derived interfaces 
- * and classes representing the binding of schema 
- * type definitions, element declarations and model 
- * groups.  Factory methods for each of these are 
+ * This object contains factory methods for each
+ * Java content interface and Java element interface
+ * generated in the ru.stepanenko.tm.endpoint package.
+ * <p>An ObjectFactory allows you to programatically
+ * construct new instances of the Java representation
+ * for XML content. The Java representation of XML
+ * content can consist of schema derived interfaces
+ * and classes representing the binding of schema
+ * type definitions, element declarations and model
+ * groups.  Factory methods for each of these are
  * provided in this class.
- * 
  */
 @XmlRegistry
 public class ObjectFactory {
@@ -31,14 +30,12 @@ public class ObjectFactory {
 
     /**
      * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: ru.stepanenko.tm.endpoint
-     * 
      */
     public ObjectFactory() {
     }
 
     /**
      * Create an instance of {@link GetInfoHost }
-     * 
      */
     public GetInfoHost createGetInfoHost() {
         return new GetInfoHost();
@@ -46,7 +43,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetInfoHostResponse }
-     * 
      */
     public GetInfoHostResponse createGetInfoHostResponse() {
         return new GetInfoHostResponse();
@@ -54,7 +50,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetInfoPort }
-     * 
      */
     public GetInfoPort createGetInfoPort() {
         return new GetInfoPort();
@@ -62,7 +57,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link GetInfoPortResponse }
-     * 
      */
     public GetInfoPortResponse createGetInfoPortResponse() {
         return new GetInfoPortResponse();
@@ -70,7 +64,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetInfoHost }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "getInfoHost")
     public JAXBElement<GetInfoHost> createGetInfoHost(GetInfoHost value) {
@@ -79,7 +72,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetInfoHostResponse }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "getInfoHostResponse")
     public JAXBElement<GetInfoHostResponse> createGetInfoHostResponse(GetInfoHostResponse value) {
@@ -88,7 +80,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetInfoPort }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "getInfoPort")
     public JAXBElement<GetInfoPort> createGetInfoPort(GetInfoPort value) {
@@ -97,7 +88,6 @@ public class ObjectFactory {
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link GetInfoPortResponse }{@code >}}
-     * 
      */
     @XmlElementDecl(namespace = "http://endpoint.tm.stepanenko.ru/", name = "getInfoPortResponse")
     public JAXBElement<GetInfoPortResponse> createGetInfoPortResponse(GetInfoPortResponse value) {

@@ -3,26 +3,29 @@ package ru.stepanenko.tm.config;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.stereotype.Component;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.ICommand;
+import ru.stepanenko.tm.api.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Instance;
-import javax.enterprise.inject.spi.CDI;
-import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 
-@ApplicationScoped
+@Component
 @NoArgsConstructor
 public class Bootstrap {
 
     @NotNull
+    @Autowired
+    private ApplicationContext applicationContext;
+
+    @NotNull
     Map<String, ICommand> commandsMap = new HashMap<>();
 
-    @Inject
     @NotNull
+    @Autowired
     ITerminalService terminalService;
 
     public void init() {
@@ -53,8 +56,8 @@ public class Bootstrap {
     }
 
     private void initCommands() {
-        final Instance<ICommand> commands = CDI.current().select(ICommand.class);
-        for (final ICommand iCommand : commands) {
+        Map<String, ICommand> commands = applicationContext.getBeansOfType(ICommand.class);
+        for (final ICommand iCommand : commands.values()) {
             commandsMap.put(iCommand.getName(), iCommand);
         }
     }

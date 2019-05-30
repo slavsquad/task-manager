@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.exception.DataValidateException;
+
 import java.util.Collection;
 
 @Service

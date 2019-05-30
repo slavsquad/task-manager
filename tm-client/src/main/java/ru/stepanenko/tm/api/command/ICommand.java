@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.command;
+package ru.stepanenko.tm.api.command;
 
 import ru.stepanenko.tm.endpoint.AuthenticationSecurityException_Exception;
 import ru.stepanenko.tm.endpoint.DataValidateException_Exception;

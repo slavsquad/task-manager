@@ -3,27 +3,28 @@ package ru.stepanenko.tm.command.user;
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITerminalService;
-import ru.stepanenko.tm.command.ICommand;
+import ru.stepanenko.tm.api.command.ICommand;
 import ru.stepanenko.tm.endpoint.*;
 import ru.stepanenko.tm.util.HashUtil;
 
-import javax.inject.Inject;
-
+@Component
 @NoArgsConstructor
 public final class UserLoginCommand implements ICommand {
 
-    @Inject
     @NotNull
+    @Autowired
     SessionEndpoint sessionEndpoint;
 
-    @Inject
     @NotNull
+    @Autowired
     ISessionService sessionService;
 
-    @Inject
     @NotNull
+    @Autowired
     ITerminalService terminalService;
 
     @Override

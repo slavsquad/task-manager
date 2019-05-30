@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import ru.stepanenko.tm.api.endpoint.*;
 import ru.stepanenko.tm.api.service.IPropertyService;
 import ru.stepanenko.tm.util.DataGenerator;
+
 import javax.xml.ws.Endpoint;
 
 @Component
@@ -46,7 +47,6 @@ public class Bootstrap {
         dataGenerator.generateUsers();
         dataGenerator.generateData();
         registryEndpoint();
-        //HazelcastInstance hz = Hazelcast.newHazelcastInstance();
     }
 
     private void registryEndpoint() {
@@ -54,23 +54,23 @@ public class Bootstrap {
         @NotNull final String URL = propertyService.getServerHost();
         @NotNull final String PORT = propertyService.getServerPort();
 
-        String wsdl = URL + ":" + PORT +"/"+ projectEndpoint.getClass().getSimpleName() + "?wsdl";
+        String wsdl = URL + ":" + PORT + "/" + projectEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, projectEndpoint);
         System.out.println(wsdl);
 
-        wsdl = URL + ":" + PORT +"/"+ taskEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT + "/" + taskEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, taskEndpoint);
         System.out.println(wsdl);
 
-        wsdl = URL + ":" + PORT +"/"+ userEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT + "/" + userEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, userEndpoint);
         System.out.println(wsdl);
 
-        wsdl = URL + ":" + PORT +"/"+ sessionEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT + "/" + sessionEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, sessionEndpoint);
         System.out.println(wsdl);
 
-        wsdl = URL + ":" + PORT +"/"+ serverEndpoint.getClass().getSimpleName() + "?wsdl";
+        wsdl = URL + ":" + PORT + "/" + serverEndpoint.getClass().getSimpleName() + "?wsdl";
         Endpoint.publish(wsdl, serverEndpoint);
         System.out.println(wsdl);
     }

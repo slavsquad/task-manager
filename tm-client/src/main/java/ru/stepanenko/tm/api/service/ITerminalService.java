@@ -1,8 +1,8 @@
 package ru.stepanenko.tm.api.service;
 
-import javax.enterprise.context.ApplicationScoped;
+import org.springframework.stereotype.Service;
 
-@ApplicationScoped
+@Service
 public interface ITerminalService {
 
     String nextLine();

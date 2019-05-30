@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for findAllTaskByProjectId complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="findAllTaskByProjectId"&gt;
  *   &lt;complexContent&gt;
@@ -23,13 +23,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "findAllTaskByProjectId", propOrder = {
-    "session",
-    "id"
+        "session",
+        "id"
 })
 public class FindAllTaskByProjectId {
 
@@ -38,11 +36,9 @@ public class FindAllTaskByProjectId {
 
     /**
      * Gets the value of the session property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SessionDTO }
-     *     
+     *
+     * @return possible object is
+     * {@link SessionDTO }
      */
     public SessionDTO getSession() {
         return session;
@@ -50,11 +46,9 @@ public class FindAllTaskByProjectId {
 
     /**
      * Sets the value of the session property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SessionDTO }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link SessionDTO }
      */
     public void setSession(SessionDTO value) {
         this.session = value;
@@ -62,11 +56,9 @@ public class FindAllTaskByProjectId {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id;
@@ -74,11 +66,9 @@ public class FindAllTaskByProjectId {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id = value;

@@ -1,8 +1,10 @@
 package ru.stepanenko.tm.command.common;
 
 import lombok.NoArgsConstructor;
-import ru.stepanenko.tm.command.ICommand;
+import org.springframework.stereotype.Component;
+import ru.stepanenko.tm.api.command.ICommand;
 
+@Component
 @NoArgsConstructor
 public final class HelpCommand implements ICommand {
 

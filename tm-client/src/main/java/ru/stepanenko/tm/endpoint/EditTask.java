@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for editTask complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="editTask"&gt;
  *   &lt;complexContent&gt;
@@ -23,13 +23,11 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "editTask", propOrder = {
-    "session",
-    "task"
+        "session",
+        "task"
 })
 public class EditTask {
 
@@ -38,11 +36,9 @@ public class EditTask {
 
     /**
      * Gets the value of the session property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link SessionDTO }
-     *     
+     *
+     * @return possible object is
+     * {@link SessionDTO }
      */
     public SessionDTO getSession() {
         return session;
@@ -50,11 +46,9 @@ public class EditTask {
 
     /**
      * Sets the value of the session property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link SessionDTO }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link SessionDTO }
      */
     public void setSession(SessionDTO value) {
         this.session = value;
@@ -62,11 +56,9 @@ public class EditTask {
 
     /**
      * Gets the value of the task property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link TaskDTO }
-     *     
+     *
+     * @return possible object is
+     * {@link TaskDTO }
      */
     public TaskDTO getTask() {
         return task;
@@ -74,11 +66,9 @@ public class EditTask {
 
     /**
      * Sets the value of the task property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link TaskDTO }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link TaskDTO }
      */
     public void setTask(TaskDTO value) {
         this.task = value;

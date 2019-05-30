@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for getUserBySessionResponse complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="getUserBySessionResponse"&gt;
  *   &lt;complexContent&gt;
@@ -23,12 +23,10 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getUserBySessionResponse", propOrder = {
-    "_return"
+        "_return"
 })
 public class GetUserBySessionResponse {
 
@@ -37,11 +35,9 @@ public class GetUserBySessionResponse {
 
     /**
      * Gets the value of the return property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link UserDTO }
-     *     
+     *
+     * @return possible object is
+     * {@link UserDTO }
      */
     public UserDTO getReturn() {
         return _return;
@@ -49,11 +45,9 @@ public class GetUserBySessionResponse {
 
     /**
      * Sets the value of the return property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link UserDTO }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link UserDTO }
      */
     public void setReturn(UserDTO value) {
         this._return = value;

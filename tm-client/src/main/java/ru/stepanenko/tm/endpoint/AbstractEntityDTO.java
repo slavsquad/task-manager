@@ -9,9 +9,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for abstractEntityDTO complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="abstractEntityDTO"&gt;
  *   &lt;complexContent&gt;
@@ -25,18 +25,16 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "abstractEntityDTO", propOrder = {
-    "description",
-    "id",
-    "name"
+        "description",
+        "id",
+        "name"
 })
 @XmlSeeAlso({
-    SessionDTO.class,
-    UserDTO.class
+        SessionDTO.class,
+        UserDTO.class
 })
 public abstract class AbstractEntityDTO {
 
@@ -46,11 +44,9 @@ public abstract class AbstractEntityDTO {
 
     /**
      * Gets the value of the description property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getDescription() {
         return description;
@@ -58,11 +54,9 @@ public abstract class AbstractEntityDTO {
 
     /**
      * Sets the value of the description property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setDescription(String value) {
         this.description = value;
@@ -70,11 +64,9 @@ public abstract class AbstractEntityDTO {
 
     /**
      * Gets the value of the id property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getId() {
         return id;
@@ -82,11 +74,9 @@ public abstract class AbstractEntityDTO {
 
     /**
      * Sets the value of the id property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setId(String value) {
         this.id = value;
@@ -94,11 +84,9 @@ public abstract class AbstractEntityDTO {
 
     /**
      * Gets the value of the name property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getName() {
         return name;
@@ -106,11 +94,9 @@ public abstract class AbstractEntityDTO {
 
     /**
      * Sets the value of the name property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setName(String value) {
         this.name = value;

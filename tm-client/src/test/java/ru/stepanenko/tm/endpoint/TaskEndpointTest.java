@@ -5,9 +5,12 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.IntegrationTest;
-import ru.stepanenko.tm.api.service.IEndpointProducerService;
-import ru.stepanenko.tm.service.EndpointProducerService;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.util.DateFormatter;
 import ru.stepanenko.tm.util.HashUtil;
 
@@ -21,15 +24,20 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 @Category(IntegrationTest.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class TaskEndpointTest {
 
     @NotNull
+    @Autowired
     private ProjectEndpoint projectEndpoint;
 
     @NotNull
+    @Autowired
     private TaskEndpoint taskEndpoint;
 
     @NotNull
+    @Autowired
     private SessionEndpoint sessionEndpoint;
 
     @NotNull
@@ -39,10 +47,6 @@ public class TaskEndpointTest {
     @Before
     public void setUp(
     ) throws DataValidateException_Exception, AuthenticationSecurityException_Exception {
-        @NotNull final IEndpointProducerService endpointService = new EndpointProducerService();
-        taskEndpoint = endpointService.getTaskEndpoint();
-        projectEndpoint = endpointService.getProjectEndpoint();
-        sessionEndpoint = endpointService.getSessionEndpoint();
         currentSession = sessionEndpoint.openSession("testAdmin", HashUtil.md5("testAdmin"));
     }
 

@@ -2,12 +2,12 @@ package ru.stepanenko.tm.service;
 
 import lombok.NoArgsConstructor;
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.api.service.ITerminalService;
 
-import javax.enterprise.context.ApplicationScoped;
 import java.util.Scanner;
 
-@ApplicationScoped
+@Service
 @NoArgsConstructor
 public class TerminalService implements ITerminalService {
 

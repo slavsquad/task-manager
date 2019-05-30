@@ -8,7 +8,7 @@ import ru.stepanenko.tm.config.Bootstrap;
 
 public class AppServer {
     public static void main(String[] args) {
-        final ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
+        @NotNull final ApplicationContext context = new AnnotationConfigApplicationContext(AppConfiguration.class);
         @NotNull final Bootstrap bootstrap = context.getBean(Bootstrap.class);
         bootstrap.init();
     }

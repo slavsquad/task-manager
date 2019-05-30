@@ -10,9 +10,9 @@ import javax.xml.datatype.XMLGregorianCalendar;
 
 /**
  * <p>Java class for sessionDTO complex type.
- * 
+ *
  * <p>The following schema fragment specifies the expected content contained within this class.
- * 
+ *
  * <pre>
  * &lt;complexType name="sessionDTO"&gt;
  *   &lt;complexContent&gt;
@@ -26,18 +26,15 @@ import javax.xml.datatype.XMLGregorianCalendar;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
- * 
- * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "sessionDTO", propOrder = {
-    "signature",
-    "timestamp",
-    "userId"
+        "signature",
+        "timestamp",
+        "userId"
 })
 public class SessionDTO
-    extends AbstractEntityDTO
-{
+        extends AbstractEntityDTO {
 
     protected String signature;
     @XmlSchemaType(name = "dateTime")
@@ -46,11 +43,9 @@ public class SessionDTO
 
     /**
      * Gets the value of the signature property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getSignature() {
         return signature;
@@ -58,11 +53,9 @@ public class SessionDTO
 
     /**
      * Sets the value of the signature property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setSignature(String value) {
         this.signature = value;
@@ -70,11 +63,9 @@ public class SessionDTO
 
     /**
      * Gets the value of the timestamp property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @return possible object is
+     * {@link XMLGregorianCalendar }
      */
     public XMLGregorianCalendar getTimestamp() {
         return timestamp;
@@ -82,11 +73,9 @@ public class SessionDTO
 
     /**
      * Sets the value of the timestamp property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link XMLGregorianCalendar }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link XMLGregorianCalendar }
      */
     public void setTimestamp(XMLGregorianCalendar value) {
         this.timestamp = value;
@@ -94,11 +83,9 @@ public class SessionDTO
 
     /**
      * Gets the value of the userId property.
-     * 
-     * @return
-     *     possible object is
-     *     {@link String }
-     *     
+     *
+     * @return possible object is
+     * {@link String }
      */
     public String getUserId() {
         return userId;
@@ -106,11 +93,9 @@ public class SessionDTO
 
     /**
      * Sets the value of the userId property.
-     * 
-     * @param value
-     *     allowed object is
-     *     {@link String }
-     *     
+     *
+     * @param value allowed object is
+     *              {@link String }
      */
     public void setUserId(String value) {
         this.userId = value;

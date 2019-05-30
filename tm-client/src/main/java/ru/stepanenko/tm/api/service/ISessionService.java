@@ -1,12 +1,10 @@
 package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.endpoint.*;
 
-import javax.enterprise.context.ApplicationScoped;
-import javax.inject.Singleton;
-
-@ApplicationScoped
+@Service
 public interface ISessionService {
 
     SessionDTO getCurrentSession();
