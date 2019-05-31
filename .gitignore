@@ -1,6 +1,0 @@
-*.out
-**/docs/
-**/release/
-*.idea
-*.iml
-data.*
