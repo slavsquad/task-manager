@@ -51,7 +51,10 @@
                     <outputDirectory>${basedir}/release/bin</outputDirectory>
                     <archive>
                         <manifest>
-                            <mainClass>ru.stepanenko.tm.AppServer</mainClass>
+                            <mainClass>ru.stepanenko.tm.AppClient</mainClass>
+                            <packageName>ru.stepanenko.tm</packageName>
+                            <addClasspath>true</addClasspath>
+                            <classpathPrefix>../lib/</classpathPrefix>
                             <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                         <manifestEntries>

@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for sortAllTaskByUserId complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="sortAllTaskByUserId"&gt;
  *   &lt;complexContent&gt;
@@ -23,11 +23,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "sortAllTaskByUserId", propOrder = {
-        "session",
-        "comparator"
+    "session",
+    "comparator"
 })
 public class SortAllTaskByUserId {
 
@@ -36,9 +38,11 @@ public class SortAllTaskByUserId {
 
     /**
      * Gets the value of the session property.
-     *
-     * @return possible object is
-     * {@link SessionDTO }
+     * 
+     * @return
+     *     possible object is
+     *     {@link SessionDTO }
+     *     
      */
     public SessionDTO getSession() {
         return session;
@@ -46,9 +50,11 @@ public class SortAllTaskByUserId {
 
     /**
      * Sets the value of the session property.
-     *
-     * @param value allowed object is
-     *              {@link SessionDTO }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SessionDTO }
+     *     
      */
     public void setSession(SessionDTO value) {
         this.session = value;
@@ -56,9 +62,11 @@ public class SortAllTaskByUserId {
 
     /**
      * Gets the value of the comparator property.
-     *
-     * @return possible object is
-     * {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getComparator() {
         return comparator;
@@ -66,9 +74,11 @@ public class SortAllTaskByUserId {
 
     /**
      * Sets the value of the comparator property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setComparator(String value) {
         this.comparator = value;

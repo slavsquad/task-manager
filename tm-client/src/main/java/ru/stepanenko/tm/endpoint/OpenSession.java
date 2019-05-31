@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for openSession complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="openSession"&gt;
  *   &lt;complexContent&gt;
@@ -23,11 +23,13 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "openSession", propOrder = {
-        "login",
-        "password"
+    "login",
+    "password"
 })
 public class OpenSession {
 
@@ -36,9 +38,11 @@ public class OpenSession {
 
     /**
      * Gets the value of the login property.
-     *
-     * @return possible object is
-     * {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getLogin() {
         return login;
@@ -46,9 +50,11 @@ public class OpenSession {
 
     /**
      * Sets the value of the login property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setLogin(String value) {
         this.login = value;
@@ -56,9 +62,11 @@ public class OpenSession {
 
     /**
      * Gets the value of the password property.
-     *
-     * @return possible object is
-     * {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getPassword() {
         return password;
@@ -66,9 +74,11 @@ public class OpenSession {
 
     /**
      * Sets the value of the password property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setPassword(String value) {
         this.password = value;

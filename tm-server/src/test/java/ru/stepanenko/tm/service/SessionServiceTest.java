@@ -9,9 +9,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.SessionDTO;
@@ -21,6 +23,7 @@ import ru.stepanenko.tm.util.DataGenerator;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class SessionServiceTest {
 
     @Autowired
@@ -53,9 +56,10 @@ public class SessionServiceTest {
         @NotNull final SessionDTO session = sessionService.create(user);
         @NotNull final String sessionId = session.getId();
         assertEquals(sessionId, sessionService.findOne(sessionId).getId());
+        @Nullable final int size = sessionService.findAll().size();
+        assertNotNull(size);
         sessionService.remove(sessionId);
-        thrown.expect(DataValidateException.class);
-        sessionService.findOne(sessionId);
+        assertEquals(size-1,sessionService.findAll().size());
     }
 
     @Test

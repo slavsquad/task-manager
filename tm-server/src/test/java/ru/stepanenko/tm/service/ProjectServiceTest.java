@@ -6,8 +6,10 @@ import org.junit.*;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.service.IProjectService;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class ProjectServiceTest {
 
     @Autowired
@@ -41,9 +44,6 @@ public class ProjectServiceTest {
         dataGenerator.cleanUp();
     }
 
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
     public void projectCRUD(
     ) throws DataValidateException {
@@ -61,9 +61,10 @@ public class ProjectServiceTest {
         projectService.edit(project);
         assertEquals("Change name", projectService.findOne(projectId, userId).getName());
         assertEquals("Change description", projectService.findOne(projectId, userId).getDescription());
+        @Nullable final int size = projectService.findAllByUserId(userId).size();
+        assertNotNull(size);
         projectService.remove(projectId, userId);
-        thrown.expect(DataValidateException.class);
-        projectService.findOne(projectId, userId);
+        assertEquals(size-1,projectService.findAllByUserId(userId).size());
     }
 
     @Test

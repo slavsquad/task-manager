@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for AuthenticationSecurityException complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="AuthenticationSecurityException"&gt;
  *   &lt;complexContent&gt;
@@ -22,10 +22,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "AuthenticationSecurityException", propOrder = {
-        "message"
+    "message"
 })
 public class AuthenticationSecurityException {
 
@@ -33,9 +35,11 @@ public class AuthenticationSecurityException {
 
     /**
      * Gets the value of the message property.
-     *
-     * @return possible object is
-     * {@link String }
+     * 
+     * @return
+     *     possible object is
+     *     {@link String }
+     *     
      */
     public String getMessage() {
         return message;
@@ -43,9 +47,11 @@ public class AuthenticationSecurityException {
 
     /**
      * Sets the value of the message property.
-     *
-     * @param value allowed object is
-     *              {@link String }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link String }
+     *     
      */
     public void setMessage(String value) {
         this.message = value;

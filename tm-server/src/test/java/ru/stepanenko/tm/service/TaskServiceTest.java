@@ -9,8 +9,10 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import ru.stepanenko.tm.api.service.ITaskService;
+import ru.stepanenko.tm.config.AppConfiguration;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.TaskDTO;
@@ -25,6 +27,7 @@ import java.util.stream.Collectors;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = AppConfiguration.class)
 public class TaskServiceTest {
 
     @Autowired
@@ -42,9 +45,6 @@ public class TaskServiceTest {
     public void tearDown() throws DataValidateException {
         dataGenerator.cleanUp();
     }
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     public void taskCRUD(
@@ -67,9 +67,10 @@ public class TaskServiceTest {
         taskService.edit(task);
         assertEquals("Change name", taskService.findOne(taskId, userId).getName());
         assertEquals("Change description", taskService.findOne(taskId, userId).getDescription());
+        @Nullable final int size = taskService.findAllByUserId(userId).size();
+        assertNotNull(size);
         taskService.remove(taskId, userId);
-        thrown.expect(DataValidateException.class);
-        taskService.findOne(taskId, userId);
+        assertEquals(size-1,taskService.findAllByUserId(userId).size());
     }
 
     @Test

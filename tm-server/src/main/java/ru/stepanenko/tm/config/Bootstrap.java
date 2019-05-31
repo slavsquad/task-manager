@@ -44,14 +44,13 @@ public class Bootstrap {
     private IPropertyService propertyService;
 
     public void init() {
-        dataGenerator.generateUsers();
-        dataGenerator.generateData();
+        dataGenerator.generate();
         registryEndpoint();
     }
 
     private void registryEndpoint() {
 
-        @NotNull final String URL = propertyService.getServerHost();
+        @NotNull final String URL = "http://"+propertyService.getServerHost();
         @NotNull final String PORT = propertyService.getServerPort();
 
         String wsdl = URL + ":" + PORT + "/" + projectEndpoint.getClass().getSimpleName() + "?wsdl";

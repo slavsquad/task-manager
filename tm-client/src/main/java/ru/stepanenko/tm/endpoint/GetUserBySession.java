@@ -8,9 +8,9 @@ import javax.xml.bind.annotation.XmlType;
 
 /**
  * <p>Java class for getUserBySession complex type.
- *
+ * 
  * <p>The following schema fragment specifies the expected content contained within this class.
- *
+ * 
  * <pre>
  * &lt;complexType name="getUserBySession"&gt;
  *   &lt;complexContent&gt;
@@ -22,10 +22,12 @@ import javax.xml.bind.annotation.XmlType;
  *   &lt;/complexContent&gt;
  * &lt;/complexType&gt;
  * </pre>
+ * 
+ * 
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "getUserBySession", propOrder = {
-        "session"
+    "session"
 })
 public class GetUserBySession {
 
@@ -33,9 +35,11 @@ public class GetUserBySession {
 
     /**
      * Gets the value of the session property.
-     *
-     * @return possible object is
-     * {@link SessionDTO }
+     * 
+     * @return
+     *     possible object is
+     *     {@link SessionDTO }
+     *     
      */
     public SessionDTO getSession() {
         return session;
@@ -43,9 +47,11 @@ public class GetUserBySession {
 
     /**
      * Sets the value of the session property.
-     *
-     * @param value allowed object is
-     *              {@link SessionDTO }
+     * 
+     * @param value
+     *     allowed object is
+     *     {@link SessionDTO }
+     *     
      */
     public void setSession(SessionDTO value) {
         this.session = value;
