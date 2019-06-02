@@ -1,42 +1,97 @@
 package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
-import ru.stepanenko.tm.repository.IProjectRepository;
-import ru.stepanenko.tm.entity.Project;
+import ru.stepanenko.tm.api.repository.IProjectRepository;
+import ru.stepanenko.tm.model.entity.Project;
 
 import java.util.*;
 
-public final class ProjectRepository extends AbstractRepository<Project> implements IProjectRepository {
+public class ProjectRepository implements IProjectRepository {
+
+    @NotNull
+    private final Map<String, Project> projects = new HashMap<>();
 
     @Override
-    public Collection<Project> findAllByUserId(@NotNull final String id) {
-        @NotNull
-        Collection<Project> userProjects = new ArrayList<>();
-        for (Project project : findAll()) {
-            if (id.equals(project.getUserID())) {
-                userProjects.add(project);
+    public Project findOne(
+            @NotNull final String id) {
+        return projects.get(id);
+    }
+
+    @Override
+    public Collection<Project> findAll() {
+        return projects.values();
+    }
+
+    @Override
+    public void removeAll() {
+        projects.clear();
+    }
+
+    @Override
+    public void remove(
+            @NotNull final String id) {
+        projects.remove(id);
+    }
+
+    @Override
+    public void persist(
+            @NotNull final Project project) {
+        merge(project);
+    }
+
+    @Override
+    public void merge(
+            @NotNull final Project project) {
+        projects.put(project.getId(), project);
+    }
+
+    @Override
+    public Collection<Project> findAllByUserId(
+            @NotNull final String id) {
+        @NotNull final Collection<Project> findProjects = new ArrayList<>();
+        for (@NotNull final Project project : findAll()) {
+            if (project.getUserId().equals(id)) {
+                findProjects.add(project);
             }
         }
-        return userProjects;
+        return findProjects;
     }
 
     @Override
-    public void removeAllByUserID(@NotNull final String id) {
-        for (Project project : findAllByUserId(id)) {
-            remove(project.getId());
+    public Project findOneByUserId(
+            @NotNull final String id,
+            @NotNull final String userId) {
+        for (@NotNull final Project project : findAllByUserId(userId)) {
+            if (project.getId().equals(id)) {
+                return project;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void removeAllByUserId(
+            @NotNull String id) {
+        for (@NotNull final Project project : findAllByUserId(id)) {
+            projects.remove(project.getId());
         }
     }
 
     @Override
-    public Collection<Project> sortAllByUserId(@NotNull final String id, Comparator<Project> comparator) {
-        List<Project> projects = new ArrayList<>(findAllByUserId(id));
-        Collections.sort(projects, comparator);
-        return projects;
+    public Collection<Project> sortAllByUserId(
+            @NotNull final String id,
+            @NotNull final Comparator<Project> comparator) {
+        @NotNull final List<Project> findProjects = new ArrayList<>(findAllByUserId(id));
+        Collections.sort(findProjects, comparator);
+        return findProjects;
     }
 
     @Override
-    public Collection<Project> findAllByPartOfNameOrDescription(@NotNull String name, @NotNull String description, @NotNull String userId) {
-        List<Project> findProjects = new ArrayList<>();
+    public Collection<Project> findAllByPartOfNameOrDescription(
+            @NotNull final String name,
+            @NotNull final String description,
+            @NotNull final String userId) {
+        @NotNull final List<Project> findProjects = new ArrayList<>();
         for (Project project : findAllByUserId(userId)) {
             if (project.getName().contains(name) || project.getDescription().contains(description)) {
                 findProjects.add(project);
