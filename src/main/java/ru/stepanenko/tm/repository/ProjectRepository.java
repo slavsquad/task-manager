@@ -5,6 +5,7 @@ import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.model.entity.Project;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class ProjectRepository implements IProjectRepository {
 

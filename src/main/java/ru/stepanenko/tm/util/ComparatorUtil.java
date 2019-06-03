@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComparatorUtil {
-    public static<E extends BaseEntity> Comparator<E> getComparator(
+    public static<T extends BaseEntity> Comparator<T> getComparator(
             @NotNull final String parameter) {
 
-        Comparator<E> comparatorDateStart = new Comparator<E>() {
+        Comparator<T> comparatorDateStart = new Comparator<T>() {
             @Override
-            public int compare(E o1, E o2) {
+            public int compare(T o1, T o2) {
                 Date date1 = o1.getDateBegin();
                 Date date2 = o2.getDateBegin();
                 if (date1 == null) {
@@ -28,9 +28,9 @@ public class ComparatorUtil {
             }
         };
 
-        Comparator<E> comparatorDateEnd = new Comparator<E>() {
+        Comparator<T> comparatorDateEnd = new Comparator<T>() {
             @Override
-            public int compare(E o1, E o2) {
+            public int compare(T o1, T o2) {
                 Date date1 = o1.getDateEnd();
                 Date date2 = o2.getDateEnd();
                 if (date1 == null) {
@@ -43,17 +43,17 @@ public class ComparatorUtil {
             }
         };
 
-        Comparator<E> comparatorStatus = new Comparator<E>() {
+        Comparator<T> comparatorStatus = new Comparator<T>() {
             @Override
-            public int compare(E o1, E o2) {
+            public int compare(T o1, T o2) {
                 Status status1 = o1.getStatus();
                 Status status2 = o2.getStatus();
                 return status1.compareTo(status2);
             }
         };
 
-        Map<String, Comparator<E>> comparators = new HashMap<>(3);
-        comparators.put("dateStart", comparatorDateStart);
+        Map<String, Comparator<T>> comparators = new HashMap<>(3);
+        comparators.put("dateBegin", comparatorDateStart);
         comparators.put("dateEnd", comparatorDateEnd);
         comparators.put("status", comparatorStatus);
         return comparators.get(parameter);

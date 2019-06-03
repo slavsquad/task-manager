@@ -33,6 +33,7 @@
     <maven.compiler.source>1.8</maven.compiler.source>
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.developer>Stepanenko Stanislav</project.developer>
+    <project.contextPath>taskmanager</project.contextPath>
   </properties>
 
   <dependencies>
@@ -70,17 +71,33 @@
       <version>1.18.8</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>jquery</artifactId>
+      <version>2.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>org.webjars</groupId>
+      <artifactId>bootstrap</artifactId>
+      <version>3.2.0</version>
+      <exclusions>
+        <exclusion>
+          <groupId>org.webjars</groupId>
+          <artifactId>jquery</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
   </dependencies>
 
   <build>
-    <finalName>task-manager</finalName>
+    <finalName>${project.contextPath}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.tomcat.maven</groupId>
         <artifactId>tomcat7-maven-plugin</artifactId>
         <version>2.2</version>
         <configuration>
-          <path>/</path>
+          <path>/${project.contextPath}</path>
         </configuration>
       </plugin>
       <plugin>
@@ -89,7 +106,7 @@
         <version>9.4.14.v20181114</version>
         <configuration>
           <webApp>
-            <contextPath>/</contextPath>
+            <contextPath>/${project.contextPath}</contextPath>
           </webApp>
         </configuration>
       </plugin>

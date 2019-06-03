@@ -20,7 +20,7 @@ public interface IUserRepository {
     void persist(
             @NotNull final User user);
 
-    User merge(
+    void merge(
             @NotNull final User user);
 
     User findByLogin(
