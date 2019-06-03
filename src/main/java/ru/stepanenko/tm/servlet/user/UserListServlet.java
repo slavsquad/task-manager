@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.servlet.project;
+package ru.stepanenko.tm.servlet.user;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -7,11 +7,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@WebServlet(urlPatterns = "project/list")
-public class ProjectListServlet extends HttpServlet {
+@WebServlet(urlPatterns = "user/list")
+public class UserListServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //resp.getWriter().println(new Date());
-        req.getRequestDispatcher("/WEB-INF/jsp/project/projectList.jsp").forward(req,resp);
+        req.getRequestDispatcher("/WEB-INF/jsp/user/userList.jsp").forward(req, resp);
     }
 }
