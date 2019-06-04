@@ -31,8 +31,7 @@ public class ProjectServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        @NotNull final IProjectRepository projectRepository = new ProjectRepository();
-        projectService = new ProjectService(projectRepository);
+        projectService = ProjectService.INSTANCE;
         currentUser = new User();
         currentUser.setLogin("admin");
         currentUser.setPassword("admin");

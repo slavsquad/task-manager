@@ -7,10 +7,17 @@ import ru.stepanenko.tm.model.entity.Project;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ProjectRepository implements IProjectRepository {
+public enum ProjectRepository implements IProjectRepository {
+
+    INSTANCE;
 
     @NotNull
-    private final Map<String, Project> projects = new HashMap<>();
+    private final Map<String, Project> projects;
+
+    ProjectRepository() {
+        this.projects = new HashMap<>();
+        generate();
+    }
 
     @Override
     public Project findOne(
@@ -19,15 +26,18 @@ public class ProjectRepository implements IProjectRepository {
     }
 
     private void generate(){
-        projects.put("1", new Project());
-        projects.put("2", new Project());
-        projects.put("3", new Project());
-        projects.put("4", new Project());
+        @NotNull final Project project1 = new Project();
+        @NotNull final Project project2 = new Project();
+        @NotNull final Project project3 = new Project();
+        @NotNull final Project project4 = new Project();
+        projects.put(project1.getId(), project1);
+        projects.put(project2.getId(), project2);
+        projects.put(project3.getId(), project3);
+        projects.put(project4.getId(), project4);
     }
 
     @Override
     public Collection<Project> findAll() {
-        generate();
         return projects.values();
     }
 

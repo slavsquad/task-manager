@@ -7,4 +7,7 @@ public final class FieldConst {
     @NotNull
     public static final String PROJECTS = "projects";
 
+    @NotNull
+    public static final String ID = "id";
+
 }

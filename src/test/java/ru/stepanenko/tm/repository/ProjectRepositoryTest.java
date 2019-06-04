@@ -30,7 +30,7 @@ public class ProjectRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        projectRepository = new ProjectRepository();
+        projectRepository = ProjectRepository.INSTANCE;
         currentUser = new User();
         currentUser.setLogin("admin");
         currentUser.setPassword("admin");

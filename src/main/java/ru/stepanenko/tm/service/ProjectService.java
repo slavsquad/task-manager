@@ -7,21 +7,18 @@ import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.Project;
+import ru.stepanenko.tm.repository.ProjectRepository;
 import ru.stepanenko.tm.util.ComparatorUtil;
 import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.Collection;
 
-public class ProjectService implements IProjectService {
+public enum ProjectService implements IProjectService {
+
+    INSTANCE;
 
     @NotNull
-    final IProjectRepository projectRepository;
-
-
-    public ProjectService(
-            @NotNull final IProjectRepository projectRepository) {
-        this.projectRepository = projectRepository;
-    }
+    private final IProjectRepository projectRepository = ProjectRepository.INSTANCE;
 
     @Override
     public void create(
