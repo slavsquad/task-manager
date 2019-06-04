@@ -18,8 +18,16 @@ public class ProjectRepository implements IProjectRepository {
         return projects.get(id);
     }
 
+    private void generate(){
+        projects.put("1", new Project());
+        projects.put("2", new Project());
+        projects.put("3", new Project());
+        projects.put("4", new Project());
+    }
+
     @Override
     public Collection<Project> findAll() {
+        generate();
         return projects.values();
     }
 

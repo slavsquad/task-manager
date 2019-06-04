@@ -6,42 +6,39 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="java.util.Collection" %>
+<%@ page import="ru.stepanenko.tm.model.entity.Project" %>
+<%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
 <jsp:include page="/WEB-INF/jsp/fragment/navigableBar.jsp"/>
 <div class="container theme-showcase" role="main">
     <div class="jumbotron">
-        <h3>List of projects:</h3>
+        <div class="row">
+        </div>
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-condensed">
                     <thead>
                     <tr>
-                        <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Data begin</th>
+                        <th>Data End</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
+                    <% for (Project project:(Collection<Project>) request.getAttribute(FieldConst.PROJECTS)){%>
+						<tr>
+							<td><p><%=project.getId()%></p></td>
+							<td><p><%=project.getName()%></p></td>
+							<td><p><%=project.getDescription()%></p></td>
+							<td><p><%=project.getDateBegin()%></p></td>
+							<td><p><%=project.getDateEnd()%></p></td>
+						</tr>
+					<%}%>
                     </tbody>
                 </table>
             </div>
