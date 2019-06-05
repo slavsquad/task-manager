@@ -21,40 +21,40 @@
     <div class="jumbotron">
         <div class="row">
             <% Project project = (Project) request.getAttribute(FieldConst.PROJECT); %>
-            <form action="create" method="get">
+            <form method="POST" action="update">
+                <input type=hidden name="<%=FieldConst.ID%>" value="<%=project.getId()%>">
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputName">Name</label>
-                            <input type="text" class="form-control" id="inputName" placeholder="<%=project.getName()%>">
+                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="<%=project.getName()%>">
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputDescription">Description</label>
-                    <textarea class="form-control" id="inputDescription" rows="10"
-                              placeholder="<%=project.getDescription()%>"></textarea>
+                    <textarea class="form-control" name = "<%=FieldConst.DESCRIPTION%>" id="inputDescription" rows="10"><%=project.getDescription()%></textarea>
                 </div>
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
-                            <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00"
+                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_BEGIN%>" value="2011-08-19T13:45:00"
                                    id="inputDateBegin">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
-                            <input class="form-control" type="datetime-local" value="2011-08-19T13:45:00"
+                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_END%>" value="2011-08-19T13:45:00"
                                    id="inputDateEnd">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputStatus">Select status:</label>
-                            <select class="form-control" id="inputStatus">
+                            <select class="form-control" name = "<%=FieldConst.STATUS%>" id="inputStatus" >
                                 <option>PLANNED</option>
                                 <option>INPROCESS</option>
                                 <option>DONE</option>
