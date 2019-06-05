@@ -26,10 +26,10 @@ public enum ProjectRepository implements IProjectRepository {
     }
 
     private void generate(){
-        @NotNull final Project project1 = new Project();
-        @NotNull final Project project2 = new Project();
-        @NotNull final Project project3 = new Project();
-        @NotNull final Project project4 = new Project();
+        @NotNull final Project project1 = new Project("New Project","New Description","1");
+        @NotNull final Project project2 = new Project("New Project","New Description","1");
+        @NotNull final Project project3 = new Project("New Project","New Description","1");
+        @NotNull final Project project4 = new Project("New Project","New Description","1");
         projects.put(project1.getId(), project1);
         projects.put(project2.getId(), project2);
         projects.put(project3.getId(), project3);
