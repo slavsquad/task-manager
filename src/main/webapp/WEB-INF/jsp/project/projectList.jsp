@@ -9,6 +9,7 @@
 <%@ page import="java.util.Collection" %>
 <%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
+<%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -37,8 +38,8 @@
 							<td><%=project.getId()%></td>
 							<td><%=project.getName()%></td>
 							<td><%=project.getDescription()%></td>
-							<td><%=project.getDateBegin()%></td>
-							<td><%=project.getDateEnd()%></td>
+							<td><%=DateFormatter.dateToString(project.getDateBegin())%></td>
+							<td><%=DateFormatter.dateToString(project.getDateEnd())%></td>
 							<td><a class="btn btn-primary btn-xs" href="edit?<%=FieldConst.ID%>=<%=project.getId()%>" role="button">edit</a></td>
 							<td><a class="btn btn-danger btn-xs" href="delete?<%=FieldConst.ID%>=<%=project.getId()%>" role="button">delete</a></td>
 						</tr>

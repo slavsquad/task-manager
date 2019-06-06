@@ -9,6 +9,7 @@
 <%@ page import="java.util.Collection" %>
 <%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
+<%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -21,13 +22,13 @@
     <div class="jumbotron">
         <div class="row">
             <% Project project = (Project) request.getAttribute(FieldConst.PROJECT); %>
-            <form method="POST" action="update">
+            <form method="POST" action="edit">
                 <input type=hidden name="<%=FieldConst.ID%>" value="<%=project.getId()%>">
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputName">Name</label>
-                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="<%=project.getName()%>">
+                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="${project.getName()}sdsd">
                         </div>
                     </div>
                 </div>
@@ -40,14 +41,14 @@
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
-                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_BEGIN%>" value="2011-08-19T13:45:00"
+                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_BEGIN%>" value="<%=DateFormatter.dateToInput(project.getDateBegin())%>"
                                    id="inputDateBegin">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
-                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_END%>" value="2011-08-19T13:45:00"
+                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_END%>" value="<%=DateFormatter.dateToInput(project.getDateEnd())%>"
                                    id="inputDateEnd">
                         </div>
                     </div>
@@ -62,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary" formenctype="text/plain">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
         </div>
     </div>
