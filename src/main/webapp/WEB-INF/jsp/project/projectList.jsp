@@ -10,13 +10,14 @@
 <%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
+<%@ page import="org.jetbrains.annotations.NotNull" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
 <jsp:include page="/WEB-INF/jsp/fragment/navigableBar.jsp"/>
 <div class="container theme-showcase" role="main">
     <div class="header">
-        <h3 class="text-muted">List of projects:</h3>
+        <h3 class="text-muted"><br/></h3>
         <h4 class="text-muted">PROJECT MANAGEMENT:</h4>
     </div>
     <div class="jumbotron">
@@ -25,35 +26,79 @@
                 <table class="table table-striped">
                     <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>#</th>
                         <th>Name</th>
                         <th>Description</th>
                         <th>Data begin</th>
                         <th>Data End</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <% for (Project project:(Collection<Project>) request.getAttribute(FieldConst.PROJECTS)){%>
-						<tr>
-							<td><%=project.getId()%></td>
-							<td><%=project.getName()%></td>
-							<td><%=project.getDescription()%></td>
-							<td><%=DateFormatter.dateToString(project.getDateBegin())%></td>
-							<td><%=DateFormatter.dateToString(project.getDateEnd())%></td>
-							<td><a class="btn btn-primary btn-xs" href="edit?<%=FieldConst.ID%>=<%=project.getId()%>" role="button">edit</a></td>
-							<td><a class="btn btn-danger btn-xs" href="delete?<%=FieldConst.ID%>=<%=project.getId()%>" role="button">delete</a></td>
-						</tr>
-					<%}%>
+                    <% @NotNull int i = 0;
+                        for (Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
+                            i++;
+                    %>
+                    <tr>
+                        <td><%=i%>
+                        </td>
+                        <td><%=project.getName()%>
+                        </td>
+                        <td><%=project.getDescription()%>
+                        </td>
+                        <td><%=DateFormatter.dateToString(project.getDateBegin())%>
+                        </td>
+                        <td><%=DateFormatter.dateToString(project.getDateEnd())%>
+                        </td>
+                        <td><%=project.getStatus()%>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-xs"
+                                    onclick="postToUrl(
+                                            '${pageContext.request.contextPath}/task/list',
+                                            {'<%=FieldConst.ID%>':'<%=project.getId()%>'},
+                                            'GET');">
+                                TASKS
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-xs"
+                                    onclick="postToUrl(
+                                            '${pageContext.request.contextPath}/project/edit',
+                                            {'<%=FieldConst.ID%>':'<%=project.getId()%>'},
+                                            'GET');">
+                                EDIT
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-xs"
+                                    onclick="postToUrl(
+                                            '${pageContext.request.contextPath}/project/delete',
+                                            {'<%=FieldConst.ID%>':'<%=project.getId()%>'},
+                                            'POST');">
+                                DELETE
+                            </button>
+                        </td>
+
+                    </tr>
+                    <%}%>
                     </tbody>
                 </table>
-				<a class="btn btn-success" href="create" role="button">Create project</a>
+                <button class="btn btn-success"
+                        onclick="postToUrl(
+                                '${pageContext.request.contextPath}/project/create',
+                                '',
+                                'POST');">
+                    CREATE
+                </button>
             </div>
         </div>
     </div>
     <!-- Footer -->
     <jsp:include page="/WEB-INF/jsp/fragment/footer.jsp"/>
 </div>
-<script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>

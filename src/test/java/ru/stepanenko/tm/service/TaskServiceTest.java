@@ -34,8 +34,7 @@ public class TaskServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        @NotNull final ITaskRepository taskRepository = new TaskRepository();
-        taskService = new TaskService(taskRepository);
+        taskService = TaskService.INSTANCE;
         currentUser = new User();
         currentUser.setLogin("admin");
         currentUser.setPassword("admin");

@@ -6,21 +6,21 @@ import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.Task;
+import ru.stepanenko.tm.repository.TaskRepository;
 import ru.stepanenko.tm.util.ComparatorUtil;
 import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.Collection;
 
-public class TaskService implements ITaskService {
+public enum TaskService implements ITaskService {
 
+    INSTANCE;
 
     @NotNull
     private final ITaskRepository taskRepository;
 
-
-    public TaskService(
-            @NotNull final ITaskRepository taskRepository) {
-        this.taskRepository = taskRepository;
+    TaskService() {
+        this.taskRepository = TaskRepository.INSTANCE;
     }
 
     @Override

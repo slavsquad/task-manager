@@ -21,7 +21,7 @@ public class ProjectCreateServlet extends HttpServlet {
     final IProjectService projectService = ProjectService.INSTANCE;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
         @NotNull final Project project = generateProject();
         try {

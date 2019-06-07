@@ -23,14 +23,12 @@ public class ProjectListServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        //resp.getWriter().println(new Date());
         try {
             req.setAttribute(FieldConst.PROJECTS, projectService.findAll());
+            req.getRequestDispatcher("/WEB-INF/jsp/project/projectList.jsp").forward(req,resp);
         } catch (DataValidateException e) {
             e.printStackTrace();
             return;
         }
-        req.getRequestDispatcher("/WEB-INF/jsp/project/projectList.jsp").forward(req,resp);
-
     }
 }

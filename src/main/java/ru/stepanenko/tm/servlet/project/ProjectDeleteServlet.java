@@ -21,7 +21,7 @@ public class ProjectDeleteServlet extends HttpServlet {
     private IProjectService projectService;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         @Nullable final String id = req.getParameter(FieldConst.ID);
         projectService = ProjectService.INSTANCE;
         try {

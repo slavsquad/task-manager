@@ -1,4 +1,9 @@
-<%--
+<%@ page import="org.jetbrains.annotations.NotNull" %>
+<%@ page import="ru.stepanenko.tm.model.entity.Project" %>
+<%@ page import="ru.stepanenko.tm.model.entity.Task" %>
+<%@ page import="java.util.Collection" %>
+<%@ page import="ru.stepanenko.tm.util.FieldConst" %>
+<%@ page import="ru.stepanenko.tm.util.DateFormatter" %><%--
   Created by IntelliJ IDEA.
   User: Asus
   Date: 04.06.2019
@@ -11,46 +16,77 @@
 <body>
 <jsp:include page="/WEB-INF/jsp/fragment/navigableBar.jsp"/>
 <div class="container theme-showcase" role="main">
+    <div class="header">
+        <h3 class="text-muted"><br/></h3>
+        <h4 class="text-muted">TASK MANAGEMENT:</h4>
+    </div>
     <div class="jumbotron">
-        <h3>List of tasks:</h3>
         <div class="row">
             <div class="col-md-12">
-                <table class="table table-condensed">
+                <table class="table table-striped">
                     <thead>
                     <tr>
                         <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Data begin</th>
+                        <th>Data End</th>
+                        <th>Status</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
+                    <% @NotNull int i = 0;
+                        for (Task task : (Collection<Task>) request.getAttribute(FieldConst.TASKS)) {
+                            i++;
+                    %>
                     <tr>
-                        <td>1</td>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
+                        <td><%=i%>
+                        </td>
+                        <td><%=task.getName()%>
+                        </td>
+                        <td><%=task.getDescription()%>
+                        </td>
+                        <td><%=DateFormatter.dateToString(task.getDateBegin())%>
+                        </td>
+                        <td><%=DateFormatter.dateToString(task.getDateEnd())%>
+                        </td>
+                        <td><%=task.getStatus()%>
+                        </td>
+                        <td>
+                            <button class="btn btn-primary btn-xs"
+                                    onclick="postToUrl(
+                                            '${pageContext.request.contextPath}/task/edit',
+                                            {'<%=FieldConst.ID%>':'<%=task.getId()%>'},
+                                            'GET');">
+                                EDIT
+                            </button>
+                        </td>
+                        <td>
+                            <button class="btn btn-danger btn-xs"
+                                    onclick="postToUrl(
+                                            '${pageContext.request.contextPath}/task/edit',
+                                            {'<%=FieldConst.ID%>':'<%=task.getId()%>'},
+                                            'GET');">
+                                DELETE
+                            </button>
+                        </td>
+
                     </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td colspan="2">Larry the Bird</td>
-                        <td>@twitter</td>
-                    </tr>
+                    <%}%>
                     </tbody>
                 </table>
+                <button class="btn btn-success"
+                        onclick="postToUrl('${pageContext.request.contextPath}/task/create', '', 'POST');">
+                    CREATE
+                </button>
             </div>
         </div>
     </div>
     <!-- Footer -->
     <jsp:include page="/WEB-INF/jsp/fragment/footer.jsp"/>
 </div>
-<script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </body>
 </html>

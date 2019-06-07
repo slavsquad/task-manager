@@ -8,10 +8,16 @@ public final class FieldConst {
     public static final String PROJECTS = "projects";
 
     @NotNull
+    public static final String TASKS = "tasks";
+
+    @NotNull
     public static final String ID = "id";
 
     @NotNull
     public static final String PROJECT = "project";
+
+    @NotNull
+    public static final String TASK = "task";
 
     @NotNull
     public static final String NAME = "name";

@@ -9,4 +9,5 @@
 <head>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel='stylesheet' href='${pageContext.request.contextPath}/webjars/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <script src="${pageContext.request.contextPath}/js/script.js"></script>
 </head>
