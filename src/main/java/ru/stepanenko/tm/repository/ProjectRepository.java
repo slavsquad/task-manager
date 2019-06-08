@@ -5,7 +5,6 @@ import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.model.entity.Project;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public enum ProjectRepository implements IProjectRepository {
 
@@ -15,7 +14,7 @@ public enum ProjectRepository implements IProjectRepository {
     private final Map<String, Project> projects;
 
     ProjectRepository() {
-        this.projects = new HashMap<>();
+        this.projects = new LinkedHashMap<>();
         generate();
     }
 

@@ -14,16 +14,16 @@ public enum TaskRepository implements ITaskRepository {
     private final Map<String, Task> tasks;
 
     TaskRepository() {
-        this.tasks = new HashMap<>();
+        this.tasks = new LinkedHashMap<>();
         generate();
     }
 
     private void generate() {
-        for (int i = 1; i<=4;i++){
-            @NotNull final Task task1 = new Task("New Task 1 for project: "+i, "New Description", String.valueOf(i),"1");
-            @NotNull final Task task2 = new Task("New Task 2 for project: "+i, "New Description", String.valueOf(i),"1");
-            @NotNull final Task task3 = new Task("New Task 3 for project: "+i, "New Description", String.valueOf(i),"1");
-            @NotNull final Task task4 = new Task("New Task 4 for project: "+i, "New Description", String.valueOf(i),"1");
+        for (int i = 1; i <= 4; i++) {
+            @NotNull final Task task1 = new Task("New Task 1 for project: " + i, "New Description", String.valueOf(i), "1");
+            @NotNull final Task task2 = new Task("New Task 2 for project: " + i, "New Description", String.valueOf(i), "1");
+            @NotNull final Task task3 = new Task("New Task 3 for project: " + i, "New Description", String.valueOf(i), "1");
+            @NotNull final Task task4 = new Task("New Task 4 for project: " + i, "New Description", String.valueOf(i), "1");
 
             tasks.put(task1.getId(), task1);
             tasks.put(task2.getId(), task2);
@@ -84,7 +84,7 @@ public enum TaskRepository implements ITaskRepository {
             @NotNull final String userId) {
         @NotNull final List<Task> findTasks = new ArrayList<>();
         for (@NotNull final Task task : findAllByUserId(userId)) {
-            if (task.getProjectId().equals(projectId)) {
+            if (task.getProjectId() != null && task.getProjectId().equals(projectId)) {
                 findTasks.add(task);
             }
         }

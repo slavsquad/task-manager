@@ -39,7 +39,7 @@
                     </thead>
                     <tbody>
                     <% @NotNull int i = 0;
-                        for (Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
+                        for (@NotNull  Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
                             i++;
                     %>
                     <tr>
@@ -59,7 +59,7 @@
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/task/list',
-                                            {'<%=FieldConst.ID%>':'<%=project.getId()%>'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'<%=project.getId()%>'},
                                             'GET');">
                                 TASKS
                             </button>
@@ -68,7 +68,7 @@
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/project/edit',
-                                            {'<%=FieldConst.ID%>':'<%=project.getId()%>'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'<%=project.getId()%>'},
                                             'GET');">
                                 EDIT
                             </button>
@@ -77,7 +77,7 @@
                             <button class="btn btn-danger btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/project/delete',
-                                            {'<%=FieldConst.ID%>':'<%=project.getId()%>'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'<%=project.getId()%>'},
                                             'POST');">
                                 DELETE
                             </button>

@@ -22,12 +22,11 @@ import java.text.ParseException;
 public class ProjectEditServlet extends HttpServlet {
 
     @NotNull
-    IProjectService projectService = ProjectService.INSTANCE;
+    private final IProjectService projectService = ProjectService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        projectService = ProjectService.INSTANCE;
-        @Nullable final String id = req.getParameter(FieldConst.ID);
+        @Nullable final String id = req.getParameter(FieldConst.PROJECT_ID);
         try {
             @Nullable final Project project = projectService.findOne(id);
             req.setAttribute(FieldConst.PROJECT, project);
@@ -41,12 +40,11 @@ public class ProjectEditServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            @NotNull final Project project = projectService.findOne(req.getParameter(FieldConst.ID));
+            @NotNull final Project project = projectService.findOne(req.getParameter(FieldConst.PROJECT_ID));
             project.setName(req.getParameter(FieldConst.NAME));
             project.setDescription(req.getParameter(FieldConst.DESCRIPTION));
             project.setDateBegin(DateFormatter.stringToDate(req.getParameter(FieldConst.DATE_BEGIN)));
             project.setDateEnd(DateFormatter.stringToDate(req.getParameter(FieldConst.DATE_END)));
-            resp.getWriter().println(req.getParameter(FieldConst.DATE_BEGIN));
             project.setStatus(Status.valueOf(req.getParameter(FieldConst.STATUS)));
             projectService.edit(project);
             resp.sendRedirect("list");

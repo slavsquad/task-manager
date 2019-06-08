@@ -2,15 +2,32 @@ package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.IUserRepository;
+import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class UserRepository implements IUserRepository {
+public enum  UserRepository implements IUserRepository {
 
-    @NotNull final Map<String, User> users = new HashMap<>();
+    INSTANCE;
+
+    @NotNull private final Map<String, User> users;
+
+    UserRepository() {
+        users = new LinkedHashMap<>();
+        generate();
+    }
+
+    private void generate() {
+        @NotNull final User admin = new User("admin","admin", Role.ADMIN);
+        @NotNull final User user = new User("user","user", Role.USER);
+        admin.setId("1");
+        user.setId("2");
+        users.put(admin.getId(), admin);
+        users.put(user.getId(), user);
+    }
 
     @Override
     public User findOne(

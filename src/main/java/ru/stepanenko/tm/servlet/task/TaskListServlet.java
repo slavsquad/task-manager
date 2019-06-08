@@ -19,19 +19,22 @@ import java.util.Collection;
 @WebServlet(urlPatterns = "task/list")
 public class TaskListServlet extends HttpServlet {
 
-    @NotNull final ITaskService taskService = TaskService.INSTANCE;
+    @NotNull
+    final private ITaskService taskService = TaskService.INSTANCE;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-            @Nullable final String id = req.getParameter(FieldConst.ID);
-            if (id==null){
+            @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
+            req.setAttribute(FieldConst.PROJECT_ID, projectId);
+            if (projectId == null) {
                 @NotNull final Collection<Task> tasks = taskService.findAllByUserId("1");
                 req.setAttribute(FieldConst.TASKS, tasks);
-            } else {
-                @NotNull final Collection<Task> tasks = taskService.findAllByProjectId(id,"1");
-                req.setAttribute(FieldConst.TASKS, tasks);
+                req.getRequestDispatcher("/WEB-INF/jsp/task/taskList.jsp").forward(req, resp);
+                return;
             }
+            @NotNull final Collection<Task> tasks = taskService.findAllByProjectId(projectId, "1");
+            req.setAttribute(FieldConst.TASKS, tasks);
             req.getRequestDispatcher("/WEB-INF/jsp/task/taskList.jsp").forward(req, resp);
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());

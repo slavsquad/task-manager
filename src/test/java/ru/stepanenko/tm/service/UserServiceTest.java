@@ -23,8 +23,7 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        @NotNull final IUserRepository userRepository = new UserRepository();
-        userService = new UserService(userRepository);
+        userService =  UserService.INSTANCE;
     }
 
     @After

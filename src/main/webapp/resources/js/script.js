@@ -1,4 +1,4 @@
-function postToUrl(path, params, method) {
+﻿function postToUrl(path, params, method) {
     method = method || "post"; // Устанавливаем метод отправки.
 
     var form = document.createElement("form");

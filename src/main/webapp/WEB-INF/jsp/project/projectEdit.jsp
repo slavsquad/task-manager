@@ -23,12 +23,12 @@
         <div class="row">
             <% Project project = (Project) request.getAttribute(FieldConst.PROJECT); %>
             <form method="POST" action="${pageContext.request.contextPath}/project/edit">
-                <input type=hidden name="<%=FieldConst.ID%>" value="<%=project.getId()%>">
+                <input type=hidden name="<%=FieldConst.PROJECT_ID%>" value="<%=project.getId()%>">
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputName">Name</label>
-                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="${project.getName()}sdsd">
+                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="<%=project.getName()%>">
                         </div>
                     </div>
                 </div>
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-success">SAVE</button>
             </form>
         </div>
     </div>

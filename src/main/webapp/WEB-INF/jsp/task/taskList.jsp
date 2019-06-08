@@ -38,7 +38,9 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% @NotNull int i = 0;
+                    <%
+                        @NotNull final String projectId = (String) request.getAttribute(FieldConst.PROJECT_ID);
+                        @NotNull int i = 0;
                         for (Task task : (Collection<Task>) request.getAttribute(FieldConst.TASKS)) {
                             i++;
                     %>
@@ -54,12 +56,11 @@
                         <td><%=DateFormatter.dateToString(task.getDateEnd())%>
                         </td>
                         <td><%=task.getStatus()%>
-                        </td>
                         <td>
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/task/edit',
-                                            {'<%=FieldConst.ID%>':'<%=task.getId()%>'},
+                                            {'<%=FieldConst.TASK_ID%>':'<%=task.getId()%>'},
                                             'GET');">
                                 EDIT
                             </button>
@@ -67,9 +68,10 @@
                         <td>
                             <button class="btn btn-danger btn-xs"
                                     onclick="postToUrl(
-                                            '${pageContext.request.contextPath}/task/edit',
-                                            {'<%=FieldConst.ID%>':'<%=task.getId()%>'},
-                                            'GET');">
+                                            '${pageContext.request.contextPath}/task/delete',
+                                            {'<%=FieldConst.TASK_ID%>':'<%=task.getId()%>',
+                                            '<%=FieldConst.PROJECT_ID%>':'<%=projectId%>'},
+                                            'POST');">
                                 DELETE
                             </button>
                         </td>
@@ -79,7 +81,10 @@
                     </tbody>
                 </table>
                 <button class="btn btn-success"
-                        onclick="postToUrl('${pageContext.request.contextPath}/task/create', '', 'POST');">
+                        onclick="postToUrl(
+                                '${pageContext.request.contextPath}/task/create',
+                                {'<%=FieldConst.PROJECT_ID%>':'<%=projectId%>'},
+                                'POST');">
                     CREATE
                 </button>
             </div>

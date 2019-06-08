@@ -11,7 +11,10 @@ public final class FieldConst {
     public static final String TASKS = "tasks";
 
     @NotNull
-    public static final String ID = "id";
+    public static final String PROJECT_ID = "projectId";
+
+    @NotNull
+    public static final String TASK_ID = "taskId";
 
     @NotNull
     public static final String PROJECT = "project";
@@ -36,5 +39,14 @@ public final class FieldConst {
 
     @NotNull
     public static final String STATUS = "status";
+
+    @NotNull
+    public static final String USER = "user";
+
+    @NotNull
+    public static final String LOGIN = "login";
+
+    @NotNull
+    public static final String PASSWORD = "password";
 
 }

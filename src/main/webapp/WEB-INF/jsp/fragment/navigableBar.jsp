@@ -1,4 +1,7 @@
-<%--
+<%@ page import="ru.stepanenko.tm.util.FieldConst" %>
+<%@ page import="org.jetbrains.annotations.NotNull" %>
+<%@ page import="ru.stepanenko.tm.model.entity.User" %>
+<%@ page import="ru.stepanenko.tm.enumerate.Role" %><%--
   Created by IntelliJ IDEA.
   User: Asus
   Date: 03.06.2019
@@ -9,23 +12,31 @@
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="false" aria-controls="navbar">
                 <span class="sr-only">Toggle navigation</span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/project/list">Projects</a>
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/task/list">Tasks</a>
-            <a class="navbar-brand" href="${pageContext.request.contextPath}/user/list">Users</a>
+            <% @NotNull final User loggedUser = (User)request.getSession().getAttribute(FieldConst.USER);%>
+            <a <%if (loggedUser==null) out.print("hidden");%> class="navbar-brand" href="${pageContext.request.contextPath}/project/list">Projects</a>
+            <a <%if (loggedUser==null) out.print("hidden");%> class="navbar-brand" href="${pageContext.request.contextPath}/task/list">Tasks</a>
+            <a <%if (loggedUser==null || loggedUser.getRole() == Role.USER) out.print("hidden");%> class="navbar-brand" href="${pageContext.request.contextPath}/user/list">Users</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
-            <form class="navbar-form navbar-right">
+
+            <form <%if (request.getSession().getAttribute(FieldConst.USER)==null) out.print("hidden");%> method="POST" action="${pageContext.request.contextPath}/user/login" class="navbar-form navbar-right">
+                <button type="submit" class="btn btn-primary">PROFILE</button>
+                <button type="submit" class="btn btn-danger">LOG OUT</button>
+            </form>
+
+            <form <%if (request.getSession().getAttribute(FieldConst.USER) !=null) out.print("hidden");%> method="POST" action="${pageContext.request.contextPath}/user/login" class="navbar-form navbar-right">
                 <div class="form-group">
-                    <input type="text" placeholder="Login" class="form-control">
+                    <input type="text" placeholder="Login" name="<%=FieldConst.LOGIN%>" class="form-control">
                 </div>
                 <div class="form-group">
-                    <input type="password" placeholder="Password" class="form-control">
+                    <input type="password" placeholder="Password" name="<%=FieldConst.PASSWORD%>" class="form-control">
                 </div>
                 <button type="submit" class="btn btn-success">Sign in</button>
             </form>

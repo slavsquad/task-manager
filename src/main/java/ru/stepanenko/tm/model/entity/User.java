@@ -21,4 +21,10 @@ public class User extends AbstractEntity implements Serializable {
 
     @Nullable
     private Role role = Role.USER;
+
+    public User(@Nullable String login, @Nullable String password, @Nullable Role role) {
+        this.login = login;
+        this.password = password;
+        this.role = role;
+    }
 }

@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 
 <!DOCTYPE html>
 <html>
@@ -7,12 +7,19 @@
 
 <jsp:include page="WEB-INF/jsp/fragment/navigableBar.jsp"/>
 <div class="container theme-showcase" role="main">
+    <h3 class="text-muted"><br/></h3>
+    <h4 class="text-muted">WELCOME PAGE</h4>
     <div class="jumbotron">
-        <h3>Main page:</h3>
-    <!-- Footer -->
-   <jsp:include page="WEB-INF/jsp/fragment/footer.jsp"/>
-</div>
-<script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
-<script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="center-block">
+                    <img src="${pageContext.request.contextPath}/resources/images/logo.png" class="img-responsive center-block"
+                         alt="Responsive image">
+                </div>
+            </div>
+        </div>
+        <!-- Footer -->
+    </div>
+    <jsp:include page="WEB-INF/jsp/fragment/footer.jsp"/>
 </body>
 </html>

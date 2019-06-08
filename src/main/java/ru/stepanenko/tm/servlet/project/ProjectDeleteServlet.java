@@ -18,17 +18,16 @@ import java.io.IOException;
 public class ProjectDeleteServlet extends HttpServlet {
 
     @NotNull
-    private IProjectService projectService;
+    private final IProjectService projectService = ProjectService.INSTANCE;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        @Nullable final String id = req.getParameter(FieldConst.ID);
-        projectService = ProjectService.INSTANCE;
+        @Nullable final String id = req.getParameter(FieldConst.PROJECT_ID);
         try {
             projectService.remove(id);
+            resp.sendRedirect("list");
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
-        resp.sendRedirect("list");
     }
 }

@@ -11,6 +11,9 @@
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
 <%@ page import="ru.stepanenko.tm.model.entity.Task" %>
+<%@ page import="org.jetbrains.annotations.NotNull" %>
+<%@ page import="java.util.Comparator" %>
+<%@ page import="java.util.Collections" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -23,48 +26,66 @@
     <div class="jumbotron">
         <div class="row">
             <% Task task = (Task) request.getAttribute(FieldConst.TASK); %>
-            <form method="POST" action="${pageContext.request.contextPath}/task/list">
-                <input type=hidden name="<%=FieldConst.ID%>" value="<%=task.getId()%>">
+            <form method="POST" action="${pageContext.request.contextPath}/task/edit">
+                <input type=hidden name="<%=FieldConst.TASK_ID%>" value="<%=task.getId()%>">
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputName">Name</label>
-                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="${project.getName()}sdsd">
+                            <input type="text" class="form-control" name="<%=FieldConst.NAME%>" id="inputName"
+                                   value="<%=task.getName()%>">
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputDescription">Description</label>
-                    <textarea class="form-control" name = "<%=FieldConst.DESCRIPTION%>" id="inputDescription" rows="10"><%=task.getDescription()%></textarea>
+                    <textarea class="form-control" name="<%=FieldConst.DESCRIPTION%>" id="inputDescription"
+                              rows="10"><%=task.getDescription()%></textarea>
                 </div>
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
-                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_BEGIN%>" value="<%=DateFormatter.dateToInput(task.getDateBegin())%>"
+                            <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_BEGIN%>"
+                                   value="<%=DateFormatter.dateToInput(task.getDateBegin())%>"
                                    id="inputDateBegin">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
-                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_END%>" value="<%=DateFormatter.dateToInput(task.getDateEnd())%>"
+                            <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_END%>"
+                                   value="<%=DateFormatter.dateToInput(task.getDateEnd())%>"
                                    id="inputDateEnd">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputStatus">Select status:</label>
-                            <select class="form-control" name = "<%=FieldConst.STATUS%>" id="inputStatus" >
+                            <select class="form-control" name="<%=FieldConst.STATUS%>" id="inputStatus">
                                 <option>PLANNED</option>
                                 <option>INPROCESS</option>
                                 <option>DONE</option>
                             </select>
                         </div>
                     </div>
+                    <div class="col-xs-3">
+                        <div class="form-group">
+                            <label for="inputProject">Select project:</label>
+                            <select class="form-control" name="<%=FieldConst.PROJECT_ID%>" id="inputProject">
+                                <%
+                                    for (@NotNull Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
+                                        if (project.getId().equals(task.getProjectId())){%>
+                                <option value="<%=project.getId()%>" selected><%=project.getName()%></option>
+                                <%}%>
+                                <option value="<%=project.getId()%>"><%=project.getName()%></option>
+                                <%}%>
+                            </select>
+                        </div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-success">SAVE</button>
             </form>
         </div>
     </div>
@@ -73,3 +94,4 @@
 </div>
 </body>
 </html>
+

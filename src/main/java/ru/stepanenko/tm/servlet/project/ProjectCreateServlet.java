@@ -18,7 +18,7 @@ import java.util.Date;
 public class ProjectCreateServlet extends HttpServlet {
 
     @NotNull
-    final IProjectService projectService = ProjectService.INSTANCE;
+    private final IProjectService projectService = ProjectService.INSTANCE;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

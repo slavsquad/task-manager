@@ -72,8 +72,6 @@ public class DataValidator {
             throw new DataValidateException("Id task not must be empty!");
         if (task.getUserId() == null || task.getUserId().isEmpty())
             throw new DataValidateException("User id not must be empty!");
-        if (task.getProjectId() == null || task.getProjectId().isEmpty())
-            throw new DataValidateException("Project id not must be empty!");
         if (task.getName() == null || task.getName().isEmpty())
             throw new DataValidateException("Task name not must be empty!");
         if (task.getDescription() == null || task.getDescription().isEmpty())
