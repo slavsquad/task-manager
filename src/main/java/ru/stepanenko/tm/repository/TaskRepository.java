@@ -2,6 +2,7 @@ package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
+import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Task;
 
@@ -20,10 +21,10 @@ public enum TaskRepository implements ITaskRepository {
 
     private void generate() {
         for (int i = 1; i <= 4; i++) {
-            @NotNull final Task task1 = new Task("New Task 1 for project: " + i, "New Description", String.valueOf(i), "1");
-            @NotNull final Task task2 = new Task("New Task 2 for project: " + i, "New Description", String.valueOf(i), "1");
-            @NotNull final Task task3 = new Task("New Task 3 for project: " + i, "New Description", String.valueOf(i), "1");
-            @NotNull final Task task4 = new Task("New Task 4 for project: " + i, "New Description", String.valueOf(i), "1");
+            @NotNull final Task task1 = new Task("Task #1 for project#" + i, "Description for task #1", new Date(), null, Status.PLANNED, String.valueOf(i), "1");
+            @NotNull final Task task2 = new Task("Task #2 for project#" + i, "Description for task #2", new Date(), null, Status.PLANNED, String.valueOf(i), "1");
+            @NotNull final Task task3 = new Task("Task #3 for project#" + i, "Description for task #3", new Date(), null, Status.PLANNED, String.valueOf(i), "1");
+            @NotNull final Task task4 = new Task("Task #4 for project#" + i, "Description for task #4", new Date(), null, Status.PLANNED, String.valueOf(i), "1");
 
             tasks.put(task1.getId(), task1);
             tasks.put(task2.getId(), task2);

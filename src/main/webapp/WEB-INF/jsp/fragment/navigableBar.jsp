@@ -19,19 +19,40 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <% @NotNull final User loggedUser = (User)request.getSession().getAttribute(FieldConst.USER);%>
-            <a <%if (loggedUser==null) out.print("hidden");%> class="navbar-brand" href="${pageContext.request.contextPath}/project/list">Projects</a>
-            <a <%if (loggedUser==null) out.print("hidden");%> class="navbar-brand" href="${pageContext.request.contextPath}/task/list">Tasks</a>
-            <a <%if (loggedUser==null || loggedUser.getRole() == Role.USER) out.print("hidden");%> class="navbar-brand" href="${pageContext.request.contextPath}/user/list">Users</a>
+            <% @NotNull final User loggedUser = (User) request.getSession().getAttribute(FieldConst.USER);%>
+            <a class="navbar-brand"
+               href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span></a>
+            <a <%if (loggedUser == null) out.print("hidden");%> class="navbar-brand"
+                                                                href="${pageContext.request.contextPath}/project/list">Projects</a>
+            <a <%if (loggedUser == null) out.print("hidden");%> class="navbar-brand"
+                                                                href="${pageContext.request.contextPath}/task/list">Tasks</a>
+            <a <%if (loggedUser == null || loggedUser.getRole() == Role.USER) out.print("hidden");%>
+                    class="navbar-brand" href="${pageContext.request.contextPath}/user/list">Users</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
-            <form <%if (request.getSession().getAttribute(FieldConst.USER)==null) out.print("hidden");%> method="POST" action="${pageContext.request.contextPath}/user/login" class="navbar-form navbar-right">
-                <button type="submit" class="btn btn-primary">PROFILE</button>
-                <button type="submit" class="btn btn-danger">LOG OUT</button>
-            </form>
+            <div <%if (request.getSession().getAttribute(FieldConst.USER) == null) out.print("hidden");%>
+                    class="navbar-form navbar-right">
+                <button class="btn btn-primary"
+                        onclick="postToUrl(
+                                '${pageContext.request.contextPath}/user/edit',
+                                {'<%=FieldConst.USER_ID%>':'<%if(loggedUser != null) out.print(loggedUser.getId());%>'},
+                                'GET');">
+                    PROFILE
+                </button>
+                <button class="btn btn-danger"
+                        onclick="postToUrl(
+                                '${pageContext.request.contextPath}/user/logout',
+                                '',
+                                'POST');">
 
-            <form <%if (request.getSession().getAttribute(FieldConst.USER) !=null) out.print("hidden");%> method="POST" action="${pageContext.request.contextPath}/user/login" class="navbar-form navbar-right">
+                    LOG OUT
+                </button>
+            </div>
+
+            <form <%if (request.getSession().getAttribute(FieldConst.USER) != null) out.print("hidden");%> method="POST"
+                                                                                                           action="${pageContext.request.contextPath}/user/login"
+                                                                                                           class="navbar-form navbar-right">
                 <div class="form-group">
                     <input type="text" placeholder="Login" name="<%=FieldConst.LOGIN%>" class="form-control">
                 </div>

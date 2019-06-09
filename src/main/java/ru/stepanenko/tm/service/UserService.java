@@ -12,7 +12,7 @@ import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.Collection;
 
-public enum  UserService implements IUserService {
+public enum UserService implements IUserService {
 
     INSTANCE;
 
@@ -36,6 +36,11 @@ public enum  UserService implements IUserService {
             @Nullable final User user
     ) throws DataValidateException {
         DataValidator.validateUser(user, true);
+        @NotNull final User findUser = userRepository
+                .findByLogin(user.getLogin());
+
+        if (findUser != null && user.getLogin().equals(findUser.getLogin()) && !(user.getId().equals(findUser.getId())))
+            throw new DataValidateException("User with login: '" + user.getLogin() + "' already exist!");
         userRepository
                 .merge(user);
     }

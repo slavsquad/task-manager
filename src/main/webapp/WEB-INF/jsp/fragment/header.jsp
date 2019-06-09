@@ -9,7 +9,8 @@
 <head>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel='stylesheet' href='${pageContext.request.contextPath}/webjars/bootstrap/3.2.0/css/bootstrap.min.css'>
-    <script src="${pageContext.request.contextPath}/js/script.js"></script>
+    <script src="${pageContext.request.contextPath}/resources/js/script.js"></script>
     <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/jquery/2.1.1/jquery.min.js"></script>
-    <script type="text/javascript" src="${pageContext.request.contextPath}/webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
 </head>

@@ -14,6 +14,7 @@
 <%@ page import="org.jetbrains.annotations.NotNull" %>
 <%@ page import="java.util.Comparator" %>
 <%@ page import="java.util.Collections" %>
+<%@ page import="ru.stepanenko.tm.enumerate.Status" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -64,9 +65,10 @@
                         <div class="form-group">
                             <label for="inputStatus">Select status:</label>
                             <select class="form-control" name="<%=FieldConst.STATUS%>" id="inputStatus">
-                                <option>PLANNED</option>
-                                <option>INPROCESS</option>
-                                <option>DONE</option>
+                                <%for (@NotNull Status status : Status.values()) {%>
+                                <option <%if (status == task.getStatus()) out.print("selected");%>><%=status%>
+                                </option>
+                                <%}%>
                             </select>
                         </div>
                     </div>
@@ -74,12 +76,12 @@
                         <div class="form-group">
                             <label for="inputProject">Select project:</label>
                             <select class="form-control" name="<%=FieldConst.PROJECT_ID%>" id="inputProject">
-                                <%
-                                    for (@NotNull Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
-                                        if (project.getId().equals(task.getProjectId())){%>
-                                <option value="<%=project.getId()%>" selected><%=project.getName()%></option>
-                                <%}%>
-                                <option value="<%=project.getId()%>"><%=project.getName()%></option>
+                                <% for (@NotNull Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {%>
+                                <option value="<%=project.getId()%>" <%
+                                    if (project.getId().equals(task.getProjectId()))
+                                        out.print("selected");
+                                %>><%=project.getName()%>
+                                </option>
                                 <%}%>
                             </select>
                         </div>

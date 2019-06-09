@@ -10,7 +10,7 @@ public interface ISessionService {
 
     void validateSession(
             @Nullable final HttpSession session
-            ) throws AuthenticationSecurityException;
+    ) throws AuthenticationSecurityException;
 
     void validateAdminSession(
             @Nullable final HttpSession session

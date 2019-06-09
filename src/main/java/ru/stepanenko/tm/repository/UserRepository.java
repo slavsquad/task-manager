@@ -9,11 +9,12 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public enum  UserRepository implements IUserRepository {
+public enum UserRepository implements IUserRepository {
 
     INSTANCE;
 
-    @NotNull private final Map<String, User> users;
+    @NotNull
+    private final Map<String, User> users;
 
     UserRepository() {
         users = new LinkedHashMap<>();
@@ -21,8 +22,18 @@ public enum  UserRepository implements IUserRepository {
     }
 
     private void generate() {
-        @NotNull final User admin = new User("admin","admin", Role.ADMIN);
-        @NotNull final User user = new User("user","user", Role.USER);
+        @NotNull final User admin = new User(
+                "admin",
+                "admin",
+                "Administrator",
+                "Administrator for task manager application.",
+                Role.ADMIN);
+        @NotNull final User user = new User(
+                "user",
+                "user",
+                "User",
+                "User for task manager application.",
+                Role.USER);
         admin.setId("1");
         user.setId("2");
         users.put(admin.getId(), admin);
@@ -66,7 +77,7 @@ public enum  UserRepository implements IUserRepository {
     @Override
     public User findByLogin(
             @NotNull final String login) {
-        for (@NotNull final User user: findAll()){
+        for (@NotNull final User user : findAll()) {
             if (user.getLogin().equals(login))
                 return user;
         }

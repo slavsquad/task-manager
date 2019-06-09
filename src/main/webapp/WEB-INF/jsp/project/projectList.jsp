@@ -39,7 +39,7 @@
                     </thead>
                     <tbody>
                     <% @NotNull int i = 0;
-                        for (@NotNull  Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
+                        for (@NotNull Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
                             i++;
                     %>
                     <tr>

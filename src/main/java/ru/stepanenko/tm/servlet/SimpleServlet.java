@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
 
-@WebServlet(urlPatterns = {"time","date"})
+@WebServlet(urlPatterns = {"time", "date"})
 public class SimpleServlet extends HttpServlet {
 
     @Override

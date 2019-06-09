@@ -44,6 +44,12 @@ public final class FieldConst {
     public static final String USER = "user";
 
     @NotNull
+    public static final String USERS = "users";
+
+    @NotNull
+    public static final String USER_ID = "userId";
+
+    @NotNull
     public static final String LOGIN = "login";
 
     @NotNull

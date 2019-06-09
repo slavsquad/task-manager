@@ -10,6 +10,8 @@
 <%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
+<%@ page import="ru.stepanenko.tm.enumerate.Status" %>
+<%@ page import="org.jetbrains.annotations.NotNull" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -28,37 +30,42 @@
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputName">Name</label>
-                            <input type="text" class="form-control" name = "<%=FieldConst.NAME%>" id="inputName" value="<%=project.getName()%>">
+                            <input type="text" class="form-control" name="<%=FieldConst.NAME%>" id="inputName"
+                                   value="<%=project.getName()%>">
                         </div>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <label for="inputDescription">Description</label>
-                    <textarea class="form-control" name = "<%=FieldConst.DESCRIPTION%>" id="inputDescription" rows="10"><%=project.getDescription()%></textarea>
+                    <textarea class="form-control" name="<%=FieldConst.DESCRIPTION%>" id="inputDescription"
+                              rows="10"><%=project.getDescription()%></textarea>
                 </div>
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
-                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_BEGIN%>" value="<%=DateFormatter.dateToInput(project.getDateBegin())%>"
+                            <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_BEGIN%>"
+                                   value="<%=DateFormatter.dateToInput(project.getDateBegin())%>"
                                    id="inputDateBegin">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
-                            <input class="form-control" type="datetime-local" name = "<%=FieldConst.DATE_END%>" value="<%=DateFormatter.dateToInput(project.getDateEnd())%>"
+                            <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_END%>"
+                                   value="<%=DateFormatter.dateToInput(project.getDateEnd())%>"
                                    id="inputDateEnd">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputStatus">Select status:</label>
-                            <select class="form-control" name = "<%=FieldConst.STATUS%>" id="inputStatus" >
-                                <option>PLANNED</option>
-                                <option>INPROCESS</option>
-                                <option>DONE</option>
+                            <select class="form-control" name="<%=FieldConst.STATUS%>" id="inputStatus">
+                                <%for (@NotNull Status status : Status.values()) {%>
+                                <option <%if (status == project.getStatus()) out.print("selected");%>><%=status%>
+                                </option>
+                                <%}%>
                             </select>
                         </div>
                     </div>

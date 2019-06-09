@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ComparatorUtil {
-    public static<T extends BaseEntity> Comparator<T> getComparator(
+    public static <T extends BaseEntity> Comparator<T> getComparator(
             @NotNull final String parameter) {
 
         Comparator<T> comparatorDateStart = new Comparator<T>() {

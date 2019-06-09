@@ -13,7 +13,8 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="center-block">
-                    <img src="${pageContext.request.contextPath}/resources/images/logo.png" class="img-responsive center-block"
+                    <img src="${pageContext.request.contextPath}/resources/images/logo.png"
+                         class="img-responsive center-block"
                          alt="Responsive image">
                 </div>
             </div>

@@ -19,7 +19,8 @@ import java.io.IOException;
 @WebServlet(urlPatterns = "user/login")
 public class UserLoginServlet extends HttpServlet {
 
-    @NotNull private final IUserService userService = UserService.INSTANCE;
+    @NotNull
+    private final IUserService userService = UserService.INSTANCE;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -30,7 +31,7 @@ public class UserLoginServlet extends HttpServlet {
             @NotNull final User loggedUser = userService.authenticationUser(login, password);
             @NotNull final HttpSession session = req.getSession();
             session.setAttribute(FieldConst.USER, loggedUser);
-            req.getRequestDispatcher("/index.jsp").forward(req,resp);
+            req.getRequestDispatcher("/index.jsp").forward(req, resp);
         } catch (AuthenticationSecurityException | DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }

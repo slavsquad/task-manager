@@ -11,7 +11,7 @@ import ru.stepanenko.tm.util.FieldConst;
 
 import javax.servlet.http.HttpSession;
 
-public enum  SessionService implements ISessionService {
+public enum SessionService implements ISessionService {
 
     INSTANCE;
 

@@ -10,11 +10,11 @@ import java.util.Collection;
 public interface IUserService {
 
     void create(
-            @Nullable final User userDTO
+            @Nullable final User user
     ) throws DataValidateException;
 
     void edit(
-            @Nullable final User userDTO
+            @Nullable final User user
     ) throws DataValidateException;
 
     User findByLogin(
