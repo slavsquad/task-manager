@@ -26,20 +26,11 @@ public enum ProjectRepository implements IProjectRepository {
     }
 
     private void generate() {
-        @NotNull final Project project1 = new Project("Project #1", "Description for project #1", new Date(), null, Status.PLANNED, "1");
-        @NotNull final Project project2 = new Project("Project #2", "Description for project #2", new Date(), null, Status.PLANNED, "1");
-        @NotNull final Project project3 = new Project("Project #3", "Description for project #3", new Date(), null, Status.PLANNED, "1");
-        @NotNull final Project project4 = new Project("Project #4", "Description for project #4", new Date(), null, Status.PLANNED, "1");
-
-        project1.setId("1");
-        project2.setId("2");
-        project3.setId("3");
-        project4.setId("4");
-
-        projects.put(project1.getId(), project1);
-        projects.put(project2.getId(), project2);
-        projects.put(project3.getId(), project3);
-        projects.put(project4.getId(), project4);
+        for (int i = 0; i <= 4; i++) {
+            @NotNull final Project project = new Project("Project #"+i, "Description for project #"+i, new Date(), null, Status.PLANNED, "1");
+            project.setId(String.valueOf(i));
+            projects.put(project.getId(), project);
+        }
     }
 
     @Override

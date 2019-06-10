@@ -12,8 +12,6 @@
 <%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
 <%@ page import="ru.stepanenko.tm.model.entity.Task" %>
 <%@ page import="org.jetbrains.annotations.NotNull" %>
-<%@ page import="java.util.Comparator" %>
-<%@ page import="java.util.Collections" %>
 <%@ page import="ru.stepanenko.tm.enumerate.Status" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
