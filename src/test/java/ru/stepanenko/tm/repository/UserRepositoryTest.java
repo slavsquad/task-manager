@@ -18,7 +18,7 @@ public class UserRepositoryTest {
 
     @Before
     public void setUp() {
-        userRepository = UserRepository.INSTANCE;
+        userRepository = new UserRepository();
     }
 
     @After

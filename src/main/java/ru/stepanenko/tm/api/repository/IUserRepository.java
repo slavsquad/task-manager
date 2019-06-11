@@ -1,10 +1,12 @@
 package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
 
+@Repository
 public interface IUserRepository {
 
     User findOne(

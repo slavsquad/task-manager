@@ -2,11 +2,14 @@ package ru.stepanenko.tm.api.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.Task;
 
 import java.util.Collection;
 
+@Service
 public interface ITaskService {
     void create(
             @Nullable final Task task

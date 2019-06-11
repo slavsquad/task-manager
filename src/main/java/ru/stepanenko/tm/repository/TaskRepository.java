@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.model.entity.Project;
@@ -8,13 +9,13 @@ import ru.stepanenko.tm.model.entity.Task;
 
 import java.util.*;
 
-public enum TaskRepository implements ITaskRepository {
+@Repository
+public class TaskRepository implements ITaskRepository {
 
-    INSTANCE;
 
     private final Map<String, Task> tasks;
 
-    TaskRepository() {
+    public TaskRepository() {
         this.tasks = new LinkedHashMap<>();
         generate();
     }

@@ -5,6 +5,8 @@ import org.jetbrains.annotations.Nullable;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.enumerate.Status;
@@ -30,7 +32,7 @@ public class ProjectRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        projectRepository = ProjectRepository.INSTANCE;
+        projectRepository = new ProjectRepository();
         currentUser = new User();
         currentUser.setLogin("admin");
         currentUser.setPassword("admin");

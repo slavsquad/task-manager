@@ -2,6 +2,7 @@ package ru.stepanenko.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -11,9 +12,8 @@ import ru.stepanenko.tm.util.FieldConst;
 
 import javax.servlet.http.HttpSession;
 
-public enum SessionService implements ISessionService {
-
-    INSTANCE;
+@Service
+public class SessionService implements ISessionService {
 
     @Override
     public void validateSession(

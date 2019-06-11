@@ -2,6 +2,8 @@ package ru.stepanenko.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
@@ -12,14 +14,15 @@ import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.Collection;
 
-public enum UserService implements IUserService {
+@Service
+public class UserService implements IUserService {
 
-    INSTANCE;
-
+    @NotNull
     private final IUserRepository userRepository;
 
-    UserService() {
-        this.userRepository = UserRepository.INSTANCE;
+    @Autowired
+    public UserService(@NotNull final IUserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override

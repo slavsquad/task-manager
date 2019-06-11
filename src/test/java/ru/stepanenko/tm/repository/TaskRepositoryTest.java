@@ -32,7 +32,7 @@ public class TaskRepositoryTest {
 
     @Before
     public void setUp() throws Exception {
-        taskRepository = TaskRepository.INSTANCE;
+        taskRepository = new TaskRepository();
         currentUser = new User();
         currentUser.setLogin("admin");
         currentUser.setPassword("admin");

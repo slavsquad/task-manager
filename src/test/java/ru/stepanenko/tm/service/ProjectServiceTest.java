@@ -31,7 +31,7 @@ public class ProjectServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        projectService = ProjectService.INSTANCE;
+        projectService = new ProjectService(new ProjectRepository());
         currentUser = new User();
         currentUser.setLogin("admin");
         currentUser.setPassword("admin");

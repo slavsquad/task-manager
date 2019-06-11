@@ -1,11 +1,13 @@
 package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.Project;
 
 import java.util.Collection;
 import java.util.Comparator;
 
+@Repository
 public interface IProjectRepository {
 
     Project findOne(

@@ -1,20 +1,20 @@
 package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.model.entity.Project;
 
 import java.util.*;
 
-public enum ProjectRepository implements IProjectRepository {
-
-    INSTANCE;
+@Repository
+public class ProjectRepository implements IProjectRepository {
 
     @NotNull
     private final Map<String, Project> projects;
 
-    ProjectRepository() {
+    public ProjectRepository() {
         this.projects = new LinkedHashMap<>();
         generate();
     }

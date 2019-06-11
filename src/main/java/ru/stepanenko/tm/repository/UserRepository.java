@@ -1,6 +1,7 @@
 package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.model.entity.User;
@@ -9,14 +10,13 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public enum UserRepository implements IUserRepository {
-
-    INSTANCE;
+@Repository
+public class UserRepository implements IUserRepository {
 
     @NotNull
     private final Map<String, User> users;
 
-    UserRepository() {
+    public UserRepository() {
         users = new LinkedHashMap<>();
         generate();
     }

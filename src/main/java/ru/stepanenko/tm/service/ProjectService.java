@@ -2,6 +2,8 @@ package ru.stepanenko.tm.service;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IProjectService;
@@ -13,12 +15,16 @@ import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.Collection;
 
-public enum ProjectService implements IProjectService {
-
-    INSTANCE;
+@Service
+public class ProjectService implements IProjectService {
 
     @NotNull
-    private final IProjectRepository projectRepository = ProjectRepository.INSTANCE;
+    private final IProjectRepository projectRepository;
+
+    @Autowired
+    public ProjectService(@NotNull final IProjectRepository projectRepository) {
+        this.projectRepository = projectRepository;
+    }
 
     @Override
     public void create(

@@ -1,12 +1,14 @@
 package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Task;
 
 import java.util.Collection;
 import java.util.Comparator;
 
+@Repository
 public interface ITaskRepository {
 
     Task findOne(@NotNull final String id);
