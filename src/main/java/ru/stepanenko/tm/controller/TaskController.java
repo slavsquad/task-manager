@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
@@ -42,67 +43,65 @@ public class TaskController {
     private ISessionService sessionService;
 
     @RequestMapping(value = {"task/list"}, method = RequestMethod.GET)
-    public void taskList(
+    public ModelAndView taskList(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
+        @NotNull final ModelAndView model = new ModelAndView("task/taskList");
         try {
             sessionService.validateSession(session);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
             @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
-            req.setAttribute(FieldConst.PROJECT_ID, projectId);
-            if (projectId == null) {
+            model.addObject(FieldConst.PROJECT_ID, projectId);
+            if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
                 @NotNull final Collection<Task> tasks = taskService.findAllByUserId(loggedUser.getId());
-                req.setAttribute(FieldConst.TASKS, tasks);
-                req.getRequestDispatcher("/WEB-INF/jsp/task/taskList.jsp").forward(req, resp);
-                return;
+                model.addObject(FieldConst.TASKS, tasks);
+                return model;
             }
             @NotNull final Collection<Task> tasks = taskService.findAllByProjectId(projectId, loggedUser.getId());
-            req.setAttribute(FieldConst.TASKS, tasks);
-            req.getRequestDispatcher("/WEB-INF/jsp/task/taskList.jsp").forward(req, resp);
+            model.addObject(FieldConst.TASKS, tasks);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
-        } catch (ServletException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
+        return model;
     }
 
     @RequestMapping(value = {"task/edit"}, method = RequestMethod.GET)
-    public void taskEdit(
+    public ModelAndView taskEdit(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
+        @NotNull final ModelAndView model = new ModelAndView("task/taskEdit");
         try {
             sessionService.validateSession(session);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
             @NotNull final String taskId = req.getParameter(FieldConst.TASK_ID);
             @NotNull final Task task = taskService.findOne(taskId, loggedUser.getId());
-            req.setAttribute(FieldConst.TASK, task);
-            req.setAttribute(FieldConst.PROJECTS, projectService.findAllByUserId(loggedUser.getId()));
-            req.getRequestDispatcher("/WEB-INF/jsp/task/taskEdit.jsp").forward(req, resp);
+            model.addObject(FieldConst.TASK, task);
+            model.addObject(FieldConst.PROJECTS, projectService.findAllByUserId(loggedUser.getId()));
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
-        } catch (ServletException e) {
-            resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, e.getMessage());
         }
+        return model;
     }
 
     @RequestMapping(value = {"task/edit"}, method = RequestMethod.POST)
-    public void taskUpdate(
+    public String taskUpdate(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
+        @NotNull String projectId=null;
         try {
             sessionService.validateSession(session);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
-            @NotNull final String projectId = req.getParameter(FieldConst.PROJECT_ID);
+            projectId = req.getParameter(FieldConst.PROJECT_ID);
             @NotNull final Task task = new Task(
                     req.getParameter(FieldConst.NAME),
                     req.getParameter(FieldConst.DESCRIPTION),
@@ -112,31 +111,31 @@ public class TaskController {
                     projectId,
                     loggedUser.getId());
             task.setId(req.getParameter(FieldConst.TASK_ID));
-            if (projectId == null || "null".equals(projectId)) {
+            if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
                 task.setProjectId(null);
                 taskService.edit(task);
-                resp.sendRedirect(req.getContextPath() + "/task/list");
-                return;
+                return "redirect:/task/list";
             }
             taskService.edit(task);
-            resp.sendRedirect(req.getContextPath() + "/task/list?" + FieldConst.PROJECT_ID + "=" + projectId);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException | ParseException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
+        return "redirect:/task/list?" + FieldConst.PROJECT_ID + "=" + projectId;
     }
 
     @RequestMapping(value = {"task/create"}, method = RequestMethod.POST)
-    public void taskCreate(
+    public String taskCreate(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
+        @Nullable String projectId = null;
         try {
             sessionService.validateSession(session);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
-            @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
+            projectId = req.getParameter(FieldConst.PROJECT_ID);
             @NotNull final Task task = new Task(
                     "New task",
                     "Description for new task",
@@ -145,43 +144,42 @@ public class TaskController {
                     Status.PLANNED,
                     projectId,
                     loggedUser.getId());
-            if (projectId == null || "null".equals(projectId)) {
+            if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
                 task.setProjectId(null);
                 taskService.create(task);
-                resp.sendRedirect(req.getContextPath() + "/task/list");
-                return;
+                return "redirect:/task/list";
             }
             taskService.create(task);
-            resp.sendRedirect(req.getContextPath() + "/task/list?" + FieldConst.PROJECT_ID + "=" + projectId);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
+        return "redirect:/task/list?" + FieldConst.PROJECT_ID + "=" + projectId;
     }
 
     @RequestMapping(value = {"task/delete"}, method = RequestMethod.POST)
-    public void taskDelete(
+    public String taskDelete(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
+        @Nullable String projectId = null;
         try {
             sessionService.validateSession(session);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
-            @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
+            projectId = req.getParameter(FieldConst.PROJECT_ID);
             @Nullable final String taskId = req.getParameter(FieldConst.TASK_ID);
             taskService.remove(taskId, loggedUser.getId());
-            if (projectId == null || "null".equals(projectId)) {
-                resp.sendRedirect(req.getContextPath() + "/task/list");
-                return;
+            if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
+                return "redirect:/task/list";
             }
-            resp.sendRedirect(req.getContextPath() + "/task/list?" + FieldConst.PROJECT_ID + "=" + projectId);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
+        return "redirect:/task/list?" + FieldConst.PROJECT_ID + "=" + projectId;
     }
 
 }

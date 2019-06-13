@@ -14,12 +14,9 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.User;
-import ru.stepanenko.tm.service.ProjectService;
-import ru.stepanenko.tm.service.SessionService;
 import ru.stepanenko.tm.util.DateFormatter;
 import ru.stepanenko.tm.util.FieldConst;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -41,7 +38,6 @@ public class ProjectController {
     @RequestMapping(value = {"project/list"}, method = {RequestMethod.GET})
     public ModelAndView projectList(
             @NotNull final HttpSession session,
-            @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("project/projectList");
@@ -79,7 +75,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = {"project/edit"}, method = RequestMethod.POST)
-    public void projectUpdate(
+    public String projectUpdate(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
@@ -96,16 +92,16 @@ public class ProjectController {
                     loggedUser.getId());
             project.setId(req.getParameter(FieldConst.PROJECT_ID));
             projectService.edit(project);
-            resp.sendRedirect(req.getContextPath() + "/project/list");
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException | ParseException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
+        return "redirect:/project/list";
     }
 
     @RequestMapping(value = "project/create", method = RequestMethod.POST)
-    public void projectCreate(
+    public String projectCreate(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
@@ -121,16 +117,16 @@ public class ProjectController {
                     Status.PLANNED,
                     loggedUser.getId());
             projectService.create(project);
-            resp.sendRedirect(req.getContextPath() + "/project/list");
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
+        return "redirect:/project/list";
     }
 
     @RequestMapping(value = "project/delete", method = RequestMethod.POST)
-    public void projectDelete(
+    public String projectDelete(
             @NotNull final HttpSession session,
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
@@ -140,12 +136,12 @@ public class ProjectController {
             @Nullable final String id = req.getParameter(FieldConst.PROJECT_ID);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
             projectService.remove(id, loggedUser.getId());
-            resp.sendRedirect(req.getContextPath() + "/project/list");
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
+        return "redirect:/project/list";
     }
 
 }

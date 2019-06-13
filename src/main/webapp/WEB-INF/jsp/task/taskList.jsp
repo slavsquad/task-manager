@@ -1,9 +1,11 @@
 <%@ page import="org.jetbrains.annotations.NotNull" %>
-<%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.model.entity.Task" %>
 <%@ page import="java.util.Collection" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
-<%@ page import="ru.stepanenko.tm.util.DateFormatter" %><%--
+<%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--
   Created by IntelliJ IDEA.
   User: Asus
   Date: 04.06.2019
@@ -34,56 +36,55 @@
                         <th>Status</th>
                         <th></th>
                         <th></th>
-                        <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <%
-                        @NotNull final String projectId = (String) request.getAttribute(FieldConst.PROJECT_ID);
-                        @NotNull int i = 0;
-                        for (Task task : (Collection<Task>) request.getAttribute(FieldConst.TASKS)) {
-                            i++;
-                    %>
-                    <tr>
-                        <td><%=i%>
-                        </td>
-                        <td><%=task.getName()%>
-                        </td>
-                        <td><%=task.getDescription()%>
-                        </td>
-                        <td><%=DateFormatter.dateToString(task.getDateBegin())%>
-                        </td>
-                        <td><%=DateFormatter.dateToString(task.getDateEnd())%>
-                        </td>
-                        <td><%=task.getStatus()%>
-                        <td>
-                            <button class="btn btn-primary btn-xs"
-                                    onclick="postToUrl(
-                                            '${pageContext.request.contextPath}/task/edit',
-                                            {'<%=FieldConst.TASK_ID%>':'<%=task.getId()%>'},
-                                            'GET');">
-                                EDIT
-                            </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-danger btn-xs"
-                                    onclick="postToUrl(
-                                            '${pageContext.request.contextPath}/task/delete',
-                                            {'<%=FieldConst.TASK_ID%>':'<%=task.getId()%>',
-                                            '<%=FieldConst.PROJECT_ID%>':'<%=projectId%>'},
-                                            'POST');">
-                                DELETE
-                            </button>
-                        </td>
+                    <c:set var="i" value="0"/>
+                    <c:forEach var="task" items="${tasks}">
+                        <tr>
+                            <td>${i=i+1}
+                            </td>
+                            <td>${task.getName()}
+                            </td>
+                            <td>${task.getDescription()}
+                            </td>
+                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+                                                value="${task.getDateBegin()}"/>
+                            </td>
+                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+                                                value="${task.getDateEnd()}"/>
+                            </td>
+                            <td>${task.getStatus()}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-xs"
+                                        onclick="postToUrl(
+                                                '${pageContext.request.contextPath}/task/edit',
+                                                {'<%=FieldConst.TASK_ID%>':'${task.getId()}',
+                                                '<%=FieldConst.PROJECT_ID%>':'${projectId}'},
+                                                'GET');">
+                                    EDIT
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-xs"
+                                        onclick="postToUrl(
+                                                '${pageContext.request.contextPath}/task/delete',
+                                                {'<%=FieldConst.TASK_ID%>':'${task.getId()}',
+                                                '<%=FieldConst.PROJECT_ID%>':'${projectId}'},
+                                                'POST');">
+                                    DELETE
+                                </button>
+                            </td>
 
-                    </tr>
-                    <%}%>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
                 <button class="btn btn-success"
                         onclick="postToUrl(
                                 '${pageContext.request.contextPath}/task/create',
-                                {'<%=FieldConst.PROJECT_ID%>':'<%=projectId%>'},
+                                {'<%=FieldConst.PROJECT_ID%>':'${projectId}'},
                                 'POST');">
                     CREATE
                 </button>

@@ -46,18 +46,24 @@
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
-                            <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_BEGIN%>"
-                                   id="inputDateBegin">
-                                <fmt:formatDate pattern = "yyyy-MM-dd HH:mm"
+                            <c:set var="dateBegin">
+                                <fmt:formatDate pattern = "yyyy-MM-dd'T'HH:mm"
                                                 value = "${project.getDateBegin()}"/>
-                            </input>
+                            </c:set>
+                            <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_BEGIN%>"
+                                   value="${dateBegin}"
+                                   id="inputDateBegin">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
+                            <c:set var="dateEnd">
+                                <fmt:formatDate pattern = "yyyy-MM-dd'T'HH:mm"
+                                                value = "${project.getDateEnd()}"/>
+                            </c:set>
                             <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_END%>"
-                                   value="${project.dateEnd}"
+                                   value="${dateEnd}"
                                    id="inputDateEnd">
                         </div>
                     </div>
@@ -65,10 +71,14 @@
                         <div class="form-group">
                             <label for="inputStatus">Select status:</label>
                             <select class="form-control" name="<%=FieldConst.STATUS%>" id="inputStatus">
-                                <%for (@NotNull Status status : Status.values()) {%>
-                                <option <%if (status == project.getStatus()) out.print("selected");%>><%=status%>
-                                </option>
-                                <%}%>
+                                <c:set var="selected" value=""/>
+                                <c:forEach var="status" items="<%=Status.values()%>">
+                                    ${selected=""}
+                                    <c:if test="${status==project.getStatus()}">
+                                        ${selected="selected"}
+                                    </c:if>
+                                    <option ${selected}>${status}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>

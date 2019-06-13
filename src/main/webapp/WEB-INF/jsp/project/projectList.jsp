@@ -39,29 +39,28 @@
                     </thead>
                     <tbody>
                     <c:set var="i" value="0"/>
-                    <c:forEach var="project" items="${projects}">
+                    <c:forEach var="task" items="${projects}">
                     <tr>
-
                         <td>
-                            ${i+1}
+                            ${i=i+1}
                         </td>
-                        <td>${project.getName()}
+                        <td>${task.getName()}
                         </td>
-                        <td>${project.getDescription()}
-                        </td>
-                        <td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm"
-                                            value = "${project.getDateBegin()}" />
+                        <td>${task.getDescription()}
                         </td>
                         <td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm"
-                                            value = "${project.getDateEnd()}" />
+                                            value = "${task.getDateBegin()}" />
                         </td>
-                        <td>${project.getStatus()}
+                        <td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm"
+                                            value = "${task.getDateEnd()}" />
+                        </td>
+                        <td>${task.getStatus()}
                         </td>
                         <td>
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/task/list',
-                                            {'<%=FieldConst.PROJECT_ID%>':'${project.getId( )}'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
                                             'GET');">
                                 TASKS
                             </button>
@@ -70,7 +69,7 @@
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/project/edit',
-                                            {'<%=FieldConst.PROJECT_ID%>':'${project.getId( )}'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
                                             'GET');">
                                 EDIT
                             </button>
@@ -79,7 +78,7 @@
                             <button class="btn btn-danger btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/project/delete',
-                                            {'<%=FieldConst.PROJECT_ID%>':''},
+                                            {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
                                             'POST');">
                                 DELETE
                             </button>
@@ -89,6 +88,7 @@
                     </c:forEach>
                     </tbody>
                 </table>
+
                 <button class="btn btn-success"
                         onclick="postToUrl(
                                 '${pageContext.request.contextPath}/project/create',

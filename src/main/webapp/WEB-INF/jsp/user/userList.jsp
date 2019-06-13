@@ -1,7 +1,7 @@
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
-<%@ page import="ru.stepanenko.tm.model.entity.User" %>
-<%@ page import="org.jetbrains.annotations.NotNull" %>
-<%@ page import="java.util.Collection" %><%--
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%--
   Created by IntelliJ IDEA.
   User: Asus
   Date: 04.06.2019
@@ -34,42 +34,40 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% @NotNull int i = 0;
-                        for (@NotNull User user : (Collection<User>) request.getAttribute(FieldConst.USERS)) {
-                            i++;
-                    %>
-                    <tr>
-                        <td><%=i%>
-                        </td>
-                        <td><%=user.getLogin()%>
-                        </td>
-                        <td><%=user.getName()%>
-                        </td>
-                        <td><%=user.getDescription()%>
-                        </td>
-                        <td><%=user.getRole()%>
-                        </td>
-                        <td>
-                            <button class="btn btn-primary btn-xs"
-                                    onclick="postToUrl(
-                                            '${pageContext.request.contextPath}/user/edit',
-                                            {'<%=FieldConst.USER_ID%>':'<%=user.getId()%>'},
-                                            'GET');">
-                                EDIT
-                            </button>
-                        </td>
-                        <td>
-                            <button class="btn btn-danger btn-xs"
-                                    onclick="postToUrl(
-                                            '${pageContext.request.contextPath}/user/delete',
-                                            {'<%=FieldConst.USER_ID%>':'<%=user.getId()%>'},
-                                            'POST');">
-                                DELETE
-                            </button>
-                        </td>
+                    <c:set var="i" value="0"/>
+                    <c:forEach var="user" items="${users}">
+                        <tr>
+                            <td>${i=i+1}
+                            </td>
+                            <td>${user.getLogin()}
+                            </td>
+                            <td>${user.getName()}
+                            </td>
+                            <td>${user.getDescription()}
+                            </td>
+                            <td>${user.getRole()}
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-xs"
+                                        onclick="postToUrl(
+                                                '${pageContext.request.contextPath}/user/edit',
+                                                {'<%=FieldConst.USER_ID%>':'${user.getId()}'},
+                                                'GET');">
+                                    EDIT
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-danger btn-xs"
+                                        onclick="postToUrl(
+                                                '${pageContext.request.contextPath}/user/delete',
+                                                {'<%=FieldConst.USER_ID%>':'${user.getId()}'},
+                                                'POST');">
+                                    DELETE
+                                </button>
+                            </td>
 
-                    </tr>
-                    <%}%>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
                 <button class="btn btn-success"

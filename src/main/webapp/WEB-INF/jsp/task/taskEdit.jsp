@@ -13,6 +13,8 @@
 <%@ page import="ru.stepanenko.tm.model.entity.Task" %>
 <%@ page import="org.jetbrains.annotations.NotNull" %>
 <%@ page import="ru.stepanenko.tm.enumerate.Status" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -24,15 +26,14 @@
     </div>
     <div class="jumbotron">
         <div class="row">
-            <% Task task = (Task) request.getAttribute(FieldConst.TASK); %>
             <form method="POST" action="${pageContext.request.contextPath}/task/edit">
-                <input type=hidden name="<%=FieldConst.TASK_ID%>" value="<%=task.getId()%>">
+                <input type=hidden name="<%=FieldConst.TASK_ID%>" value="${task.getId()}">
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputName">Name</label>
                             <input type="text" class="form-control" name="<%=FieldConst.NAME%>" id="inputName"
-                                   value="<%=task.getName()%>">
+                                   value="${task.getName()}">
                         </div>
                     </div>
                 </div>
@@ -40,22 +41,30 @@
                 <div class="form-group">
                     <label for="inputDescription">Description</label>
                     <textarea class="form-control" name="<%=FieldConst.DESCRIPTION%>" id="inputDescription"
-                              rows="10"><%=task.getDescription()%></textarea>
+                              rows="10">${task.getDescription()}</textarea>
                 </div>
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
+                            <c:set var="dateBegin">
+                                <fmt:formatDate pattern = "yyyy-MM-dd'T'HH:mm"
+                                                value = "${task.getDateBegin()}"/>
+                            </c:set>
                             <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_BEGIN%>"
-                                   value="<%=DateFormatter.dateToInput(task.getDateBegin())%>"
+                                   value="${dateBegin}"
                                    id="inputDateBegin">
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
+                            <c:set var="dateEnd">
+                                <fmt:formatDate pattern = "yyyy-MM-dd'T'HH:mm"
+                                                value = "${task.getDateEnd()}"/>
+                            </c:set>
                             <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_END%>"
-                                   value="<%=DateFormatter.dateToInput(task.getDateEnd())%>"
+                                   value="${dateEnd}"
                                    id="inputDateEnd">
                         </div>
                     </div>
@@ -63,24 +72,30 @@
                         <div class="form-group">
                             <label for="inputStatus">Select status:</label>
                             <select class="form-control" name="<%=FieldConst.STATUS%>" id="inputStatus">
-                                <%for (@NotNull Status status : Status.values()) {%>
-                                <option <%if (status == task.getStatus()) out.print("selected");%>><%=status%>
-                                </option>
-                                <%}%>
+                                <c:set var="selected" value=""/>
+                                <c:forEach var="status" items="<%=Status.values()%>">
+                                    ${selected=""}
+                                    <c:if test="${status==task.getStatus()}">
+                                        ${selected="selected"}
+                                    </c:if>
+                                    <option ${selected}>${status}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
-                            <label for="inputProject">Select project:</label>
+                            <label for="inputProject">Select status:</label>
                             <select class="form-control" name="<%=FieldConst.PROJECT_ID%>" id="inputProject">
-                                <% for (@NotNull Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {%>
-                                <option value="<%=project.getId()%>" <%
-                                    if (project.getId().equals(task.getProjectId()))
-                                        out.print("selected");
-                                %>><%=project.getName()%>
-                                </option>
-                                <%}%>
+                                <option></option>
+                                <c:set var="selected" value=""/>
+                                <c:forEach var="project" items="${projects}">
+                                    ${selected=""}
+                                    <c:if test="${project.getId()==task.getProjectId()}">
+                                        ${selected="selected"}
+                                    </c:if>
+                                    <option ${selected} value="${project.getId()}">${project.getName()}</option>
+                                </c:forEach>
                             </select>
                         </div>
                     </div>
