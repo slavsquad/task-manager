@@ -6,11 +6,10 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
-<%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
-<%@ page import="org.jetbrains.annotations.NotNull" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 <html>
 <jsp:include page="/WEB-INF/jsp/fragment/header.jsp"/>
 <body>
@@ -23,6 +22,7 @@
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-12">
+
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -38,28 +38,30 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <% @NotNull int i = 0;
-                        for (@NotNull Project project : (Collection<Project>) request.getAttribute(FieldConst.PROJECTS)) {
-                            i++;
-                    %>
+                    <c:set var="i" value="0"/>
+                    <c:forEach var="project" items="${projects}">
                     <tr>
-                        <td><%=i%>
+
+                        <td>
+                            ${i+1}
                         </td>
-                        <td><%=project.getName()%>
+                        <td>${project.getName()}
                         </td>
-                        <td><%=project.getDescription()%>
+                        <td>${project.getDescription()}
                         </td>
-                        <td><%=DateFormatter.dateToString(project.getDateBegin())%>
+                        <td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm"
+                                            value = "${project.getDateBegin()}" />
                         </td>
-                        <td><%=DateFormatter.dateToString(project.getDateEnd())%>
+                        <td><fmt:formatDate pattern = "yyyy-MM-dd HH:mm"
+                                            value = "${project.getDateEnd()}" />
                         </td>
-                        <td><%=project.getStatus()%>
+                        <td>${project.getStatus()}
                         </td>
                         <td>
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/task/list',
-                                            {'<%=FieldConst.PROJECT_ID%>':'<%=project.getId()%>'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'${project.getId( )}'},
                                             'GET');">
                                 TASKS
                             </button>
@@ -68,7 +70,7 @@
                             <button class="btn btn-primary btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/project/edit',
-                                            {'<%=FieldConst.PROJECT_ID%>':'<%=project.getId()%>'},
+                                            {'<%=FieldConst.PROJECT_ID%>':'${project.getId( )}'},
                                             'GET');">
                                 EDIT
                             </button>
@@ -77,14 +79,14 @@
                             <button class="btn btn-danger btn-xs"
                                     onclick="postToUrl(
                                             '${pageContext.request.contextPath}/project/delete',
-                                            {'<%=FieldConst.PROJECT_ID%>':'<%=project.getId()%>'},
+                                            {'<%=FieldConst.PROJECT_ID%>':''},
                                             'POST');">
                                 DELETE
                             </button>
                         </td>
 
                     </tr>
-                    <%}%>
+                    </c:forEach>
                     </tbody>
                 </table>
                 <button class="btn btn-success"

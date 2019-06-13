@@ -28,4 +28,5 @@ public class Project extends BaseEntity implements Serializable {
         this.status = status;
         this.userId = userId;
     }
+
 }

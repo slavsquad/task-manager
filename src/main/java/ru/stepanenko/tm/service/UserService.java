@@ -108,4 +108,5 @@ public class UserService implements IUserService {
         if (!user.getPassword().equals(password)) throw new AuthenticationSecurityException("Wrong password!");
         return user;
     }
+
 }

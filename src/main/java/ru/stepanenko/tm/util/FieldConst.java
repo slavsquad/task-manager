@@ -55,4 +55,10 @@ public final class FieldConst {
     @NotNull
     public static final String PASSWORD = "password";
 
+    @NotNull
+    public static final String ERROR_CODE = "errorCode";
+
+    @NotNull
+    public static final String ERROR_MESSAGE = "errorMessage";
+
 }

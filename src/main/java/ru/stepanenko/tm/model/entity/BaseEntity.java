@@ -25,4 +25,5 @@ public class BaseEntity extends AbstractEntity implements Serializable {
 
     @Getter
     protected Status status = Status.PLANNED;
+
 }

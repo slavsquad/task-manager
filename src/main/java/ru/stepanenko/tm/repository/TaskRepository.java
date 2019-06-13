@@ -22,7 +22,7 @@ public class TaskRepository implements ITaskRepository {
 
     private void generate() {
         for (int i = 1; i <= 4; i++) {
-            for (int j = 0; j <= 4; j++) {
+            for (int j = 1; j <= 4; j++) {
                 @NotNull final Task task = new Task("Task #"+j+" for project#" + i, "Description for task #"+j, new Date(), null, Status.PLANNED, String.valueOf(i), "1");
                 tasks.put(task.getId(), task);
             }
@@ -141,4 +141,5 @@ public class TaskRepository implements ITaskRepository {
         }
         return findTasks;
     }
+
 }

@@ -52,14 +52,20 @@
 
             <form <%if (request.getSession().getAttribute(FieldConst.USER) != null) out.print("hidden");%> method="POST"
                                                                                                            action="${pageContext.request.contextPath}/user/login"
+
                                                                                                            class="navbar-form navbar-right">
+                <a onclick="postToUrl(
+                        '${pageContext.request.contextPath}/user/register',
+                        '',
+                        'POST');">Sign Up&nbsp&nbsp</a>
                 <div class="form-group">
                     <input type="text" placeholder="Login" name="<%=FieldConst.LOGIN%>" class="form-control">
                 </div>
                 <div class="form-group">
                     <input type="password" placeholder="Password" name="<%=FieldConst.PASSWORD%>" class="form-control">
                 </div>
-                <button type="submit" class="btn btn-success">Sign in</button>
+                <button type="submit" class="btn btn-success">Sign In</button>
+
             </form>
         </div><!--/.navbar-collapse -->
     </div>

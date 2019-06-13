@@ -33,4 +33,5 @@ public class SessionService implements ISessionService {
             throw new AuthenticationSecurityException("Forbidden action for your role!");
 
     }
+
 }

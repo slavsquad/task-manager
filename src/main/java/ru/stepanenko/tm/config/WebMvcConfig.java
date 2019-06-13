@@ -13,6 +13,7 @@ import org.springframework.web.servlet.view.JstlView;
 @Configuration
 @ComponentScan(basePackages = "ru.stepanenko.tm")
 public class WebMvcConfig implements WebMvcConfigurer {
+
     @Bean
     public InternalResourceViewResolver resolver() {
         final InternalResourceViewResolver resolver =
@@ -28,5 +29,8 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry
                 .addResourceHandler("/resources/**")
                 .addResourceLocations("/resources/");
+        registry.addResourceHandler("/webjars/**")
+                .addResourceLocations("/webjars/");
     }
+
 }

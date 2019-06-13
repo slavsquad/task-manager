@@ -33,4 +33,5 @@ public class Task extends BaseEntity implements Serializable {
         this.projectId = projectId;
         this.userId = userId;
     }
+
 }

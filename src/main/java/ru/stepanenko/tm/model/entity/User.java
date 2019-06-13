@@ -34,4 +34,5 @@ public class User extends AbstractEntity implements Serializable {
         this.description = description;
         this.role = role;
     }
+
 }

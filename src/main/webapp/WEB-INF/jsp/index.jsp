@@ -16,7 +16,6 @@
                     <img src="${pageContext.request.contextPath}/resources/images/logo.png"
                          class="img-responsive center-block"
                          alt="Responsive image">
-                    <c:out value="${pageContext.request.contextPath}/resources/images/logo.png" />
                 </div>
             </div>
         </div>
