@@ -97,7 +97,7 @@ public class TaskController {
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
     ) throws IOException {
-        @NotNull String projectId=null;
+        @NotNull String projectId = null;
         try {
             sessionService.validateSession(session);
             @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);

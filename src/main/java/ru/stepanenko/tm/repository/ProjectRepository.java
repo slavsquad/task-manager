@@ -27,7 +27,7 @@ public class ProjectRepository implements IProjectRepository {
 
     private void generate() {
         for (int i = 1; i <= 4; i++) {
-            @NotNull final Project project = new Project("Project #"+i, "Description for project #"+i, new Date(), null, Status.PLANNED, "1");
+            @NotNull final Project project = new Project("Project #" + i, "Description for project #" + i, new Date(), null, Status.PLANNED, "1");
             project.setId(String.valueOf(i));
             projects.put(project.getId(), project);
         }

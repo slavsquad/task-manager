@@ -67,7 +67,7 @@
                 <div class="row">
                     <c:set var="hidden" value=""/>
                     <c:if test="${loggedUser.getRole()==Role.USER}">
-                        ${hidden="hidden"}
+                        <div hidden>${hidden="hidden"}</div>
                     </c:if>
                     <div class="col-xs-3" ${hidden}>
                         <div class="form-group">
@@ -77,7 +77,7 @@
                                 <c:forEach var="role" items="<%=Role.values()%>">
                                     ${selected=""}
                                     <c:if test="${role==user.getRole()}">
-                                        ${selected="selected"}
+                                        <div hidden>${selected="selected"}</div>
                                     </c:if>
                                     <option ${selected}>${role}</option>
                                 </c:forEach>

@@ -17,7 +17,7 @@ public class ErrorPageController {
     public ModelAndView pageError(
             @NotNull final HttpServletRequest req,
             @NotNull final HttpServletResponse resp
-            ) throws IOException {
+    ) throws IOException {
         @NotNull final ModelAndView errorPage = new ModelAndView("errorPage");
         @NotNull final int httpErrorCode = getErrorCode(req);
         @NotNull final String errorMessage = resp.toString();

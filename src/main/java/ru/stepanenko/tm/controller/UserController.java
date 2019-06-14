@@ -97,7 +97,6 @@ public class UserController {
             if (!loggedUser.getId().equals(userId)) {
                 return "redirect:/user/list";
             }
-            resp.sendRedirect(req.getContextPath());
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
         } catch (DataValidateException e) {
@@ -132,9 +131,10 @@ public class UserController {
     }
 
     @RequestMapping(value = {"user/create"}, method = RequestMethod.POST)
-    public String userCreate(@NotNull final HttpSession session,
-                           @NotNull final HttpServletRequest req,
-                           @NotNull final HttpServletResponse resp
+    public String userCreate(
+            @NotNull final HttpSession session,
+            @NotNull final HttpServletRequest req,
+            @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
             sessionService.validateAdminSession(session);
@@ -155,9 +155,10 @@ public class UserController {
     }
 
     @RequestMapping(value = {"user/delete"}, method = RequestMethod.POST)
-    public String userDelete(@NotNull final HttpSession session,
-                           @NotNull final HttpServletRequest req,
-                           @NotNull final HttpServletResponse resp
+    public String userDelete(
+            @NotNull final HttpSession session,
+            @NotNull final HttpServletRequest req,
+            @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
             sessionService.validateAdminSession(session);
@@ -168,6 +169,35 @@ public class UserController {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
         return "redirect:/user/list";
+    }
+
+    @RequestMapping(value = {"user/register"}, method = RequestMethod.GET)
+    public ModelAndView userRegister(
+    ) {
+        @NotNull final ModelAndView model = new ModelAndView("user/userRegister");
+        return model;
+    }
+
+    @RequestMapping(value = {"user/register"}, method = RequestMethod.POST)
+    public ModelAndView userRegister(
+            @NotNull final HttpSession session,
+            @NotNull final HttpServletRequest req,
+            @NotNull final HttpServletResponse resp
+    ) throws IOException {
+        @NotNull final ModelAndView model = new ModelAndView("user/userSuccessRegister");
+        try {
+            @NotNull final User user = new User(
+                    req.getParameter(FieldConst.LOGIN),
+                    req.getParameter(FieldConst.PASSWORD),
+                    req.getParameter(FieldConst.NAME),
+                    req.getParameter(FieldConst.DESCRIPTION),
+                    Role.USER);
+            userService.create(user);
+            model.addObject(FieldConst.USER, user);
+        } catch (DataValidateException e) {
+            resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
+        }
+        return model;
     }
 
 }

@@ -30,6 +30,8 @@ public class UserService implements IUserService {
             @Nullable final User user
     ) throws DataValidateException {
         DataValidator.validateUser(user, true);
+        if (userRepository.findByLogin(user.getLogin()) != null)
+            throw new DataValidateException("User with login: '" + user.getLogin() + "' already exist!");
         userRepository
                 .persist(user);
     }

@@ -1,7 +1,9 @@
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <%@ page import="org.jetbrains.annotations.NotNull" %>
 <%@ page import="ru.stepanenko.tm.model.entity.User" %>
-<%@ page import="ru.stepanenko.tm.enumerate.Role" %><%--
+<%@ page import="ru.stepanenko.tm.enumerate.Role" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%--
   Created by IntelliJ IDEA.
   User: Asus
   Date: 03.06.2019
@@ -19,24 +21,36 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <% @NotNull final User loggedUser = (User) request.getSession().getAttribute(FieldConst.USER);%>
+            <c:set var="hiddenForUser" value="hidden"/>
+            <c:set var="hiddenForNotLoginUser" value="hidden"/>
+            <c:set var="hiddenForLoginUser" value=""/>
+            <c:set var="loggedUser" value="<%=(User) request.getSession().getAttribute(FieldConst.USER)%>"/>
+
+            <c:if test="${loggedUser!=null}">
+                <div hidden>
+                        ${hiddenForNotLoginUser=""}
+                        ${hiddenForLoginUser="hidden"}
+                    <c:if test="${loggedUser.getRole()==Role.ADMIN}">
+                        ${hiddenForUser=""}
+                    </c:if>
+                </div>
+            </c:if>
             <a class="navbar-brand"
                href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span></a>
-            <a <%if (loggedUser == null) out.print("hidden");%> class="navbar-brand"
-                                                                href="${pageContext.request.contextPath}/project/list">Projects</a>
-            <a <%if (loggedUser == null) out.print("hidden");%> class="navbar-brand"
-                                                                href="${pageContext.request.contextPath}/task/list">Tasks</a>
-            <a <%if (loggedUser == null || loggedUser.getRole() == Role.USER) out.print("hidden");%>
-                    class="navbar-brand" href="${pageContext.request.contextPath}/user/list">Users</a>
+            <a ${hiddenForNotLoginUser} class="navbar-brand"
+                                        href="${pageContext.request.contextPath}/project/list">Projects</a>
+            <a ${hiddenForNotLoginUser} class="navbar-brand"
+                                        href="${pageContext.request.contextPath}/task/list">Tasks</a>
+            <a ${hiddenForUser} class="navbar-brand" href="${pageContext.request.contextPath}/user/list">Users</a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
 
-            <div <%if (request.getSession().getAttribute(FieldConst.USER) == null) out.print("hidden");%>
+            <div ${hiddenForNotLoginUser}
                     class="navbar-form navbar-right">
                 <button class="btn btn-primary"
                         onclick="postToUrl(
                                 '${pageContext.request.contextPath}/user/edit',
-                                {'<%=FieldConst.USER_ID%>':'<%if(loggedUser != null) out.print(loggedUser.getId());%>'},
+                                {'<%=FieldConst.USER_ID%>':'${loggedUser.getId()}'},
                                 'GET');">
                     PROFILE
                 </button>
@@ -50,14 +64,13 @@
                 </button>
             </div>
 
-            <form <%if (request.getSession().getAttribute(FieldConst.USER) != null) out.print("hidden");%> method="POST"
-                                                                                                           action="${pageContext.request.contextPath}/user/login"
-
-                                                                                                           class="navbar-form navbar-right">
+            <form ${hiddenForLoginUser} method="POST"
+                                        action="${pageContext.request.contextPath}/user/login"
+                                        class="navbar-form navbar-right">
                 <a onclick="postToUrl(
                         '${pageContext.request.contextPath}/user/register',
                         '',
-                        'POST');">Sign Up&nbsp&nbsp</a>
+                        'GET');">Sign Up</a>
                 <div class="form-group">
                     <input type="text" placeholder="Login" name="<%=FieldConst.LOGIN%>" class="form-control">
                 </div>

@@ -47,8 +47,8 @@
                         <div class="form-group">
                             <label for="inputDateBegin">Date begin</label>
                             <c:set var="dateBegin">
-                                <fmt:formatDate pattern = "yyyy-MM-dd'T'HH:mm"
-                                                value = "${project.getDateBegin()}"/>
+                                <fmt:formatDate pattern="yyyy-MM-dd'T'HH:mm"
+                                                value="${project.getDateBegin()}"/>
                             </c:set>
                             <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_BEGIN%>"
                                    value="${dateBegin}"
@@ -59,8 +59,8 @@
                         <div class="form-group">
                             <label for="inputDateEnd">Date end</label>
                             <c:set var="dateEnd">
-                                <fmt:formatDate pattern = "yyyy-MM-dd'T'HH:mm"
-                                                value = "${project.getDateEnd()}"/>
+                                <fmt:formatDate pattern="yyyy-MM-dd'T'HH:mm"
+                                                value="${project.getDateEnd()}"/>
                             </c:set>
                             <input class="form-control" type="datetime-local" name="<%=FieldConst.DATE_END%>"
                                    value="${dateEnd}"
@@ -73,10 +73,10 @@
                             <select class="form-control" name="<%=FieldConst.STATUS%>" id="inputStatus">
                                 <c:set var="selected" value=""/>
                                 <c:forEach var="status" items="<%=Status.values()%>">
-                                    ${selected=""}
-                                    <c:if test="${status==project.getStatus()}">
-                                        ${selected="selected"}
-                                    </c:if>
+                                    <div hidden>${selected=""}
+                                        <c:if test="${status==project.getStatus()}">
+                                            ${selected="selected"}
+                                        </c:if></div>
                                     <option ${selected}>${status}</option>
                                 </c:forEach>
                             </select>
