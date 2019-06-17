@@ -1,7 +1,6 @@
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
-<%@ page import="org.jetbrains.annotations.NotNull" %>
-<%@ page import="ru.stepanenko.tm.model.entity.User" %>
 <%@ page import="ru.stepanenko.tm.enumerate.Role" %>
+<%@ page import="ru.stepanenko.tm.model.dto.UserDTO" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%--
   Created by IntelliJ IDEA.
@@ -24,7 +23,7 @@
             <c:set var="hiddenForUser" value="hidden"/>
             <c:set var="hiddenForNotLoginUser" value="hidden"/>
             <c:set var="hiddenForLoginUser" value=""/>
-            <c:set var="loggedUser" value="<%=(User) request.getSession().getAttribute(FieldConst.USER)%>"/>
+            <c:set var="loggedUser" value="<%=(UserDTO) request.getSession().getAttribute(FieldConst.USER)%>"/>
 
             <c:if test="${loggedUser!=null}">
                 <div hidden>

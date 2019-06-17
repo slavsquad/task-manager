@@ -3,35 +3,43 @@ package ru.stepanenko.tm.model.entity;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import ru.stepanenko.tm.enumerate.Status;
+import ru.stepanenko.tm.model.dto.TaskDTO;
 
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Date;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
+@Table(name = "app_task")
 public class Task extends BaseEntity implements Serializable {
 
     @Nullable
-    private String projectId;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
 
-    public Task(
-            @Nullable final String name,
-            @Nullable final String description,
-            @Nullable final Date dateBegin,
-            @Nullable final Date dateEnd,
-            @Nullable final Status status,
-            @Nullable final String projectId,
-            @Nullable final String userId) {
-        this.name = name;
-        this.description = description;
-        this.dateBegin = dateBegin;
-        this.dateEnd = dateEnd;
-        this.status = status;
-        this.projectId = projectId;
-        this.userId = userId;
+    @Nullable
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
+    public TaskDTO getDTO() {
+        @NotNull final TaskDTO dto = new TaskDTO();
+        dto.setId(id);
+        dto.setName(name);
+        dto.setDescription(description);
+        dto.setDateBegin(dateBegin);
+        dto.setDateEnd(dateEnd);
+        dto.setStatus(status);
+        dto.setUserId(user.getId());
+        dto.setProjectId(project == null ? null : project.getId());
+        return dto;
     }
-
 }

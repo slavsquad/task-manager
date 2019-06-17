@@ -1,4 +1,4 @@
-package ru.stepanenko.tm.model.entity;
+package ru.stepanenko.tm.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -6,20 +6,14 @@ import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.UUID;
 
 @Getter
 @Setter
 @NoArgsConstructor
-@MappedSuperclass
-public abstract class
-AbstractEntity implements Serializable {
+public abstract class AbstractEntityDTO implements Serializable {
 
-    @Id
     @NotNull
     protected String id = UUID.randomUUID().toString();
 

@@ -17,78 +17,78 @@
 <div class="container theme-showcase" role="main">
     <div class="header">
         <h3 class="text-muted"><br/></h3>
-        <h4 class="text-muted">PROJECT MANAGEMENT:</h4>
+        <h4 class="text-muted">PROJECT MANAGEMENT</h4>
     </div>
     <div class="jumbotron">
         <div class="row">
             <div class="col-md-12">
-
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>#</th>
-                        <th>Name</th>
-                        <th>Description</th>
-                        <th>Data begin</th>
-                        <th>Data End</th>
-                        <th>Status</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:set var="i" value="0"/>
-                    <c:forEach var="task" items="${projects}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
                         <tr>
-                            <td>
-                                    ${i=i+1}
-                            </td>
-                            <td>${task.getName()}
-                            </td>
-                            <td>${task.getDescription()}
-                            </td>
-                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-                                                value="${task.getDateBegin()}"/>
-                            </td>
-                            <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-                                                value="${task.getDateEnd()}"/>
-                            </td>
-                            <td>${task.getStatus()}
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-xs"
-                                        onclick="postToUrl(
-                                                '${pageContext.request.contextPath}/task/list',
-                                                {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
-                                                'GET');">
-                                    TASKS
-                                </button>
-                            </td>
-                            <td>
-                                <button class="btn btn-primary btn-xs"
-                                        onclick="postToUrl(
-                                                '${pageContext.request.contextPath}/project/edit',
-                                                {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
-                                                'GET');">
-                                    EDIT
-                                </button>
-                            </td>
-                            <td>
-                                <button class="btn btn-danger btn-xs"
-                                        onclick="postToUrl(
-                                                '${pageContext.request.contextPath}/project/delete',
-                                                {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
-                                                'POST');">
-                                    DELETE
-                                </button>
-                            </td>
-
+                            <th>#</th>
+                            <th>Name</th>
+                            <th>Description</th>
+                            <th>Data begin</th>
+                            <th>Data End</th>
+                            <th>Status</th>
+                            <th></th>
+                            <th></th>
+                            <th></th>
                         </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        <c:set var="i" value="0"/>
+                        <c:forEach var="task" items="${projects}">
+                            <tr>
+                                <td>
+                                        ${i=i+1}
+                                </td>
+                                <td>${task.getName()}
+                                </td>
+                                <td>${task.getDescription()}
+                                </td>
+                                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+                                                    value="${task.getDateBegin()}"/>
+                                </td>
+                                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+                                                    value="${task.getDateEnd()}"/>
+                                </td>
+                                <td>${task.getStatus()}
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-xs"
+                                            onclick="postToUrl(
+                                                    '${pageContext.request.contextPath}/task/list',
+                                                    {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
+                                                    'GET');">
+                                        TASKS
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-primary btn-xs"
+                                            onclick="postToUrl(
+                                                    '${pageContext.request.contextPath}/project/edit',
+                                                    {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
+                                                    'GET');">
+                                        EDIT
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-danger btn-xs"
+                                            onclick="postToUrl(
+                                                    '${pageContext.request.contextPath}/project/delete',
+                                                    {'<%=FieldConst.PROJECT_ID%>':'${task.getId( )}'},
+                                                    'POST');">
+                                        DELETE
+                                    </button>
+                                </td>
 
+                            </tr>
+                        </c:forEach>
+                        </tbody>
+                    </table>
+                </div>
                 <button class="btn btn-success"
                         onclick="postToUrl(
                                 '${pageContext.request.contextPath}/project/create',

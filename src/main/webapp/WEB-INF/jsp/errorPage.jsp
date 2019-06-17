@@ -18,7 +18,7 @@
 <div class="container theme-showcase" role="main">
     <div class="header">
         <h3 class="text-muted"><br/></h3>
-        <h4 class="text-muted">ERROR PAGE</h4>
+        <h4 class="text-muted">ERROR</h4>
     </div>
     <div class="jumbotron">
         <div class="row">

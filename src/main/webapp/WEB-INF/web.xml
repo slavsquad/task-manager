@@ -4,6 +4,6 @@
 http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
          version="3.1">
     <error-page>
-        <location>/error</location> <!-- /src/main/webapp/error-404.html-->
+        <location>/error</location>
     </error-page>
 </web-app>

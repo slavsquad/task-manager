@@ -1,7 +1,5 @@
-<%@ page import="ru.stepanenko.tm.model.entity.User" %>
+
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
-<%@ page import="ru.stepanenko.tm.enumerate.Role" %>
-<%@ page import="org.jetbrains.annotations.NotNull" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -19,7 +17,7 @@
 <div class="container theme-showcase" role="main">
     <div class="header">
         <h3 class="text-muted"><br/></h3>
-        <h4 class="text-muted">REGISTRATION:</h4>
+        <h4 class="text-muted">REGISTRATION</h4>
     </div>
     <div class="jumbotron">
         <div class="row">

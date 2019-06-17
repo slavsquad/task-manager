@@ -1,13 +1,11 @@
 package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.Project;
+import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
-import java.util.Comparator;
 
-@Repository
 public interface IProjectRepository {
 
     Project findOne(
@@ -18,30 +16,30 @@ public interface IProjectRepository {
     void removeAll();
 
     void remove(
-            @NotNull final String id);
+            @NotNull final Project project);
 
     void persist(
             @NotNull final Project project);
 
-    void merge(
+    Project merge(
             @NotNull final Project project);
 
     Collection<Project> findAllByUserId(
-            @NotNull final String id);
+            @NotNull final User user);
 
     Project findOneByUserId(
             @NotNull final String id,
-            @NotNull final String userId);
+            @NotNull final User user);
 
-    void removeAllByUserId(
-            @NotNull final String id);
+    void removeAllByUserID(
+            @NotNull final User user);
 
     Collection<Project> sortAllByUserId(
-            @NotNull final String id,
-            @NotNull final Comparator<Project> comparator);
+            @NotNull final User user,
+            @NotNull final String parameter);
 
     Collection<Project> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
-            @NotNull final String userId);
+            @NotNull final User user);
 }

@@ -1,6 +1,5 @@
 package ru.stepanenko.tm.controller;
 
-import com.sun.org.apache.bcel.internal.generic.MONITORENTER;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,10 +12,11 @@ import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.FieldConst;
+import ru.stepanenko.tm.util.HashUtil;
 
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -43,7 +43,7 @@ public class UserController {
         @NotNull final String login = req.getParameter(FieldConst.LOGIN);
         @NotNull final String password = req.getParameter(FieldConst.PASSWORD);
         try {
-            @NotNull final User loggedUser = userService.authenticationUser(login, password);
+            @NotNull final UserDTO loggedUser = userService.authenticationUser(login, HashUtil.md5(password));
             session.setAttribute(FieldConst.USER, loggedUser);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
@@ -62,10 +62,10 @@ public class UserController {
         @NotNull final ModelAndView model = new ModelAndView("user/userEdit");
         try {
             sessionService.validateSession(session);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String userId = req.getParameter(FieldConst.USER_ID);
             if (!loggedUser.getId().equals(userId)) sessionService.validateAdminSession(session);
-            @NotNull final User user = userService.findOne(userId);
+            @NotNull final UserDTO user = userService.findOne(userId);
             model.addObject(FieldConst.USER, user);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
@@ -83,10 +83,10 @@ public class UserController {
     ) throws IOException {
         try {
             sessionService.validateSession(session);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String userId = req.getParameter(FieldConst.USER_ID);
             if (!loggedUser.getId().equals(userId)) sessionService.validateAdminSession(session);
-            @NotNull final User user = new User(
+            @NotNull final UserDTO user = new UserDTO(
                     req.getParameter(FieldConst.LOGIN),
                     req.getParameter(FieldConst.PASSWORD),
                     req.getParameter(FieldConst.NAME),
@@ -138,7 +138,7 @@ public class UserController {
     ) throws IOException {
         try {
             sessionService.validateAdminSession(session);
-            @NotNull final User user = new User(
+            @NotNull final UserDTO user = new UserDTO(
                     "New User:",
                     "password",
                     "New user name",
@@ -186,7 +186,7 @@ public class UserController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("user/userSuccessRegister");
         try {
-            @NotNull final User user = new User(
+            @NotNull final UserDTO user = new UserDTO(
                     req.getParameter(FieldConst.LOGIN),
                     req.getParameter(FieldConst.PASSWORD),
                     req.getParameter(FieldConst.NAME),

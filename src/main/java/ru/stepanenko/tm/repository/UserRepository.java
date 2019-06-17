@@ -1,87 +1,70 @@
 package ru.stepanenko.tm.repository;
 
+
+import lombok.SneakyThrows;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
-import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.model.entity.User;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 @Repository
-public class UserRepository implements IUserRepository {
+public final class UserRepository implements IUserRepository {
 
     @NotNull
-    private final Map<String, User> users;
-
-    public UserRepository() {
-        users = new LinkedHashMap<>();
-        generate();
-    }
-
-    private void generate() {
-        @NotNull final User admin = new User(
-                "admin",
-                "admin",
-                "Administrator",
-                "Administrator for task manager application.",
-                Role.ADMIN);
-        @NotNull final User user = new User(
-                "user",
-                "user",
-                "User",
-                "User for task manager application.",
-                Role.USER);
-        admin.setId("1");
-        user.setId("2");
-        users.put(admin.getId(), admin);
-        users.put(user.getId(), user);
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public User findOne(
             @NotNull final String id) {
-        return users.get(id);
+        return entityManager.find(User.class, id);
     }
 
     @Override
     public Collection<User> findAll() {
-        return users.values();
+        return entityManager.createQuery("SELECT e FROM User e", User.class).getResultList();
     }
 
     @Override
     public void removeAll() {
-        users.clear();
+        @Nullable final Collection<User> users = findAll();
+        if (users == null) return;
+        users.forEach(entityManager::remove);
     }
 
     @Override
     public void remove(
-            @NotNull final String id) {
-        users.remove(id);
+            @NotNull final User user) {
+        entityManager.remove(user);
     }
 
     @Override
     public void persist(
             @NotNull final User user) {
-        merge(user);
+        entityManager.persist(user);
     }
 
     @Override
-    public void merge(
+    public User merge(
             @NotNull final User user) {
-        users.put(user.getId(), user);
+        return entityManager.merge(user);
     }
 
     @Override
     public User findByLogin(
             @NotNull final String login) {
-        for (@NotNull final User user : findAll()) {
-            if (user.getLogin().equals(login))
-                return user;
-        }
-        return null;
+        @Nullable final User user = entityManager
+                .createQuery("SELECT e FROM User e WHERE e.login = :login", User.class)
+                .setParameter("login", login)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+        return user;
     }
-
 }

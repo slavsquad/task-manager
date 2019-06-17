@@ -5,9 +5,9 @@ import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.DataValidateException;
-import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.model.entity.Task;
-import ru.stepanenko.tm.model.entity.User;
+import ru.stepanenko.tm.model.dto.ProjectDTO;
+import ru.stepanenko.tm.model.dto.TaskDTO;
+import ru.stepanenko.tm.model.dto.UserDTO;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -45,56 +45,56 @@ public class DataValidator {
         if (parameters.get(parameter) == null) throw new DataValidateException("Incorrect input parameter!");
     }
 
-    public static void validateProject(
-            @Nullable final Project project)
+    public static void validateProjectDTO(
+            @Nullable final ProjectDTO projectDTO)
             throws DataValidateException {
-        if (project == null)
+        if (projectDTO == null)
             throw new DataValidateException("Incorrect project dto!");
-        if (project.getId() == null || project.getId().isEmpty())
+        if (projectDTO.getId() == null || projectDTO.getId().isEmpty())
             throw new DataValidateException("Id project not must be empty!");
-        if (project.getUserId() == null || project.getUserId().isEmpty())
+        if (projectDTO.getUserId() == null || projectDTO.getUserId().isEmpty())
             throw new DataValidateException("User id not must be empty!");
-        if (project.getName() == null || project.getName().isEmpty())
+        if (projectDTO.getName() == null || projectDTO.getName().isEmpty())
             throw new DataValidateException("Project name not must be empty!");
-        if (project.getDescription() == null || project.getDescription().isEmpty())
+        if (projectDTO.getDescription() == null || projectDTO.getDescription().isEmpty())
             throw new DataValidateException("Project description not must be empty!");
-        if (project.getDateBegin() == null)
+        if (projectDTO.getDateBegin() == null)
             throw new DataValidateException("Project date begin not must be empty!");
-        validateStatus(project.getStatus());
+        validateStatus(projectDTO.getStatus());
     }
 
-    public static void validateTask(
-            @Nullable final Task task)
+    public static void validateTaskDTO(
+            @Nullable final TaskDTO taskDTO)
             throws DataValidateException {
-        if (task == null)
+        if (taskDTO == null)
             throw new DataValidateException("Incorrect task dto!");
-        if (task.getId() == null || task.getId().isEmpty())
+        if (taskDTO.getId() == null || taskDTO.getId().isEmpty())
             throw new DataValidateException("Id task not must be empty!");
-        if (task.getUserId() == null || task.getUserId().isEmpty())
+        if (taskDTO.getUserId() == null || taskDTO.getUserId().isEmpty())
             throw new DataValidateException("User id not must be empty!");
-        if (task.getName() == null || task.getName().isEmpty())
+        if (taskDTO.getName() == null || taskDTO.getName().isEmpty())
             throw new DataValidateException("Task name not must be empty!");
-        if (task.getDescription() == null || task.getDescription().isEmpty())
+        if (taskDTO.getDescription() == null || taskDTO.getDescription().isEmpty())
             throw new DataValidateException("Task description not must be empty!");
-        if (task.getDateBegin() == null)
+        if (taskDTO.getDateBegin() == null)
             throw new DataValidateException("Task date begin not must be empty!");
-        validateStatus(task.getStatus());
+        validateStatus(taskDTO.getStatus());
     }
 
-    public static void validateUser(
-            @Nullable final User user,
+    public static void validateUserDTO(
+            @Nullable final UserDTO userDTO,
             @NotNull final boolean validatePassword)
             throws DataValidateException {
-        if (user == null)
+        if (userDTO == null)
             throw new DataValidateException("Incorrect user dto!");
-        if (user.getId() == null || user.getId().isEmpty())
+        if (userDTO.getId() == null || userDTO.getId().isEmpty())
             throw new DataValidateException("Id user not must be empty!");
-        if (user.getLogin() == null || user.getLogin().isEmpty())
+        if (userDTO.getLogin() == null || userDTO.getLogin().isEmpty())
             throw new DataValidateException("User login not must be empty!");
         if (validatePassword)
-            if (user.getPassword() == null || user.getPassword().isEmpty())
+            if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty())
                 throw new DataValidateException("User password not must be empty!");
-        validateRole(user.getRole());
+        validateRole(userDTO.getRole());
     }
 
 }

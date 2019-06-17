@@ -6,12 +6,7 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.Collection" %>
-<%@ page import="ru.stepanenko.tm.model.entity.Project" %>
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
-<%@ page import="ru.stepanenko.tm.util.DateFormatter" %>
-<%@ page import="ru.stepanenko.tm.model.entity.Task" %>
-<%@ page import="org.jetbrains.annotations.NotNull" %>
 <%@ page import="ru.stepanenko.tm.enumerate.Status" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -22,12 +17,13 @@
 <div class="container theme-showcase" role="main">
     <div class="header">
         <h3 class="text-muted"><br/></h3>
-        <h4 class="text-muted">TASK EDIT:</h4>
+        <h4 class="text-muted">TASK EDIT</h4>
     </div>
     <div class="jumbotron">
         <div class="row">
             <form method="POST" action="${pageContext.request.contextPath}/task/edit">
                 <input type=hidden name="<%=FieldConst.TASK_ID%>" value="${task.getId()}">
+                <input type=hidden name="<%=FieldConst.PROJECT_ID%>" value="${projectId}">
                 <div class="row">
                     <div class="col-xs-3">
                         <div class="form-group">
@@ -87,8 +83,8 @@
                     </div>
                     <div class="col-xs-3">
                         <div class="form-group">
-                            <label for="inputProject">Select status:</label>
-                            <select class="form-control" name="<%=FieldConst.PROJECT_ID%>" id="inputProject">
+                            <label for="inputProject">Select project:</label>
+                            <select class="form-control" name="<%=FieldConst.EDIT_PROJECT_ID%>" id="inputProject">
                                 <option></option>
                                 <c:set var="selected" value=""/>
                                 <c:forEach var="project" items="${projects}">

@@ -7,6 +7,7 @@ import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.FieldConst;
 
@@ -28,7 +29,7 @@ public class SessionService implements ISessionService {
             @Nullable final HttpSession session
     ) throws AuthenticationSecurityException, DataValidateException {
         validateSession(session);
-        @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
+        @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
         if (!loggedUser.getRole().equals(Role.ADMIN))
             throw new AuthenticationSecurityException("Forbidden action for your role!");
 

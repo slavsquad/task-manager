@@ -1,12 +1,10 @@
 package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
 
-@Repository
 public interface IUserRepository {
 
     User findOne(
@@ -17,12 +15,12 @@ public interface IUserRepository {
     void removeAll();
 
     void remove(
-            @NotNull final String id);
+            @NotNull final User user);
 
     void persist(
             @NotNull final User user);
 
-    void merge(
+    User merge(
             @NotNull final User user);
 
     User findByLogin(

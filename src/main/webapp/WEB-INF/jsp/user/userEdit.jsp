@@ -1,7 +1,7 @@
-<%@ page import="ru.stepanenko.tm.model.entity.User" %>
+
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <%@ page import="ru.stepanenko.tm.enumerate.Role" %>
-<%@ page import="org.jetbrains.annotations.NotNull" %>
+<%@ page import="ru.stepanenko.tm.model.dto.UserDTO" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -19,11 +19,11 @@
 <div class="container theme-showcase" role="main">
     <div class="header">
         <h3 class="text-muted"><br/></h3>
-        <h4 class="text-muted">USER EDIT:</h4>
+        <h4 class="text-muted">USER EDIT</h4>
     </div>
     <div class="jumbotron">
         <div class="row">
-            <c:set var="loggedUser" value="<%=(User) request.getSession().getAttribute(FieldConst.USER)%>"/>
+            <c:set var="loggedUser" value="<%=(UserDTO) request.getSession().getAttribute(FieldConst.USER)%>"/>
             <form method="POST" action="${pageContext.request.contextPath}/user/edit">
 
                 <input type=hidden name="<%=FieldConst.USER_ID%>" value="${user.getId()}">

@@ -12,6 +12,8 @@ import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
+import ru.stepanenko.tm.model.dto.ProjectDTO;
+import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.DateFormatter;
@@ -43,7 +45,7 @@ public class ProjectController {
         @NotNull final ModelAndView model = new ModelAndView("project/projectList");
         try {
             sessionService.validateSession(session);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             model.addObject(FieldConst.PROJECTS, projectService.findAllByUserId(loggedUser.getId()));
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
@@ -62,9 +64,9 @@ public class ProjectController {
         @NotNull final ModelAndView model = new ModelAndView("project/projectEdit");
         try {
             sessionService.validateSession(session);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
-            @Nullable final Project project = projectService.findOne(projectId, loggedUser.getId());
+            @Nullable final ProjectDTO project = projectService.findOne(projectId, loggedUser.getId());
             model.addObject(FieldConst.PROJECT, project);
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
@@ -82,8 +84,8 @@ public class ProjectController {
     ) throws IOException {
         try {
             sessionService.validateSession(session);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
-            @NotNull final Project project = new Project(
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
+            @NotNull final ProjectDTO project = new ProjectDTO(
                     req.getParameter(FieldConst.NAME),
                     req.getParameter(FieldConst.DESCRIPTION),
                     DateFormatter.stringToDate(req.getParameter(FieldConst.DATE_BEGIN)),
@@ -108,8 +110,8 @@ public class ProjectController {
     ) throws IOException {
         try {
             sessionService.validateSession(session);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
-            @NotNull final Project project = new Project(
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
+            @NotNull final ProjectDTO project = new ProjectDTO(
                     "New project",
                     "Description for new project",
                     new Date(),
@@ -134,7 +136,7 @@ public class ProjectController {
         try {
             sessionService.validateSession(session);
             @Nullable final String id = req.getParameter(FieldConst.PROJECT_ID);
-            @NotNull final User loggedUser = (User) session.getAttribute(FieldConst.USER);
+            @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             projectService.remove(id, loggedUser.getId());
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());

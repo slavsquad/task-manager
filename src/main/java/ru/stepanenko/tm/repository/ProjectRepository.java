@@ -1,119 +1,122 @@
 package ru.stepanenko.tm.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
-import ru.stepanenko.tm.enumerate.Status;
 import ru.stepanenko.tm.model.entity.Project;
+import ru.stepanenko.tm.model.entity.User;
 
-import java.util.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.util.Collection;
+import java.util.List;
 
 @Repository
-public class ProjectRepository implements IProjectRepository {
+public final class ProjectRepository implements IProjectRepository {
 
     @NotNull
-    private final Map<String, Project> projects;
-
-    public ProjectRepository() {
-        this.projects = new LinkedHashMap<>();
-        generate();
-    }
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public Project findOne(
             @NotNull final String id) {
-        return projects.get(id);
-    }
-
-    private void generate() {
-        for (int i = 1; i <= 4; i++) {
-            @NotNull final Project project = new Project("Project #" + i, "Description for project #" + i, new Date(), null, Status.PLANNED, "1");
-            project.setId(String.valueOf(i));
-            projects.put(project.getId(), project);
-        }
+        return entityManager.find(Project.class, id);
     }
 
     @Override
     public Collection<Project> findAll() {
-        return projects.values();
+        return entityManager.createQuery("SELECT e FROM Project e", Project.class).getResultList();
     }
 
     @Override
     public void removeAll() {
-        projects.clear();
+        @Nullable final Collection<Project> projects = findAll();
+        if (projects == null) return;
+        projects.forEach(entityManager::remove);
     }
 
     @Override
     public void remove(
-            @NotNull final String id) {
-        projects.remove(id);
+            @NotNull final Project project) {
+        entityManager.remove(project);
     }
 
     @Override
     public void persist(
             @NotNull final Project project) {
-        merge(project);
+        entityManager.persist(project);
     }
 
     @Override
-    public void merge(
+    public Project merge(
             @NotNull final Project project) {
-        projects.put(project.getId(), project);
+        return entityManager.merge(project);
     }
 
     @Override
     public Collection<Project> findAllByUserId(
-            @NotNull final String id) {
-        @NotNull final Collection<Project> findProjects = new ArrayList<>();
-        for (@NotNull final Project project : findAll()) {
-            if (project.getUserId().equals(id)) {
-                findProjects.add(project);
-            }
-        }
-        return findProjects;
+            @NotNull final User user) {
+        @Nullable final Collection<Project> projects = entityManager
+                .createQuery("SELECT e FROM Project e WHERE e.user = :user", Project.class)
+                .setParameter("user", user)
+                .getResultList();
+        return projects;
     }
 
     @Override
     public Project findOneByUserId(
             @NotNull final String id,
-            @NotNull final String userId) {
-        for (@NotNull final Project project : findAllByUserId(userId)) {
-            if (project.getId().equals(id)) {
-                return project;
-            }
-        }
-        return null;
+            @NotNull final User user) {
+        @Nullable final Project project = entityManager
+                .createQuery("SELECT e FROM Project e WHERE e.id = :id AND e.user = :user", Project.class)
+                .setParameter("id", id)
+                .setParameter("user", user)
+                .getResultList()
+                .stream()
+                .findFirst()
+                .orElse(null);
+        return project;
     }
 
     @Override
-    public void removeAllByUserId(
-            @NotNull String id) {
-        for (@NotNull final Project project : findAllByUserId(id)) {
-            projects.remove(project.getId());
-        }
+    public void removeAllByUserID(@NotNull final User user) {
+        @Nullable final Collection<Project> projects = findAllByUserId(user);
+        if (projects == null) return;
+        projects.forEach(entityManager::remove);
     }
 
     @Override
     public Collection<Project> sortAllByUserId(
-            @NotNull final String id,
-            @NotNull final Comparator<Project> comparator) {
-        @NotNull final List<Project> findProjects = new ArrayList<>(findAllByUserId(id));
-        Collections.sort(findProjects, comparator);
-        return findProjects;
+            @NotNull final User user,
+            @NotNull final String parameter) {
+        @NotNull final CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        @NotNull final CriteriaQuery<Project> criteriaQuery = criteriaBuilder.createQuery(Project.class);
+        @NotNull final Root<Project> projectRoot = criteriaQuery.from(Project.class);
+        @NotNull final Predicate condition = criteriaBuilder.equal(projectRoot.get("user"), user);
+        criteriaQuery.select(projectRoot).where(condition);
+        criteriaQuery.orderBy(criteriaBuilder.desc(projectRoot.get(parameter)));
+        @NotNull final TypedQuery<Project> query = entityManager.createQuery(criteriaQuery);
+        return query.getResultList();
     }
 
     @Override
     public Collection<Project> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
-            @NotNull final String userId) {
-        @NotNull final List<Project> findProjects = new ArrayList<>();
-        for (Project project : findAllByUserId(userId)) {
-            if (project.getName().contains(name) || project.getDescription().contains(description)) {
-                findProjects.add(project);
-            }
-        }
-        return findProjects;
+            @NotNull final User user) {
+        @NotNull final String query = "SELECT e FROM Project e WHERE e.user = :user and (e.name like :name OR e.description LIKE :description)";
+        @Nullable final List<Project> projects = entityManager.createQuery(query, Project.class)
+                .setParameter("user", user)
+                .setParameter("name", "%" + name + "%")
+                .setParameter("description", "%" + description + "%")
+                .getResultList();
+        return projects;
     }
-
 }
