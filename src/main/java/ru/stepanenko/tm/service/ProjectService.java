@@ -177,7 +177,7 @@ public class ProjectService implements IProjectService {
         DataValidator.validateString(id, parameter);
         DataValidator.validateParameter(parameter);
         @Nullable Collection<Project> projects = projectRepository
-                .sortAllByUserId(getUser(id),parameter);
+                .sortAllByUserId(getUser(id), parameter);
         if (projects == null) throw new DataValidateException("Projects not found!");
         return projects
                 .stream()

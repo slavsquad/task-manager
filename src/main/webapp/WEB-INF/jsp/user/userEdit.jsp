@@ -1,4 +1,3 @@
-
 <%@ page import="ru.stepanenko.tm.util.FieldConst" %>
 <%@ page import="ru.stepanenko.tm.enumerate.Role" %>
 <%@ page import="ru.stepanenko.tm.model.dto.UserDTO" %>

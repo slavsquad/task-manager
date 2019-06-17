@@ -90,12 +90,12 @@ public class DataGenerator {
 
     public void generateData() {
         try {
-            for (@NotNull UserDTO user:userService.findAll()){
+            for (@NotNull UserDTO user : userService.findAll()) {
                 for (int i = 1; i <= 4; i++) {
-                    @NotNull final ProjectDTO project = new ProjectDTO("Project for "+user.getLogin()+" #" + i, "Description for project #" + i, new Date(), null, Status.PLANNED, user.getId());
+                    @NotNull final ProjectDTO project = new ProjectDTO("Project for " + user.getLogin() + " #" + i, "Description for project #" + i, new Date(), null, Status.PLANNED, user.getId());
                     projectService.create(project);
                     for (int j = 1; j <= 4; j++) {
-                        @NotNull final TaskDTO task = new TaskDTO("Task  for "+user.getLogin()+" #" + j, "Description task #" + j + " for project #" + i, new Date(), null, Status.PLANNED, project.getId(), user.getId());
+                        @NotNull final TaskDTO task = new TaskDTO("Task  for " + user.getLogin() + " #" + j, "Description task #" + j + " for project #" + i, new Date(), null, Status.PLANNED, project.getId(), user.getId());
                         taskService.create(task);
                     }
                 }

@@ -23,16 +23,16 @@ public class UserDTO extends AbstractEntityDTO implements Serializable {
     private Role role = Role.USER;
 
     public UserDTO(
-        @Nullable final String login,
-        @Nullable final String password,
-        @Nullable final String name,
-        @Nullable final String description,
-        @Nullable final Role role) {
-            this.login = login;
-            this.password = password;
-            this.name = name;
-            this.description = description;
-            this.role = role;
+            @Nullable final String login,
+            @Nullable final String password,
+            @Nullable final String name,
+            @Nullable final String description,
+            @Nullable final Role role) {
+        this.login = login;
+        this.password = password;
+        this.name = name;
+        this.description = description;
+        this.role = role;
     }
 
 }
