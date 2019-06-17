@@ -14,6 +14,7 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.User;
+import ru.stepanenko.tm.util.DataValidator;
 import ru.stepanenko.tm.util.FieldConst;
 import ru.stepanenko.tm.util.HashUtil;
 
@@ -88,7 +89,7 @@ public class UserController {
             if (!loggedUser.getId().equals(userId)) sessionService.validateAdminSession(session);
             @NotNull final UserDTO user = new UserDTO(
                     req.getParameter(FieldConst.LOGIN),
-                    req.getParameter(FieldConst.PASSWORD),
+                    HashUtil.md5(req.getParameter(FieldConst.PASSWORD)),
                     req.getParameter(FieldConst.NAME),
                     req.getParameter(FieldConst.DESCRIPTION),
                     Role.valueOf(req.getParameter(FieldConst.ROLE)));
@@ -188,7 +189,7 @@ public class UserController {
         try {
             @NotNull final UserDTO user = new UserDTO(
                     req.getParameter(FieldConst.LOGIN),
-                    req.getParameter(FieldConst.PASSWORD),
+                    HashUtil.md5(req.getParameter(FieldConst.PASSWORD)),
                     req.getParameter(FieldConst.NAME),
                     req.getParameter(FieldConst.DESCRIPTION),
                     Role.USER);

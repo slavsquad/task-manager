@@ -52,31 +52,37 @@ public class DataGenerator {
 
     public void generateUsers() {
         try {
-            UserDTO admin = new UserDTO();
-            admin.setLogin("admin");
-            admin.setPassword(HashUtil.md5("admin"));
-            admin.setRole(Role.ADMIN);
+            UserDTO admin = new UserDTO(
+                    "admin",
+                    HashUtil.md5("admin"),
+                    "Administrator",
+                    "Application's administrator",
+                    Role.ADMIN);
 
-            UserDTO user = new UserDTO();
-            user.setLogin("user");
-            user.setPassword(HashUtil.md5("user"));
-            user.setRole(Role.USER);
+            UserDTO user = new UserDTO("user",
+                    HashUtil.md5("user"),
+                    "User",
+                    "Application's user",
+                    Role.USER);
 
-            UserDTO testAdmin = new UserDTO();
-            testAdmin.setLogin("testAdmin");
-            testAdmin.setPassword(HashUtil.md5("testAdmin"));
-            testAdmin.setRole(Role.ADMIN);
+            UserDTO testAdmin = new UserDTO("testAdmin",
+                    HashUtil.md5("testAdmin"),
+                    "Test admin",
+                    "Test application's administrator",
+                    Role.ADMIN);
 
-            UserDTO testUser = new UserDTO();
-            testUser.setLogin("testUser");
-            testUser.setPassword(HashUtil.md5("testUser"));
-            testUser.setRole(Role.USER);
+            UserDTO testUser = new UserDTO("testUser",
+                    HashUtil.md5("testUser"),
+                    "Test user",
+                    "Test application's user",
+                    Role.USER);
 
-            UserDTO test = new UserDTO();
+            UserDTO test = new UserDTO("test",
+                    HashUtil.md5("test"),
+                    "Test user",
+                    "Test application's user with id equals 1",
+                    Role.USER);
             test.setId("1");
-            test.setLogin("test");
-            test.setPassword(HashUtil.md5("test"));
-            test.setRole(Role.USER);
 
             userService.create(admin);
             userService.create(user);

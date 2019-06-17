@@ -45,16 +45,23 @@ public class UserService implements IUserService {
     public void edit(
             @Nullable final UserDTO userDTO
     ) throws DataValidateException {
-        DataValidator.validateUserDTO(userDTO, true);
+        DataValidator.validateUserDTO(userDTO, false);
         @Nullable final User user = userRepository
                 .findOne(userDTO.getId());
         if (user == null) throw new DataValidateException("User not found");
         @NotNull final User findUser = userRepository
                 .findByLogin(userDTO.getLogin());
         if (findUser != null && !user.getId().equals(findUser.getId()))
-            throw new DataValidateException("User with login: '" + user.getLogin() + "' already exist!");
+            throw new DataValidateException("User with login: '" + userDTO.getLogin() + "' already exist!");
+        if (DataValidator.stringIsNull(userDTO.getPassword()))
+            userDTO.setPassword(user.getPassword());
+        user.setName(userDTO.getName());
+        user.setDescription(userDTO.getDescription());
+        user.setLogin(userDTO.getLogin());
+        user.setPassword(userDTO.getPassword());
+        user.setRole(userDTO.getRole());
         userRepository
-                .merge(convertDTOtoUser(userDTO));
+                .merge(user);
     }
 
     @Override

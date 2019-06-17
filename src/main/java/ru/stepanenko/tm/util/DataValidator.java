@@ -13,6 +13,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataValidator {
+    public static boolean stringIsNull(
+            @Nullable final String string) {
+        if (string == null || string.isEmpty() || "null".equals(string))
+            return true;
+        return false;
+    }
+
     public static void validateString(
             @Nullable final String... strings)
             throws DataValidateException {

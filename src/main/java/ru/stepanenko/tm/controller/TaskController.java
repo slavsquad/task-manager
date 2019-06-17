@@ -17,6 +17,7 @@ import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
+import ru.stepanenko.tm.util.DataValidator;
 import ru.stepanenko.tm.util.DateFormatter;
 import ru.stepanenko.tm.util.FieldConst;
 
@@ -113,7 +114,7 @@ public class TaskController {
                     DateFormatter.stringToDate(req.getParameter(FieldConst.DATE_BEGIN)),
                     DateFormatter.stringToDate(req.getParameter(FieldConst.DATE_END)),
                     Status.valueOf(req.getParameter(FieldConst.STATUS)),
-                    (editProjectId == null || editProjectId.isEmpty() || "null".equals(editProjectId)) ? null : editProjectId,
+                    DataValidator.stringIsNull(editProjectId) ? null : editProjectId,
                     loggedUser.getId());
             task.setId(req.getParameter(FieldConst.TASK_ID));
             taskService.edit(task);
@@ -122,7 +123,7 @@ public class TaskController {
         } catch (DataValidateException | ParseException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
-        if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
+        if (DataValidator.stringIsNull(projectId)) {
             return "redirect:/task/list";
         }
         return "redirect:/task/list?" + FieldConst.PROJECT_ID + "=" + projectId;
@@ -145,7 +146,7 @@ public class TaskController {
                     new Date(),
                     null,
                     Status.PLANNED,
-                    (projectId == null || projectId.isEmpty() || "null".equals(projectId)) ? null : projectId,
+                    DataValidator.stringIsNull(projectId) ? null : projectId,
                     loggedUser.getId());
             taskService.create(task);
         } catch (AuthenticationSecurityException e) {
@@ -153,7 +154,7 @@ public class TaskController {
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
-        if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
+        if (DataValidator.stringIsNull(projectId)) {
             return "redirect:/task/list";
         }
         return "redirect:/task/list?" + FieldConst.PROJECT_ID + "=" + projectId;
@@ -177,7 +178,7 @@ public class TaskController {
         } catch (DataValidateException e) {
             resp.sendError(HttpServletResponse.SC_NOT_FOUND, e.getMessage());
         }
-        if (projectId == null || projectId.isEmpty() || "null".equals(projectId)) {
+        if (DataValidator.stringIsNull(projectId)) {
             return "redirect:/task/list";
         }
         return "redirect:/task/list?" + FieldConst.PROJECT_ID + "=" + projectId;

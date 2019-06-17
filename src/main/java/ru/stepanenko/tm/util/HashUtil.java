@@ -9,11 +9,11 @@ import java.security.NoSuchAlgorithmException;
 public class HashUtil {
 
     @Nullable
-    public static String md5(@Nullable final String md5) {
-        if (md5 == null) return null;
+    public static String md5(@Nullable final String string) {
+        if (DataValidator.stringIsNull(string)) return null;
         try {
             @NotNull final MessageDigest md = MessageDigest.getInstance("MD5");
-            @NotNull final byte[] array = md.digest(md5.getBytes());
+            @NotNull final byte[] array = md.digest(string.getBytes());
             @NotNull final StringBuilder sb = new StringBuilder();
             for (int i = 0; i < array.length; ++i) {
                 sb.append(Integer.toHexString((array[i] & 0xFF) | 0x100)
