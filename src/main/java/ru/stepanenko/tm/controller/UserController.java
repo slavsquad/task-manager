@@ -110,7 +110,7 @@ public class UserController {
     public String userLogout(
             @NotNull final HttpSession session
     ) {
-        session.invalidate();
+        session.setAttribute(FieldConst.USER, null);
         return "redirect:/";
     }
 

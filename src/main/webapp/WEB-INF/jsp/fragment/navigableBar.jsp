@@ -35,7 +35,7 @@
                 </div>
             </c:if>
             <a class="navbar-brand"
-               href="${pageContext.request.contextPath}"><span class="glyphicon glyphicon-home"></span></a>
+               href="${pageContext.request.contextPath}/"><span class="glyphicon glyphicon-home"></span></a>
             <a ${hiddenForNotLoginUser} class="navbar-brand"
                                         href="${pageContext.request.contextPath}/project/list">Projects</a>
             <a ${hiddenForNotLoginUser} class="navbar-brand"
