@@ -1,22 +1,23 @@
 package ru.stepanenko.tm.service;
 
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.api.repository.IProjectRepository;
-import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.ITaskService;
-import ru.stepanenko.tm.exception.DataValidateException;
+import ru.stepanenko.tm.api.repository.ITaskRepository;
 import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Task;
+import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.DataValidator;
 
-import java.util.Collection;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,7 +51,7 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateTaskDTO(taskDTO);
         @NotNull final Task task = convertDTOtoTask(taskDTO);
-        taskRepository.persist(task);
+        taskRepository.save(task);
     }
 
     @Override
@@ -59,17 +60,17 @@ public class TaskService implements ITaskService {
             @Nullable final TaskDTO taskDTO
     ) throws DataValidateException {
         DataValidator.validateTaskDTO(taskDTO);
-        @Nullable final Task task = taskRepository
-                .findOne(taskDTO.getId());
+        @Nullable final Task task = taskRepository.findById(taskDTO.getId()).get();
+        @Nullable final String projectId = taskDTO.getProjectId();
         if (task == null) throw new DataValidateException("Task not found");
         task.setName(taskDTO.getName());
         task.setDescription(taskDTO.getDescription());
         task.setStatus(taskDTO.getStatus());
         task.setDateBegin(taskDTO.getDateBegin());
         task.setDateEnd(taskDTO.getDateEnd());
-        task.setProject(getProject(taskDTO.getProjectId()));
+        task.setProject(getProject(projectId));
         taskRepository
-                .merge(task);
+                .save(task);
     }
 
     @Override
@@ -80,7 +81,7 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @Nullable final Task task = taskRepository
-                .findOneByUserId(id, getUser(userId));
+                .findByIdAndUser(id, getUser(userId));
         if (task == null) throw new DataValidateException("Task not found");
         return task.getDTO();
     }
@@ -93,9 +94,9 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @Nullable final Task task = taskRepository
-                .findOneByUserId(id, getUser(userId));
+                .findByIdAndUser(id, getUser(userId));
         if (task == null) throw new DataValidateException("Task not found");
-        taskRepository.remove(task);
+        taskRepository.delete(task);
     }
 
     @Override
@@ -105,7 +106,7 @@ public class TaskService implements ITaskService {
         @Nullable final Collection<Task> tasks = taskRepository
                 .findAll();
         if (tasks == null) throw new DataValidateException("Tasks not found");
-        tasks.forEach(taskRepository::remove);
+        tasks.forEach(taskRepository::delete);
     }
 
     @Override
@@ -115,7 +116,7 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Task task = taskRepository
-                .findOne(id);
+                .findById(id).get();
         if (task == null) throw new DataValidateException("Task not found");
         return task.getDTO();
     }
@@ -127,9 +128,9 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Task task = taskRepository
-                .findOne(id);
+                .findById(id).get();
         if (task == null) throw new DataValidateException("Task not found");
-        taskRepository.remove(task);
+        taskRepository.delete(task);
     }
 
     @Override
@@ -153,9 +154,9 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @Nullable final Collection<Task> tasks = taskRepository
-                .findAllByProjectAndUserId(getProject(id), getUser(userId));
+                .findByProjectAndUser(getProject(id), getUser(userId));
         if (tasks == null) throw new DataValidateException("Tasks not found");
-        tasks.forEach(taskRepository::remove);
+        tasks.forEach(taskRepository::delete);
     }
 
     @Override
@@ -165,9 +166,9 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Collection<Task> tasks = taskRepository
-                .findAllByUserId(getUser(id));
+                .findAllByUser(getUser(id));
         if (tasks == null) throw new DataValidateException("Tasks not found");
-        tasks.forEach(taskRepository::remove);
+        tasks.forEach(taskRepository::delete);
 
     }
 
@@ -179,8 +180,25 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id, parameter);
         DataValidator.validateParameter(parameter);
-        @Nullable Collection<Task> tasks = taskRepository
-                .sortAllByUserId(getUser(id), parameter);
+        @Nullable Collection<Task> tasks = null;
+        switch (parameter) {
+            case "order":
+                tasks = taskRepository
+                        .findAllByUser(getUser(id));
+                break;
+            case "status":
+                tasks = taskRepository
+                        .sortByStatus(getUser(id));
+                break;
+            case "dateBegin":
+                tasks = taskRepository
+                        .sortByDateBegin(getUser(id));
+                break;
+            case "dateEnd":
+                tasks = taskRepository
+                        .sortByDateEnd(getUser(id));
+                break;
+        }
         if (tasks == null) throw new DataValidateException("Tasks not found");
         return tasks
                 .stream()
@@ -213,7 +231,7 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id, userId);
         @Nullable final Collection<Task> tasks = taskRepository
-                .findAllByProjectAndUserId(getProject(id), getUser(userId));
+                .findByProjectAndUser(getProject(id), getUser(userId));
         if (tasks == null) throw new DataValidateException("Tasks not found");
         return tasks
                 .stream()
@@ -228,7 +246,7 @@ public class TaskService implements ITaskService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final Collection<Task> tasks = taskRepository
-                .findAllByUserId(getUser(id));
+                .findAllByUser(getUser(id));
         if (tasks == null) throw new DataValidateException("Tasks not found");
         return tasks
                 .stream()
@@ -255,7 +273,7 @@ public class TaskService implements ITaskService {
     public User getUser(
             @NotNull final String id
     ) throws DataValidateException {
-        @Nullable final User user = userRepository.findOne(id);
+        @Nullable final User user = userRepository.findById(id).get();
         if (user == null) throw new DataValidateException("User not found!");
         return user;
     }
@@ -264,9 +282,9 @@ public class TaskService implements ITaskService {
     public Project getProject(
             @Nullable final String id
     ) throws DataValidateException {
-        if (id == null || id.isEmpty() || "null".equals(id))
+        if (DataValidator.stringIsNull(id))
             return null;
-        @Nullable final Project project = projectRepository.findOne(id);
+        @Nullable final Project project = projectRepository.findById(id).get();
         if (project == null) throw new DataValidateException("Project not found!");
         return project;
     }

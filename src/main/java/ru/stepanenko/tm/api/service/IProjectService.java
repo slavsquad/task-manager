@@ -1,10 +1,11 @@
 package ru.stepanenko.tm.api.service;
 
+
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
+import ru.stepanenko.tm.exception.DataValidateException;
 
 import java.util.Collection;
 

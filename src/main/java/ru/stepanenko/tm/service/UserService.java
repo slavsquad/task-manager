@@ -1,5 +1,6 @@
 package ru.stepanenko.tm.service;
 
+
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,10 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
-import ru.stepanenko.tm.exception.AuthenticationSecurityException;
-import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.model.entity.User;
+import ru.stepanenko.tm.exception.AuthenticationSecurityException;
+import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.util.DataValidator;
 
 import java.util.Collection;
@@ -34,10 +35,9 @@ public class UserService implements IUserService {
             @Nullable final UserDTO userDTO
     ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
-        if (userRepository.findByLogin(userDTO.getLogin()) != null)
-            throw new DataValidateException("User with login: '" + userDTO.getLogin() + "' already exist!");
+        @NotNull final User user = convertDTOtoUser(userDTO);
         userRepository
-                .persist(convertDTOtoUser(userDTO));
+                .save(user);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class UserService implements IUserService {
     ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, false);
         @Nullable final User user = userRepository
-                .findOne(userDTO.getId());
+                .findById(userDTO.getId()).get();
         if (user == null) throw new DataValidateException("User not found");
         @NotNull final User findUser = userRepository
                 .findByLogin(userDTO.getLogin());
@@ -61,7 +61,7 @@ public class UserService implements IUserService {
         user.setPassword(userDTO.getPassword());
         user.setRole(userDTO.getRole());
         userRepository
-                .merge(user);
+                .save(user);
     }
 
     @Override
@@ -83,7 +83,7 @@ public class UserService implements IUserService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable final User user = userRepository
-                .findOne(id);
+                .findById(id).get();
         if (user == null) throw new DataValidateException("User not found!");
         return user.getDTO();
     }
@@ -95,10 +95,10 @@ public class UserService implements IUserService {
     ) throws DataValidateException {
         DataValidator.validateString(id);
         @Nullable User user = userRepository
-                .findOne(id);
+                .findById(id).get();
         if (user == null) throw new DataValidateException("User not found!");
         userRepository
-                .remove(user);
+                .delete(user);
     }
 
     @Transactional
@@ -107,7 +107,7 @@ public class UserService implements IUserService {
         @Nullable final Collection<User> users = userRepository
                 .findAll();
         if (users == null) throw new DataValidateException("Users not found!");
-        users.forEach(userRepository::remove);
+        users.forEach(userRepository::delete);
     }
 
     @Override

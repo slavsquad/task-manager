@@ -1,54 +1,43 @@
 package ru.stepanenko.tm.api.repository;
 
 import org.jetbrains.annotations.NotNull;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import ru.stepanenko.tm.model.entity.Project;
 import ru.stepanenko.tm.model.entity.Task;
 import ru.stepanenko.tm.model.entity.User;
 
 import java.util.Collection;
 
-public interface ITaskRepository {
+@Repository
+public interface ITaskRepository extends JpaRepository<Task, String> {
 
-    Task findOne(@NotNull final String id);
-
-    Collection<Task> findAll();
-
-    void removeAll();
-
-    void remove(
-            @NotNull final Task task);
-
-    void persist(
-            @NotNull final Task entity);
-
-    Task merge(
-            @NotNull final Task task);
-
-
-    Collection<Task> findAllByUserId(
+    Collection<Task> findAllByUser(
             @NotNull final User user);
 
-    Collection<Task> findAllByProjectAndUserId(
+    Collection<Task> findByProjectAndUser(
             @NotNull final Project project,
             @NotNull final User user);
 
 
-    Task findOneByUserId(
+    Task findByIdAndUser(
             @NotNull final String id,
             @NotNull final User user);
 
-    void removeAllByUserId(
+    @Query("SELECT e FROM Task e WHERE e.user = ?1 ORDER BY e.status DESC")
+    Collection<Task> sortByStatus(
             @NotNull final User user);
 
-    void removeAllByProjectAndUserId(
-            @NotNull final Project project,
+    @Query("SELECT e FROM Task e WHERE e.user = ?1 ORDER BY e.dateBegin DESC")
+    Collection<Task> sortByDateBegin(
             @NotNull final User user);
 
+    @Query("SELECT e FROM Task e WHERE e.user = ?1 ORDER BY e.dateEnd DESC")
+    Collection<Task> sortByDateEnd(
+            @NotNull final User user);
 
-    Collection<Task> sortAllByUserId(
-            @NotNull final User user,
-            @NotNull final String parameter);
-
+    @Query("SELECT e FROM Task e WHERE e.user = ?3 AND (e.name LIKE (concat('%', ?1,'%')) OR e.description LIKE (concat('%', ?2,'%')))")
     Collection<Task> findAllByPartOfNameOrDescription(
             @NotNull final String name,
             @NotNull final String description,
