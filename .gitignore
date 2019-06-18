@@ -1,5 +1,4 @@
 *.out
-*.properties
 **/docs/
 **/release/
 *.idea

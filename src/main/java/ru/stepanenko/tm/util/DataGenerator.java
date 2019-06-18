@@ -41,11 +41,11 @@ public class DataGenerator {
         this.taskService = taskService;
         this.userService = userService;
         this.sessionService = sessionService;
-
         generate();
     }
 
     public void generate() {
+        cleanUp();
         generateUsers();
         generateData();
     }
@@ -112,9 +112,13 @@ public class DataGenerator {
     }
 
     public void cleanUp(
-    ) throws DataValidateException {
-        taskService.clear();
-        projectService.clear();
-        userService.clear();
+    ) {
+        try {
+            taskService.clear();
+            projectService.clear();
+            userService.clear();
+        } catch (DataValidateException e) {
+            e.printStackTrace();
+        }
     }
 }
