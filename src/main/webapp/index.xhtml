@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head><h:outputStylesheet library="styles" name="style.css"/></h:head>
+<div class="header"/>
+<div class="content ui-g-12 ui-g-nopad">
+    <div class="wrapper">
+        <p:growl id="growl" life="2000"/>
+        <div class="mainContainer">
+            <div class="mainBox">
+                <div class="greetingsBox">
+                    <p>Welcome to Task Manager</p>
+                </div>
+                <div class="imageBox">
+                    <h:graphicImage value="/resources/images/logo.png"/>
+                </div>
+                <div class="buttonBox">
+                    <h:form>
+                        <p:commandButton action="#{indexController.enter()}" process="@form" value="Enter"
+                                         update=":growl"
+                                         ajax="true"/>
+                        <p:commandButton action="#{indexController.registration()}" process="@form" value="Registration"
+                                         update=":growl"
+                                         ajax="true"/>
+                    </h:form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="footer ui-g-12"/>
+</html>
