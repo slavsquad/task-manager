@@ -3,31 +3,83 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:p="http://primefaces.org/ui">
-<h:head><h:outputStylesheet library="styles" name="style.css"/></h:head>
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<h:head></h:head>
 <div class="header"/>
 <div class="content ui-g-12 ui-g-nopad">
     <div class="wrapper">
         <p:growl id="growl" life="2000"/>
         <div class="mainContainer">
             <div class="mainBox">
-                <div class="greetingsBox">
-                    <p>Welcome to Task Manager</p>
-                </div>
-                <div class="imageBox">
-                    <h:graphicImage value="/resources/images/logo.png"/>
-                </div>
-                <div class="buttonBox">
-                    <h:form>
-                        <p:commandButton action="#{indexController.enter()}" process="@form" value="Enter"
-                                         update=":growl"
-                                         ajax="true"/>
-                        <p:commandButton action="#{indexController.registration()}" process="@form" value="Registration"
-                                         update=":growl"
-                                         ajax="true"/>
-                    </h:form>
-                </div>
+                <h:form>
+                    <p:growl id="messages"/>
+
+                    <p:menubar>
+
+                        <p:menuitem value="Home" url="ya.ru" icon="pi pi-home"/>
+                        <p:menuitem value="Project" url="ya.ru" icon="pi pi-briefcase"/>
+                        <p:menuitem value="Task" url="ya.ru" icon="pi pi-calendar"/>
+                        <p:menuitem value="User" url="ya.ru" icon="pi pi-users"/>
+
+                        <f:facet name="options">
+                            <a >Sign Up</a>
+                            <p:inputText placeholder="Username" style="margin-left: 15px;"/>
+                            <p:inputText placeholder="Password" style="margin-left: 5px;"/>
+                            <p:commandButton type="button" value="Sing In" style="margin-left: 5px;"/>
+                            <!--<p:commandButton type="button" value="Profile" icon="pi pi-user" />
+                            <p:commandButton type="button" value="Logout" icon="pi pi-times" />-->
+                        </f:facet>
+                    </p:menubar>
+                </h:form>
             </div>
+            <h:form id="form">
+                <p:dataGrid var="car" value="#{dataGridView.cars}" columns="3" layout="grid"
+                            rows="12" paginator="true" id="cars"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rowsPerPageTemplate="6,12,16">
+
+                    <f:facet name="header">
+                        Cars for Sale
+                    </f:facet>
+
+                    <p:panel header="#{car.id}" style="text-align:center">
+                        <h:panelGrid columns="1" style="width:100%">
+                            <p:graphicImage name="demo/images/car/#{car.brand}.gif"/>
+
+                            <h:outputText value="#{car.year}" />
+
+                            <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()" title="View Detail">
+                                <h:outputText styleClass="pi pi-search" style="margin:0 auto;"/>
+                                <f:setPropertyActionListener value="#{car}" target="#{dataGridView.selectedCar}" />
+                            </p:commandLink>
+                        </h:panelGrid>
+                    </p:panel>
+
+                </p:dataGrid>
+
+                <p:dialog header="Car Info" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade" resizable="false">
+                    <p:outputPanel id="carDetail" style="text-align:center;">
+                        <p:panelGrid  columns="2" rendered="#{not empty dataGridView.selectedCar}" columnClasses="label,value">
+                            <f:facet name="header">
+                                <p:graphicImage name="demo/images/car/#{dataGridView.selectedCar.brand}-big.gif"/>
+                            </f:facet>
+
+                            <h:outputText value="Id:" />
+                            <h:outputText value="#{dataGridView.selectedCar.id}" />
+
+                            <h:outputText value="Year" />
+                            <h:outputText value="#{dataGridView.selectedCar.year}" />
+
+                            <h:outputText value="Color:" />
+                            <h:outputText value="#{dataGridView.selectedCar.color}" style="color:#{dataGridView.selectedCar.color}"/>
+
+                            <h:outputText value="Price" />
+                            <h:outputText value="$#{dataGridView.selectedCar.price}" />
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+            </h:form>
         </div>
     </div>
 </div>
