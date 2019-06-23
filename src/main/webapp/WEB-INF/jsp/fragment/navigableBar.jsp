@@ -55,7 +55,7 @@
                 </button>
                 <button class="btn btn-danger"
                         onclick="postToUrl(
-                                '${pageContext.request.contextPath}/user/logout',
+                                '${pageContext.request.contextPath}/user/userLogout',
                                 '',
                                 'POST');">
 

@@ -5,12 +5,11 @@ import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
 
-import java.io.Serializable;
 import java.util.Date;
 
 @Getter
 @Setter
-public class BaseEntityDTO extends AbstractEntityDTO implements Serializable {
+public class BaseEntityDTO extends AbstractEntityDTO {
 
     @Nullable
     protected Date dateBegin = new Date();
@@ -21,6 +20,6 @@ public class BaseEntityDTO extends AbstractEntityDTO implements Serializable {
     @Nullable
     protected String userId = "";
 
-    @Getter
+    @Nullable
     protected Status status = Status.PLANNED;
 }

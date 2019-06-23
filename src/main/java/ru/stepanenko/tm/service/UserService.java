@@ -52,7 +52,7 @@ public class UserService implements IUserService {
         @NotNull final User findUser = userRepository
                 .findByLogin(userDTO.getLogin());
         if (findUser != null && !user.getId().equals(findUser.getId()))
-            throw new DataValidateException("User with login: '" + userDTO.getLogin() + "' already exist!");
+            throw new DataValidateException("User with userLogin: '" + userDTO.getLogin() + "' already exist!");
         if (DataValidator.stringIsNull(userDTO.getPassword()))
             userDTO.setPassword(user.getPassword());
         user.setName(userDTO.getName());

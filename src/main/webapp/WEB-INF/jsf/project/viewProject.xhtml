@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <title>Project</title>
+</h:head>
+
+<h:body>
+    <p:outputPanel id="carDetail">
+        <p:panelGrid columns="2" styleClass="ui-noborder">
+
+            <h:outputText value="Id:"/>
+            <h:outputText value="#{projectViewController.selectedProject.id}"/>
+
+            <h:outputText value="Name:"/>
+            <h:outputText value="#{projectViewController.selectedProject.name}"/>
+
+            <h:outputText value="Description:"/>
+            <h:outputText value="#{projectViewController.selectedProject.description}"/>
+
+            <h:outputText value="Data begin:"/>
+            <h:outputText value="#{projectViewController.selectedProject.dateBegin}"/>
+
+            <h:outputText value="Data End:"/>
+            <h:outputText value="#{projectViewController.selectedProject.dateEnd}"/>
+
+            <h:outputText value="Description:"/>
+            <h:outputText value="#{projectViewController.selectedProject.description}"/>
+
+            <h:outputText value="Status:"/>
+            <h:outputText value="$#{projectViewController.selectedProject.status}"/>
+        </p:panelGrid>
+    </p:outputPanel>
+</h:body>
+
+</html>

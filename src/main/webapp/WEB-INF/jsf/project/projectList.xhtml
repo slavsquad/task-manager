@@ -10,51 +10,113 @@
     <ui:composition template="/WEB-INF/jsf/template/template.xhtml">
         <ui:param name="title" value="PROJECT MANAGEMENT"/>
         <ui:define name="content">
-            <p:dataTable styleClass="crudTable" id="projects" var="project" binding = "#{table}" value="#{projectList.projects}"
-                         editable="true"
-                         rows="10"
-                         paginator="true"
-                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15,50" >
-                <p:column headerText="#" style="width:20px;">
-                    <h:outputText value="#{table.rowIndex+1}" />
-                </p:column>
+            <h:form id="form">
+                <p:growl id="msgs" showDetail="true" sticky="true"/>
 
-                <p:column headerText="Name">
-                    <h:outputText value="#{project.name}" />
-                </p:column>
+                <p:dataTable
+                        id="projects"
+                        var="project"
+                        binding="#{table}"
+                        value="#{projectViewController.projects}"
+                        selectionMode="single"
+                        selection="#{projectViewController.selectedProject}"
+                        rowKey="#{project.id}"
+                        rows="10"
+                        paginator="true"
+                        paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                        rowsPerPageTemplate="4,12,16,24,58">
+                    <p:ajax event="rowSelect" listener="#{projectViewController.onRowSelect}" update=":form:msgs" />
+                    <p:ajax event="rowUnselect" listener="#{projectViewController.onRowUnselect}" update=":form:msgs" />
+                    <p:column headerText="#" width="10">
+                        <p:outputLabel value="#{table.rowIndex+1}"/>
+                    </p:column>
 
-                <p:column headerText="Description">
-                    <h:outputText value="#{project.description}" />
-                </p:column>
+                    <p:column headerText="ID" rendered="false" >
+                        <p:outputLabel value="#{project.id}"/>
+                    </p:column>
 
-                <p:column headerText="Data Begin">
-                    <h:outputText value="#{project.dateBegin}" />
-                </p:column>
-                <p:column headerText="Data End">
-                    <h:outputText value="#{project.dateEnd}" />
-                </p:column>
-                <p:column headerText="Status">
-                    <h:outputText value="#{project.status}" />
-                </p:column>
-            </p:dataTable>
-            <!--<p:dataTable var="car" value="#{dtBasicView.cars}">
-                <p:column headerText="Id">
-                    <h:outputText value="#{car.id}" />
-                </p:column>
+                    <p:column headerText="Name" sortable="true" sortBy="#{project.name}">
+                        <p:outputLabel value="#{project.name}"/>
+                    </p:column>
 
-                <p:column headerText="Year">
-                    <h:outputText value="#{car.year}" />
-                </p:column>
+                    <p:column headerText="Data Begin"  width="150" sortable="true" sortBy="#{project.dateBegin}">
+                        <p:outputLabel value="#{project.dateBegin}">
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Data End"  width="150" sortable="true" sortBy="#{project.dateEnd}">
+                        <p:outputLabel value="#{project.dateEnd}">
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Status" width="150" sortable="true" sortBy="#{project.status}">
+                        <p:outputLabel value="#{project.status}"/>
+                    </p:column>
+                </p:dataTable>
 
-                <p:column headerText="Brand">
-                    <h:outputText value="#{car.brand}" />
-                </p:column>
 
-                <p:column headerText="Color">
-                    <h:outputText value="#{car.color}" />
-                </p:column>
-            </p:dataTable>-->
+                <p:dialog header="Project information:" widgetVar="carDialog" modal="true" showEffect="fade" hideEffect="fade"
+                          resizable="false">
+                    <p:outputPanel id="carDetail">
+                        <p:panelGrid columns="2" rendered="#{not empty projectViewController.selectedProject}"
+                                     columnClasses="label,value">
+
+                            <h:outputText value="Id:"/>
+                            <h:outputText value="#{projectViewController.selectedProject.id}"/>
+
+                            <h:outputText value="Name:"/>
+                            <h:outputText value="#{projectViewController.selectedProject.name}"/>
+
+                            <h:outputText value="Description:"/>
+                            <h:outputText value="#{projectViewController.selectedProject.description}"/>
+
+                            <h:outputText value="Data begin:"/>
+                            <h:outputText value="#{projectViewController.selectedProject.dateBegin}"/>
+
+                            <h:outputText value="Data End:"/>
+                            <h:outputText value="#{projectViewController.selectedProject.dateEnd}"/>
+
+                            <h:outputText value="Description:"/>
+                            <h:outputText value="#{projectViewController.selectedProject.description}"/>
+
+                            <h:outputText value="Status:"/>
+                            <h:outputText value="$#{projectViewController.selectedProject.status}"/>
+                        </p:panelGrid>
+                    </p:outputPanel>
+                </p:dialog>
+                <p:panelGrid columns="1" style="width: 100%; text-align:left;margin-top: -1px;">
+                    <p:outputPanel>
+                        <p:commandButton
+                                update=":form:projects"
+                                value="Create"
+                                icon="pi pi-file"
+                                style="margin-top:10px;margin-bottom:10px;"
+                                action="#{projectViewController.projectCreate}"/>
+
+                        <p:commandButton
+                                update=":form:carDetail"
+                                icon="pi pi-calendar"
+                                value="Tasks"
+                                style="margin-left:15px;"/>
+
+                        <p:commandButton
+                                update=":form:msgs"
+                                icon="pi pi-pencil"
+                                value="Edit|View"
+                                action="#{projectViewController.projectView}"
+                                style="margin-left:15px;"/>
+
+                        <p:commandButton
+                                update="form"
+                                icon="pi pi-trash"
+                                value="Delete"
+                                style="margin-left:15px;"
+                                action="#{projectViewController.projectDelete}"
+                        />
+                    </p:outputPanel>
+
+                </p:panelGrid>
+            </h:form>
         </ui:define>
     </ui:composition>
 </f:view>

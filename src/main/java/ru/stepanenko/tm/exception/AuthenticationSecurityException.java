@@ -6,7 +6,7 @@ public class AuthenticationSecurityException extends Exception {
 
     public AuthenticationSecurityException(
             @NotNull final String message) {
-        super(message);
+        super("#"+message);
     }
 
 }

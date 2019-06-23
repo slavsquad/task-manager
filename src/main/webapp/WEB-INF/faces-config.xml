@@ -6,16 +6,31 @@
               version="2.1">
     <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
+        <action-listener>org.primefaces.application.DialogActionListener</action-listener>
+        <navigation-handler>org.primefaces.application.DialogNavigationHandler</navigation-handler>
+        <view-handler>org.primefaces.application.DialogViewHandler</view-handler>
     </application>
 
     <navigation-rule>
+        <from-view-id>/*</from-view-id>
         <navigation-case>
             <from-outcome>projectListOutcome</from-outcome>
             <to-view-id>/WEB-INF/jsf/project/projectList.xhtml</to-view-id>
+            <redirect/>
         </navigation-case>
         <navigation-case>
             <from-outcome>main</from-outcome>
             <to-view-id>/WEB-INF/jsf/index.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>error</from-outcome>
+            <to-view-id>/WEB-INF/jsf/errorPage.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>viewProject</from-outcome>
+            <to-view-id>/WEB-INF/jsf/project/viewProject.xhtml</to-view-id>
         </navigation-case>
         <!--
         <navigation-case>

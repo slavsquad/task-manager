@@ -53,7 +53,7 @@ public class UserServiceTest {
         @NotNull final String userId = user.getId();
         userService.create(user);
         assertEquals(userId, userService.findByLogin("root").getId());
-        user.setLogin("change login");
+        user.setLogin("change userLogin");
         userService.edit(user);
         assertEquals(user.getLogin(), userService.findOne(userId).getLogin());
         @Nullable final int size = userService.findAll().size();

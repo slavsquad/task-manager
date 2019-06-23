@@ -97,7 +97,7 @@ public class DataValidator {
         if (userDTO.getId() == null || userDTO.getId().isEmpty())
             throw new DataValidateException("Id user not must be empty!");
         if (userDTO.getLogin() == null || userDTO.getLogin().isEmpty())
-            throw new DataValidateException("User login not must be empty!");
+            throw new DataValidateException("User userLogin not must be empty!");
         if (validatePassword)
             if (userDTO.getPassword() == null || userDTO.getPassword().isEmpty())
                 throw new DataValidateException("User password not must be empty!");

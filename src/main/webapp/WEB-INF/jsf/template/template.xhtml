@@ -13,33 +13,73 @@
 <h:outputStylesheet library="css" name="styles.css" target="body"/>-->
 </h:head>
 
-<h:body>
+<h:body style="background-color:#323232">
     <div class="menu-bar">
         <h:form>
+            <p:growl id="growl" showDetail="true" sticky="true"/>
             <p:menubar>
-                <p:menuitem value="Home" outcome="main" icon="pi pi-home" style="margin: 5px 0px 5px 5px;"/>
-                <p:menuitem value="Project" outcome="projectListOutcome" icon="pi pi-briefcase" style="margin: 5px 0px 5px 0px;"/>
-                <p:menuitem value="Task" url="ya.ru" icon="pi pi-calendar" style="margin: 5px 0px 5px 0px;"/>
-                <p:menuitem value="User" url="ya.ru" icon="pi pi-users" style="margin: 5px 0px 5px 0px;"/>
+                <p:menuitem value="Home"
+                            outcome="main"
+                            icon="pi pi-home"
+                            style="margin: 5px 0px 5px 5px;"/>
+                <p:menuitem rendered="#{elementController.visibleForUser}"
+                            value="Project"
+                            outcome="projectListOutcome"
+                            icon="pi pi-briefcase"
+                            style="margin: 5px 0px 5px 0px;"/>
+                <p:menuitem rendered="#{elementController.visibleForUser}"
+                            value="Task"
+                            url="ya.ru"
+                            icon="pi pi-calendar" style="margin: 5px 0px 5px 0px;"/>
+                <p:menuitem rendered="#{elementController.visibleForAdmin}"
+                            value="User" url="ya.ru" icon="pi pi-users"
+                            style="margin: 5px 0px 5px 0px;"/>
 
                 <f:facet name="options">
-                    <a href="ww" style="margin: 5px 10px 5px 0px;">Sign Up</a>
-                    <p:inputText placeholder="Username" style="margin: 5px 0px 5px 5px;"/>
-                    <p:inputText placeholder="Password" style="margin: 5px 0px 5px 5px;"/>
-                    <p:commandButton type="button" value="Sing In" icon="pi pi-key" style="margin: 5px 0px 5px 5px;"/>
-                    <p:commandButton rendered="false" hidden = "hidden" type="button" value="Profile" icon="pi pi-user" style="margin: 0px 5px 5px 0px;"/>
-                    <p:commandButton rendered="false" type="button" value="Logout" icon="pi pi-times" style="margin: 5px 0px 5px 0px;"/>
+                    <p:commandLink
+                            rendered="#{not elementController.visibleForUser}"
+                            value="Sing Up"/>
+                    <p:inputText
+                            rendered="#{not elementController.visibleForUser}"
+                            id="login"
+                            placeholder="Login"
+                            value="#{userViewController.login}" style="margin: 5px 0px 5px 5px;"/>
+                    <p:inputText
+                            rendered="#{not elementController.visibleForUser}"
+                            id="password"
+                            placeholder="Password"
+                            value="#{userViewController.password}"
+                            style="margin: 5px 0px 5px 5px;"/>
+                    <p:commandButton
+                            rendered="#{not elementController.visibleForUser}"
+                            value="Sing In"
+                            action="#{userViewController.userLogin}"
+                            update="@form"
+                            style="margin: 5px 0px 5px 5px;"
+                            icon="pi pi-key"/>
+                    <p:commandButton
+                            rendered="#{elementController.visibleForUser}"
+                            value="Profile"
+                            icon="pi pi-user"
+                            style="margin: 0px 5px 5px 0px;"/>
+                    <p:commandButton
+                            rendered="#{elementController.visibleForUser}"
+                            value="Logout"
+                            action="#{userViewController.userLogout}"
+                            update="@form"
+                            icon="pi pi-times"
+                            style="margin: 5px 0px 5px 0px;">
+                    </p:commandButton>
                 </f:facet>
             </p:menubar>
         </h:form>
+
     </div>
 
     <div class="content">
-        <p:panel id="contentPanel" header="#{title}" footer="© 2019 I-teco, Inc." style="margin-bottom:20px">
-            <h:panelGrid>
-                <ui:insert name="content"/>
-            </h:panelGrid>
-        </p:panel>
+        <p:panel id="header" header="#{title}" collapsed="true" toggleSpeed="500" closeSpeed="500"/>
+        <ui:insert name="content"/>
+        <p:panel id="footer" header="© 2019 I-teco, Inc." collapsed="true" />
     </div>
 </h:body>
 </html>

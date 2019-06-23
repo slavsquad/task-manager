@@ -6,7 +6,7 @@ public class DataValidateException extends Exception {
 
     public DataValidateException(
             @NotNull final String message) {
-        super(message);
+        super("#"+message);
     }
 
 }

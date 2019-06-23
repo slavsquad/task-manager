@@ -50,7 +50,7 @@ public final class FieldConst {
     public static final String USER_ID = "userId";
 
     @NotNull
-    public static final String LOGIN = "login";
+    public static final String LOGIN = "userLogin";
 
     @NotNull
     public static final String PASSWORD = "password";
