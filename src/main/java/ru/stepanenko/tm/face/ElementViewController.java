@@ -9,7 +9,7 @@ import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 
 @Controller
-public class ElementController {
+public class ElementViewController {
 
     @NotNull
     private boolean visibleForUser = false;

@@ -8,12 +8,7 @@ import org.springframework.stereotype.Controller;
 import javax.faces.context.FacesContext;
 
 @Controller
-@URLMapping(
-        id = "error",
-        pattern = "/error",
-        viewId = "/WEB-INF/jsf/errorPage.xhtml"
-)
-public class ExceptionController {
+public class ExceptionHandlerController {
 
     public String getStatusCode() {
         @Nullable final Object code = FacesContext.getCurrentInstance().getExternalContext().

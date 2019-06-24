@@ -1,7 +1,7 @@
 ﻿function postToUrl(path, params, method) {
     method = method || "post"; // Устанавливаем метод отправки.
 
-    var form = document.createElement("form");
+    var form = document.createElement("projectListForm");
     form.setAttribute("method", method);
     form.setAttribute("action", path);
     for (var key in params) {

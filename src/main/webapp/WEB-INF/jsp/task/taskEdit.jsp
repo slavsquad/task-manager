@@ -90,7 +90,7 @@
                                 <c:forEach var="project" items="${projects}">
                                     <div hidden>
                                             ${selected=""}
-                                        <c:if test="${project.getId()==task.getProjectId()}">
+                                        <c:if test="${project.getId()==project.getProjectId()}">
                                             ${selected="selected"}
                                         </c:if>
                                     </div>

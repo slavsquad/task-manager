@@ -6,6 +6,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
@@ -53,10 +54,7 @@ public class UserViewController {
     public String userLogout() {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context.getExternalContext().getSession(false);
-        login = null;
-        password = null;
         session.invalidate();
-        System.out.println();
-        return "main";
+        return "mainOutcome";
     }
 }

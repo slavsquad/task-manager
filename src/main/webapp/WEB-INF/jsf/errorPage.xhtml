@@ -13,7 +13,7 @@
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <p:menubar>
                 <p:menuitem value="Home"
-                            outcome="main"
+                            outcome="mainOutcome"
                             icon="pi pi-home"
                             style="margin: 5px 0px 5px 5px;"/>
             </p:menubar>
@@ -23,16 +23,16 @@
         <p:panel id="contentPanel" header="ERROR" >
             <p:panelGrid columns="2" styleClass="ui-noborder">
                 <h:outputText value="Code:" style="font-weight: bold;"/>
-                <h:outputText value="#{exceptionController.statusCode}"/>
+                <h:outputText value="#{exceptionHandlerController.statusCode}"/>
 
                 <h:outputText value="Message:" style="font-weight: bold;"/>
-                <h:outputText value="#{exceptionController.message}"/>
+                <h:outputText value="#{exceptionHandlerController.message}"/>
 
                 <h:outputText value="Exception:" style="font-weight: bold;"/>
-                <h:outputText value="#{exceptionController.exception}"/>
+                <h:outputText value="#{exceptionHandlerController.exception}"/>
 
                 <h:outputText value="Request URI:" style="font-weight: bold;"/>
-                <h:outputText value="#{exceptionController.requestURI}"/>
+                <h:outputText value="#{exceptionHandlerController.requestURI}"/>
             </p:panelGrid>
         </p:panel>
         <p:panel id="footer" header="© 2019 I-teco, Inc." collapsed="true"/>

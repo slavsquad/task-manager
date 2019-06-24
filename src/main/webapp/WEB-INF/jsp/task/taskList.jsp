@@ -41,27 +41,27 @@
                         </thead>
                         <tbody>
                         <c:set var="i" value="0"/>
-                        <c:forEach var="task" items="${tasks}">
+                        <c:forEach var="project" items="${tasks}">
                             <tr>
                                 <td>${i=i+1}
                                 </td>
-                                <td>${task.getName()}
+                                <td>${project.getName()}
                                 </td>
-                                <td>${task.getDescription()}
-                                </td>
-                                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-                                                    value="${task.getDateBegin()}"/>
+                                <td>${project.getDescription()}
                                 </td>
                                 <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
-                                                    value="${task.getDateEnd()}"/>
+                                                    value="${project.getDateBegin()}"/>
                                 </td>
-                                <td>${task.getStatus()}
+                                <td><fmt:formatDate pattern="yyyy-MM-dd HH:mm"
+                                                    value="${project.getDateEnd()}"/>
+                                </td>
+                                <td>${project.getStatus()}
                                 </td>
                                 <td>
                                     <button class="btn btn-primary btn-xs"
                                             onclick="postToUrl(
                                                     '${pageContext.request.contextPath}/task/edit',
-                                                    {'<%=FieldConst.TASK_ID%>':'${task.getId()}',
+                                                    {'<%=FieldConst.TASK_ID%>':'${project.getId()}',
                                                     '<%=FieldConst.PROJECT_ID%>':'${projectId}'},
                                                     'GET');">
                                         EDIT
@@ -71,7 +71,7 @@
                                     <button class="btn btn-danger btn-xs"
                                             onclick="postToUrl(
                                                     '${pageContext.request.contextPath}/task/delete',
-                                                    {'<%=FieldConst.TASK_ID%>':'${task.getId()}',
+                                                    {'<%=FieldConst.TASK_ID%>':'${project.getId()}',
                                                     '<%=FieldConst.PROJECT_ID%>':'${projectId}'},
                                                     'POST');">
                                         DELETE

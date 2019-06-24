@@ -1,9 +1,5 @@
 package ru.stepanenko.tm.face;
 
-import com.ocpsoft.pretty.faces.annotation.URLMapping;
-import com.ocpsoft.pretty.faces.annotation.URLMappings;
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.primefaces.PrimeFaces;
@@ -25,25 +21,14 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
-@URLMappings(mappings = {
-        @URLMapping(
-                id = "projectList",
-                pattern = "/project/list",
-                viewId = "/WEB-INF/jsf/project/projectList.xhtml"),
-        @URLMapping(
-                id = "viewProject",
-                pattern = "/project/view",
-                viewId = "/WEB-INF/jsf/project/viewProject.xhtml")})
-
 public class ProjectViewController {
 
     @Nullable
     private List<ProjectDTO> projects;
 
-    @Getter
-    @Setter
     @Nullable
     private ProjectDTO selectedProject;
+
 
     @NotNull
     @Autowired
@@ -85,6 +70,20 @@ public class ProjectViewController {
         projectService.create(project);
     }
 
+    @Nullable
+    public ProjectDTO getSelectedProject() throws AuthenticationSecurityException {
+        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
+        @NotNull final HttpSession session = (HttpSession) context
+                .getExternalContext()
+                .getSession(false);
+        sessionService.validateSession(session);
+        return selectedProject;
+    }
+
+    public void setSelectedProject(@Nullable ProjectDTO selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+
     public void onRowSelect(SelectEvent event) {
         selectedProject = ((ProjectDTO) event.getObject());
     }
@@ -119,6 +118,16 @@ public class ProjectViewController {
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%");
         options.put("headerElement", "customheader");
-        PrimeFaces.current().dialog().openDynamic("viewProject", options, null);
+        PrimeFaces.current().dialog().openDynamic("projectEdit", options, null);
+    }
+
+    public Status[] getStatuses(){
+        return Status.values();
+    }
+
+    public void projectUpdate() throws DataValidateException {
+        System.out.println(selectedProject.getName());
+        projectService.edit(selectedProject);
+        PrimeFaces.current().dialog().closeDynamic("viewProject");
     }
 }
