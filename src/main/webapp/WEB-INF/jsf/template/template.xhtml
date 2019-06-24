@@ -29,10 +29,12 @@
                             style="margin: 5px 0px 5px 0px;"/>
                 <p:menuitem rendered="#{elementViewController.visibleForUser}"
                             value="Task"
-                            url="ya.ru"
+                            action="#{taskViewController.redirectToListTask}"
                             icon="pi pi-calendar" style="margin: 5px 0px 5px 0px;"/>
                 <p:menuitem rendered="#{elementViewController.visibleForAdmin}"
-                            value="User" url="ya.ru" icon="pi pi-users"
+                            value="User"
+                            outcome="userListOutcome"
+                            icon="pi pi-users"
                             style="margin: 5px 0px 5px 0px;"/>
 
                 <f:facet name="options">

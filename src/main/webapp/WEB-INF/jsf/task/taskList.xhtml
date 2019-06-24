@@ -8,88 +8,80 @@
       xmlns:p="http://primefaces.org/ui">
 <f:view>
     <ui:composition template="/WEB-INF/jsf/template/template.xhtml">
-        <ui:param name="title" value="PROJECT MANAGEMENT"/>
+        <ui:param name="title" value="TASK MANAGEMENT"/>
         <ui:define name="content">
-            <h:form id="projectListForm">
+            <h:form id="taskListForm">
                 <p:growl id="msgs" showDetail="true" sticky="true"/>
 
                 <p:dataTable
-                        id="projectTable"
-                        var="project"
+                        id="taskTable"
+                        var="task"
                         binding="#{table}"
-                        value="#{projectViewController.projects}"
+                        value="#{taskViewController.tasks}"
                         selectionMode="single"
-                        selection="#{projectViewController.selectedProject}"
-                        rowKey="#{project.id}"
+                        selection="#{taskViewController.selectedTask}"
+                        rowKey="#{task.id}"
                         rows="16"
                         paginator="true"
                         paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                         rowsPerPageTemplate="5,10,20,50 ">
                     <p:ajax event="rowSelect"
-                            listener="#{projectViewController.onRowSelect}"
-                            update=":projectListForm:msgs" />
+                            listener="#{taskViewController.onRowSelect}"
+                            update=":taskListForm:msgs" />
                     <p:ajax event="rowUnselect"
-                            listener="#{projectViewController.onRowUnselect}"
-                            update=":projectListForm:msgs" />
+                            listener="#{taskViewController.onRowUnselect}"
+                            update=":taskListForm:msgs" />
                     <p:column headerText="#" width="10">
                         <p:outputLabel value="#{table.rowIndex+1}"/>
                     </p:column>
 
                     <p:column headerText="ID" rendered="false" >
-                        <p:outputLabel value="#{project.id}"/>
+                        <p:outputLabel value="#{task.id}"/>
                     </p:column>
 
-                    <p:column headerText="Name" sortable="true" sortBy="#{project.name}">
-                        <p:outputLabel value="#{project.name}"/>
+                    <p:column headerText="Name" sortable="true" sortBy="#{task.name}">
+                        <p:outputLabel value="#{task.name}"/>
                     </p:column>
 
-                    <p:column headerText="Data Begin"  width="150" sortable="true" sortBy="#{project.dateBegin}">
-                        <p:outputLabel value="#{project.dateBegin}">
+                    <p:column headerText="Data Begin"  width="150" sortable="true" sortBy="#{task.dateBegin}">
+                        <p:outputLabel value="#{task.dateBegin}">
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
                         </p:outputLabel>
                     </p:column>
-                    <p:column headerText="Data End"  width="150" sortable="true" sortBy="#{project.dateEnd}">
-                        <p:outputLabel value="#{project.dateEnd}">
+                    <p:column headerText="Data End"  width="150" sortable="true" sortBy="#{task.dateEnd}">
+                        <p:outputLabel value="#{task.dateEnd}">
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
                         </p:outputLabel>
                     </p:column>
-                    <p:column headerText="Status" width="150" sortable="true" sortBy="#{project.status}">
-                        <p:outputLabel value="#{project.status}"/>
+                    <p:column headerText="Status" width="150" sortable="true" sortBy="#{task.status}">
+                        <p:outputLabel value="#{task.status}"/>
                     </p:column>
                 </p:dataTable>
 
                 <p:panelGrid columns="1" style="width: 100%; text-align:left;margin-top: -1px;">
                     <p:outputPanel>
                         <p:commandButton
-                                update=":projectListForm:projectTable"
+                                update=":taskListForm:taskTable"
                                 value="Create"
                                 icon="pi pi-file"
                                 style="margin-top:10px;margin-bottom:10px;"
-                                action="#{projectViewController.projectCreate}"/>
+                                action="#{taskViewController.taskCreate}"/>
 
                         <p:commandButton
-                                icon="pi pi-calendar"
-                                value="Tasks"
-                                style="margin-left:15px;"
-                                action="#{taskViewController.redirectToListTask(projectViewController.selectedProject)}"
-                                update=":projectListForm:msgs"
-                        />
-
-                        <p:commandButton
-                                update=":projectListForm:msgs"
+                                update=":taskListForm:msgs"
                                 icon="pi pi-pencil"
                                 value="Edit"
-                                action="#{projectViewController.projectEdit}"
+                                action="#{taskViewController.taskEdit}"
                                 style="margin-left:15px;">
-                            <p:ajax event="dialogReturn" update=":projectListForm:projectTable" />
+                            <p:ajax event="dialogReturn" update=":taskListForm:taskTable" />
                         </p:commandButton>
 
                         <p:commandButton
-                                update="projectListForm"
+                                update="taskListForm"
                                 icon="pi pi-trash"
                                 value="Delete"
                                 style="margin-left:15px;"
-                                action="#{projectViewController.projectDelete}"
+                                action="#{taskViewController.taskDelete}"
                         />
                     </p:outputPanel>
                 </p:panelGrid>

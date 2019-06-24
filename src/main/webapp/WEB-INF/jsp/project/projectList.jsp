@@ -39,7 +39,7 @@
                         </thead>
                         <tbody>
                         <c:set var="i" value="0"/>
-                        <c:forEach var="project" items="${projects}">
+                        <c:forEach var="project" items="${tasks}">
                             <tr>
                                 <td>
                                         ${i=i+1}

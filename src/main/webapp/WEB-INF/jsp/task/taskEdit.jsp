@@ -87,7 +87,7 @@
                             <select class="form-control" name="<%=FieldConst.EDIT_PROJECT_ID%>" id="inputProject">
                                 <option></option>
                                 <c:set var="selected" value=""/>
-                                <c:forEach var="project" items="${projects}">
+                                <c:forEach var="project" items="${tasks}">
                                     <div hidden>
                                             ${selected=""}
                                         <c:if test="${project.getId()==project.getProjectId()}">

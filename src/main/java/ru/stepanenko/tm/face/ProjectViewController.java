@@ -106,7 +106,7 @@ public class ProjectViewController {
         projectService.remove(selectedProject.getId(), loggedUser.getId());
     }
 
-    public void projectView() {
+    public void projectEdit() {
         if (selectedProject == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
             return;
@@ -118,7 +118,7 @@ public class ProjectViewController {
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%");
         options.put("headerElement", "customheader");
-        PrimeFaces.current().dialog().openDynamic("projectEdit", options, null);
+        PrimeFaces.current().dialog().openDynamic("projectEditOutcome", options, null);
     }
 
     public Status[] getStatuses(){
@@ -128,6 +128,6 @@ public class ProjectViewController {
     public void projectUpdate() throws DataValidateException {
         System.out.println(selectedProject.getName());
         projectService.edit(selectedProject);
-        PrimeFaces.current().dialog().closeDynamic("viewProject");
+        PrimeFaces.current().dialog().closeDynamic("projectEditOutcome");
     }
 }

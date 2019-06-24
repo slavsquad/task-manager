@@ -19,11 +19,6 @@
     <navigation-rule>
         <from-view-id>/*</from-view-id>
         <navigation-case>
-            <from-outcome>projectListOutcome</from-outcome>
-            <to-view-id>/WEB-INF/jsf/project/projectList.xhtml</to-view-id>
-            <redirect/>
-        </navigation-case>
-        <navigation-case>
             <from-outcome>mainOutcome</from-outcome>
             <to-view-id>/WEB-INF/jsf/index.xhtml</to-view-id>
             <redirect/>
@@ -34,8 +29,31 @@
             <redirect/>
         </navigation-case>
         <navigation-case>
+            <from-outcome>projectListOutcome</from-outcome>
+            <to-view-id>/WEB-INF/jsf/project/projectList.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
             <from-outcome>projectEditOutcome</from-outcome>
             <to-view-id>/WEB-INF/jsf/project/projectEdit.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>taskListOutcome</from-outcome>
+            <to-view-id>/WEB-INF/jsf/task/taskList.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>taskEditOutcome</from-outcome>
+            <to-view-id>/WEB-INF/jsf/task/taskEdit.xhtml</to-view-id>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>userListOutcome</from-outcome>
+            <to-view-id>/WEB-INF/jsf/user/userList.xhtml</to-view-id>
+            <redirect/>
+        </navigation-case>
+        <navigation-case>
+            <from-outcome>userEditOutcome</from-outcome>
+            <to-view-id>/WEB-INF/jsf/user/userEdit.xhtml</to-view-id>
         </navigation-case>
     </navigation-rule>
 </faces-config>

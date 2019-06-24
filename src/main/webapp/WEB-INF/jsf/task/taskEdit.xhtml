@@ -7,30 +7,30 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Project information:</title>
+    <title>Task information:</title>
 </h:head>
 
 <h:body>
-    <h:form id="projectEditForm">
-    <p:outputPanel id="carDetail" style="margin-top: 20px">
+    <h:form id="taskEditForm">
+    <p:outputPanel style="margin-top: 20px">
         <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
 
             <p:outputLabel for="id" value="Id:"/>
-            <p:outputLabel id="id" value="#{projectViewController.selectedProject.id}"/>
+            <p:outputLabel id="id" value="#{taskViewController.selectedTask.id}"/>
 
             <p:outputLabel for="name" value="Name:"/>
-            <p:inputText id="name" value="#{projectViewController.selectedProject.name}"/>
+            <p:inputText id="name" value="#{taskViewController.selectedTask.name}"/>
 
             <p:outputLabel for="description" value="Description:"/>
             <p:inputTextarea id="description" rows="5" cols="65" style="width: 100%"
-                             value="#{projectViewController.selectedProject.description}"/>
+                             value="#{taskViewController.selectedTask.description}"/>
 
             <p:outputLabel for="dateBegin" value="Date Begin:"/>
             <p:calendar
                     id="dateBegin"
                     pattern="dd.MM.yyyy HH:mm"
                     showTime="true"
-                    value="#{projectViewController.selectedProject.dateBegin}"
+                    value="#{taskViewController.selectedTask.dateBegin}"
                     showOn="button">
             </p:calendar>
 
@@ -39,17 +39,17 @@
                     id="dateEnd"
                     pattern="dd.MM.yyyy HH:mm"
                     showTime="true"
-                    value="#{projectViewController.selectedProject.dateEnd}"
+                    value="#{taskViewController.selectedTask.dateEnd}"
                     showOn="button">
             </p:calendar>
             <p:outputLabel for="status" value="Status:"/>
-            <p:selectOneMenu id="status" value="#{projectViewController.selectedProject.status}" style="width:125px">
-                <f:selectItems var="status" value="#{projectViewController.statuses}" itemLabel="#{status}"
+            <p:selectOneMenu id="status" value="#{taskViewController.selectedTask.status}" style="width:125px">
+                <f:selectItems var="status" value="#{taskViewController.statuses}" itemLabel="#{status}"
                                itemValue="#{status}"/>
             </p:selectOneMenu>
                 <p:commandButton
                         value="Save"
-                        action="#{projectViewController.projectUpdate}"
+                        action="#{taskViewController.taskUpdate}"
                         icon="pi pi-save">
                 </p:commandButton>
         </p:panelGrid>
