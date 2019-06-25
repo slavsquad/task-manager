@@ -6,6 +6,7 @@ import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.repository.IUserRepository;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.model.dto.UserDTO;
@@ -35,6 +36,10 @@ public class UserService implements IUserService {
             @Nullable final UserDTO userDTO
     ) throws DataValidateException {
         DataValidator.validateUserDTO(userDTO, true);
+        @NotNull final User findUser = userRepository
+                .findByLogin(userDTO.getLogin());
+        if (findUser != null)
+            throw new DataValidateException("User with login: '" + userDTO.getLogin() + "' already exist!");
         @NotNull final User user = convertDTOtoUser(userDTO);
         userRepository
                 .save(user);

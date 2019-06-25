@@ -7,6 +7,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
 import ru.stepanenko.tm.enumerate.Status;
@@ -15,6 +16,7 @@ import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
+import ru.stepanenko.tm.util.OptionsUtil;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
+@SessionScope
 public class TaskViewController {
 
     @Nullable
@@ -63,38 +66,30 @@ public class TaskViewController {
         this.tasks = tasks;
     }
 
-    public void taskCreate() throws AuthenticationSecurityException, DataValidateException {
+    public void taskCreate() {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
-        @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        editTask = new TaskDTO(
-                "New Task",
-                "Description for new Task",
-                new Date(),
-                null,
-                Status.PLANNED,
-                selectedProject == null ? null : selectedProject.getId(),
-                loggedUser.getId());
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("width", 640);
-        options.put("height", 480);
-        options.put("contentWidth", "100%");
-        options.put("contentHeight", "100%");
-        options.put("headerElement", "customheader");
-        PrimeFaces.current().dialog().openDynamic("taskEditOutcome", options, null);
+        try {
+            sessionService.validateSession(session);
+            @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
+            editTask = new TaskDTO(
+                    "New Task",
+                    "Description for new Task",
+                    new Date(),
+                    null,
+                    Status.PLANNED,
+                    selectedProject == null ? null : selectedProject.getId(),
+                    loggedUser.getId());
+            PrimeFaces.current().dialog().openDynamic("taskEditOutcome", OptionsUtil.getWindowOptions(), null);
+        } catch (AuthenticationSecurityException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Authentication Error:", e.getMessage()));
+        }
     }
 
     @Nullable
-    public TaskDTO getSelectedTask() throws AuthenticationSecurityException {
-        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
-        @NotNull final HttpSession session = (HttpSession) context
-                .getExternalContext()
-                .getSession(false);
-        sessionService.validateSession(session);
+    public TaskDTO getSelectedTask() {
         return selectedTask;
     }
 
@@ -112,7 +107,12 @@ public class TaskViewController {
     }
 
     @NotNull
-    public TaskDTO getEditTask() {
+    public TaskDTO getEditTask() throws AuthenticationSecurityException {
+        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
+        @NotNull final HttpSession session = (HttpSession) context
+                .getExternalContext()
+                .getSession(false);
+        sessionService.validateSession(session);
         return editTask;
     }
 
@@ -128,18 +128,24 @@ public class TaskViewController {
         selectedTask = null;
     }
 
-    public void taskDelete() throws AuthenticationSecurityException, DataValidateException {
+    public void taskDelete() {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
-        @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        if (selectedTask == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
-            return;
+        try {
+            sessionService.validateSession(session);
+            @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
+            if (selectedTask == null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
+                return;
+            }
+            taskService.remove(selectedTask.getId(), loggedUser.getId());
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
+        } catch (AuthenticationSecurityException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Authentication Error:", e.getMessage()));
         }
-        taskService.remove(selectedTask.getId(), loggedUser.getId());
     }
 
     public void taskEdit() {
@@ -147,32 +153,30 @@ public class TaskViewController {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
             return;
         }
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("width", 640);
-        options.put("height", 480);
-        options.put("contentWidth", "100%");
-        options.put("contentHeight", "100%");
-        options.put("headerElement", "customheader");
         editTask = selectedTask;
-        PrimeFaces.current().dialog().openDynamic("taskEditOutcome", options, null);
+        PrimeFaces.current().dialog().openDynamic("taskEditOutcome", OptionsUtil.getWindowOptions(), null);
     }
 
     public Status[] getStatuses() {
         return Status.values();
     }
 
-    public void taskSave() throws DataValidateException {
-        if (editTask == selectedTask) {//equality to reference
-            taskService.edit(editTask);
-        } else {
-            taskService.create(editTask);
+    public void taskSave() {
+        try {
+            if (editTask == selectedTask) {//equality to reference
+                taskService.edit(editTask);
+            } else {
+                taskService.create(editTask);
+            }
+            PrimeFaces.current().dialog().closeDynamic("taskEditOutcome");
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
         }
-        PrimeFaces.current().dialog().closeDynamic("taskEditOutcome");
     }
 
-    public String redirectToListTask(@Nullable final ProjectDTO selectedProject) {
-
+    public String redirectToListTask(
+            @Nullable final ProjectDTO selectedProject
+    ) {
         if (selectedProject == null) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
             return "";

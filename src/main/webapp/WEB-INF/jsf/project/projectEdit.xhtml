@@ -12,48 +12,49 @@
 
 <h:body>
     <h:form id="projectEditForm">
-    <p:outputPanel id="projectDetail" style="margin-top: 20px">
-        <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
+        <p:growl id="msgs" showDetail="true" sticky="true"/>
+        <p:outputPanel id="projectDetail" style="margin-top: 20px">
+            <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
+                <p:outputLabel for="id" value="Id:"/>
+                <p:outputLabel id="id" value="#{projectViewController.editProject.id}"/>
 
-            <p:outputLabel for="id" value="Id:"/>
-            <p:outputLabel id="id" value="#{projectViewController.editProject.id}"/>
+                <p:outputLabel for="name" value="Name:"/>
+                <p:inputText id="name" value="#{projectViewController.editProject.name}"/>
 
-            <p:outputLabel for="name" value="Name:"/>
-            <p:inputText id="name" value="#{projectViewController.editProject.name}"/>
+                <p:outputLabel for="description" value="Description:"/>
+                <p:inputTextarea id="description" rows="5" cols="65" style="width: 100%"
+                                 value="#{projectViewController.editProject.description}"/>
 
-            <p:outputLabel for="description" value="Description:"/>
-            <p:inputTextarea id="description" rows="5" cols="65" style="width: 100%"
-                             value="#{projectViewController.editProject.description}"/>
+                <p:outputLabel for="dateBegin" value="Date Begin:"/>
+                <p:calendar
+                        id="dateBegin"
+                        pattern="dd.MM.yyyy HH:mm"
+                        showTime="true"
+                        value="#{projectViewController.editProject.dateBegin}"
+                        showOn="button">
+                </p:calendar>
 
-            <p:outputLabel for="dateBegin" value="Date Begin:"/>
-            <p:calendar
-                    id="dateBegin"
-                    pattern="dd.MM.yyyy HH:mm"
-                    showTime="true"
-                    value="#{projectViewController.editProject.dateBegin}"
-                    showOn="button">
-            </p:calendar>
-
-            <p:outputLabel for="dateEnd" value="Date End:"/>
-            <p:calendar
-                    id="dateEnd"
-                    pattern="dd.MM.yyyy HH:mm"
-                    showTime="true"
-                    value="#{projectViewController.editProject.dateEnd}"
-                    showOn="button">
-            </p:calendar>
-            <p:outputLabel for="status" value="Status:"/>
-            <p:selectOneMenu id="status" value="#{projectViewController.editProject.status}" style="width:125px">
-                <f:selectItems var="status" value="#{projectViewController.statuses}" itemLabel="#{status}"
-                               itemValue="#{status}"/>
-            </p:selectOneMenu>
+                <p:outputLabel for="dateEnd" value="Date End:"/>
+                <p:calendar
+                        id="dateEnd"
+                        pattern="dd.MM.yyyy HH:mm"
+                        showTime="true"
+                        value="#{projectViewController.editProject.dateEnd}"
+                        showOn="button">
+                </p:calendar>
+                <p:outputLabel for="status" value="Status:"/>
+                <p:selectOneMenu id="status" value="#{projectViewController.editProject.status}" style="width:125px">
+                    <f:selectItems var="status" value="#{projectViewController.statuses}" itemLabel="#{status}"
+                                   itemValue="#{status}"/>
+                </p:selectOneMenu>
                 <p:commandButton
+                        update=":projectEditForm:msgs"
                         value="Save"
                         action="#{projectViewController.projectSave}"
                         icon="pi pi-save">
                 </p:commandButton>
-        </p:panelGrid>
-    </p:outputPanel>
+            </p:panelGrid>
+        </p:outputPanel>
     </h:form>
 </h:body>
 </html>

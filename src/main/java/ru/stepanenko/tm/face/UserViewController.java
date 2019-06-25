@@ -17,6 +17,7 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
+import ru.stepanenko.tm.util.DataValidator;
 import ru.stepanenko.tm.util.FieldConst;
 import ru.stepanenko.tm.util.HashUtil;
 import ru.stepanenko.tm.util.OptionsUtil;
@@ -27,6 +28,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
+@SessionScope
 public class UserViewController {
 
     @NotNull
@@ -55,7 +57,6 @@ public class UserViewController {
     @Setter
     @Nullable
     private String password;
-
 
     public void userLogin(
     ) {
@@ -93,44 +94,41 @@ public class UserViewController {
         this.users = users;
     }
 
-    public void userCreate() throws AuthenticationSecurityException, DataValidateException {
+    public void userCreate() {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
-        @NotNull final HttpSession session = (HttpSession) context
-                .getExternalContext()
-                .getSession(false);
-        sessionService.validateAdminSession(session);
         editUser = new UserDTO(
                 "New User:",
                 "password",
                 "New user name",
                 "Description for new user",
                 Role.USER);
-        editUser.setLogin("New User:" + editUser.getId());
         PrimeFaces.current().dialog().openDynamic("userEditOutcome", OptionsUtil.getWindowOptions(), null);
     }
 
     @Nullable
-    public UserDTO getSelectedUser() throws AuthenticationSecurityException, DataValidateException {
-        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
-        @NotNull final HttpSession session = (HttpSession) context
-                .getExternalContext()
-                .getSession(false);
-        if (sessionService.isAdmin(session))
-            sessionService.validateAdminSession(session);
-        sessionService.validateSession(session);
+    public UserDTO getSelectedUser() {
         return selectedUser;
     }
 
-    public void setSelectedUser(@Nullable UserDTO selectedUser) {
+    public void setSelectedUser(
+            @Nullable final UserDTO selectedUser
+    ) {
         this.selectedUser = selectedUser;
     }
 
     @NotNull
-    public UserDTO getEditUser() {
+    public UserDTO getEditUser() throws DataValidateException, AuthenticationSecurityException {
+        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
+        @NotNull final HttpSession session = (HttpSession) context
+                .getExternalContext()
+                .getSession(false);
+        sessionService.validateAdminSession(session);
         return editUser;
     }
 
-    public void setEditUser(@NotNull UserDTO editUser) {
+    public void setEditUser(
+            @NotNull final UserDTO editUser
+    ) {
         this.editUser = editUser;
     }
 
@@ -142,39 +140,71 @@ public class UserViewController {
         selectedUser = null;
     }
 
-    public void userDelete() throws AuthenticationSecurityException, DataValidateException {
+    public void userDelete() {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
-        @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        if (selectedUser == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
-            return;
+        try {
+            sessionService.validateSession(session);
+            @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
+            if (selectedUser == null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No user selected!"));
+                return;
+            }
+            userService.remove(selectedUser.getId());
+            PrimeFaces.current().dialog().closeDynamic("userEditOutcome");
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
+        } catch (AuthenticationSecurityException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Authentication Error:", e.getMessage()));
         }
-        userService.remove(selectedUser.getId());
+
     }
 
     public void userEdit() {
         if (selectedUser == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No user selected!"));
             return;
         }
-        editUser=selectedUser;
+        editUser = selectedUser;
         PrimeFaces.current().dialog().openDynamic("userEditOutcome", OptionsUtil.getWindowOptions(), null);
+    }
+
+    public void editProfile() {
+        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
+        @NotNull final HttpSession session = (HttpSession) context
+                .getExternalContext()
+                .getSession(false);
+        try {
+            sessionService.validateSession(session);
+            @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
+            selectedUser = userService.findOne(loggedUser.getId());
+            userEdit();
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
+        } catch (AuthenticationSecurityException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Authentication Error:", e.getMessage()));
+        }
     }
 
     public Role[] getRoles() {
         return Role.values();
     }
 
-    public void userSave() throws DataValidateException {
-        if (editUser==selectedUser){//equality to reference
-            userService.edit(editUser);
-        } else {
-            userService.create(editUser);
+    public void userSave() {
+        @Nullable final String password = editUser.getPassword();
+        if (!DataValidator.stringIsNull(password))
+            editUser.setPassword(HashUtil.md5(password));
+        try {
+            if (editUser == selectedUser) {//equality to reference
+                userService.edit(editUser);
+            } else {
+                userService.create(editUser);
+            }
+            PrimeFaces.current().dialog().closeDynamic("userEditOutcome");
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
         }
-        PrimeFaces.current().dialog().closeDynamic("userEditOutcome");
     }
 }

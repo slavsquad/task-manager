@@ -12,6 +12,7 @@
 
 <h:body>
     <h:form id="taskEditForm">
+        <p:growl id="msgs" showDetail="true" sticky="true"/>
         <p:outputPanel id="taskDetail">
             <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
 
@@ -49,13 +50,14 @@
                                    itemValue="#{status}"/>
                 </p:selectOneMenu>
                 <p:outputLabel for="project" value="Project:"/>
-                <p:selectOneMenu id="project" value="#{taskViewController.editTask.projectId}" >
+                <p:selectOneMenu id="project" value="#{taskViewController.editTask.projectId}">
                     <f:selectItems var="project" value="#{projectViewController.projects}" itemLabel="#{project.name}"
                                    itemValue="#{project.id}"/>
-                    <f:selectItem  itemLabel=""
-                                   itemValue="#{null}"/>
+                    <f:selectItem itemLabel=""
+                                  itemValue="#{null}"/>
                 </p:selectOneMenu>
                 <p:commandButton
+                        update=":taskEditForm:msgs"
                         value="Save"
                         action="#{taskViewController.taskSave}"
                         icon="pi pi-save">

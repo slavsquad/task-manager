@@ -27,15 +27,15 @@
                         rowsPerPageTemplate="10,20,50 ">
                     <p:ajax event="rowSelect"
                             listener="#{taskViewController.onRowSelect}"
-                            update=":taskListForm:msgs" />
+                            update=":taskListForm:msgs"/>
                     <p:ajax event="rowUnselect"
                             listener="#{taskViewController.onRowUnselect}"
-                            update=":taskListForm:msgs" />
+                            update=":taskListForm:msgs"/>
                     <p:column headerText="#" width="10">
                         <p:outputLabel value="#{table.rowIndex+1}"/>
                     </p:column>
 
-                    <p:column headerText="ID" rendered="false" >
+                    <p:column headerText="ID" rendered="false">
                         <p:outputLabel value="#{task.id}"/>
                     </p:column>
 
@@ -43,12 +43,12 @@
                         <p:outputLabel value="#{task.name}"/>
                     </p:column>
 
-                    <p:column headerText="Data Begin"  width="150" sortable="true" sortBy="#{task.dateBegin}">
+                    <p:column headerText="Data Begin" width="150" sortable="true" sortBy="#{task.dateBegin}">
                         <p:outputLabel value="#{task.dateBegin}">
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
                         </p:outputLabel>
                     </p:column>
-                    <p:column headerText="Data End"  width="150" sortable="true" sortBy="#{task.dateEnd}">
+                    <p:column headerText="Data End" width="150" sortable="true" sortBy="#{task.dateEnd}">
                         <p:outputLabel value="#{task.dateEnd}">
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm"/>
                         </p:outputLabel>
@@ -65,7 +65,7 @@
                                 icon="pi pi-file"
                                 style="margin-top:10px;margin-bottom:10px;"
                                 action="#{taskViewController.taskCreate}">
-                            <p:ajax event="dialogReturn" update=":taskListForm:taskTable" />
+                            <p:ajax event="dialogReturn" update=":taskListForm:taskTable"/>
                         </p:commandButton>
 
 
@@ -75,7 +75,7 @@
                                 value="Edit"
                                 action="#{taskViewController.taskEdit}"
                                 style="margin-left:15px;">
-                            <p:ajax event="dialogReturn" update=":taskListForm:taskTable" />
+                            <p:ajax event="dialogReturn" update=":taskListForm:taskTable"/>
                         </p:commandButton>
 
                         <p:commandButton

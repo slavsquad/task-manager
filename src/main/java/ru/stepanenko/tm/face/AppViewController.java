@@ -8,7 +8,7 @@ import org.springframework.stereotype.Controller;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
-@ManagedBean
+@Controller
 @URLMappings(mappings = {
         @URLMapping(
                 id = "main",
@@ -41,7 +41,11 @@ import javax.faces.bean.SessionScoped;
         @URLMapping(
                 id = "userEdit",
                 pattern = "/user/edit",
-                viewId = "/WEB-INF/jsf/user/userEdit.xhtml")})
+                viewId = "/WEB-INF/jsf/user/userEdit.xhtml"),
+        @URLMapping(
+                id = "registration",
+                pattern = "/registration",
+                viewId = "/WEB-INF/jsf/registration.xhtml")})
 public class AppViewController {
 
 }

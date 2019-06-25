@@ -37,20 +37,20 @@ public class ExceptionHandlerController {
         @Nullable final Object exception = FacesContext.getCurrentInstance().getExternalContext().
                 getRequestMap().get("javax.servlet.error.exception");
         if (exception == null) return null;
-        return ((Exception)exception).toString();
+        return ((Exception) exception).toString();
     }
 
     public String getRequestURI() {
         @Nullable final Object uri = FacesContext.getCurrentInstance().getExternalContext().
                 getRequestMap().get("javax.servlet.error.request_uri");
-        if (uri==null) return null;
+        if (uri == null) return null;
         return uri.toString();
     }
 
     public String getServletName() {
-        @Nullable final Object servlet =  FacesContext.getCurrentInstance().getExternalContext().
+        @Nullable final Object servlet = FacesContext.getCurrentInstance().getExternalContext().
                 getRequestMap().get("javax.servlet.error.servlet_name");
-        if (servlet==null) return null;
+        if (servlet == null) return null;
         return servlet.toString();
     }
 

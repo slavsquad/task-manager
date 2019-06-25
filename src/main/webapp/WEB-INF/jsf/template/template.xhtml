@@ -40,13 +40,15 @@
                 <f:facet name="options">
                     <p:commandLink
                             rendered="#{not elementViewController.visibleForUser}"
-                            value="Sing Up"/>
+                            value="Sing Up"
+                            action="#{registrationViewController.registrationUser}"
+                    />
                     <p:inputText
                             rendered="#{not elementViewController.visibleForUser}"
                             id="login"
                             placeholder="Login"
                             value="#{userViewController.login}" style="margin: 5px 0px 5px 5px;"/>
-                    <p:inputText
+                    <p:password
                             rendered="#{not elementViewController.visibleForUser}"
                             id="password"
                             placeholder="Password"
@@ -63,6 +65,7 @@
                             rendered="#{elementViewController.visibleForUser}"
                             value="Profile"
                             icon="pi pi-user"
+                            action="#{userViewController.editProfile}"
                             style="margin: 0px 5px 5px 0px;"/>
                     <p:commandButton
                             rendered="#{elementViewController.visibleForUser}"
@@ -81,7 +84,7 @@
     <div class="content">
         <p:panel id="header" header="#{title}" collapsed="true" toggleSpeed="500" closeSpeed="500"/>
         <ui:insert name="content"/>
-        <p:panel id="footer" header="© 2019 I-teco, Inc." collapsed="true" />
+        <p:panel id="footer" header="© 2019 I-teco, Inc." collapsed="true"/>
     </div>
 </h:body>
 </html>

@@ -7,6 +7,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.enumerate.Status;
@@ -14,6 +15,7 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
+import ru.stepanenko.tm.util.OptionsUtil;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -21,6 +23,7 @@ import javax.servlet.http.HttpSession;
 import java.util.*;
 
 @Controller
+@SessionScope
 public class ProjectViewController {
 
     @Nullable
@@ -40,7 +43,8 @@ public class ProjectViewController {
     @Autowired
     private ISessionService sessionService;
 
-    public Collection<ProjectDTO> getProjects() throws AuthenticationSecurityException, DataValidateException {
+    public Collection<ProjectDTO> getProjects(
+    ) throws AuthenticationSecurityException, DataValidateException {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
@@ -55,50 +59,53 @@ public class ProjectViewController {
         this.projects = projects;
     }
 
-    public void projectCreate() throws AuthenticationSecurityException, DataValidateException {
+    public void projectCreate() {
+        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
+        @NotNull final HttpSession session = (HttpSession) context
+                .getExternalContext()
+                .getSession(false);
+        try {
+            sessionService.validateSession(session);
+            @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
+            editProject = new ProjectDTO(
+                    "New project",
+                    "Description for new project",
+                    new Date(),
+                    null,
+                    Status.PLANNED,
+                    loggedUser.getId());
+            PrimeFaces.current().dialog().openDynamic("projectEditOutcome", OptionsUtil.getWindowOptions(), null);
+        } catch (AuthenticationSecurityException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Authentication Error:", e.getMessage()));
+        }
+
+    }
+
+    @NotNull
+    public ProjectDTO getEditProject(
+    ) throws AuthenticationSecurityException {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
         sessionService.validateSession(session);
-        @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        editProject = new ProjectDTO(
-                "New project",
-                "Description for new project",
-                new Date(),
-                null,
-                Status.PLANNED,
-                loggedUser.getId());
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("width", 640);
-        options.put("height", 480);
-        options.put("contentWidth", "100%");
-        options.put("contentHeight", "100%");
-        options.put("headerElement", "customheader");
-        PrimeFaces.current().dialog().openDynamic("projectEditOutcome", options, null);
-    }
-
-    @NotNull
-    public ProjectDTO getEditProject() {
         return editProject;
     }
 
-    public void setEditProject(@NotNull final ProjectDTO editProject) {
+    public void setEditProject(
+            @NotNull final ProjectDTO editProject
+    ) {
         this.editProject = editProject;
     }
 
     @Nullable
-    public ProjectDTO getSelectedProject() throws AuthenticationSecurityException {
-        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
-        @NotNull final HttpSession session = (HttpSession) context
-                .getExternalContext()
-                .getSession(false);
-        sessionService.validateSession(session);
+    public ProjectDTO getSelectedProject() {
         return selectedProject;
     }
 
-    public void setSelectedProject(@Nullable ProjectDTO selectedProject) {
+    public void setSelectedProject(
+            @Nullable ProjectDTO selectedProject
+    ) {
         this.selectedProject = selectedProject;
     }
 
@@ -110,18 +117,24 @@ public class ProjectViewController {
         selectedProject = null;
     }
 
-    public void projectDelete() throws AuthenticationSecurityException, DataValidateException {
-        @NotNull final FacesContext context = FacesContext.getCurrentInstance();
-        @NotNull final HttpSession session = (HttpSession) context
-                .getExternalContext()
-                .getSession(false);
-        sessionService.validateSession(session);
-        @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        if (selectedProject == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
-            return;
+    public void projectDelete() {
+        try {
+            @NotNull final FacesContext context = FacesContext.getCurrentInstance();
+            @NotNull final HttpSession session = (HttpSession) context
+                    .getExternalContext()
+                    .getSession(false);
+            sessionService.validateSession(session);
+            @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
+            if (selectedProject == null) {
+                context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
+                return;
+            }
+            projectService.remove(selectedProject.getId(), loggedUser.getId());
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
+        } catch (AuthenticationSecurityException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Authentication Error:", e.getMessage()));
         }
-        projectService.remove(selectedProject.getId(), loggedUser.getId());
     }
 
     public void projectEdit() {
@@ -129,27 +142,25 @@ public class ProjectViewController {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
             return;
         }
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("width", 640);
-        options.put("height", 480);
-        options.put("contentWidth", "100%");
-        options.put("contentHeight", "100%");
-        options.put("headerElement", "customheader");
         editProject = selectedProject;
-        PrimeFaces.current().dialog().openDynamic("projectEditOutcome", options, null);
+        PrimeFaces.current().dialog().openDynamic("projectEditOutcome", OptionsUtil.getWindowOptions(), null);
     }
 
     public Status[] getStatuses() {
         return Status.values();
     }
 
-    public void projectSave() throws DataValidateException {
-        if (selectedProject == editProject){//equality to reference
-            projectService.edit(editProject);
-        } else {
-            projectService.create(editProject);
+    public void projectSave() {
+        try {
+            if (selectedProject == editProject) {//equality to reference
+                projectService.edit(editProject);
+            } else {
+                projectService.create(editProject);
+            }
+            PrimeFaces.current().dialog().closeDynamic("projectEditOutcome");
+        } catch (DataValidateException e) {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
         }
-        PrimeFaces.current().dialog().closeDynamic("projectEditOutcome");
     }
+
 }
