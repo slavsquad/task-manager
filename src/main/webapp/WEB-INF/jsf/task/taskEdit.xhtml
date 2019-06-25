@@ -12,48 +12,56 @@
 
 <h:body>
     <h:form id="taskEditForm">
-    <p:outputPanel id ="taskDetail" style="margin-top: 20px">
-        <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
+        <p:outputPanel id="taskDetail">
+            <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
 
-            <p:outputLabel for="id" value="Id:"/>
-            <p:outputLabel id="id" value="#{taskViewController.editTask.id}"/>
+                <p:outputLabel for="id" value="Id:"/>
+                <p:outputLabel id="id" value="#{taskViewController.editTask.id}"/>
 
-            <p:outputLabel for="name" value="Name:"/>
-            <p:inputText id="name" value="#{taskViewController.editTask.name}"/>
+                <p:outputLabel for="name" value="Name:"/>
+                <p:inputText id="name" value="#{taskViewController.editTask.name}"/>
 
-            <p:outputLabel for="description" value="Description:"/>
-            <p:inputTextarea id="description" rows="5" cols="65" style="width: 100%"
-                             value="#{taskViewController.editTask.description}"/>
+                <p:outputLabel for="description" value="Description:"/>
+                <p:inputTextarea id="description" rows="3" cols="65" style="width: 100%"
+                                 value="#{taskViewController.editTask.description}"/>
 
-            <p:outputLabel for="dateBegin" value="Date Begin:"/>
-            <p:calendar
-                    id="dateBegin"
-                    pattern="dd.MM.yyyy HH:mm"
-                    showTime="true"
-                    value="#{taskViewController.editTask.dateBegin}"
-                    showOn="button">
-            </p:calendar>
+                <p:outputLabel for="dateBegin" value="Date Begin:"/>
+                <p:calendar
+                        id="dateBegin"
+                        pattern="dd.MM.yyyy HH:mm"
+                        showTime="true"
+                        value="#{taskViewController.editTask.dateBegin}"
+                        showOn="button">
+                </p:calendar>
 
-            <p:outputLabel for="dateEnd" value="Date End:"/>
-            <p:calendar
-                    id="dateEnd"
-                    pattern="dd.MM.yyyy HH:mm"
-                    showTime="true"
-                    value="#{taskViewController.editTask.dateEnd}"
-                    showOn="button">
-            </p:calendar>
-            <p:outputLabel for="status" value="Status:"/>
-            <p:selectOneMenu id="status" value="#{taskViewController.editTask.status}" style="width:125px">
-                <f:selectItems var="status" value="#{taskViewController.statuses}" itemLabel="#{status}"
-                               itemValue="#{status}"/>
-            </p:selectOneMenu>
+                <p:outputLabel for="dateEnd" value="Date End:"/>
+                <p:calendar
+                        id="dateEnd"
+                        pattern="dd.MM.yyyy HH:mm"
+                        showTime="true"
+                        value="#{taskViewController.editTask.dateEnd}"
+                        showOn="button">
+                </p:calendar>
+
+                <p:outputLabel for="status" value="Status:"/>
+                <p:selectOneMenu id="status" value="#{taskViewController.editTask.status}">
+                    <f:selectItems var="status" value="#{taskViewController.statuses}" itemLabel="#{status}"
+                                   itemValue="#{status}"/>
+                </p:selectOneMenu>
+                <p:outputLabel for="project" value="Project:"/>
+                <p:selectOneMenu id="project" value="#{taskViewController.editTask.projectId}" >
+                    <f:selectItems var="project" value="#{projectViewController.projects}" itemLabel="#{project.name}"
+                                   itemValue="#{project.id}"/>
+                    <f:selectItem  itemLabel=""
+                                   itemValue="#{null}"/>
+                </p:selectOneMenu>
                 <p:commandButton
                         value="Save"
                         action="#{taskViewController.taskSave}"
                         icon="pi pi-save">
                 </p:commandButton>
-        </p:panelGrid>
-    </p:outputPanel>
+            </p:panelGrid>
+        </p:outputPanel>
     </h:form>
 </h:body>
 </html>
