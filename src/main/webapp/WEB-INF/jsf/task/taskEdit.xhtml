@@ -7,30 +7,30 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>Task information:</title>
+    <title>Task details:</title>
 </h:head>
 
 <h:body>
     <h:form id="taskEditForm">
-    <p:outputPanel style="margin-top: 20px">
+    <p:outputPanel id ="taskDetail" style="margin-top: 20px">
         <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
 
             <p:outputLabel for="id" value="Id:"/>
-            <p:outputLabel id="id" value="#{taskViewController.selectedTask.id}"/>
+            <p:outputLabel id="id" value="#{taskViewController.editTask.id}"/>
 
             <p:outputLabel for="name" value="Name:"/>
-            <p:inputText id="name" value="#{taskViewController.selectedTask.name}"/>
+            <p:inputText id="name" value="#{taskViewController.editTask.name}"/>
 
             <p:outputLabel for="description" value="Description:"/>
             <p:inputTextarea id="description" rows="5" cols="65" style="width: 100%"
-                             value="#{taskViewController.selectedTask.description}"/>
+                             value="#{taskViewController.editTask.description}"/>
 
             <p:outputLabel for="dateBegin" value="Date Begin:"/>
             <p:calendar
                     id="dateBegin"
                     pattern="dd.MM.yyyy HH:mm"
                     showTime="true"
-                    value="#{taskViewController.selectedTask.dateBegin}"
+                    value="#{taskViewController.editTask.dateBegin}"
                     showOn="button">
             </p:calendar>
 
@@ -39,17 +39,17 @@
                     id="dateEnd"
                     pattern="dd.MM.yyyy HH:mm"
                     showTime="true"
-                    value="#{taskViewController.selectedTask.dateEnd}"
+                    value="#{taskViewController.editTask.dateEnd}"
                     showOn="button">
             </p:calendar>
             <p:outputLabel for="status" value="Status:"/>
-            <p:selectOneMenu id="status" value="#{taskViewController.selectedTask.status}" style="width:125px">
+            <p:selectOneMenu id="status" value="#{taskViewController.editTask.status}" style="width:125px">
                 <f:selectItems var="status" value="#{taskViewController.statuses}" itemLabel="#{status}"
                                itemValue="#{status}"/>
             </p:selectOneMenu>
                 <p:commandButton
                         value="Save"
-                        action="#{taskViewController.taskUpdate}"
+                        action="#{taskViewController.taskSave}"
                         icon="pi pi-save">
                 </p:commandButton>
         </p:panelGrid>

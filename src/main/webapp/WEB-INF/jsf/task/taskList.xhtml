@@ -61,11 +61,13 @@
                 <p:panelGrid columns="1" style="width: 100%; text-align:left;margin-top: -1px;">
                     <p:outputPanel>
                         <p:commandButton
-                                update=":taskListForm:taskTable"
                                 value="Create"
                                 icon="pi pi-file"
                                 style="margin-top:10px;margin-bottom:10px;"
-                                action="#{taskViewController.taskCreate}"/>
+                                action="#{taskViewController.taskCreate}">
+                            <p:ajax event="dialogReturn" update=":taskListForm:taskTable" />
+                        </p:commandButton>
+
 
                         <p:commandButton
                                 update=":taskListForm:msgs"

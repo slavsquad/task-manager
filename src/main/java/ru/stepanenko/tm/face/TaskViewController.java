@@ -31,7 +31,10 @@ public class TaskViewController {
     private TaskDTO selectedTask;
 
     @Nullable
-    private String projectId;
+    private ProjectDTO selectedProject;
+
+    @NotNull
+    private TaskDTO editTask;
 
     @NotNull
     @Autowired
@@ -48,10 +51,11 @@ public class TaskViewController {
                 .getSession(false);
         sessionService.validateSession(session);
         @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        if (projectId == null)
+        if (selectedProject == null) {
             tasks = new ArrayList<>(taskService.findAllByUserId(loggedUser.getId()));
-        if (projectId != null)
-            tasks = new ArrayList<>(taskService.findAllByProjectId(projectId, loggedUser.getId()));
+        } else {
+            tasks = new ArrayList<>(taskService.findAllByProjectId(selectedProject.getId(), loggedUser.getId()));
+        }
         return tasks;
     }
 
@@ -66,15 +70,22 @@ public class TaskViewController {
                 .getSession(false);
         sessionService.validateSession(session);
         @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        @NotNull final TaskDTO task = new TaskDTO(
-                "New project",
-                "Description for new project",
+        editTask = new TaskDTO(
+                "New Task",
+                "Description for new Task",
                 new Date(),
                 null,
                 Status.PLANNED,
-                projectId,
+                selectedProject == null ? null : selectedProject.getId(),
                 loggedUser.getId());
-        taskService.create(task);
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+        options.put("width", 640);
+        options.put("height", 480);
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        options.put("headerElement", "customheader");
+        PrimeFaces.current().dialog().openDynamic("taskEditOutcome", options, null);
     }
 
     @Nullable
@@ -92,12 +103,21 @@ public class TaskViewController {
     }
 
     @Nullable
-    public String getProjectId() {
-        return projectId;
+    public ProjectDTO getSelectedProject() {
+        return selectedProject;
     }
 
-    public void setProjectId(@Nullable String projectId) {
-        this.projectId = projectId;
+    public void setSelectedProject(@Nullable final ProjectDTO selectedProject) {
+        this.selectedProject = selectedProject;
+    }
+
+    @NotNull
+    public TaskDTO getEditTask() {
+        return editTask;
+    }
+
+    public void setEditTask(@NotNull TaskDTO editTask) {
+        this.editTask = editTask;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -116,7 +136,7 @@ public class TaskViewController {
         sessionService.validateSession(session);
         @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
         if (selectedTask == null) {
-            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
+            context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
             return;
         }
         taskService.remove(selectedTask.getId(), loggedUser.getId());
@@ -124,7 +144,7 @@ public class TaskViewController {
 
     public void taskEdit() {
         if (selectedTask == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
             return;
         }
         Map<String, Object> options = new HashMap<String, Object>();
@@ -134,6 +154,7 @@ public class TaskViewController {
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%");
         options.put("headerElement", "customheader");
+        editTask = selectedTask;
         PrimeFaces.current().dialog().openDynamic("taskEditOutcome", options, null);
     }
 
@@ -141,25 +162,27 @@ public class TaskViewController {
         return Status.values();
     }
 
-    public void taskUpdate() throws DataValidateException {
-        System.out.println(selectedTask.getName());
-        taskService.edit(selectedTask);
+    public void taskSave() throws DataValidateException {
+        if (editTask == selectedTask) {//equality to reference
+            taskService.edit(editTask);
+        } else {
+            taskService.create(editTask);
+        }
         PrimeFaces.current().dialog().closeDynamic("taskEditOutcome");
     }
 
     public String redirectToListTask(@Nullable final ProjectDTO selectedProject) {
 
         if (selectedProject == null) {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));
             return "";
         }
-        projectId = selectedProject.getId();
+        this.selectedProject = selectedProject;
         return "taskListOutcome";
     }
 
     public String redirectToListTask() {
-        projectId = null;
+        selectedProject = null;
         return "taskListOutcome";
     }
-
 }

@@ -61,11 +61,12 @@
                 <p:panelGrid columns="1" style="width: 100%; text-align:left;margin-top: -1px;">
                     <p:outputPanel>
                         <p:commandButton
-                                update=":projectListForm:projectTable"
                                 value="Create"
                                 icon="pi pi-file"
                                 style="margin-top:10px;margin-bottom:10px;"
-                                action="#{projectViewController.projectCreate}"/>
+                                action="#{projectViewController.projectCreate}">
+                            <p:ajax event="dialogReturn" update=":projectListForm:projectTable" />
+                        </p:commandButton>
 
                         <p:commandButton
                                 icon="pi pi-calendar"

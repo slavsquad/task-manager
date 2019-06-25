@@ -19,6 +19,7 @@ import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.util.FieldConst;
 import ru.stepanenko.tm.util.HashUtil;
+import ru.stepanenko.tm.util.OptionsUtil;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
@@ -41,6 +42,9 @@ public class UserViewController {
 
     @Nullable
     private UserDTO selectedUser;
+
+    @NotNull
+    private UserDTO editUser;
 
     @Getter
     @Setter
@@ -74,6 +78,7 @@ public class UserViewController {
         session.invalidate();
         return "mainOutcome";
     }
+
     public Collection<UserDTO> getUsers() throws AuthenticationSecurityException, DataValidateException {
         @NotNull final FacesContext context = FacesContext.getCurrentInstance();
         @NotNull final HttpSession session = (HttpSession) context
@@ -94,14 +99,14 @@ public class UserViewController {
                 .getExternalContext()
                 .getSession(false);
         sessionService.validateAdminSession(session);
-        @NotNull final UserDTO user = new UserDTO(
+        editUser = new UserDTO(
                 "New User:",
                 "password",
                 "New user name",
                 "Description for new user",
                 Role.USER);
-        user.setLogin("New User:" + user.getId());
-        userService.create(user);
+        editUser.setLogin("New User:" + editUser.getId());
+        PrimeFaces.current().dialog().openDynamic("userEditOutcome", OptionsUtil.getWindowOptions(), null);
     }
 
     @Nullable
@@ -118,6 +123,15 @@ public class UserViewController {
 
     public void setSelectedUser(@Nullable UserDTO selectedUser) {
         this.selectedUser = selectedUser;
+    }
+
+    @NotNull
+    public UserDTO getEditUser() {
+        return editUser;
+    }
+
+    public void setEditUser(@NotNull UserDTO editUser) {
+        this.editUser = editUser;
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -147,22 +161,20 @@ public class UserViewController {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
             return;
         }
-        Map<String, Object> options = new HashMap<String, Object>();
-        options.put("modal", true);
-        options.put("width", 640);
-        options.put("height", 480);
-        options.put("contentWidth", "100%");
-        options.put("contentHeight", "100%");
-        options.put("headerElement", "customheader");
-        PrimeFaces.current().dialog().openDynamic("userEditOutcome", options, null);
+        editUser=selectedUser;
+        PrimeFaces.current().dialog().openDynamic("userEditOutcome", OptionsUtil.getWindowOptions(), null);
     }
 
-    public Role[] getRoles(){
+    public Role[] getRoles() {
         return Role.values();
     }
 
-    public void userUpdate() throws DataValidateException {
-        userService.edit(selectedUser);
+    public void userSave() throws DataValidateException {
+        if (editUser==selectedUser){//equality to reference
+            userService.edit(editUser);
+        } else {
+            userService.create(editUser);
+        }
         PrimeFaces.current().dialog().closeDynamic("userEditOutcome");
     }
 }

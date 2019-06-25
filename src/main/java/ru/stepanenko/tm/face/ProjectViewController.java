@@ -29,6 +29,8 @@ public class ProjectViewController {
     @Nullable
     private ProjectDTO selectedProject;
 
+    @NotNull
+    private ProjectDTO editProject;
 
     @NotNull
     @Autowired
@@ -60,14 +62,30 @@ public class ProjectViewController {
                 .getSession(false);
         sessionService.validateSession(session);
         @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
-        @NotNull final ProjectDTO project = new ProjectDTO(
+        editProject = new ProjectDTO(
                 "New project",
                 "Description for new project",
                 new Date(),
                 null,
                 Status.PLANNED,
                 loggedUser.getId());
-        projectService.create(project);
+        Map<String, Object> options = new HashMap<String, Object>();
+        options.put("modal", true);
+        options.put("width", 640);
+        options.put("height", 480);
+        options.put("contentWidth", "100%");
+        options.put("contentHeight", "100%");
+        options.put("headerElement", "customheader");
+        PrimeFaces.current().dialog().openDynamic("projectEditOutcome", options, null);
+    }
+
+    @NotNull
+    public ProjectDTO getEditProject() {
+        return editProject;
+    }
+
+    public void setEditProject(@NotNull final ProjectDTO editProject) {
+        this.editProject = editProject;
     }
 
     @Nullable
@@ -118,16 +136,20 @@ public class ProjectViewController {
         options.put("contentWidth", "100%");
         options.put("contentHeight", "100%");
         options.put("headerElement", "customheader");
+        editProject = selectedProject;
         PrimeFaces.current().dialog().openDynamic("projectEditOutcome", options, null);
     }
 
-    public Status[] getStatuses(){
+    public Status[] getStatuses() {
         return Status.values();
     }
 
-    public void projectUpdate() throws DataValidateException {
-        System.out.println(selectedProject.getName());
-        projectService.edit(selectedProject);
+    public void projectSave() throws DataValidateException {
+        if (selectedProject == editProject){//equality to reference
+            projectService.edit(editProject);
+        } else {
+            projectService.create(editProject);
+        }
         PrimeFaces.current().dialog().closeDynamic("projectEditOutcome");
     }
 }

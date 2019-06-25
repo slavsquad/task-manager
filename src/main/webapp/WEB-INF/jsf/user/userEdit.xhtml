@@ -7,38 +7,38 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <h:head>
-    <title>User information:</title>
+    <title>User details:</title>
 </h:head>
 
 <h:body>
     <h:form id="userEditForm">
-    <p:outputPanel style="margin-top: 20px">
+    <p:outputPanel id="userDetail" style="margin-top: 20px">
         <p:panelGrid columns="2" styleClass="ui-noborder" style="width: 100%">
 
             <p:outputLabel for="id" value="Id:"/>
-            <p:outputLabel id="id" value="#{userViewController.selectedUser.id}"/>
+            <p:outputLabel id="id" value="#{userViewController.editUser.id}"/>
 
             <p:outputLabel for="login" value="Login:"/>
-            <p:inputText id="login" value="#{userViewController.selectedUser.login}"/>
+            <p:inputText id="login" value="#{userViewController.editUser.login}"/>
 
             <p:outputLabel for="password" value="Password:"/>
-            <p:inputText id="password" value="#{userViewController.selectedUser.password}"/>
+            <p:inputText id="password" value="#{userViewController.editUser.password}"/>
 
             <p:outputLabel for="name" value="Name:"/>
-            <p:inputText id="name" value="#{userViewController.selectedUser.name}"/>
+            <p:inputText id="name" value="#{userViewController.editUser.name}"/>
 
             <p:outputLabel for="description" value="Description:"/>
             <p:inputTextarea id="description" rows="5" cols="65" style="width: 100%"
-                             value="#{userViewController.selectedUser.description}"/>
+                             value="#{userViewController.editUser.description}"/>
 
             <p:outputLabel for="role" value="Role:"/>
-            <p:selectOneMenu id="role" value="#{userViewController.selectedUser.role}" style="width:125px">
+            <p:selectOneMenu id="role" value="#{userViewController.editUser.role}" style="width:125px">
                 <f:selectItems var="role" value="#{userViewController.roles}" itemLabel="#{role}"
                                itemValue="#{role}"/>
             </p:selectOneMenu>
                 <p:commandButton
                         value="Save"
-                        action="#{userViewController.userUpdate}"
+                        action="#{userViewController.userSave}"
                         icon="pi pi-save">
                 </p:commandButton>
         </p:panelGrid>
