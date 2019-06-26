@@ -9,10 +9,9 @@
     <ui:composition template="/WEB-INF/jsf/template/template.xhtml">
         <ui:param name="title" value="WELCOME"/>
         <ui:define name="content">
-            <p:panelGrid columns="1" style="width: 100%; text-align:center;">
-                <h:graphicImage style="margin-top: 250px;margin-bottom: 250px"
-                                value="${pageContext.request.contextPath}/resources/images/logo_iteco.png"/>
-            </p:panelGrid>
+            <p:outputPanel style="width: 100%; text-align:center; margin-top: 50px">
+                <h:graphicImage value="${pageContext.request.contextPath}/resources/images/logo_iteco.png"/>
+            </p:outputPanel>
         </ui:define>
     </ui:composition>
 </f:view>

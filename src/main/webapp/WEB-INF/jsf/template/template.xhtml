@@ -9,12 +9,12 @@
 
 <h:head>
     <title>Task Manager</title>
-    <!--<h:outputScript library="javascript" name="util.js" target="head"/>
-<h:outputStylesheet library="css" name="styles.css" target="body"/>-->
+    <!--<h:outputScript library="javascript" name="util.js" target="head"/>-->
+    <!--<h:outputStylesheet library="css" name="styles.css" target="body"/>-->
 </h:head>
 
 <h:body style="background-color:#323232">
-    <div class="menu-bar">
+    <div class="header">
         <h:form>
             <p:growl id="growl" showDetail="true" sticky="true"/>
             <p:menubar>
@@ -41,8 +41,7 @@
                     <p:commandLink
                             rendered="#{not elementViewController.visibleForUser}"
                             value="Sing Up"
-                            action="#{registrationViewController.registrationUser}"
-                    />
+                            action="#{registrationViewController.registrationUser}"/>
                     <p:inputText
                             rendered="#{not elementViewController.visibleForUser}"
                             id="login"
@@ -78,13 +77,8 @@
                 </f:facet>
             </p:menubar>
         </h:form>
-
     </div>
-
-    <div class="content">
-        <p:panel id="header" header="#{title}" collapsed="true" toggleSpeed="500" closeSpeed="500"/>
-        <ui:insert name="content"/>
-        <p:panel id="footer" header="© 2019 I-teco, Inc." collapsed="true"/>
-    </div>
+    <div id="content"><p:panel id="header" header="#{title}" collapsed="true" toggleSpeed="500" closeSpeed="500"/>
+        <ui:insert name="content"/></div>
 </h:body>
 </html>
