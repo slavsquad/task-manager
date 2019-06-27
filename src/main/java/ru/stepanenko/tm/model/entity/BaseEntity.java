@@ -1,8 +1,5 @@
 package ru.stepanenko.tm.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
 
@@ -10,11 +7,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
-@Getter
-@Setter
 @MappedSuperclass
-@NoArgsConstructor
-public class BaseEntity extends AbstractEntity implements Serializable {
+public class BaseEntity extends AbstractEntity {
 
     @Nullable
     protected Date dateBegin = null;
@@ -30,4 +24,40 @@ public class BaseEntity extends AbstractEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "user_id")
     protected User user;
+
+    @Nullable
+    public Date getDateBegin() {
+        return dateBegin;
+    }
+
+    public void setDateBegin(@Nullable Date dateBegin) {
+        this.dateBegin = dateBegin;
+    }
+
+    @Nullable
+    public Date getDateEnd() {
+        return dateEnd;
+    }
+
+    public void setDateEnd(@Nullable Date dateEnd) {
+        this.dateEnd = dateEnd;
+    }
+
+    @Nullable
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(@Nullable Status status) {
+        this.status = status;
+    }
+
+    @Nullable
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(@Nullable User user) {
+        this.user = user;
+    }
 }

@@ -52,17 +52,20 @@ public class TaskServiceTest {
     @Test
     public void taskCRUD(
     ) throws DataValidateException {
-        @Nullable final String userId = new ArrayList<>(taskService.findAll()).get(0).getUserId();
+        @Nullable final String userId = "1";
         assertNotNull(userId);
-        @Nullable final String projectId = new ArrayList<>(taskService.findAll()).get(0).getProjectId();
+        @Nullable final String projectId = "1";
         assertNotNull(projectId);
 
-        @NotNull final TaskDTO task = new TaskDTO();
+        @NotNull final TaskDTO task = new TaskDTO(
+                "Task",
+                "Description",
+                new Date(0),
+                new Date(0),
+                Status.PLANNED,
+                projectId,
+                userId);
         @NotNull final String taskId = task.getId();
-        task.setUserId(userId);
-        task.setProjectId(projectId);
-        task.setName("Task");
-        task.setDescription("Description");
         taskService.create(task);
         assertEquals(taskId, taskService.findOne(taskId, userId).getId());
         task.setName("Change name");
@@ -77,41 +80,38 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void projectSort(
+    public void taskSort(
     ) throws DataValidateException {
-        @Nullable final String userId = new ArrayList<>(taskService.findAll()).get(0).getUserId();
+        @Nullable final String userId = "1";
         assertNotNull(userId);
-        @Nullable final String projectId = new ArrayList<>(taskService.findAll()).get(0).getProjectId();
+        @Nullable final String projectId = "1";
         assertNotNull(projectId);
-        @NotNull final TaskDTO task1 = new TaskDTO();
-        task1.setUserId(userId);
-        task1.setProjectId(projectId);
-        task1.setId(UUID.randomUUID().toString());
-        task1.setName("project1");
-        task1.setDescription("Description1");
-        task1.setStatus(Status.DONE);
-        task1.setDateBegin(new Date(1000));
-        task1.setDateEnd(new Date(1000));
+        @NotNull final TaskDTO task1 = new TaskDTO(
+                "Task1",
+                "Description1",
+                new Date(1000),
+                new Date(1000),
+                Status.DONE,
+                projectId,
+                userId);
 
-        @NotNull final TaskDTO task2 = new TaskDTO();
-        task2.setUserId(userId);
-        task2.setProjectId(projectId);
-        task2.setId(UUID.randomUUID().toString());
-        task2.setName("project2");
-        task2.setDescription("Description2");
-        task2.setStatus(Status.INPROCESS);
-        task2.setDateBegin(new Date(1000000));
-        task2.setDateEnd(new Date(1000000));
+        @NotNull final TaskDTO task2 = new TaskDTO(
+                "Task2",
+                "Description2",
+                new Date(1000000),
+                new Date(1000000),
+                Status.INPROCESS,
+                projectId,
+                userId);
 
-        @NotNull final TaskDTO task3 = new TaskDTO();
-        task3.setId(UUID.randomUUID().toString());
-        task3.setProjectId(projectId);
-        task3.setUserId(userId);
-        task3.setName("project3");
-        task3.setDescription("Description3");
-        task3.setStatus(Status.PLANNED);
-        task3.setDateBegin(new Date(0));
-        task3.setDateEnd(new Date(0));
+        @NotNull final TaskDTO task3 = new TaskDTO(
+                "Task3",
+                "Description3",
+                new Date(0),
+                new Date(0),
+                Status.PLANNED,
+                projectId,
+                userId);
 
         taskService.removeAllByUserId(userId);
         assertTrue(taskService.findAllByUserId(userId).size() == 0);
@@ -138,25 +138,29 @@ public class TaskServiceTest {
     }
 
     @Test
-    public void findProject(
+    public void taskFind(
     ) throws DataValidateException {
-        @Nullable final String userId = new ArrayList<>(taskService.findAll()).get(0).getUserId();
+        @Nullable final String userId = "1";
         assertNotNull(userId);
-        @Nullable final String projectId = new ArrayList<>(taskService.findAll()).get(0).getProjectId();
+        @Nullable final String projectId = "1";
         assertNotNull(projectId);
-        @NotNull final TaskDTO task1 = new TaskDTO();
-        task1.setUserId(userId);
-        task1.setProjectId(projectId);
-        task1.setId(UUID.randomUUID().toString());
-        task1.setName("Homework");
-        task1.setDescription("Make all homework");
+        @NotNull final TaskDTO task1 = new TaskDTO(
+                "Homework",
+                "Make all homework",
+                new Date(0),
+                new Date(0),
+                Status.PLANNED,
+                projectId,
+                userId);
 
-        @NotNull final TaskDTO task2 = new TaskDTO();
-        task2.setUserId(userId);
-        task2.setProjectId(projectId);
-        task2.setId(UUID.randomUUID().toString());
-        task2.setName("Cooking");
-        task2.setDescription("Make apple pie!");
+        @NotNull final TaskDTO task2 = new TaskDTO(
+                "Cooking",
+                "Make apple pie!",
+                new Date(0),
+                new Date(0),
+                Status.PLANNED,
+                projectId,
+                userId);
 
         taskService.removeAllByUserId(userId);
         assertTrue(taskService.findAllByUserId(userId).size() == 0);

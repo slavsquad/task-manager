@@ -48,19 +48,18 @@ public class ProjectServiceTest {
     }
 
     @Test
-    public void test() {
-        assertTrue(true);
-    }
-
     public void projectCRUD(
     ) throws DataValidateException {
         @Nullable final String userId = new ArrayList<>(projectService.findAll()).get(0).getUserId();
         assertNotNull(userId);
-        @NotNull final ProjectDTO project = new ProjectDTO();
+        @NotNull final ProjectDTO project = new ProjectDTO(
+                "Project",
+                "Description",
+                new Date(1000000),
+                new Date(1000000),
+                Status.DONE,
+                userId);
         @NotNull final String projectId = project.getId();
-        project.setUserId(userId);
-        project.setName("Project");
-        project.setDescription("Description");
         projectService.create(project);
         assertEquals(projectId, projectService.findOne(projectId, userId).getId());
         project.setName("Change name");
@@ -79,32 +78,29 @@ public class ProjectServiceTest {
     ) throws DataValidateException {
         @Nullable final String userId = new ArrayList<>(projectService.findAll()).get(0).getUserId();
         assertNotNull(userId);
-        @NotNull final ProjectDTO project1 = new ProjectDTO();
-        project1.setUserId(userId);
-        project1.setId(UUID.randomUUID().toString());
-        project1.setName("project1");
-        project1.setDescription("Description1");
-        project1.setStatus(Status.DONE);
-        project1.setDateBegin(new Date(1000));
-        project1.setDateEnd(new Date(1000));
+        @NotNull final ProjectDTO project1 = new ProjectDTO(
+                "project1",
+                "Description1",
+                new Date(1000),
+                new Date(1000),
+                Status.DONE,
+                userId);
 
-        @NotNull final ProjectDTO project2 = new ProjectDTO();
-        project2.setUserId(userId);
-        project2.setId(UUID.randomUUID().toString());
-        project2.setName("project2");
-        project2.setDescription("Description2");
-        project2.setStatus(Status.INPROCESS);
-        project2.setDateBegin(new Date(1000000));
-        project2.setDateEnd(new Date(1000000));
+        @NotNull final ProjectDTO project2 = new ProjectDTO(
+                "project2",
+                "Description2",
+                new Date(1000000),
+                new Date(1000000),
+                Status.INPROCESS,
+                userId);
 
-        @NotNull final ProjectDTO project3 = new ProjectDTO();
-        project3.setId(UUID.randomUUID().toString());
-        project3.setUserId(userId);
-        project3.setName("project3");
-        project3.setDescription("Description3");
-        project3.setStatus(Status.PLANNED);
-        project3.setDateBegin(new Date(0));
-        project3.setDateEnd(new Date(0));
+        @NotNull final ProjectDTO project3 = new ProjectDTO(
+                "project3",
+                "Description3",
+                new Date(0),
+                new Date(0),
+                Status.PLANNED,
+                userId);
 
         projectService.removeAllByUserId(userId);
         assertTrue(projectService.findAllByUserId(userId).size() == 0);
@@ -135,17 +131,21 @@ public class ProjectServiceTest {
     ) throws DataValidateException {
         @Nullable final String userId = new ArrayList<>(projectService.findAll()).get(0).getUserId();
         assertNotNull(userId);
-        @NotNull final ProjectDTO project1 = new ProjectDTO();
-        project1.setUserId(userId);
-        project1.setId(UUID.randomUUID().toString());
-        project1.setName("Homework");
-        project1.setDescription("Make all homework");
+        @NotNull final ProjectDTO project1 = new ProjectDTO(
+                "Homework",
+                "Make all homework",
+                new Date(1000000),
+                new Date(1000000),
+                Status.DONE,
+                userId);
 
-        @NotNull final ProjectDTO project2 = new ProjectDTO();
-        project2.setUserId(userId);
-        project2.setId(UUID.randomUUID().toString());
-        project2.setName("Cooking");
-        project2.setDescription("Make apple pie!");
+        @NotNull final ProjectDTO project2 = new ProjectDTO(
+                "Cooking",
+                "Make apple pie!",
+                new Date(1000000),
+                new Date(1000000),
+                Status.DONE,
+                userId);
 
         projectService.removeAllByUserId(userId);
         assertTrue(projectService.findAllByUserId(userId).size() == 0);

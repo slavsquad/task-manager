@@ -1,16 +1,11 @@
 package ru.stepanenko.tm.model.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
 
 import java.util.Date;
 
-@Getter
-@Setter
-@NoArgsConstructor
 public class ProjectDTO extends BaseEntityDTO {
 
     public ProjectDTO(
@@ -27,5 +22,7 @@ public class ProjectDTO extends BaseEntityDTO {
         this.status = status;
         this.userId = userId;
     }
+
+
 
 }

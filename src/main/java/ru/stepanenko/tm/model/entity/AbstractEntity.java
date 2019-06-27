@@ -1,8 +1,5 @@
 package ru.stepanenko.tm.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,9 +9,6 @@ import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
 @MappedSuperclass
 public abstract class
 AbstractEntity implements Serializable {
@@ -28,4 +22,31 @@ AbstractEntity implements Serializable {
 
     @Nullable
     protected String description = null;
+
+    @NotNull
+    public String getId() {
+        return id;
+    }
+
+    public void setId(@NotNull String id) {
+        this.id = id;
+    }
+
+    @Nullable
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@Nullable String name) {
+        this.name = name;
+    }
+
+    @Nullable
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(@Nullable String description) {
+        this.description = description;
+    }
 }

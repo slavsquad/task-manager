@@ -1,23 +1,16 @@
 package ru.stepanenko.tm.model.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Role;
 
-import java.io.Serializable;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class UserDTO extends AbstractEntityDTO implements Serializable {
+public class UserDTO extends AbstractEntityDTO {
 
     @Nullable
-    private String login = "";
+    private String login;
 
     @Nullable
-    private String password = "";
+    private String password;
 
     @Nullable
     private Role role = Role.USER;
@@ -35,4 +28,30 @@ public class UserDTO extends AbstractEntityDTO implements Serializable {
         this.role = role;
     }
 
+    @Nullable
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(@Nullable String login) {
+        this.login = login;
+    }
+
+    @Nullable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@Nullable String password) {
+        this.password = password;
+    }
+
+    @Nullable
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(@Nullable Role role) {
+        this.role = role;
+    }
 }

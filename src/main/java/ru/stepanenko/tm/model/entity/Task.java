@@ -1,8 +1,5 @@
 package ru.stepanenko.tm.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.TaskDTO;
@@ -14,9 +11,6 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @Table(name = "app_task")
 public class Task extends BaseEntity implements Serializable {
 
@@ -31,15 +25,35 @@ public class Task extends BaseEntity implements Serializable {
     private User user;
 
     public TaskDTO getDTO() {
-        @NotNull final TaskDTO dto = new TaskDTO();
+        @NotNull final TaskDTO dto = new TaskDTO(
+                name,
+                description,
+                dateBegin,
+                dateEnd,
+                status,
+                user.getId(),
+                project == null ? null : project.getId());
         dto.setId(id);
-        dto.setName(name);
-        dto.setDescription(description);
-        dto.setDateBegin(dateBegin);
-        dto.setDateEnd(dateEnd);
-        dto.setStatus(status);
-        dto.setUserId(user.getId());
-        dto.setProjectId(project == null ? null : project.getId());
         return dto;
+    }
+
+    @Nullable
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(@Nullable Project project) {
+        this.project = project;
+    }
+
+    @Override
+    @Nullable
+    public User getUser() {
+        return user;
+    }
+
+    @Override
+    public void setUser(@Nullable User user) {
+        this.user = user;
     }
 }

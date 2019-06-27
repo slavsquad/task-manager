@@ -1,18 +1,11 @@
 package ru.stepanenko.tm.model.dto;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Status;
 
-import java.io.Serializable;
 import java.util.Date;
 
-@Getter
-@Setter
-@NoArgsConstructor
-public class TaskDTO extends BaseEntityDTO implements Serializable {
+public class TaskDTO extends BaseEntityDTO {
 
     @Nullable
     private String projectId;
@@ -34,4 +27,12 @@ public class TaskDTO extends BaseEntityDTO implements Serializable {
         this.userId = userId;
     }
 
+    @Nullable
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(@Nullable String projectId) {
+        this.projectId = projectId;
+    }
 }

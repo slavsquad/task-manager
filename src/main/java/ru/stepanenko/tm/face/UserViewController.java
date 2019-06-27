@@ -1,7 +1,5 @@
 package ru.stepanenko.tm.face;
 
-import lombok.Getter;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.primefaces.PrimeFaces;
@@ -9,6 +7,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
@@ -48,13 +47,9 @@ public class UserViewController {
     @NotNull
     private UserDTO editUser;
 
-    @Getter
-    @Setter
     @Nullable
     private String login;
 
-    @Getter
-    @Setter
     @Nullable
     private String password;
 
@@ -206,5 +201,23 @@ public class UserViewController {
         } catch (DataValidateException e) {
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", e.getMessage()));
         }
+    }
+
+    @Nullable
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(@Nullable String login) {
+        this.login = login;
+    }
+
+    @Nullable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@Nullable String password) {
+        this.password = password;
     }
 }

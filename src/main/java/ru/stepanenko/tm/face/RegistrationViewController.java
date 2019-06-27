@@ -5,6 +5,7 @@ import org.jetbrains.annotations.Nullable;
 import org.primefaces.PrimeFaces;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.DataValidateException;

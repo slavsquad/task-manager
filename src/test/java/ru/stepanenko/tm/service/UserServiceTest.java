@@ -46,10 +46,13 @@ public class UserServiceTest {
     @Test
     public void userCRUD(
     ) throws DataValidateException {
-        @NotNull final UserDTO user = new UserDTO();
-        user.setLogin("root");
-        user.setPassword("root");
-        user.setRole(Role.ADMIN);
+        @NotNull final UserDTO user = new UserDTO(
+                "root",
+                "root",
+                "root",
+                "root for system",
+                Role.ADMIN);
+
         @NotNull final String userId = user.getId();
         userService.create(user);
         assertEquals(userId, userService.findByLogin("root").getId());
@@ -65,7 +68,12 @@ public class UserServiceTest {
     @Test
     public void userLogin(
     ) throws DataValidateException, AuthenticationSecurityException {
-        @NotNull final UserDTO user = new UserDTO();
+        @NotNull final UserDTO user = new UserDTO(
+                "root",
+                "root",
+                "root",
+                "root for system",
+                Role.ADMIN);
         user.setLogin("root");
         user.setPassword("root");
         user.setRole(Role.ADMIN);

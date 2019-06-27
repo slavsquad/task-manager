@@ -4,6 +4,7 @@ import com.ocpsoft.pretty.faces.annotation.URLMapping;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.context.annotation.RequestScope;
 
 import javax.faces.context.FacesContext;
 

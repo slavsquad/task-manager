@@ -1,8 +1,5 @@
 package ru.stepanenko.tm.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
@@ -15,9 +12,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @Table(name = "app_project")
 public class Project extends BaseEntity implements Serializable {
 
@@ -26,14 +20,23 @@ public class Project extends BaseEntity implements Serializable {
     private List<Task> tasks;
 
     public ProjectDTO getDTO() {
-        @NotNull final ProjectDTO dto = new ProjectDTO();
+        @NotNull final ProjectDTO dto = new ProjectDTO(
+                name,
+                description,
+                dateBegin,
+                dateEnd,
+                status,
+                user.getId());
         dto.setId(id);
-        dto.setName(name);
-        dto.setDescription(description);
-        dto.setDateBegin(dateBegin);
-        dto.setDateEnd(dateEnd);
-        dto.setStatus(status);
-        dto.setUserId(user.getId());
         return dto;
+    }
+
+    @Nullable
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(@Nullable List<Task> tasks) {
+        this.tasks = tasks;
     }
 }

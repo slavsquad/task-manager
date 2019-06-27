@@ -1,8 +1,5 @@
 package ru.stepanenko.tm.model.entity;
 
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import ru.stepanenko.tm.enumerate.Role;
@@ -13,9 +10,6 @@ import java.io.Serializable;
 import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
 @Table(name = "app_user")
 public class User extends AbstractEntity implements Serializable {
 
@@ -39,13 +33,58 @@ public class User extends AbstractEntity implements Serializable {
     private List<Task> tasks;
 
     public UserDTO getDTO() {
-        @NotNull final UserDTO dto = new UserDTO();
+        @NotNull final UserDTO dto = new UserDTO(
+                login,
+                null,
+                name,
+                description,
+                role);
         dto.setId(id);
-        dto.setLogin(login);
-        dto.setPassword(null);
-        dto.setRole(role);
-        dto.setName(name);
-        dto.setDescription(description);
         return dto;
+    }
+
+    @Nullable
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(@Nullable String login) {
+        this.login = login;
+    }
+
+    @Nullable
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(@Nullable String password) {
+        this.password = password;
+    }
+
+    @Nullable
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(@Nullable Role role) {
+        this.role = role;
+    }
+
+    @Nullable
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(@Nullable List<Project> projects) {
+        this.projects = projects;
+    }
+
+    @Nullable
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public void setTasks(@Nullable List<Task> tasks) {
+        this.tasks = tasks;
     }
 }
