@@ -7,14 +7,12 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.IUserService;
 import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
-import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
 import ru.stepanenko.tm.util.DataValidator;
 import ru.stepanenko.tm.util.FieldConst;
@@ -80,7 +78,7 @@ public class UserViewController {
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateAdminSession(session);
+        sessionService.validateAdmin(session);
         users = userService.findAll();
         return users;
     }
@@ -117,7 +115,7 @@ public class UserViewController {
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateAdminSession(session);
+        sessionService.validateAdmin(session);
         return editUser;
     }
 
@@ -141,7 +139,7 @@ public class UserViewController {
                 .getExternalContext()
                 .getSession(false);
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
             if (selectedUser == null) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No user selected!"));
@@ -172,7 +170,7 @@ public class UserViewController {
                 .getExternalContext()
                 .getSession(false);
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
             selectedUser = userService.findOne(loggedUser.getId());
             userEdit();

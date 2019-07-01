@@ -14,8 +14,6 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.ProjectDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.Project;
-import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.DateFormatter;
 import ru.stepanenko.tm.util.FieldConst;
 
@@ -44,7 +42,7 @@ public class ProjectController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("project/projectList");
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             model.addObject(FieldConst.PROJECTS, projectService.findAllByUserId(loggedUser.getId()));
         } catch (AuthenticationSecurityException e) {
@@ -63,7 +61,7 @@ public class ProjectController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("project/projectEdit");
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
             @Nullable final ProjectDTO project = projectService.findOne(projectId, loggedUser.getId());
@@ -83,7 +81,7 @@ public class ProjectController {
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @NotNull final ProjectDTO project = new ProjectDTO(
                     req.getParameter(FieldConst.NAME),
@@ -109,7 +107,7 @@ public class ProjectController {
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @NotNull final ProjectDTO project = new ProjectDTO(
                     "New project",
@@ -134,7 +132,7 @@ public class ProjectController {
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @Nullable final String id = req.getParameter(FieldConst.PROJECT_ID);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             projectService.remove(id, loggedUser.getId());

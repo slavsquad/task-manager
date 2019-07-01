@@ -15,8 +15,6 @@ import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.TaskDTO;
 import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.Task;
-import ru.stepanenko.tm.model.entity.User;
 import ru.stepanenko.tm.util.DataValidator;
 import ru.stepanenko.tm.util.DateFormatter;
 import ru.stepanenko.tm.util.FieldConst;
@@ -52,7 +50,7 @@ public class TaskController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("task/taskList");
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String projectId = req.getParameter(FieldConst.PROJECT_ID);
             model.addObject(FieldConst.PROJECT_ID, projectId);
@@ -79,7 +77,7 @@ public class TaskController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("task/taskEdit");
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @NotNull final String taskId = req.getParameter(FieldConst.TASK_ID);
             @NotNull final String projectId = req.getParameter(FieldConst.PROJECT_ID);
@@ -104,7 +102,7 @@ public class TaskController {
         @Nullable String projectId = null;
         @Nullable String editProjectId = null;
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             projectId = req.getParameter(FieldConst.PROJECT_ID);
             editProjectId = req.getParameter(FieldConst.EDIT_PROJECT_ID);
@@ -137,7 +135,7 @@ public class TaskController {
     ) throws IOException {
         @Nullable String projectId = null;
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             projectId = req.getParameter(FieldConst.PROJECT_ID);
             @NotNull final TaskDTO task = new TaskDTO(
@@ -168,7 +166,7 @@ public class TaskController {
     ) throws IOException {
         @Nullable String projectId = null;
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             projectId = req.getParameter(FieldConst.PROJECT_ID);
             @Nullable final String taskId = req.getParameter(FieldConst.TASK_ID);

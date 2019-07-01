@@ -12,6 +12,7 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
+
     <servlet>
         <servlet-name>faces</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -32,4 +33,16 @@ http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
         <param-name>primefaces.THEME</param-name>
         <param-value>luna-blue</param-value>
     </context-param>
+
+
+    <servlet>
+        <servlet-name>cxf</servlet-name>
+        <servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>cxf</servlet-name>
+        <url-pattern>/endpoint/*</url-pattern>
+    </servlet-mapping>
+
 </web-app>

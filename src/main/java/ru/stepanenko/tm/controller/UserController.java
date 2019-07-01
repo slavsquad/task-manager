@@ -13,8 +13,6 @@ import ru.stepanenko.tm.enumerate.Role;
 import ru.stepanenko.tm.exception.AuthenticationSecurityException;
 import ru.stepanenko.tm.exception.DataValidateException;
 import ru.stepanenko.tm.model.dto.UserDTO;
-import ru.stepanenko.tm.model.entity.User;
-import ru.stepanenko.tm.util.DataValidator;
 import ru.stepanenko.tm.util.FieldConst;
 import ru.stepanenko.tm.util.HashUtil;
 
@@ -62,10 +60,10 @@ public class UserController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("user/userEdit");
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String userId = req.getParameter(FieldConst.USER_ID);
-            if (!loggedUser.getId().equals(userId)) sessionService.validateAdminSession(session);
+            if (!loggedUser.getId().equals(userId)) sessionService.validateAdmin(session);
             @NotNull final UserDTO user = userService.findOne(userId);
             model.addObject(FieldConst.USER, user);
         } catch (AuthenticationSecurityException e) {
@@ -83,10 +81,10 @@ public class UserController {
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = (UserDTO) session.getAttribute(FieldConst.USER);
             @Nullable final String userId = req.getParameter(FieldConst.USER_ID);
-            if (!loggedUser.getId().equals(userId)) sessionService.validateAdminSession(session);
+            if (!loggedUser.getId().equals(userId)) sessionService.validateAdmin(session);
             @NotNull final UserDTO user = new UserDTO(
                     req.getParameter(FieldConst.LOGIN),
                     HashUtil.md5(req.getParameter(FieldConst.PASSWORD)),
@@ -121,7 +119,7 @@ public class UserController {
     ) throws IOException {
         @NotNull final ModelAndView model = new ModelAndView("user/userList");
         try {
-            sessionService.validateAdminSession(session);
+            sessionService.validateAdmin(session);
             model.addObject(FieldConst.USERS, userService.findAll());
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());
@@ -138,7 +136,7 @@ public class UserController {
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
-            sessionService.validateAdminSession(session);
+            sessionService.validateAdmin(session);
             @NotNull final UserDTO user = new UserDTO(
                     "New User:",
                     "password",
@@ -162,7 +160,7 @@ public class UserController {
             @NotNull final HttpServletResponse resp
     ) throws IOException {
         try {
-            sessionService.validateAdminSession(session);
+            sessionService.validateAdmin(session);
             userService.remove(req.getParameter(FieldConst.USER_ID));
         } catch (AuthenticationSecurityException e) {
             resp.sendError(HttpServletResponse.SC_FORBIDDEN, e.getMessage());

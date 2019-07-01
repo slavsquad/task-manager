@@ -7,7 +7,6 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.ISessionService;
 import ru.stepanenko.tm.api.service.ITaskService;
@@ -53,7 +52,7 @@ public class TaskViewController {
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
+        sessionService.validate(session);
         @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
         if (selectedProject == null) {
             tasks = new ArrayList<>(taskService.findAllByUserId(loggedUser.getId()));
@@ -73,7 +72,7 @@ public class TaskViewController {
                 .getExternalContext()
                 .getSession(false);
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
             editTask = new TaskDTO(
                     "New Task",
@@ -113,7 +112,7 @@ public class TaskViewController {
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
+        sessionService.validate(session);
         return editTask;
     }
 
@@ -135,7 +134,7 @@ public class TaskViewController {
                 .getExternalContext()
                 .getSession(false);
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
             if (selectedTask == null) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No task selected!"));

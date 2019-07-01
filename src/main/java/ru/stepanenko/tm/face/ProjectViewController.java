@@ -7,7 +7,6 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.event.UnselectEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.context.annotation.SessionScope;
 import ru.stepanenko.tm.api.service.IProjectService;
 import ru.stepanenko.tm.api.service.ISessionService;
@@ -50,7 +49,7 @@ public class ProjectViewController {
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
+        sessionService.validate(session);
         @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
         projects = new ArrayList<>(projectService.findAllByUserId(loggedUser.getId()));
         return projects;
@@ -66,7 +65,7 @@ public class ProjectViewController {
                 .getExternalContext()
                 .getSession(false);
         try {
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
             editProject = new ProjectDTO(
                     "New project",
@@ -89,7 +88,7 @@ public class ProjectViewController {
         @NotNull final HttpSession session = (HttpSession) context
                 .getExternalContext()
                 .getSession(false);
-        sessionService.validateSession(session);
+        sessionService.validate(session);
         return editProject;
     }
 
@@ -124,7 +123,7 @@ public class ProjectViewController {
             @NotNull final HttpSession session = (HttpSession) context
                     .getExternalContext()
                     .getSession(false);
-            sessionService.validateSession(session);
+            sessionService.validate(session);
             @NotNull final UserDTO loggedUser = sessionService.getLoggedUser(session);
             if (selectedProject == null) {
                 context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, "Input Error:", "No project selected!"));
