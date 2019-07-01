@@ -101,7 +101,7 @@ public class DataGenerator {
             for (@NotNull UserDTO user : userService.findAll()) {
                 for (int i = 1; i <= 4; i++) {
                     @NotNull final ProjectDTO project = new ProjectDTO("Project for " + user.getLogin() + " #" + i, "Description for project #" + i, new Date(), null, Status.PLANNED, user.getId());
-                    if (i==1 && "1".equals(user.getId())) project.setId("1");
+                    if (i == 1 && "1".equals(user.getId())) project.setId("1");
                     projectService.create(project);
                     for (int j = 1; j <= 4; j++) {
                         @NotNull final TaskDTO task = new TaskDTO("Task  for " + user.getLogin() + " #" + j, "Description task #" + j + " for project #" + i, new Date(), null, Status.PLANNED, project.getId(), user.getId());

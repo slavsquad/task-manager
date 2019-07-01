@@ -3,7 +3,7 @@ package ru.stepanenko.tm.model.dto;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class SessionDTO  extends AbstractEntityDTO{
+public class SessionDTO extends AbstractEntityDTO {
 
     @Nullable
     String userId;

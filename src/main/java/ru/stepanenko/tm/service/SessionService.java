@@ -79,6 +79,7 @@ public class SessionService implements ISessionService {
             @NotNull SessionDTO sessionDTO
     ) throws AuthenticationSecurityException, DataValidateException {
         @NotNull final UserDTO loggedUser = userService.findOne(sessionDTO.getUserId());
-        if (loggedUser.getRole()!=Role.ADMIN) throw new AuthenticationSecurityException("Forbidden action for your role!");
+        if (loggedUser.getRole() != Role.ADMIN)
+            throw new AuthenticationSecurityException("Forbidden action for your role!");
     }
 }
