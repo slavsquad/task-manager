@@ -1,7 +1,9 @@
 Task Manager
 ============
 
-Task Manager - console application allows you to manage projects and tasks.
+Task Manager:
+application allows you to manage projects and tasks.
+(look another branches(Spring and JavaEE))
 
 
 TECHNOLOGY STACK
