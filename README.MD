@@ -2,14 +2,17 @@ Task Manager
 ============
 
 Task Manager:
-application allows you to manage projects and tasks.
-(look another branches(Spring and JavaEE))
+application allows you to manage projects and tasks (look another branches(Spring and JavaEE))
 
 
 TECHNOLOGY STACK
 ----------------
 
         Java 1.8 SE
+        JavaEE
+        Spring
+        Hibernate
+        DeltaSpike
         Maven 3.6.0
 
 
